@@ -1,18 +1,18 @@
 import Cookies from "js-cookie";
 const setToken = (data) => {
-	Cookies.set("pnc-nikkha-tokenInfo", JSON.stringify(data), { expires: 7 });
+  Cookies.set("pnc-nikha-tokenInfo", JSON.stringify(data), { expires: 7 });
 };
 
 const getToken = () => {
-	let data = Cookies.get("pnc-nikkha-tokenInfo");
-	if (data) {
-		data = JSON.parse(data);
-	}
-	return data;
+  let data = Cookies.get("pnc-nikha-tokenInfo");
+  if (data) {
+    data = JSON.parse(data);
+  }
+  return data;
 };
 
 const removeToken = () => {
-	Cookies.remove("pnc-nikkha-tokenInfo");
+  Cookies.remove("pnc-nikha-tokenInfo");
 };
 
 export { setToken, getToken, removeToken };

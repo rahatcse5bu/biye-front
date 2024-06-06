@@ -4,7 +4,7 @@ import BioContext from "../../contexts/BioContext";
 function AddressInfo() {
   const { bio } = useContext(BioContext);
   const addressInfo = bio?.address || null;
-  console.log(addressInfo);
+  console.log("address~~~", addressInfo);
   return (
     <div className="single-bio-address rounded shadow">
       <h5 className="card-title text-center text-2xl my-3">ঠিকানা</h5>

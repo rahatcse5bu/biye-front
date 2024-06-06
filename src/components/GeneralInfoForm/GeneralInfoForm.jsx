@@ -7,13 +7,13 @@ import Input from "../../components/Input/Input";
 import { Colors } from "../../constants/colors";
 import FormTitle from "../FormTitle/FormTitle";
 import {
-	bioDataTypes,
-	bloodGroup,
-	genderOptions,
-	heights,
-	maritalStatus,
-	nationalities,
-	screenColors,
+  bioDataTypes,
+  bloodGroup,
+  genderOptions,
+  heights,
+  maritalStatus,
+  nationalities,
+  screenColors,
 } from "./generalInfoForm.constant";
 import { userServices } from "../../services/user";
 import { BioDataServices } from "../../services/bioData";
@@ -27,281 +27,262 @@ import { useNavigate } from "react-router-dom";
 import { convertToBengaliNumerals } from "../../utils/weight";
 import { convertToEnglishDigits } from "../../utils/weight";
 import { verifyToken } from "../../services/verifyToken";
+import { getErrorMessage } from "../../utils/error";
+import { Toast } from "../../utils/toast";
+import { GeneralInfoServices } from "../../services/generalInfo";
 
 const GeneralInfoForm = ({ userForm, setUserForm }) => {
-	const { userInfo, logOut } = useContext(UserContext);
-	const [bioType, setBioType] = useState("");
-	const [maritalStatus, setMaritalStatus] = useState("");
-	const [dob, setDob] = useState("");
-	const [height, setHeight] = useState("");
-	const [color, setColor] = useState("");
-	const [weight, setWeight] = useState("৫০");
-	const [blood, setBlood] = useState("");
-	const [nationality, setNationality] = useState("বাংলাদেশী");
-	const [gender, setGender] = useState("");
-	const [filteredMaritalStatus, setFilteredMaritalStatus] =
-		useState(maritalStatus);
+  const { userInfo, logOut } = useContext(UserContext);
+  const [bioType, setBioType] = useState("");
+  const [maritalStatus, setMaritalStatus] = useState("");
+  const [dob, setDob] = useState("");
+  const [height, setHeight] = useState("");
+  const [color, setColor] = useState("");
+  const [weight, setWeight] = useState("৫০");
+  const [blood, setBlood] = useState("");
+  const [nationality, setNationality] = useState("বাংলাদেশী");
+  const [gender, setGender] = useState("");
+  const [filteredMaritalStatus, setFilteredMaritalStatus] =
+    useState(maritalStatus);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { data: generalInfo = null, isLoading } = useQuery({
+    queryKey: ["general-info", userInfo?.data?._id, getToken()?.token],
+    queryFn: async () => {
+      return await GeneralInfoServices.getGeneralInfoByUser(getToken()?.token);
+    },
+    retry: false,
+    enabled: !!userInfo?.data?._id,
+  });
+  // useEffect(() => {
+  // 	verifyToken(userInfo?.data?._id, logOut, "general-info-verify-token");
+  // }, [logOut, userInfo?.data]);
 
-	const [loading, setLoading] = useState(false);
-	const navigate = useNavigate();
+  console.log("general-info~~", generalInfo);
 
-	const { data: generalInfo = null } = useQuery({
-		queryKey: ["general-info", userInfo?.data[0]?.id],
-		queryFn: async () => {
-			return await userServices.getGeneralInfoByUserId(userInfo?.data[0]?.id);
-		},
-	});
-	useEffect(() => {
-		verifyToken(userInfo?.data[0]?.id, logOut, "general-info-verify-token");
-	}, [logOut, userInfo?.data]);
+  //! set init data
+  useEffect(() => {
+    console.log(generalInfo?.data);
+    if (generalInfo?.data) {
+      const {
+        gender,
+        bio_type,
+        date_of_birth,
+        height,
+        nationality,
+        screen_color,
+        marital_status,
+        weight,
+        blood_group,
+      } = generalInfo.data;
 
-	useEffect(() => {
-		console.log(generalInfo?.data);
-		if (generalInfo?.data) {
-			const {
-				gender,
-				bio_type,
-				date_of_birth,
-				height,
-				nationality,
-				screen_color,
-				marital_status,
-				weight,
-				blood_group,
-			} = generalInfo.data;
+      setGender(gender);
+      setBioType(bio_type);
+      setMaritalStatus(marital_status);
+      setBlood(blood_group);
+      setDob(getYearMonthDate(date_of_birth));
+      setNationality(nationality);
+      setHeight(height);
+      setWeight(convertToBengaliNumerals(weight.toString()));
+      setColor(screen_color);
+    }
+  }, [generalInfo]);
 
-			setGender(gender);
-			setBioType(bio_type);
-			setMaritalStatus(marital_status);
-			setBlood(blood_group);
-			setDob(getYearMonthDate(date_of_birth));
-			setNationality(nationality);
-			setHeight(height);
-			setWeight(convertToBengaliNumerals(weight.toString()));
-			setColor(screen_color);
-		}
-	}, [generalInfo]);
+  // console.log(userInfo?.data?._id);
 
-	// console.log(userInfo?.data[0]?.id);
+  const backButtonHandler = () => {
+    if (userForm > 1) {
+      setUserForm((prev) => prev - 1);
+    }
+  };
 
-	const backButtonHandler = () => {
-		if (userForm > 1) {
-			setUserForm((prev) => prev - 1);
-		}
-	};
+  useEffect(() => {
+    if (bioType === "পাত্রের বায়োডাটা") {
+      setGender("পুরুষ");
+    } else if (bioType === "পাত্রীর বায়োডাটা") {
+      setGender("মহিলা");
+    }
 
-	useEffect(() => {
-		if (bioType === "পাত্রের বায়োডাটা") {
-			setGender("পুরুষ");
-		} else if (bioType === "পাত্রীর বায়োডাটা") {
-			setGender("মহিলা");
-		}
+    if (gender === "পুরুষ") {
+      setFilteredMaritalStatus([
+        { value: "অবিবাহিত" },
+        { value: "বিবাহিত" },
+        { value: "ডিভোর্সড" },
+        { value: "বিপত্নীক" },
+      ]);
+    } else if (gender === "মহিলা") {
+      setFilteredMaritalStatus([
+        { value: "অবিবাহিত" },
+        { value: "বিবাহিত" },
+        { value: "ডিভোর্সড" },
+        { value: "বিধবা" },
+      ]);
+    }
+  }, [bioType, gender]);
 
-		if (gender === "পুরুষ") {
-			setFilteredMaritalStatus([
-				{ value: "অবিবাহিত" },
-				{ value: "বিবাহিত" },
-				{ value: "ডিভোর্সড" },
-				{ value: "বিপত্নীক" },
-			]);
-		} else if (gender === "মহিলা") {
-			setFilteredMaritalStatus([
-				{ value: "অবিবাহিত" },
-				{ value: "বিবাহিত" },
-				{ value: "ডিভোর্সড" },
-				{ value: "বিধবা" },
-			]);
-		}
-	}, [bioType, gender]);
+  const submitGeneralFormHandler = async (event) => {
+    event.preventDefault();
 
-	const submitGeneralFormHandler = async (event) => {
-		event.preventDefault();
+    let formData = {
+      bio_type: bioType,
+      marital_status: maritalStatus,
+      date_of_birth: dob,
+      height: parseFloat(height),
+      screen_color: color,
+      weight: convertToEnglishDigits(weight.toString()),
+      blood_group: blood,
+      nationality: nationality,
+      gender: gender,
+      user_id: userInfo?.data?._id,
+      isMarriageDone: false,
+      isFeatured: false,
+      isFbPosted: false,
+      views_count: 0,
+      purchases_count: 0,
+    };
 
-		let formData = {
-			bio_type: bioType,
-			marital_status: maritalStatus,
-			date_of_birth: dob,
-			height: parseFloat(height),
-			screen_color: color,
-			weight: convertToEnglishDigits(weight.toString()),
-			blood_group: blood,
-			nationality: nationality,
-			gender: gender,
-			user_id: userInfo?.data[0]?.id,
-			isMarriageDone: false,
-			isFeatured: false,
-			isFbPosted: false,
-			views_count: 0,
-			purchases_count: 0,
-		};
+    // console.log("userInfo?.data?._id~~", userInfo?.data?._id);
+    // console.log("!getToken()?.token~~", getToken()?.token);
 
-		if (!getToken()?.token) {
-			alert("Please logout and try again");
-			return;
-		}
+    if (!getToken()?.token || !userInfo?.data?._id) {
+      alert("Please logout and try again");
+      return;
+    }
 
-		if (!userInfo?.data[0].id) {
-			alert("Please login and try again");
-			return;
-		}
+    try {
+      setLoading(true);
+      let data;
+      if (generalInfo?.success) {
+        data = await GeneralInfoServices.updateGeneralInfo(
+          formData,
+          getToken()?.token
+        );
+      } else {
+        data = await BioDataServices.createGeneralInfo(
+          { ...formData, user_form: userForm },
+          getToken().token
+        );
+      }
+      if (data.success) {
+        Toast.successToast("আপনার তথ্য আপডেট  করা হয়েছে");
+        setUserForm((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.log(error);
+      const errorMsg = getErrorMessage(error);
+      Toast.errorToast(errorMsg);
+      // ! for token error redirect to logout
+      if (errorMsg.includes("You are not authorized")) {
+        await logOut();
+        removeToken();
+        navigate("/");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-		try {
-			if (generalInfo?.success) {
-				setLoading(true);
-				const data = await userServices.updateGeneralInfo(
-					formData,
-					getToken().token
-				);
+  return (
+    <div className="container mx-auto mt-5">
+      <FormTitle title="সাধারন তথ্য" />
+      {isLoading ? (
+        <LoadingCircle />
+      ) : (
+        <form onSubmit={submitGeneralFormHandler}>
+          <Select
+            title="বায়োডাটার ধরণ"
+            options={bioDataTypes}
+            value={bioType}
+            setValue={setBioType}
+            required
+          />
+          <Select
+            title="লিঙ্গ"
+            options={genderOptions}
+            value={gender}
+            setValue={setGender}
+            required
+          />
 
-				console.log(getToken()?.token);
+          <Select
+            title="বৈবাহিক অবস্থা "
+            required
+            value={maritalStatus}
+            setValue={setMaritalStatus}
+            options={filteredMaritalStatus}
+          />
 
-				if (data.success) {
-					toast.success("আপনার তথ্য আপডেট  করা হয়েছে ", {
-						position: "bottom-right",
-						duration: 3000,
-						style: { backgroundColor: "green", color: "#fff" },
-					});
-					setUserForm((prev) => prev + 1);
-				}
-				setLoading(false);
-				// console.log(data);
-			} else {
-				setLoading(true);
-				const data = await BioDataServices.createGeneralInfo(
-					{ ...formData, user_form: userForm },
-					getToken().token
-				);
+          <Input
+            title={"জন্মসন "}
+            value={dob}
+            setValue={setDob}
+            required
+            type="date"
+          />
 
-				console.log(data);
+          <Select
+            title="উচ্চতা "
+            required
+            value={height}
+            setValue={setHeight}
+            options={heights}
+          />
 
-				if (data.success) {
-					toast.success("আপনার তথ্য সেভ করা হয়েছে ", {
-						position: "bottom-right",
-						duration: 3000,
-						style: { backgroundColor: "green", color: "#fff" },
-					});
-					setUserForm((prev) => prev + 1);
-				}
-				setLoading(false);
-			}
-		} catch (error) {
-			setLoading(false);
-			console.log(error);
-			const errorMsg = error?.response?.data?.message || "Something Went wrong";
-			toast.error(errorMsg, {
-				position: "bottom-right",
-				duration: 3000,
-				style: { backgroundColor: "#FF0000", color: "#fff" },
-			});
+          <Select
+            title="গাত্রবর্ণ"
+            required
+            value={color}
+            setValue={setColor}
+            options={screenColors}
+          />
 
-			//! for token error redirect to logout
-			if (errorMsg.includes("You are not authorized")) {
-				await logOut();
-				removeToken();
-				navigate("/");
-			}
-		}
-	};
+          <Input
+            title={"ওজন (KG) "}
+            value={weight}
+            setValue={setWeight}
+            required
+            type="text"
+            placeholder="৫০"
+            subtitle="বাংলা অংকে লিখুন,যেমনঃ ৫০,৫৫,৪২...।"
+          />
 
-	// console.log(tokenInfo);
+          <Select
+            title="রক্তের গ্রুপ "
+            required
+            value={blood}
+            setValue={setBlood}
+            options={bloodGroup}
+          />
+          <Select
+            title="জাতীয়তা"
+            required
+            value={nationality}
+            setValue={setNationality}
+            options={nationalities}
+          />
 
-	return (
-		<div className="container mx-auto mt-5">
-			<FormTitle title="সাধারন তথ্য" />
-			<form onSubmit={submitGeneralFormHandler}>
-				<Select
-					title="বায়োডাটার ধরণ"
-					options={bioDataTypes}
-					value={bioType}
-					setValue={setBioType}
-					required
-				/>
-				<Select
-					title="লিঙ্গ"
-					options={genderOptions}
-					value={gender}
-					setValue={setGender}
-					required
-				/>
-
-				<Select
-					title="বৈবাহিক অবস্থা "
-					required
-					value={maritalStatus}
-					setValue={setMaritalStatus}
-					options={filteredMaritalStatus}
-				/>
-
-				<Input
-					title={"জন্মসন "}
-					value={dob}
-					setValue={setDob}
-					required
-					type="date"
-				/>
-
-				<Select
-					title="উচ্চতা "
-					required
-					value={height}
-					setValue={setHeight}
-					options={heights}
-				/>
-
-				<Select
-					title="গাত্রবর্ণ"
-					required
-					value={color}
-					setValue={setColor}
-					options={screenColors}
-				/>
-
-				<Input
-					title={"ওজন (KG) "}
-					value={weight}
-					setValue={setWeight}
-					required
-					type="text"
-					placeholder="৫০"
-					subtitle="বাংলা অংকে লিখুন,যেমনঃ ৫০,৫৫,৪২...।"
-				/>
-
-				<Select
-					title="রক্তের গ্রুপ "
-					required
-					value={blood}
-					setValue={setBlood}
-					options={bloodGroup}
-				/>
-				<Select
-					title="জাতীয়তা"
-					required
-					value={nationality}
-					setValue={setNationality}
-					options={nationalities}
-				/>
-
-				<div className="flex items-center justify-between my-5">
-					<button
-						type="button"
-						onClick={backButtonHandler}
-						className="px-5 py-2 text-xl text-white bg-gray-700 rounded-3xl"
-					>
-						Back
-					</button>
-					<button
-						type="submit"
-						className="px-5 py-2 text-xl text-white rounded-3xl"
-						style={{
-							background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
-						}}
-					>
-						{loading ? <LoadingCircle /> : "Save & Next"}
-					</button>
-				</div>
-			</form>
-		</div>
-	);
+          <div className="flex items-center justify-between my-5">
+            <button
+              type="button"
+              onClick={backButtonHandler}
+              className="px-5 py-2 text-xl text-white bg-gray-700 rounded-3xl"
+            >
+              Back
+            </button>
+            <button
+              type="submit"
+              className="px-5 py-2 text-xl text-white rounded-3xl"
+              style={{
+                background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
+              }}
+            >
+              {loading ? <LoadingCircle /> : "Save & Next"}
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
+  );
 };
 
 export default GeneralInfoForm;

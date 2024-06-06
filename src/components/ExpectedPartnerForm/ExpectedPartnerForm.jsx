@@ -3,11 +3,11 @@ import { useState } from "react";
 import FormTitle from "../FormTitle/FormTitle";
 
 import {
-	educationOptionsMultiple,
-	financialOptionsMultiple,
-	maritalStatusMultiple,
-	professionMultiple,
-	screenColorOptionsMultiple,
+  educationOptionsMultiple,
+  financialOptionsMultiple,
+  maritalStatusMultiple,
+  professionMultiple,
+  screenColorOptionsMultiple,
 } from "./expectedPartnerForm.constant";
 
 import "./expectedPartner.css";
@@ -18,282 +18,272 @@ import { BioDataServices } from "../../services/bioData";
 import Textarea from "../Textarea/Textarea";
 import { Colors } from "../../constants/colors";
 import {
-	dataToMultiple,
-	dataToRange,
-	getDataFromMultipleInput,
-	getDataFromRange,
+  dataToMultiple,
+  dataToMultipleExpectedPartner,
+  dataToRange,
+  getDataFromMultipleInput,
+  getDataFromMultipleInputExpectedPartner,
+  getDataFromRange,
 } from "../../utils/form";
 import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
-import { userServices } from "../../services/user";
 import { useEffect } from "react";
-import { getToken, removeToken } from "../../utils/cookies";
-import toast from "react-hot-toast";
+import { getToken } from "../../utils/cookies";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
-import { useNavigate } from "react-router-dom";
-import { verifyToken } from "../../services/verifyToken";
+import { getErrorMessage } from "../../utils/error";
+import { Toast } from "../../utils/toast";
+import { ExpectedPartnerServices } from "../../services/expectedPartner";
 
 const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
-	const [zilla, setZilla] = useState([]);
-	const [screenColor, setScreenColor] = useState([]);
-	const [height, setHeight] = useState({
-		min: 5.0,
-		max: 6.0,
-	});
+  const [zilla, setZilla] = useState([]);
+  const [screenColor, setScreenColor] = useState([]);
+  const [height, setHeight] = useState({
+    min: 5.0,
+    max: 6.0,
+  });
 
-	const [educationExpected, setEducationExpected] = useState([]);
-	const [age, setAge] = useState({
-		min: 20,
-		max: 30,
-	});
-	const [profession, setProfession] = useState([]);
-	const [maritalStatus, setMaritalStatus] = useState([]);
-	const [financial, setFinancial] = useState([]);
-	const [expected, setExpected] = useState("");
-	const { userInfo, logOut } = useContext(UserContext);
-	const [loading, setLoading] = useState(false);
-	const navigate = useNavigate();
+  const [educationExpected, setEducationExpected] = useState([]);
+  const [age, setAge] = useState({
+    min: 20,
+    max: 30,
+  });
+  const [profession, setProfession] = useState([]);
+  const [maritalStatus, setMaritalStatus] = useState([]);
+  const [financial, setFinancial] = useState([]);
+  const [expected, setExpected] = useState("");
+  const { userInfo } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
 
-	console.log(dataToRange(getDataFromRange(height)), getDataFromRange(height));
-	console.log(
-		getDataFromMultipleInput(screenColor),
-		dataToMultiple(getDataFromMultipleInput(screenColor))
-	);
+  // console.log(dataToRange(getDataFromRange(height)), getDataFromRange(height));
+  // console.log(
+  //   getDataFromMultipleInput(screenColor),
+  //   dataToMultiple(getDataFromMultipleInput(screenColor))
+  // );
 
-	const { data: districtsOptions = [] } = useQuery({
-		queryKey: ["districts"],
-		queryFn: async () => {
-			return await BioDataServices.getAllDistricts("");
-		},
-	});
-	useEffect(() => {
-		verifyToken(
-			userInfo?.data[0]?.id,
-			logOut,
-			"expected-partner-info-verify-token"
-		);
-	}, [logOut, userInfo?.data]);
-	const { data: expectedPartnerInfo = null } = useQuery({
-		queryKey: ["expected-life-partner-info", userInfo?.data[0]?.id],
-		queryFn: async () => {
-			return await userServices.getExpectedLifePartnerByUserId(
-				userInfo?.data[0]?.id
-			);
-		},
-	});
-	useEffect(() => {
-		if (expectedPartnerInfo?.data) {
-			const {
-				age,
-				height,
-				color,
-				zilla,
-				marital_status,
-				expected_characteristics,
-				educational_qualifications,
-				occupation,
-				economical_condition,
-			} = expectedPartnerInfo.data;
-			setAge(dataToRange(age));
-			setHeight(dataToRange(height));
-			setScreenColor(dataToMultiple(color));
-			setZilla(dataToMultiple(zilla));
-			setMaritalStatus(dataToMultiple(marital_status));
-			setProfession(dataToMultiple(occupation));
-			setFinancial(dataToMultiple(economical_condition));
-			setExpected(expected_characteristics);
-			setEducationExpected(dataToMultiple(educational_qualifications));
-		}
-	}, [expectedPartnerInfo]);
+  const { data: districtsOptions = [] } = useQuery({
+    queryKey: ["districts"],
+    queryFn: async () => {
+      return await BioDataServices.getAllDistricts("");
+    },
+  });
+  // useEffect(() => {
+  //   verifyToken(
+  //     userInfo?.data?._id,
+  //     logOut,
+  //     "expected-partner-info-verify-token"
+  //   );
+  // }, [logOut, userInfo?.data]);
+  const { data: expectedPartnerInfo = null, isLoading } = useQuery({
+    queryKey: [
+      "expected-life-partner-info",
+      userInfo?.data?._id,
+      getToken()?.token,
+    ],
+    queryFn: async () => {
+      return await ExpectedPartnerServices.getExpectedPartnerByUser(
+        getToken()?.token
+      );
+    },
+    retry: false,
+    enabled: !!userInfo?.data?._id,
+  });
+  useEffect(() => {
+    if (expectedPartnerInfo?.data) {
+      const {
+        age,
+        height,
+        color,
+        zilla,
+        marital_status,
+        expected_characteristics,
+        educational_qualifications,
+        occupation,
+        economical_condition,
+      } = expectedPartnerInfo.data;
+      setAge(age);
+      setHeight(height);
+      // setAge(dataToRange(age));
+      // setHeight(dataToRange(height));
+      setScreenColor(dataToMultipleExpectedPartner(color));
+      setZilla(dataToMultipleExpectedPartner(zilla));
+      setMaritalStatus(dataToMultipleExpectedPartner(marital_status));
+      setProfession(dataToMultipleExpectedPartner(occupation));
+      setFinancial(dataToMultipleExpectedPartner(economical_condition));
+      setExpected(expected_characteristics);
+      setEducationExpected(
+        dataToMultipleExpectedPartner(educational_qualifications)
+      );
+    }
+  }, [expectedPartnerInfo]);
 
-	const submitHandler = async (e) => {
-		e.preventDefault();
+  const submitHandler = async (e) => {
+    e.preventDefault();
 
-		let expectedPartnerInfoData = {
-			age: getDataFromRange(age),
-			color: getDataFromMultipleInput(screenColor),
-			height: getDataFromRange(height),
-			educational_qualifications: getDataFromMultipleInput(educationExpected),
-			zilla: getDataFromMultipleInput(zilla),
-			marital_status: getDataFromMultipleInput(maritalStatus),
-			occupation: getDataFromMultipleInput(profession),
-			economical_condition: getDataFromMultipleInput(financial),
-			expected_characteristics: expected,
-		};
+    let expectedPartnerInfoData = {
+      age: age,
+      height: height,
+      // age: getDataFromRange(age),
+      // height: getDataFromRange(height),
+      color: getDataFromMultipleInputExpectedPartner(screenColor),
+      educational_qualifications:
+        getDataFromMultipleInputExpectedPartner(educationExpected),
+      zilla: getDataFromMultipleInputExpectedPartner(zilla),
+      marital_status: getDataFromMultipleInputExpectedPartner(maritalStatus),
+      occupation: getDataFromMultipleInputExpectedPartner(profession),
+      economical_condition: getDataFromMultipleInputExpectedPartner(financial),
+      expected_characteristics: expected,
+    };
 
-		if (!getToken()?.token) {
-			alert("Please logout and try again");
-			return;
-		}
+    if (!getToken()?.token || !userInfo?.data?._id) {
+      alert("Please logout and try again");
+      return;
+    }
 
-		if (!userInfo?.data[0].id) {
-			alert("Please login and try again");
-			return;
-		}
+    console.log(expectedPartnerInfoData);
 
-		console.log(expectedPartnerInfoData);
+    try {
+      setLoading(true);
+      let data;
+      if (expectedPartnerInfo?.success === true) {
+        data = await ExpectedPartnerServices.updateExpectedPartner(
+          expectedPartnerInfoData,
+          getToken().token
+        );
+      } else {
+        data = await ExpectedPartnerServices.createExpectedPartner(
+          { ...expectedPartnerInfoData, user_form: userForm },
+          getToken().token
+        );
+      }
+      if (data.success) {
+        Toast.successToast("আপনার তথ্য সেভ করা হয়েছে ");
+        setUserForm((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.log(error);
+      const errorMsg = getErrorMessage(error);
+      Toast.errorToast(errorMsg);
 
-		try {
-			if (expectedPartnerInfo?.success === true) {
-				setLoading(true);
-				const data = await userServices.updateExpectedLifePartner(
-					expectedPartnerInfoData,
-					getToken().token
-				);
+      //! for token error redirect to logout
+      // if (errorMsg.includes("You are not authorized")) {
+      //   await logOut();
+      //   removeToken();
+      //   navigate("/");
+      // }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-				console.log(getToken()?.token);
+  const backButtonHandler = () => {
+    if (userForm > 1) {
+      setUserForm((prev) => prev - 1);
+    }
+  };
+  return (
+    <div>
+      <FormTitle title="প্রত্যাশিত জীবনসঙ্গী" />
+      {isLoading ? (
+        <LoadingCircle classes="mt-10" />
+      ) : (
+        <form onSubmit={submitHandler} action="">
+          <label className="block mt-4 mb-5 font-bold text-left text-gray-500">
+            বয়স
+          </label>
+          <DoubleRangeSlider value={age} setValue={setAge} />
 
-				if (data.success) {
-					toast.success("আপনার তথ্য আপডেট  করা হয়েছে ", {
-						position: "bottom-right",
-						duration: 3000,
-						style: { backgroundColor: "green", color: "#fff" },
-					});
-					setUserForm((prev) => prev + 1);
-				}
+          <MultipleSelect
+            title="গাত্রবর্ণ"
+            subtitle="নিজের মত লিখতে পারবেন পাশাপাশি একাধিক সিলেক্ট করতে পারবেন।"
+            options={screenColorOptionsMultiple}
+            value={screenColor}
+            setValue={setScreenColor}
+          />
+          <br />
 
-				setLoading(false);
+          <DoubleRangeSlider
+            value={height}
+            setValue={setHeight}
+            maxValue={7.0}
+            minValue={4.5}
+            step={0.1}
+            title="উচ্চতা"
+            subtitle="5.1 বোঝায় ৫ ফুট ১ ইঞ্চি "
+          />
 
-				// console.log(data);
-			} else {
-				setLoading(true);
-				const data = await userServices.createExpectedLifePartner(
-					{ ...expectedPartnerInfoData, user_form: userForm },
-					getToken().token
-				);
-
-				console.log(data);
-
-				if (data.success) {
-					toast.success("আপনার তথ্য সেভ করা হয়েছে ", {
-						position: "bottom-right",
-						duration: 3000,
-						style: { backgroundColor: "green", color: "#fff" },
-					});
-					setUserForm((prev) => prev + 1);
-				}
-				setLoading(false);
-			}
-		} catch (error) {
-			setLoading(false);
-			console.log(error);
-			const errorMsg = error?.response?.data?.message || "Something Went wrong";
-			toast.success(errorMsg, {
-				position: "bottom-right",
-				duration: 3000,
-				style: { backgroundColor: "#FF0000", color: "#fff" },
-			});
-
-			//! for token error redirect to logout
-			if (errorMsg.includes("You are not authorized")) {
-				await logOut();
-				removeToken();
-				navigate("/");
-			}
-		}
-	};
-
-	const backButtonHandler = () => {
-		if (userForm > 1) {
-			setUserForm((prev) => prev - 1);
-		}
-	};
-	return (
-		<div>
-			<FormTitle title="প্রত্যাশিত জীবনসঙ্গী" />
-			<form onSubmit={submitHandler} action="">
-				<label className="block mt-4 mb-5 font-bold text-left text-gray-500">
-					বয়স
-				</label>
-				<DoubleRangeSlider value={age} setValue={setAge} />
-
-				<MultipleSelect
-					title="গাত্রবর্ণ"
-					subtitle="নিজের মত লিখতে পারবেন পাশাপাশি একাধিক সিলেক্ট করতে পারবেন।"
-					options={screenColorOptionsMultiple}
-					value={screenColor}
-					setValue={setScreenColor}
-				/>
-				<br />
-
-				<DoubleRangeSlider
-					value={height}
-					setValue={setHeight}
-					maxValue={7.0}
-					minValue={4.5}
-					step={0.1}
-					title="উচ্চতা"
-					subtitle="5.1 বোঝায় ৫ ফুট ১ ইঞ্চি "
-				/>
-
-				<MultipleSelect
-					title="শিক্ষাগত যোগ্যতা "
-					placeholder=""
-					options={educationOptionsMultiple}
-					value={educationExpected}
-					setValue={setEducationExpected}
-				/>
-				<br />
-				<MultipleSelect
-					title="জেলা"
-					placeholder=""
-					options={districtsOptions}
-					value={zilla}
-					setValue={setZilla}
-				/>
-				<br />
-				<MultipleSelect
-					title="বৈবাহিক অবস্থা"
-					placeholder=""
-					options={maritalStatusMultiple}
-					value={maritalStatus}
-					setValue={setMaritalStatus}
-				/>
-				<br />
-				<MultipleSelect
-					title="পেশা"
-					placeholder=""
-					options={professionMultiple}
-					value={profession}
-					setValue={setProfession}
-				/>
-				<br />
-				<MultipleSelect
-					title="অর্থনৈতিক অবস্থা"
-					placeholder=""
-					options={financialOptionsMultiple}
-					value={financial}
-					setValue={setFinancial}
-				/>
-				<br />
-				<Textarea
-					value={expected}
-					setValue={setExpected}
-					required
-					title="জীবনসঙ্গীর যেসব বৈশিষ্ট্য বা গুণাবলী প্রত্যাশা করেন"
-					subtitle=" আপনার প্রত্যাশা বিস্তারিত লিখতে পারেন। কোন বিশেষ শর্ত থাকলে উল্লেখ করতে পারেন।"
-				/>
-				<div className="flex items-center justify-between my-5">
-					<button
-						type="button"
-						onClick={backButtonHandler}
-						className="px-5 py-2 text-xl text-white bg-gray-700 rounded-3xl"
-					>
-						Back
-					</button>
-					<button
-						type="submit"
-						className="px-5 py-2 text-xl text-white rounded-3xl"
-						style={{
-							background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
-						}}
-					>
-						{loading ? <LoadingCircle /> : "Save & Next"}
-					</button>
-				</div>
-			</form>
-		</div>
-	);
+          <MultipleSelect
+            title="শিক্ষাগত যোগ্যতা "
+            placeholder=""
+            options={educationOptionsMultiple}
+            value={educationExpected}
+            setValue={setEducationExpected}
+            classes="z-[99999]"
+          />
+          <br />
+          <MultipleSelect
+            title="জেলা"
+            placeholder=""
+            options={districtsOptions}
+            value={zilla}
+            setValue={setZilla}
+            classes="z-[9999]"
+          />
+          <br />
+          <MultipleSelect
+            title="বৈবাহিক অবস্থা"
+            placeholder=""
+            options={maritalStatusMultiple}
+            value={maritalStatus}
+            setValue={setMaritalStatus}
+            classes="z-[999]"
+          />
+          <br />
+          <MultipleSelect
+            title="পেশা"
+            placeholder=""
+            options={professionMultiple}
+            value={profession}
+            setValue={setProfession}
+            classes="z-[99]"
+          />
+          <br />
+          <MultipleSelect
+            title="অর্থনৈতিক অবস্থা"
+            placeholder=""
+            options={financialOptionsMultiple}
+            value={financial}
+            setValue={setFinancial}
+          />
+          <br />
+          <Textarea
+            value={expected}
+            setValue={setExpected}
+            required
+            title="জীবনসঙ্গীর যেসব বৈশিষ্ট্য বা গুণাবলী প্রত্যাশা করেন"
+            subtitle=" আপনার প্রত্যাশা বিস্তারিত লিখতে পারেন। কোন বিশেষ শর্ত থাকলে উল্লেখ করতে পারেন।"
+          />
+          <div className="flex items-center justify-between my-5">
+            <button
+              type="button"
+              onClick={backButtonHandler}
+              className="px-5 py-2 text-xl text-white bg-gray-700 rounded-3xl"
+            >
+              Back
+            </button>
+            <button
+              type="submit"
+              className="px-5 py-2 text-xl text-white rounded-3xl"
+              style={{
+                background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
+              }}
+            >
+              {loading ? <LoadingCircle /> : "Save & Next"}
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
+  );
 };
 
 export default ExpectedPartnerForm;

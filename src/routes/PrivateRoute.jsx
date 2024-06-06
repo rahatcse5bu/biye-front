@@ -5,19 +5,19 @@ import LoadingCircle from "../components/LoadingCircle/LoadingCircle";
 import UserContext from "../contexts/UserContext";
 
 const PrivateRoute = ({ children }) => {
-	const { userInfo, userLoading, userInfoFetchLoading } =
-		useContext(UserContext);
-	const location = useLocation();
+  const { userInfo, userLoading, userInfoFetchLoading } =
+    useContext(UserContext);
+  const location = useLocation();
 
-	if (userLoading || userInfoFetchLoading) {
-		return <LoadingCircle />;
-	}
+  if (userLoading || userInfoFetchLoading) {
+    return <LoadingCircle />;
+  }
 
-	if (userInfo?.data[0]?.id) {
-		return children;
-	}
+  if (userInfo?.data?._id) {
+    return children;
+  }
 
-	return <Navigate to="/login" state={{ from: location }} replace />;
+  return <Navigate to="/login" state={{ from: location }} replace />;
 };
 
 export default PrivateRoute;

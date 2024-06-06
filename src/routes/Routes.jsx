@@ -36,226 +36,226 @@ import RefundFail from "../pages/RefundFail/RefundFail";
 import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
-	{
-		path: "/",
-		element: <MainLayout />,
-		children: [
-			{
-				path: "/",
-				element: <Home />,
-			},
-			{
-				path: "/biodata/:id",
-				element: <BioData />,
-			},
-			{
-				path: "/biodatas",
-				element: <BioDatas />,
-			},
-			{
-				path: "/signup",
-				element: <Signup />,
-			},
-			{
-				path: "/login",
-				element: <Login />,
-			},
-			{
-				path: "/send-form/:id",
-				element: <SendForm />,
-			},
-			{
-				path: "/about-us",
-				element: <AboutUs />,
-			},
-			{
-				path: "/reports",
-				element: <Reports />,
-			},
-			{
-				path: "/send-form",
-				element: (
-					<PrivateRoute>
-						<SendForm />
-					</PrivateRoute>
-				),
-			},
-			{
-				path: "/privacy-policy",
-				element: <PrivacyPolicy />,
-			},
-			{
-				path: "/terms-and-condition",
-				element: <TermsAndConditions />,
-			},
-			{
-				path: "/instructions",
-				element: <Instructions />,
-			},
-			{
-				path: "/points-package",
-				element: <Payments />,
-			},
-			{
-				path: "/refund-policy",
-				element: <RefundPolicy />,
-			},
-			{
-				path: "/faq",
-				element: <Faq />,
-			},
-			{
-				path: "/contact-us",
-				element: (
-					<PrivateRoute>
-						<ContactUs />
-					</PrivateRoute>
-				),
-			},
-			{
-				path: "/forgot-password",
-				element: <ForgotPassword />,
-			},
-			{
-				path: "/pay",
-				element: (
-					<PrivateRoute>
-						<AfterPay />
-					</PrivateRoute>
-				),
-			},
-			{
-				path: "/pay/fail",
-				element: (
-					<PrivateRoute>
-						<PayFail />
-					</PrivateRoute>
-				),
-			},
-			// {
-			// 	path: "/admin/refund/:paymentId/:tnxId",
-			// 	element: <Refund />,
-			// },
-			{
-				path: "/admin/refund/",
-				element: (
-					<PrivateRoute>
-						<Refund />
-					</PrivateRoute>
-				),
-			},
-			{
-				path: "/pay/success",
-				element: (
-					<PrivateRoute>
-						<PaySuccess />
-					</PrivateRoute>
-				),
-			},
-			{
-				path: "/refund/success",
-				element: (
-					<PrivateRoute>
-						<RefundSuccess />
-					</PrivateRoute>
-				),
-			},
-			{
-				path: "/refund/fail",
-				element: (
-					<PrivateRoute>
-						<RefundFail />
-					</PrivateRoute>
-				),
-			},
-			{
-				path: "/user/account",
-				element: <UserLayout />,
-				children: [
-					{
-						path: "/user/account/edit-biodata",
-						element: (
-							<PrivateRoute>
-								<EditBiodata />
-							</PrivateRoute>
-						),
-					},
-					{
-						path: "/user/account/preview-biodata/:id",
-						element: (
-							<PrivateRoute>
-								<BioData />
-							</PrivateRoute>
-						),
-					},
-					{
-						path: "/user/account/dashboard",
-						element: (
-							<PrivateRoute>
-								<DashBoard />
-							</PrivateRoute>
-						),
-					},
-					{
-						path: "/user/account/dislikes",
-						element: (
-							<PrivateRoute>
-								<BioDisLikes />
-							</PrivateRoute>
-						),
-					},
-					{
-						path: "/user/account/likes",
-						element: (
-							<PrivateRoute>
-								<BioLikes />
-							</PrivateRoute>
-						),
-					},
-					{
-						path: "/user/account/purchases",
-						element: (
-							<PrivateRoute>
-								<MyPurchases />
-							</PrivateRoute>
-						),
-					},
-					{
-						path: "/user/account/bio-requests",
-						element: (
-							<PrivateRoute>
-								<BioRequests />
-							</PrivateRoute>
-						),
-					},
-					{
-						path: "/user/account/payment-and-refund",
-						element: (
-							<PrivateRoute>
-								<PaymentAndRefund />
-							</PrivateRoute>
-						),
-					},
-					{
-						path: "/user/account/myreports",
-						element: (
-							<PrivateRoute>
-								<MyReports />
-							</PrivateRoute>
-						),
-					},
-					{
-						path: "/user/account/settings",
-						element: <Settings />,
-					},
-				],
-			},
-		],
-	},
-	{
-		path: "*",
-		element: <NotFound />,
-	},
+  {
+    path: "/",
+    element: <MainLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/biodata/:id",
+        element: <BioData />,
+      },
+      {
+        path: "/biodatas",
+        element: <BioDatas />,
+      },
+      {
+        path: "/signup",
+        element: <Signup />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/send-form/:id",
+        element: <SendForm />,
+      },
+      {
+        path: "/about-us",
+        element: <AboutUs />,
+      },
+      {
+        path: "/reports",
+        element: <Reports />,
+      },
+      {
+        path: "/send-form",
+        element: (
+          <PrivateRoute>
+            <SendForm />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/privacy-policy",
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: "/terms-and-condition",
+        element: <TermsAndConditions />,
+      },
+      {
+        path: "/instructions",
+        element: <Instructions />,
+      },
+      {
+        path: "/points-package",
+        element: <Payments />,
+      },
+      {
+        path: "/refund-policy",
+        element: <RefundPolicy />,
+      },
+      {
+        path: "/faq",
+        element: <Faq />,
+      },
+      {
+        path: "/contact-us",
+        element: (
+          <PrivateRoute>
+            <ContactUs />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "/pay",
+        element: (
+          <PrivateRoute>
+            <AfterPay />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/pay/fail",
+        element: (
+          <PrivateRoute>
+            <PayFail />
+          </PrivateRoute>
+        ),
+      },
+      // {
+      // 	path: "/admin/refund/:paymentId/:tnxId",
+      // 	element: <Refund />,
+      // },
+      {
+        path: "/admin/refund/",
+        element: (
+          <PrivateRoute>
+            <Refund />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/pay/success",
+        element: (
+          <PrivateRoute>
+            <PaySuccess />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/refund/success",
+        element: (
+          <PrivateRoute>
+            <RefundSuccess />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/refund/fail",
+        element: (
+          <PrivateRoute>
+            <RefundFail />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/user/account",
+        element: <UserLayout />,
+        children: [
+          {
+            path: "/user/account/edit-biodata",
+            element: (
+              <PrivateRoute>
+                <EditBiodata />
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: "/user/account/preview-biodata/:id",
+            element: (
+              <PrivateRoute>
+                <BioData />
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: "/user/account/dashboard",
+            element: (
+              <PrivateRoute>
+                <DashBoard />
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: "/user/account/dislikes",
+            element: (
+              <PrivateRoute>
+                <BioDisLikes />
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: "/user/account/likes",
+            element: (
+              <PrivateRoute>
+                <BioLikes />
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: "/user/account/purchases",
+            element: (
+              <PrivateRoute>
+                <MyPurchases />
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: "/user/account/bio-requests",
+            element: (
+              <PrivateRoute>
+                <BioRequests />
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: "/user/account/payment-and-refund",
+            element: (
+              <PrivateRoute>
+                <PaymentAndRefund />
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: "/user/account/myreports",
+            element: (
+              <PrivateRoute>
+                <MyReports />
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: "/user/account/settings",
+            element: <Settings />,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
 ]);
 
 export default router;
