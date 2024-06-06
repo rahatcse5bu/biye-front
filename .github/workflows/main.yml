@@ -10,13 +10,13 @@ jobs:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     env:
-      VITE_REACT_APP_authDomain: ${{ secrets.REACT_APP_AUTHDOMAIN }}
-      VITE_REACT_APP_apiKey: ${{ secrets.REACT_APP_APIKEY }}
-      VITE_REACT_APP_projectId: ${{ secrets.REACT_APP_PROJECTID }}
-      VITE_REACT_APP_storageBucket: ${{ secrets.REACT_APP_STORAGEBUCKET }}
-      VITE_REACT_APP_messagingSenderId: ${{ secrets.REACT_APP_MESSAGINGSENDERID }}
-      VITE_REACT_APP_appId: ${{ secrets.REACT_APP_APPID }}
-      VITE_REACT_APP_NODE_ENV: ${{secrets.REACT_APP_NODE_ENV}}
+      VITE_REACT_APP_authDomain: "pnc-nikah.firebaseapp.com"
+      VITE_REACT_APP_apiKey: "AIzaSyCGMfMlLJk65tcQi1_IocJKI-KD11mfGpE"
+      VITE_REACT_APP_projectId: "pnc-nikah"
+      VITE_REACT_APP_storageBucket: "pnc-nikah.appspot.com"
+      VITE_REACT_APP_messagingSenderId: "893917202752"
+      VITE_REACT_APP_appId: "1:893917202752:web:37d31a29adbf37bcd712a5"
+      VITE_REACT_APP_NODE_ENV: "production"
     steps:
       - name: environment variable
         run: echo Hello world $REACT_APP_IMGBB_KEY
@@ -37,9 +37,9 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ${{secrets.FTP_SERVER}}
-          username: ${{secrets.FTP_USERNAME}}
+          server: "ftp.pncsoft.tech"
+          username: "pnc-nikah@pnc-nikah.com"
           # dangerous-clean-slate: true
-          password: ${{ secrets.FTP_PASSWORD }}
+          password: "{J?.H_fLC*JD"
           port: 21
           local-dir: ./dist/
