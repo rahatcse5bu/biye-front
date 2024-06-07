@@ -9,7 +9,7 @@ import { Pagination } from "../Pagination/Pagination";
 
 const BioDatasGrid = ({ sideBarDisplay, setSideBarDisplay }) => {
   const { bios } = useContext(BioContext);
-  console.log("bio-datas-from-db~", bios);
+  // console.log("bio-datas-from-db~", bios);
 
   return (
     <div className="w-full mx-5 mt-5">

@@ -25,8 +25,16 @@ const updateGeneralInfo = async (updatedData, token) => {
   });
   return data;
 };
+const updateWatchOfBioData = async (id) => {
+  if (!id) {
+    return null;
+  }
+  const { data } = await axios.get(baseUrl + `/general-info/watch/${id}`);
+  return data;
+};
 
 export const GeneralInfoServices = {
   getGeneralInfoByUser,
   updateGeneralInfo,
+  updateWatchOfBioData,
 };

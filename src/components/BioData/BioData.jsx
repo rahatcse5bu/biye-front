@@ -16,26 +16,17 @@ import UserContext from "../../contexts/UserContext";
 import { DisLikesServices } from "../../services/unfavorites";
 import { RiProhibitedFill, RiProhibitedLine } from "react-icons/ri";
 import { convertHeightToBengali } from "../../utils/height";
+import { GeneralInfoServices } from "../../services/generalInfo";
+import { useState, useEffect } from "react";
 
 const BioData = ({ biodata }) => {
+  const [likes, setLikes] = useState(false);
+  const [count, setCount] = useState(false);
+  const [disLikes, setDisLikes] = useState(false);
+  const [countDisLike, setDisLikesCount] = useState(false);
   const navigate = useNavigate();
   const { userInfo } = useContext(UserContext);
 
-  console.log("bio data~", userInfo);
-
-  const { data, refetch } = useQuery({
-    queryKey: ["like", "count", biodata?.user_id],
-    queryFn: async () => {
-      return LikesServices.getLikes(biodata?.user_id);
-    },
-  });
-
-  const { data: userData, refetch: userRefetch } = useQuery({
-    queryKey: ["like", "user", "count", userInfo?.data?._id, biodata?.user_id],
-    queryFn: async () => {
-      return LikesServices.getUserLikes(userInfo?.data?._id, biodata?.user_id);
-    },
-  });
   const { data: userDisLikesData, refetch: userDisLikesRefetch } = useQuery({
     queryKey: ["dis-like", "user", userInfo?.data?._id, biodata?.user_id],
     queryFn: async () => {
@@ -44,32 +35,108 @@ const BioData = ({ biodata }) => {
         biodata.user_id
       );
     },
+    retry: false,
   });
 
-  console.log(biodata);
+  const { data: checkLikes } = useQuery({
+    queryKey: [
+      "check-likes",
+      biodata?.user,
+      userInfo?.data?._id,
+      getToken()?.token,
+    ],
+    queryFn: async () => {
+      return await LikesServices.checkLikes(biodata?.user, getToken()?.token);
+    },
+    retry: false,
+  });
+  const { data: checkDisLikes } = useQuery({
+    queryKey: [
+      "check-dislikes",
+      biodata?.user,
+      userInfo?.data?._id,
+      getToken()?.token,
+    ],
+    queryFn: async () => {
+      return await DisLikesServices.checkDisLikes(
+        biodata?.user,
+        getToken()?.token
+      );
+    },
+    retry: false,
+  });
 
-  const bioDataHandler = () => {
+  useEffect(() => {
+    if (checkLikes) {
+      setLikes(checkLikes?.data);
+    }
+  }, [checkLikes]);
+  useEffect(() => {
+    if (checkDisLikes) {
+      setDisLikes(checkDisLikes?.data);
+    }
+  }, [checkDisLikes]);
+
+  useEffect(() => {
+    if (biodata) {
+      setCount(biodata?.likes_count);
+    }
+  }, [biodata]);
+  useEffect(() => {
+    if (biodata) {
+      setDisLikesCount(biodata?.dislikes_count);
+    }
+  }, [biodata]);
+
+  // console.log("likes", likes);
+  // console.log(checkLikes);
+  // console.log(biodata);
+
+  const bioDataHandler = async () => {
+    // update watch count
+    if (biodata?._id) {
+      try {
+        const response = await GeneralInfoServices.updateWatchOfBioData(
+          biodata?._id
+        );
+        console.log("watch-response", response);
+      } catch (error) {
+        console.error("Error incrementing view count", error);
+      }
+    }
+    // navigate to biodata page
     navigate(`/biodata/${biodata?.user_id}`);
   };
 
   // ? FOR GIVING like REACTION
   const likeButtonHandler = async () => {
-    if (!userInfo?.data?._id) {
+    if (!userInfo?.data?._id || !getToken()?.token) {
       Toast.errorToast("Please,Login First");
       return;
     }
 
+    if (!biodata?.user) {
+      return;
+    }
+
+    if (likes) {
+      setCount((prev) => prev - 1);
+    }
+
+    if (!likes) {
+      setCount((prev) => prev + 1);
+    }
+
     try {
+      setLikes((prev) => !prev);
       const data = await LikesServices.createLikes(
-        { bio_id: biodata?.user_id },
+        { bio_user: biodata?.user },
         getToken().token
       );
       if (data?.success) {
-        await refetch();
-        await userRefetch();
         Toast.successToast("আপনার রিয়াকশন যুক্ত করা হয়েছে");
       }
-      console.log(data);
+      // console.log("likes~~", data);
     } catch (error) {
       console.log(error);
     }
@@ -81,13 +148,27 @@ const BioData = ({ biodata }) => {
       return;
     }
 
+    if (!biodata?.user) {
+      return;
+    }
+
+    if (disLikes) {
+      setDisLikesCount((prev) => prev - 1);
+    }
+
+    if (!disLikes) {
+      setDisLikesCount((prev) => prev + 1);
+    }
+
     try {
+      setDisLikes((prev) => !prev);
+
       const data = await DisLikesServices.createDisLikes(
-        { bio_id: biodata?.user_id },
+        { bio_user: biodata?.user },
         getToken().token
       );
+      console.log("dislikes~~", data);
       if (data?.success) {
-        await userDisLikesRefetch();
         Toast.successToast("আপনার রিয়াকশন যুক্ত করা হয়েছে");
       }
       // console.log(data);
@@ -100,7 +181,7 @@ const BioData = ({ biodata }) => {
   // console.log("dislikes~", userDisLikesData);
 
   return (
-    <div className="my-5 hover:shadow-2xl transition-all  duration-300 ease-in rounded-md border-2">
+    <div className="my-5 relative hover:shadow-2xl transition-all  duration-300 ease-in rounded-md border-2">
       <ScrollToTop />
       <div
         style={{
@@ -121,31 +202,29 @@ const BioData = ({ biodata }) => {
         {/* view icons */}
         <div className="flex absolute top-2 left-2">
           <FaEye className="w-6 h-6 mr-2" />
-          {biodata?.views}
+          {biodata?.views_count}
         </div>
         {/*dislikes icons */}
-        <div
+        <button
           onClick={DisLikeButtonHandler}
-          className="flex absolute cursor-pointer top-2  right-2"
+          disabled={likes}
+          className="flex absolute disabled:cursor-not-allowed cursor-pointer top-2  right-2"
         >
-          {userDisLikesData?.data?.type === "ignore" ? (
-            <RiProhibitedFill />
-          ) : (
-            <RiProhibitedLine />
-          )}
-        </div>
+          {disLikes ? <RiProhibitedFill /> : <RiProhibitedLine />}
+        </button>
         {/* like icons */}
-        <div
+        <button
+          disabled={disLikes}
           onClick={likeButtonHandler}
-          className=" absolute flex items-center bottom-2 left-2 cursor-pointer"
+          className=" absolute flex items-center disabled:cursor-not-allowed bottom-2 left-2 cursor-pointer"
         >
-          {userData?.data?.type === "like" && biodata ? (
+          {likes ? (
             <FaHeart className="w-6 h-6 " />
           ) : (
             <FaRegHeart className="w-6 h-6 text-white" />
-          )}{" "}
-          {data?.count > 0 && <span className="ml-1 ">{data?.count}</span>}
-        </div>
+          )}
+          {count > 0 && <span className="ml-1 ">{count}</span>}
+        </button>
       </div>
       <div className="mx-2 mt-4">
         <table className="min-w-full divide-y divide-gray-200 border-0 border-gray-300">
@@ -185,8 +264,7 @@ const BioData = ({ biodata }) => {
             background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
           }}
         >
-          {" "}
-          সম্পূর্ন বায়োডাটা{" "}
+          সম্পূর্ন বায়োডাটা
         </Button>
       </div>
     </div>

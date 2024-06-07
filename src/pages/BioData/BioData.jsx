@@ -18,24 +18,31 @@ import { ContactServices } from "../../services/contact";
 import { UserInfoServices } from "../../services/userInfo";
 import { getToken } from "../../utils/cookies";
 import LoadingBioData from "../../components/LoadingBioData/LoadingBioData";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useCallback } from "react";
 import BioContext from "../../contexts/BioContext";
 import UserContext from "../../contexts/UserContext";
 import { ScrollToTop } from "../../constants/ScrolltoTop";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
-
+import { GeneralInfoServices } from "../../services/generalInfo";
+import { FcLeft } from "react-icons/fc";
+import { useNavigate } from "react-router-dom";
 const BioData = () => {
   const { id } = useParams();
   const { setBio } = useContext(BioContext);
   const { userInfo } = useContext(UserContext);
+  const navigate = useNavigate();
 
   // console.log(id);
-  const { isLoading, error, data } = useQuery({
+  const { isLoading, data } = useQuery({
     queryKey: ["bio-data", id],
     queryFn: async () => {
       return await BioDataServices.getBioData(id);
     },
+    retry: false,
+    enabled: !!id,
   });
+
+  console.log("data~~", data);
   const { data: userStatus = null } = useQuery({
     queryKey: ["bio-data", "status", id],
     queryFn: async () => {
@@ -62,9 +69,29 @@ const BioData = () => {
 
   useEffect(() => {
     if (data && data?.data) {
-      setBio(data.data?.data);
+      setBio(data.data);
     }
-  }, [data, setBio]);
+  }, [data, setBio, id]);
+
+  // const incrementViewCount = useCallback(async () => {
+  //   const generalId = data?.data?.generalInfo?._id;
+  //   if (generalId) {
+  //     try {
+  //       const response = await GeneralInfoServices.updateWatchOfBioData(
+  //         generalId
+  //       );
+  //       console.log("watch~~", response);
+  //     } catch (error) {
+  //       console.error("Error incrementing view count", error);
+  //     }
+  //   }
+  // }, [data?.data?.generalInfo?._id]);
+
+  // useEffect(() => {
+  //   if (data?.data?.generalInfo?._id) {
+  //     incrementViewCount();
+  //   }
+  // }, [data?.data?.generalInfo?._id, incrementViewCount]);
 
   // if (isLoading) {
   // 	return <LoadingBioData />;
@@ -74,46 +101,57 @@ const BioData = () => {
   // console.log(error);
 
   return (
-    <div className=" py-12 w-full  ">
-      <ScrollToTop />
-      <div className="grid text-[16px] lg:grid-cols-[30%,70%] md:grid-cols-[50%,50%] grid-cols-1 ">
-        <div className="col px-2 single-bio-left-sidebar">
-          <BioInfo />
-          <div className="h-5"></div>
-          <BioInfoButton />
-          <div className="h-5"></div>
-          <BioDataStat id={id} />
-          {/*<!-- End of Single Bio STATS Section  -->*/}
-        </div>
-        <div className="col px-2  single-bio-right-sidebar">
-          <AddressInfo />
-          <hr />
-          <div className="h-5"></div>
-          <EducationInfo />
-
-          <div className="h-5"></div>
-          <FamilyInfo />
-
-          <div className="h-5"></div>
-          <PersonalInfo />
-          <div className="h-5"></div>
-          <ProfessionalInfo />
-          {/*<!-- End of Occupational Info  -->*/}
-          <div className="h-5"></div>
-          <MaritalInfo />
-
-          <div className="h-5"></div>
-
-          <ExpectedPartner />
-          {/*<!-- End of Expected Life Partner  -->*/}
-          <div className="h-5"></div>
-          <OngikarNama />
-
-          <div className="h-5"></div>
-
-          <ContactInfo contact={contact?.data} status={userStatus?.data} />
-        </div>
+    <div className=" py-2 w-full  ">
+      <div
+        onClick={() => navigate(-1)}
+        className=" py-2 flex flex-row cursor-pointer my-2"
+      >
+        <FcLeft className="w-8 h-6 text-white " />
+        <strong className="text-indigo-600">Back</strong>
       </div>
+      <ScrollToTop />
+      {isLoading ? (
+        <LoadingCircle classes="mt-10" />
+      ) : (
+        <div className="grid text-[16px] lg:grid-cols-[30%,70%] md:grid-cols-[50%,50%] grid-cols-1 ">
+          <div className="col px-2 single-bio-left-sidebar">
+            <BioInfo id={id} />
+            <div className="h-5"></div>
+            <BioInfoButton />
+            <div className="h-5"></div>
+            <BioDataStat id={id} />
+            {/*<!-- End of Single Bio STATS Section  -->*/}
+          </div>
+          <div className="col px-2  single-bio-right-sidebar">
+            <AddressInfo />
+            <hr />
+            <div className="h-5"></div>
+            <EducationInfo />
+
+            <div className="h-5"></div>
+            <FamilyInfo />
+
+            <div className="h-5"></div>
+            <PersonalInfo />
+            <div className="h-5"></div>
+            <ProfessionalInfo />
+            {/*<!-- End of Occupational Info  -->*/}
+            <div className="h-5"></div>
+            <MaritalInfo />
+
+            <div className="h-5"></div>
+
+            <ExpectedPartner />
+            {/*<!-- End of Expected Life Partner  -->*/}
+            <div className="h-5"></div>
+            <OngikarNama />
+
+            <div className="h-5"></div>
+
+            <ContactInfo contact={contact?.data} status={userStatus?.data} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

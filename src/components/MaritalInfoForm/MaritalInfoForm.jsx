@@ -19,6 +19,7 @@ const MaritalInfoForm = ({ userForm, setUserForm }) => {
   const [wifeDeadInfo, setWifeDeadInfo] = useState("");
   const [whenHusbandDead, setWhenHusbandDead] = useState("");
   const [divorcedReason, setDivorcedReason] = useState("");
+  // const [isJoutuk, setIsJoutuk] = useState("");
   const [whyMarriedAnother, setWhyMarriedAnother] = useState("");
   const [whyMarriage, setWhyMarriage] = useState("");
   const [hopeForGift, setHopeForGift] = useState("");
@@ -302,6 +303,12 @@ const MaritalInfoForm = ({ userForm, setUserForm }) => {
               />
             </>
           )}
+          {/* <Input
+            title="বিয়েতে যৌতুক নিবেন বা দিবেন?"
+            value={isJoutuk}
+            setValue={setIsJoutuk}
+            subtitle="চাকুরীজীবী না হলে ঘরটি ফাঁকা রাখুন।"
+          /> */}
 
           <Textarea
             title="কেন বিয়ে করছেন? বিয়ে সম্পর্কে আপনার ধারণা কি?"

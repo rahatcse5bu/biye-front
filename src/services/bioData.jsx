@@ -62,8 +62,8 @@ const getALLGeneralInfo = async (query) => {
 };
 
 const getBioData = async (id) => {
-  const bioData = await axios.get(baseUrl + "/bio-data/" + Number(id));
-  return bioData;
+  const { data } = await axios.get(baseUrl + "/bio-data/" + Number(id));
+  return data;
 };
 
 const createGeneralInfo = async (data, token) => {

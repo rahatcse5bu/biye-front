@@ -17,14 +17,12 @@ const MaritalInfo = () => {
               অভিভাবক আপনার বিয়েতে রাজি কি না?
             </td>
             <td className="px-4 py-2 text-left  w-1/2 border-l">
-              {maritalInfo?.isFamilyAgree === true
-                ? " জি আলহামদুলিল্লাহ"
-                : "না"}
+              {maritalInfo?.isFamilyAgree}
             </td>
           </tr>
         </thead>
         <tbody>
-          <tr className="border-b">
+          {/* <tr className="border-b">
             <td className="px-4 py-2 text-left  w-1/2">
               বিয়ের পুরো আয়োজন সুন্নতি নিয়মে করতে চান?
             </td>
@@ -33,7 +31,7 @@ const MaritalInfo = () => {
                 ? " জি আলহামদুলিল্লাহ"
                 : "না"}
             </td>
-          </tr>
+          </tr> */}
 
           {generalInfo?.gender === "মহিলা" ||
           generalInfo?.bio_type === "পাত্রীর বায়োডাটা" ? (
@@ -43,8 +41,7 @@ const MaritalInfo = () => {
                   আপনি কি বিয়ের পর চাকরি করতে ইচ্ছুক?
                 </td>
                 <td className="px-4 py-2 text-left  w-1/2 border-l">
-                  করপোরেট জব করার কোন ইচ্ছা নেই। তবে হালাল ভাবে কিছু করার ইচ্ছা
-                  আছে(আলোচনা সাপেক্ষ)
+                  {maritalInfo?.after_marriage_running_job}
                 </td>
               </tr>
               <tr className="border-b">
@@ -52,12 +49,18 @@ const MaritalInfo = () => {
                   বিয়ের পর পড়াশোনা চালিয়ে যেতে চান?
                 </td>
                 <td className="px-4 py-2 text-left  w-1/2 border-l">
-                  {maritalInfo?.permission_for_study === true
-                    ? " জি আলহামদুলিল্লাহ"
-                    : "না"}
+                  {maritalInfo?.is_running_study}
                 </td>
               </tr>
               <tr className="border-b">
+                <td className="px-4 py-2 text-left  w-1/2">
+                  বিয়ের পর চাকরি চালিয়ে যেতে চান?
+                </td>
+                <td className="px-4 py-2 text-left  w-1/2 border-l">
+                  {maritalInfo?.is_running_job}
+                </td>
+              </tr>
+              {/* <tr className="border-b">
                 <td className="px-4 py-2 text-left  w-1/2">
                   তালাক হয়ে থাকলে কারণ উল্লেখ করুন
                 </td>
@@ -66,9 +69,9 @@ const MaritalInfo = () => {
                     ? " জি "
                     : "না আলহামদুলিল্লাহ"}
                 </td>
-              </tr>
+              </tr> */}
 
-              <tr className="border-b">
+              {/* <tr className="border-b">
                 <td className="px-4 py-2 text-left  w-1/2">
                   তালাক হয়ে থাকলে এবং সন্তান থাকলে সন্তান সম্পর্কে বিস্তারিত
                   উল্লেখ করুন
@@ -76,16 +79,24 @@ const MaritalInfo = () => {
                 <td className="px-4 py-2 text-left  w-1/2 border-l">
                   {maritalInfo?.children_details}
                 </td>
-              </tr>
+              </tr> */}
             </>
           ) : (
             <>
               <tr className="border-b">
                 <td className="px-4 py-2 text-left  w-1/2">
+                  বিয়ের পর স্ত্রীকে পর্দায় রাখতে পারবেন?
+                </td>
+                <td className="px-4 py-2 text-left  w-1/2 border-l">
+                  {maritalInfo?.isPordaToWife}
+                </td>
+              </tr>
+              <tr className="border-b">
+                <td className="px-4 py-2 text-left  w-1/2">
                   আপনি কি বিয়ের পর বউকে চাকরি করতে দিতে ইচ্ছুক?
                 </td>
                 <td className="px-4 py-2 text-left  w-1/2 border-l">
-                  কোন ইচ্ছা নেই(আলোচনা সাপেক্ষ)
+                  {maritalInfo?.permission_for_job}
                 </td>
               </tr>
 
@@ -94,7 +105,16 @@ const MaritalInfo = () => {
                   বিয়ের পর আহলিয়াকে পড়াশোনা চালিয়ে যেতে দিতে চান?
                 </td>
                 <td className="px-4 py-2 text-left  w-1/2 border-l">
-                  জি ইনশাআল্লাহ
+                  {maritalInfo?.permission_for_study}
+                </td>
+              </tr>
+              <tr className="border-b">
+                <td className="px-4 py-2 text-left  w-1/2">
+                  আপনি বা আপনার পরিবার পাত্রীপক্ষের কাছে কোনো উপহার আশা করবেন কি
+                  না?
+                </td>
+                <td className="px-4 py-2 text-left  w-1/2 border-l">
+                  {maritalInfo?.isJoutuk}
                 </td>
               </tr>
               <tr className="border-b">
@@ -108,15 +128,15 @@ const MaritalInfo = () => {
             </>
           )}
 
-          <tr className="border-b">
+          {/* <tr className="border-b">
             <td className="px-4 py-2 text-left  w-1/2">
               বিয়েতে যৌতুক নিবেন বা দিবেন?
             </td>
             <td className="px-4 py-2 text-left  w-1/2 border-l">
               {" "}
-              {maritalInfo?.isJoutuk === true ? " জি " : "কখনই না"}
+              {maritalInfo?.isJoutuk}
             </td>
-          </tr>
+          </tr> */}
 
           <tr className="border-b">
             <td className="px-4 py-2 text-left  w-1/2">

@@ -1,5 +1,6 @@
 import BioContext from "../../contexts/BioContext";
 import { useContext } from "react";
+import { convertToBengaliDigits } from "../../utils/language";
 const ExpectedPartner = () => {
   const { bio } = useContext(BioContext);
   const expectedLifePartner = bio?.expectedLifePartner || null;
@@ -14,46 +15,53 @@ const ExpectedPartner = () => {
           <tr className="border-t border-b">
             <td className="w-1/2 px-4 py-2 text-left">বয়স</td>
             <td className="w-1/2 px-4 py-2 text-left border-l">
-              {expectedLifePartner?.age?.min}
-              {expectedLifePartner?.age?.max}
+              {convertToBengaliDigits(expectedLifePartner?.age?.min)} বছর থেকে{" "}
+              {convertToBengaliDigits(expectedLifePartner?.age?.max)} বছর
+              পর্যন্ত
             </td>
           </tr>
           <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left"> গাত্রবর্ণ </td>
             <td className="w-1/2 px-4 py-2 text-left border-l">
-              {expectedLifePartner?.color.join(",")}
+              {expectedLifePartner?.color.join(", ")}
             </td>
           </tr>
           <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">উচ্চতা</td>
             <td className="w-1/2 px-4 py-2 text-left border-l">
-              {expectedLifePartner?.height?.min}
-              {expectedLifePartner?.height?.max}
+              {convertToBengaliDigits(
+                expectedLifePartner?.height?.min.toFixed(2)
+              )}{" "}
+              ফূট থেকে{" "}
+              {convertToBengaliDigits(
+                expectedLifePartner?.height?.max.toFixed(2)
+              )}{" "}
+              ফূট পর্যন্ত
             </td>
           </tr>
           <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">শিক্ষাগত যোগ্যতা</td>
             <td className="w-1/2 px-4 py-2 text-left break-all border-l">
-              {expectedLifePartner?.educational_qualifications?.join(",")}
+              {expectedLifePartner?.educational_qualifications?.join(", ")}
             </td>
           </tr>
-          <tr className="border-b lg:block sm:hidden">
+          {/* <tr className="border-b lg:block sm:hidden">
             <td className="w-1/2 px-4 py-2 text-left">জেলা</td>
             <td className="w-1/2 px-4 py-2 text-left break-all border-l">
-              {expectedLifePartner?.zilla.join(",")}
+              {expectedLifePartner?.zilla.join(", ")}
             </td>
-          </tr>
+          </tr> */}
 
           {/* mobile version layout change */}
           {/* Row 1 */}
-          <tr className="border-b lg:hidden">
+          {/* <tr className="border-b lg:hidden">
             <td colSpan="2" className="px-4 py-2 text-left">
               জেলা
             </td>
           </tr>
 
           {/* Row 2 */}
-          <tr className="w-full border-b lg:hidden">
+          {/* <tr className="w-full border-b lg:hidden">
             <td
               colSpan="2"
               className="px-4 py-2 text-center break-all border-l"
@@ -62,24 +70,30 @@ const ExpectedPartner = () => {
                 {expectedLifePartner?.zilla.join(",")}
               </div>
             </td>
-          </tr>
+          </tr>  */}
 
+          <tr className="border-b">
+            <td className="w-1/2 px-4 py-2 text-left">জেলা</td>
+            <td className="w-1/2 px-4  py-2 text-left border-l">
+              {expectedLifePartner?.zilla.join(",")}
+            </td>
+          </tr>
           <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">বৈবাহিক অবস্থা</td>
             <td className="w-1/2 px-4 py-2 text-left border-l">
-              {expectedLifePartner?.marital_status.join(",")}
+              {expectedLifePartner?.marital_status.join(", ")}
             </td>
           </tr>
           <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">পেশা</td>
             <td className="w-1/2 px-4 py-2 text-left break-all border-l">
-              {expectedLifePartner?.occupation.join(",")}
+              {expectedLifePartner?.occupation.join(", ")}
             </td>
           </tr>
           <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">অর্থনৈতিক অবস্থা</td>
             <td className="w-1/2 px-4 py-2 text-left border-l">
-              {expectedLifePartner?.economical_condition.join(",")}
+              {expectedLifePartner?.economical_condition.join(", ")}
             </td>
           </tr>
           <tr className="border-b">
@@ -90,14 +104,14 @@ const ExpectedPartner = () => {
               {expectedLifePartner?.expected_characteristics}
             </td>
           </tr>
-          <tr className="border-b">
+          {/* <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">
               আকিদা ও মাজহাব কিরকম প্রত্যাশা করেন?{" "}
             </td>
             <td className="w-1/2 px-4 py-2 text-left border-l">
               {expectedLifePartner?.aqidah_madhab}
             </td>
-          </tr>
+          </tr> */}
           {generalInfo?.gender === "মহিলা" ||
           generalInfo?.bio_type === "পাত্রীর বায়োডাটা" ? (
             <>
@@ -129,25 +143,25 @@ const ExpectedPartner = () => {
           ) : (
             <>
               {" "}
-              <tr className="border-b">
+              {/* <tr className="border-b">
                 <td className="w-1/2 px-4 py-2 text-left">
                   তালাক-প্রাপ্তা বিয়ে করতে আগ্রহী?{" "}
                 </td>
                 <td className="w-1/2 px-4 py-2 text-left border-l">
                   {expectedLifePartner?.isDivorced_Widow === true ? "জি" : "না"}{" "}
                 </td>
-              </tr>
+              </tr> */}
             </>
           )}
 
-          <tr className="border-b">
+          {/* <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">
               সন্তানসহ বিয়ে করতে আগ্রহী?{" "}
             </td>
             <td className="w-1/2 px-4 py-2 text-left border-l">
               {expectedLifePartner?.isChild === true ? "জি" : "না"}
             </td>
-          </tr>
+          </tr> */}
         </tbody>
       </table>
     </div>

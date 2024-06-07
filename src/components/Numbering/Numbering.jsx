@@ -13,7 +13,11 @@ import UserContext from "../../contexts/UserContext";
 const Numbering = ({ setUserForm, userForm }) => {
   const { userInfo } = useContext(UserContext);
 
-  const lastEditedIndex = userInfo?.data?.last_edited_timeline_index || 1;
+  useEffect(() => {
+    const lastEditedIndex = userInfo?.data?.last_edited_timeline_index || 1;
+    setUserForm(lastEditedIndex);
+  }, [setUserForm, userInfo]);
+
   const editedTimelineIndex = userInfo?.data?.edited_timeline_index || 1;
   // console.log("Numbering", userInfo);
 
