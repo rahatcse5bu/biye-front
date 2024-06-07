@@ -1,187 +1,187 @@
 #profile-card {
-	transition: all;
-	animation: profile-card-animation 500ms ease-in-out;
+  transition: all;
+  animation: profile-card-animation 500ms ease-in-out;
 }
 
 @keyframes profile-card-animation {
-	0% {
-		opacity: 0;
-		height: 0;
-	}
-	100% {
-		opacity: 1;
-		height: 400px;
-	}
+  0% {
+    opacity: 0;
+    height: 0;
+  }
+  100% {
+    opacity: 1;
+    height: 400px;
+  }
 }
 
 .navigation-bar-custom {
-	/* z-index: 1000000 !important; */
-	background-color: #071952 !important;
-	border: none !important;
-	padding: 0 !important;
-	min-height: 68px !important;
-	min-width: 100% !important;
-	user-select: none !important;
-	padding-right: 0px !important;
+  /* z-index: 1000000 !important; */
+  background-color: #071952 !important;
+  border: none !important;
+  padding: 0 !important;
+  min-height: 68px !important;
+  min-width: 100% !important;
+  user-select: none !important;
+  padding-right: 0px !important;
 }
 
 .navigation-bar-custom .nav-list-ul {
-	margin-top: -2px;
+  margin-top: -2px;
 }
 .navigation-bar-custom .nav-list-ul li {
-	display: inline-block;
+  display: inline-block;
 }
 
 .navigation-bar-custom .mobile-nav-open .nav-list-ul {
-	background-color: #071952;
-	margin-top: 48px;
+  background-color: #071952;
+  height: 100vh !important;
 }
 .navigation-bar-custom .mobile-nav-open .nav-list-ul li a,
 .navigation-bar-custom .mobile-nav-open .nav-list-ul li {
-	display: block;
+  display: block;
 }
 
 .navigation-bar-custom .nav-list-ul li button svg {
-	font-size: 28px;
-	margin-bottom: -4px;
+  font-size: 28px;
+  margin-bottom: -4px;
 }
 .navigation-bar-custom .nav-item-primary {
-	padding: 11px 0;
+  padding: 11px 0;
 }
 .navigation-bar-custom .nav-item-primary a {
-	padding: 15px 20px !important;
-	transition: 0.4s;
+  padding: 12px 20px !important;
+  transition: 0.4s;
 }
 
 .navigation-bar-custom li.nav-item-dropdown {
-	padding: 10px 15px !important;
-	transition: 0.4s;
+  padding: 10px 15px !important;
+  transition: 0.4s;
 }
 .navigation-bar-custom li.nav-item-dropdown button {
-	font-weight: normal;
+  font-weight: normal;
 }
 
 .navigation-bar-custom li.nav-item-dropdown ul.nav-item-dropdown-ul {
-	margin-top: 10px;
-	left: 0;
-	color: rgb(55, 65, 81);
-	/* z-index: 1003 !important; */
+  margin-top: 10px;
+  left: 0;
+  color: rgb(55, 65, 81);
+  /* z-index: 1003 !important; */
 }
 
 .navigation-bar-custom li.nav-item-dropdown ul.nav-item-dropdown-ul a {
-	background-color: #071952;
-	color: #fff;
-	transition: 0.4s;
+  background-color: #071952;
+  color: #fff;
+  transition: 0.4s;
 }
 
 .navigation-bar-custom .nav-item-primary a:hover,
 .navigation-bar-custom li.nav-item-dropdown:hover {
-	background-color: #020f3a;
-	padding: 5px;
-	color: #fff;
+  background-color: #020f3a;
+  padding: 5px;
+  color: #fff;
 }
 
 .navigation-bar-custom li.nav-item-dropdown ul.nav-item-dropdown-ul a:hover {
-	background-color: #020f3a;
+  background-color: #020f3a;
 }
 
 .navigation-bar-custom .nav-toggle-button {
-	position: absolute;
-	right: 45px;
-	top: 20px;
-	height: initial !important;
-	width: initial !important;
+  position: absolute;
+  right: 45px;
+  top: 20px;
+  height: initial !important;
+  width: initial !important;
 }
 .navigation-bar-custom .nav-toggle-button :hover {
-	background-color: #cec3bf;
-	color: black;
-	border-radius: 100%;
+  background-color: #cec3bf;
+  color: black;
+  border-radius: 100%;
 }
 .navigation-bar-custom .nav-toggle-button > span {
-	padding: 4px 7px;
+  padding: 4px 7px;
 }
 
 .navigation-bar-custom .mobile-nav-open {
-	height: auto !important;
-	overflow: hidden !important;
+  height: auto !important;
+  overflow: hidden !important;
 }
 
 .navigation-bar-custom .mini-profile-container {
-	height: 48px;
-	position: absolute;
-	top: 0px;
-	right: 20px;
-	transition: 0.3s;
-	cursor: pointer;
-	padding: 0 5px;
-	display: grid;
-	justify-content: center;
-	align-items: center;
+  height: 48px;
+  position: absolute;
+  top: 0px;
+  right: 20px;
+  transition: 0.3s;
+  cursor: pointer;
+  padding: 0 5px;
+  display: grid;
+  justify-content: center;
+  align-items: center;
 }
 .navigation-bar-custom .mini-profile-container:hover {
-	background-color: #020f3a;
+  background-color: #020f3a;
 }
 .navigation-bar-custom .mini-profile-info {
-	display: grid;
-	grid-template-columns: auto 40px auto;
-	align-items: center;
-	gap: 5px;
+  display: grid;
+  grid-template-columns: auto 40px auto;
+  align-items: center;
+  gap: 5px;
 }
 .navigation-bar-custom .mini-profile-info .mini-profile-name {
-	padding-right: 5px;
+  padding-right: 5px;
 }
 .navigation-bar-custom .mini-profile-info .mini-profile-img {
-	border-radius: 100px;
-	overflow: hidden;
-	height: 40px;
-	display: grid;
-	justify-content: center;
-	align-items: center;
+  border-radius: 100px;
+  overflow: hidden;
+  height: 40px;
+  display: grid;
+  justify-content: center;
+  align-items: center;
 }
 .navigation-bar-custom .mini-profile-info img {
-	width: auto;
-	height: auto;
-	max-height: 100%;
-	max-width: 100%;
+  width: auto;
+  height: auto;
+  max-height: 100%;
+  max-width: 100%;
 }
 
 .navigation-bar-custom .mini-profile-info svg {
-	font-size: 30px;
+  font-size: 30px;
 }
 
 .navigation-bar-custom .mini-profile-container .mini-profile-dropdown {
-	position: absolute;
-	top: 48px;
-	left: 0;
-	background-color: #071952;
-	width: 100%;
+  position: absolute;
+  top: 48px;
+  left: 0;
+  background-color: #071952;
+  width: 100%;
 }
 
 .navigation-bar-custom
-	.mini-profile-container
-	.mini-profile-dropdown
-	.profile-dropdown-item {
-	padding: 12px;
-	transition: 0.4s;
+  .mini-profile-container
+  .mini-profile-dropdown
+  .profile-dropdown-item {
+  padding: 12px;
+  transition: 0.4s;
 }
 
 .navigation-bar-custom
-	.mini-profile-container
-	.mini-profile-dropdown
-	.profile-dropdown-item:hover {
-	background-color: #020f3a;
+  .mini-profile-container
+  .mini-profile-dropdown
+  .profile-dropdown-item:hover {
+  background-color: #020f3a;
 }
 
 @media only screen and (max-width: 1023px) {
-	.navigation-bar-custom .mini-profile-container {
-		right: 75px;
-	}
+  .navigation-bar-custom .mini-profile-container {
+    right: 75px;
+  }
 
-	.navigation-bar-custom {
-		padding-right: 0 !important;
-	}
+  .navigation-bar-custom {
+    padding-right: 0 !important;
+  }
 
-	.navigation-bar-custom .nav-item-dropdown-ul {
-		width: 100% !important;
-	}
+  .navigation-bar-custom .nav-item-dropdown-ul {
+    width: 100% !important;
+  }
 }

@@ -23,16 +23,38 @@ import { Modal } from "../Modal/Modal";
 import { getGender } from "../../utils/localStorage";
 import female from "../../assets/icons/female.svg";
 import male from "../../assets/icons/male.svg";
+import { useQuery } from "@tanstack/react-query";
+import { userServices } from "../../services/user";
 
 export default function NavBar() {
-  const { userInfo, logOut } = useContext(UserContext);
+  const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
   const [filteredNavData, setFilteredNavData] = useState(navData);
   const [isHovered, setIsHovered] = useState(false);
   const [openNav, setOpenNav] = useState(false);
   const gender = getGender();
   const navigate = useNavigate();
 
-  console.log("user-info", userInfo);
+  const {
+    data,
+    isLoading: userInfoFetchLoading,
+    refetch: userInfoRefetch,
+  } = useQuery({
+    queryKey: ["user-info", user?.email],
+    queryFn: async () => {
+      return await userServices.getUserInfoByEmail(user?.email);
+    },
+    retry: false,
+    enabled: !!user?.email,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setUserInfo(data);
+    }
+  }, [data, setUserInfo]);
+  console.log("user~~~", user);
+
+  // console.log("user-info", userInfo);
   useEffect(() => {
     window.addEventListener("resize", () => {
       if (window.innerWidth >= 960) {
@@ -48,6 +70,7 @@ export default function NavBar() {
   };
   const logoutHandler = async () => {
     await logOut();
+    setIsHovered(false);
     removeToken();
     navigate("/");
   };
@@ -100,7 +123,7 @@ export default function NavBar() {
         )}
       </div>
       <div className="hidden lg:block">
-        {!userInfo?.data?._id ? (
+        {!user ? (
           <Typography
             as="li"
             variant="small"
@@ -272,7 +295,7 @@ export default function NavBar() {
           </div>
 
           <div className="block lg:hidden">
-            {!userInfo?.data?._id ? (
+            {!user ? (
               <Typography
                 as="li"
                 variant="small"
@@ -314,14 +337,16 @@ export default function NavBar() {
                       </Button>
                     </div>
                     <Link
-                      className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
+                      className="flex items-center w-full transition-all  duration-300 ease-in-out rounded-md "
                       to={`/user/account/edit-biodata`}
+                      onClick={handleIconLeave}
                     >
                       <FaEdit className="mr-2" />
                       <span>বায়োডাটা এডিট করুন</span>
                     </Link>
 
                     <Link
+                      onClick={handleIconLeave}
                       className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
                       to={`/user/account/dashboard`}
                     >
@@ -330,6 +355,7 @@ export default function NavBar() {
                     </Link>
 
                     <Link
+                      onClick={handleIconLeave}
                       className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
                       to={`/user/account/likes`}
                     >
@@ -338,6 +364,7 @@ export default function NavBar() {
                     </Link>
 
                     <Link
+                      onClick={handleIconLeave}
                       className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
                       to={`/user/account/dislikes`}
                     >
@@ -345,6 +372,7 @@ export default function NavBar() {
                       <span>অপছন্দের তালিকা </span>
                     </Link>
                     <Link
+                      onClick={handleIconLeave}
                       className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
                       to={`/user/account/settings`}
                     >
@@ -352,6 +380,7 @@ export default function NavBar() {
                       <span>সেটিংস </span>
                     </Link>
                     <Link
+                      onClick={handleIconLeave}
                       className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
                       to={`/user/account/reports`}
                     >

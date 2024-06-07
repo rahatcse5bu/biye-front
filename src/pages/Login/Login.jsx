@@ -7,13 +7,12 @@ import UserContext from "../../contexts/UserContext";
 import { userServices } from "../../services/user";
 import { setToken } from "../../utils/cookies";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
-import toast from "react-hot-toast";
 import { Toast } from "../../utils/toast";
 
 export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { handleGoogleSignIn, signIn } = useContext(UserContext);
+  const { handleGoogleSignIn, signIn, setUserInfo } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/user/account/dashboard";
@@ -30,8 +29,6 @@ export function Login() {
 
       const userInfo = {
         email: response1?.user?.email,
-        username: "",
-        gender: "",
       };
 
       //store user info into db
@@ -41,10 +38,11 @@ export function Login() {
 
       // console.log("response2~~", data);
 
-      if (data?.success === true) {
+      if (data?.success === true && data?.data) {
         setToken({
           token: data?.data.token,
         });
+        setUserInfo(data.data);
         navigate(from, {
           replace: true,
         });
@@ -70,7 +68,9 @@ export function Login() {
       const { data } = await userServices.createUserInfoForGoogleSignIn(
         userInfo
       );
-      if (data?.success === true) {
+
+      // console.log(data);
+      if (data?.success === true && data?.data) {
         setToken({
           token: data?.data.token,
         });
@@ -79,6 +79,7 @@ export function Login() {
         });
       }
     } catch (error) {
+      console.log(error);
       Toast.errorToast("Invalid login credentials");
     } finally {
       setLoading(false);

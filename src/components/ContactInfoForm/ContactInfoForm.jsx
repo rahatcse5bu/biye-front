@@ -4,7 +4,6 @@ import FormTitle from "../FormTitle/FormTitle";
 import Input from "../Input/Input";
 import { Colors } from "../../constants/colors";
 import { useQuery } from "@tanstack/react-query";
-import { userServices } from "../../services/user";
 import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
 import { useEffect } from "react";

@@ -24,25 +24,26 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
   const [tokenInfo, setTokenInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
   const googleProvider = new GoogleAuthProvider();
 
-  const {
-    data: userInfo = null,
-    isLoading: userInfoFetchLoading,
-    refetch: userInfoRefetch,
-  } = useQuery({
-    queryKey: ["user-info", user?.email],
-    queryFn: async () => {
-      return await userServices.getUserInfoByEmail(user?.email);
-    },
-    retry: false,
-    enabled: !!user?.email,
-  });
+  // const {
+  //   data: userInfo = null,
+  //   isLoading: userInfoFetchLoading,
+  //   refetch: userInfoRefetch,
+  // } = useQuery({
+  //   queryKey: ["user-info", user?.email],
+  //   queryFn: async () => {
+  //     return await userServices.getUserInfoByEmail(user?.email);
+  //   },
+  //   retry: false,
+  //   enabled: !!user?.email,
+  // });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUserLoading(false);
-      console.log(currentUser);
+      // console.log(currentUser);
       setUser(currentUser);
     });
     return () => {
@@ -79,11 +80,12 @@ export const UserProvider = ({ children }) => {
 
   const logOut = () => {
     setUserLoading(true);
+    setUser(null);
     return signOut(auth);
   };
 
-  console.log({ userInfo });
-  console.log({ tokenInfo });
+  // console.log({ userInfo });
+  // console.log({ tokenInfo });
 
   return (
     <UserContext.Provider
@@ -102,8 +104,9 @@ export const UserProvider = ({ children }) => {
         userInfo,
         tokenInfo,
         setTokenInfo,
-        userInfoRefetch,
-        userInfoFetchLoading,
+        setUserInfo,
+        // userInfoRefetch,
+        // userInfoFetchLoading,
       }}
     >
       {children}
