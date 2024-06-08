@@ -61,7 +61,7 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "/send-form/:id",
+        path: "/send-form/:bio_user",
         element: <SendForm />,
       },
       {

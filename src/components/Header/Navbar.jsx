@@ -25,6 +25,7 @@ import female from "../../assets/icons/female.svg";
 import male from "../../assets/icons/male.svg";
 import { useQuery } from "@tanstack/react-query";
 import { userServices } from "../../services/user";
+import classNames from "classnames";
 
 export default function NavBar() {
   const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
@@ -52,7 +53,7 @@ export default function NavBar() {
       setUserInfo(data);
     }
   }, [data, setUserInfo]);
-  console.log("user~~~", user);
+  // console.log("user~~~", user);
 
   // console.log("user-info", userInfo);
   useEffect(() => {
@@ -160,10 +161,23 @@ export default function NavBar() {
                       alt="Person"
                     />
                   </div>
-                  <h4 className="py-2 font-bold text-gray-500">
+                  {import.meta.env.VITE_REACT_APP_NODE_ENV ===
+                    "development" && <h5>ID: {userInfo?.data?.user_id}</h5>}
+
+                  <h4 className="pt-2 font-bold text-gray-500">
                     Biodata Status
                   </h4>
-                  <h6 className="font-bold text-gray-700 capitalize ">
+                  <h6
+                    className={classNames("font-bold  capitalize", {
+                      "text-green-600":
+                        userInfo?.data?.user_status === "active",
+                      "text-orange-600":
+                        userInfo?.data?.user_status === "in review",
+                      "text-purple-600":
+                        userInfo?.data?.user_status === "pending",
+                      "text-red-600": userInfo?.data?.user_status === "banned",
+                    })}
+                  >
                     {userInfo?.data?.user_status}
                   </h6>
                   <Button
@@ -325,10 +339,23 @@ export default function NavBar() {
                   >
                     <div className="py-5 text-center">
                       <FaUserLarge className="w-10 h-10 p-2 mx-auto border-2 border-white rounded-full" />
-                      <h4 className="py-2 font-bold text-gray-500">
+                      <h4 className="pt-2 font-bold text-gray-600">
                         Biodata Status
                       </h4>
-                      <h6 className="font-bold text-gray-500">Incomplete</h6>
+                      <h6
+                        className={classNames("font-bold  capitalize", {
+                          "text-green-600":
+                            userInfo?.data?.user_status === "active",
+                          "text-orange-600":
+                            userInfo?.data?.user_status === "in review",
+                          "text-purple-600":
+                            userInfo?.data?.user_status === "pending",
+                          "text-red-600":
+                            userInfo?.data?.user_status === "banned",
+                        })}
+                      >
+                        {userInfo?.data?.user_status}
+                      </h6>
                       <Button
                         onClick={myBioDataHandler}
                         className="mt-2 bg-gradient-to-r from-purple-900 to-blue-900 rounded-3xl"

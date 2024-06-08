@@ -27,7 +27,7 @@ export const BioProvider = ({ children }) => {
     refetchInterval: 300000, //every five minutes
   });
 
-  console.log("bios~~", bios);
+  // console.log("bios~~", bios);
   const value = {
     bio,
     setBio,

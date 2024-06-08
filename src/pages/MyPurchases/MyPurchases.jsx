@@ -160,8 +160,8 @@ const MyPurchases = () => {
   const viewBioIdHandler = (bioId) => {
     navigate(`/biodata/${bioId}`);
   };
-  console.log("bio-choice-second-step~", bioChoiceSecondStep);
-  console.log("bio-choice-first-step~", bioChoiceFirstStep);
+  // console.log("bio-choice-second-step~", bioChoiceSecondStep);
+  // console.log("bio-choice-first-step~", bioChoiceFirstStep);
 
   return (
     <>

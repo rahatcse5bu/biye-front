@@ -32,6 +32,8 @@ const ContactInfoForm = ({ userForm, setUserForm }) => {
   });
   const gender = generalInfo?.data?.gender || "";
 
+  console.log("gender~~", gender);
+
   const backButtonHandler = () => {
     if (userForm > 1) {
       setUserForm((prev) => prev - 1);
@@ -113,7 +115,7 @@ const ContactInfoForm = ({ userForm, setUserForm }) => {
     }
   };
 
-  console.log("contact-info-from-db~", contactInfo);
+  // console.log("contact-info-from-db~", contactInfo);
   return (
     <div>
       <FormTitle title="যোগাযোগ" />

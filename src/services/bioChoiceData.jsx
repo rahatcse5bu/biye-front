@@ -11,26 +11,22 @@ const createBioChoiceData = async (data, token) => {
   }
   const response = await axios.post(baseUrl + "/bio-choice-data", data, {
     headers: {
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   });
   return response.data;
 };
-const updateBioChoiceData = async (id, data, token) => {
-  if (!id || !token) {
+const updateBioChoiceData = async (data, token) => {
+  if (!token) {
     return null;
   }
-  const response = await axios.put(
-    baseUrl + `/bio-choice-data/bio-data/${id}`,
-    data,
-    {
-      headers: {
-        Authorization: token,
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const response = await axios.put(baseUrl + `/bio-choice-data`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
   return response.data;
 };
 const getBioChoiceDataFirstStep = async (token) => {
@@ -39,7 +35,7 @@ const getBioChoiceDataFirstStep = async (token) => {
   }
   const response = await axios.get(baseUrl + "/bio-choice-data/first-step", {
     headers: {
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
   });
   return response.data;
@@ -50,7 +46,7 @@ const getBioChoiceDataSecondStep = async (token) => {
   }
   const response = await axios.get(baseUrl + "/bio-choice-data/second-step", {
     headers: {
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
   });
   return response.data;
@@ -63,7 +59,7 @@ const checkBioChoiceDataSecondStep = async (bioId, token) => {
     baseUrl + `/bio-choice-data/check-second-step/${bioId}`,
     {
       headers: {
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
     }
   );
@@ -77,7 +73,7 @@ const checkBioChoiceDataFirstStep = async (bioId, token) => {
     baseUrl + `/bio-choice-data/check-first-step/${bioId}`,
     {
       headers: {
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
     }
   );
@@ -89,7 +85,7 @@ const getBioChoiceShare = async (token) => {
   }
   const response = await axios.get(baseUrl + `/bio-choice-data/bio-share`, {
     headers: {
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
   });
   return response.data;

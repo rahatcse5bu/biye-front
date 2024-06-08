@@ -111,7 +111,7 @@ const BioData = () => {
       </div>
       <ScrollToTop />
       {isLoading ? (
-        <LoadingCircle classes="mt-10" />
+        <LoadingCircle classes="my-10 h-[500px]" />
       ) : (
         <div className="grid text-[16px] lg:grid-cols-[30%,70%] md:grid-cols-[50%,50%] grid-cols-1 ">
           <div className="col px-2 single-bio-left-sidebar">

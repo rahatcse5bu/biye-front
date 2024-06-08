@@ -4,6 +4,7 @@ import LoadingBioData from "../../components/LoadingBioData/LoadingBioData";
 import { useContext, useState } from "react";
 import BioContext from "../../contexts/BioContext";
 import { FaXmark } from "react-icons/fa6";
+import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 
 const BioDatas = () => {
   const { bioLoading } = useContext(BioContext);
@@ -28,7 +29,8 @@ const BioDatas = () => {
       </div>
 
       {bioLoading ? (
-        <LoadingBioData />
+        // <LoadingBioData />
+        <LoadingCircle classes="h-[500px] flex items-center" />
       ) : (
         <BioDatasGrid
           setSideBarDisplay={setSideBarDisplay}
