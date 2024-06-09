@@ -10,15 +10,24 @@ import { useNavigate } from "react-router-dom";
 import { convertToQuery } from "../../utils/query";
 import Select from "react-select";
 import "../../fonts/fonts.css";
+import { useQuery } from "@tanstack/react-query";
+import { GeneralInfoServices } from "../../services/generalInfo";
+import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 //End Bio grid Import
 
 const Home = () => {
   const navigate = useNavigate();
-  const { bioLoading } = useContext(BioContext);
   const [selectedDivisions, setSelectedDivisions] = useState([]);
   const [selectedDistricts, setSelectedDistricts] = useState([]);
   const [divisionOptions, setDivisionOptions] = useState([]);
   const [districtOptions, setDistrictOptions] = useState([]);
+  const { data, isLoading } = useQuery({
+    queryKey: ["general-info", "featured"],
+    queryFn: async () =>
+      GeneralInfoServices.getALLGeneralInfo({ isFeatured: true }),
+  });
+
+  console.log(data);
 
   useEffect(() => {
     //! Fetch division options when the component mounts
@@ -397,9 +406,13 @@ const Home = () => {
         </button>
       </form>
 
-      {/* <div className="mt-5">
-				{bioLoading ? <LoadingBioData /> : <FeaturedBioDataGrid />}
-			</div> */}
+      <div className="mt-5">
+        {isLoading ? (
+          <LoadingCircle classes="my-5" />
+        ) : (
+          <FeaturedBioDataGrid data={data?.data || []} />
+        )}
+      </div>
 
       <h2 className="my-4 text-xl text-center text-blue-700 md:text-2xl lg:text-4xl">
         বিয়ে সম্পর্কিত কুরআনের কিছু আয়াত ও কিছু হাদিসঃ

@@ -8,7 +8,8 @@ import { Toast } from "../../utils/toast";
 import { getErrorMessage } from "../../utils/error";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import { Colors } from "../../constants/colors";
-
+import { useContext } from "react";
+import UserContext from "../../contexts/UserContext";
 export function FeedbackModal({
   title,
   open,
@@ -22,6 +23,9 @@ export function FeedbackModal({
   const handleOpen = () => setOpen(!open);
   const [feedback, setFeedback] = useState("");
   const [edit, setEdit] = useState(false);
+  // const { userInfo } = useContext(UserContext);
+  // console.log("user", user);
+  // console.log("userInfo~~", userInfo);
 
   // create feedback
   const submitHandler = async (e) => {
@@ -76,15 +80,17 @@ export function FeedbackModal({
               >
                 Ok
               </button>
-              <button
-                onClick={() => {
-                  setEdit(true);
-                  setFeedback(feedbackData);
-                }}
-                className="px-4  text-white bg-purple-600 rounded-md hover:bg-purple-800 ml-2"
-              >
-                Edit
-              </button>
+              {user && (
+                <button
+                  onClick={() => {
+                    setEdit(true);
+                    setFeedback(feedbackData);
+                  }}
+                  className="px-4  text-white bg-purple-600 rounded-md hover:bg-purple-800 ml-2"
+                >
+                  Edit
+                </button>
+              )}
             </div>
           ) : (
             <form action="" onSubmit={submitHandler}>

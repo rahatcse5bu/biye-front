@@ -7,36 +7,6 @@ import BioContext from "../../contexts/BioContext";
 import { getDateMonthYear } from "../../utils/date";
 import { convertHeightToBengali } from "../../utils/height";
 
-// async function formatHeight(height) {
-// 	// Simulate an asynchronous operation (e.g., an API call)
-// 	await new Promise((resolve) => setTimeout(resolve, 1000));
-
-// 	if (height === "") {
-// 		return ""; // Handle empty input
-// 	}
-
-// 	const parts = height.toString().split(".");
-// 	let feet = parts[0];
-// 	let inches = parts[1] || "0";
-
-// 	if (feet === "") {
-// 		feet = "0";
-// 	}
-
-// 	const bengaliDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
-
-// 	feet = feet
-// 		.split("")
-// 		.map((digit) => bengaliDigits[digit])
-// 		.join("");
-// 	inches = inches
-// 		.split("")
-// 		.map((digit) => bengaliDigits[digit])
-// 		.join("");
-
-// 	return `${feet}' ${inches}"`;
-// }
-
 function BioInfo({ id }) {
   const { bio } = useContext(BioContext);
   const generalInfo = bio?.generalInfo || null;

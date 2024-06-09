@@ -27,17 +27,6 @@ const BioData = ({ biodata }) => {
   const navigate = useNavigate();
   const { userInfo } = useContext(UserContext);
 
-  const { data: userDisLikesData, refetch: userDisLikesRefetch } = useQuery({
-    queryKey: ["dis-like", "user", userInfo?.data?._id, biodata?.user_id],
-    queryFn: async () => {
-      return DisLikesServices.getUserDisLikes(
-        userInfo?.data?._id,
-        biodata.user_id
-      );
-    },
-    retry: false,
-  });
-
   const { data: checkLikes } = useQuery({
     queryKey: [
       "check-likes",
@@ -181,13 +170,13 @@ const BioData = ({ biodata }) => {
   // console.log("dislikes~", userDisLikesData);
 
   return (
-    <div className="my-5 relative hover:shadow-2xl transition-all  duration-300 ease-in rounded-md border-2">
+    <div className="my-5 min-w-[280px] relative hover:shadow-2xl transition-all  duration-300 ease-in rounded-md border-2">
       <ScrollToTop />
       <div
         style={{
           backgroundColor: Colors.pncPrimaryColor,
         }}
-        className="h-[200px] flex relative  flex-col justify-center rounded-t-md text-white"
+        className="h-[200px] min flex relative  flex-col justify-center rounded-t-md text-white"
       >
         <img
           className="w-16 h-16 mx-auto rounded-full "

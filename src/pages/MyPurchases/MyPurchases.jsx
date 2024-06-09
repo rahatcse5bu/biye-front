@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import "./MyPurchases.css";
 import { useState } from "react";
 import { Button } from "@material-tailwind/react";
@@ -22,43 +23,67 @@ import { userServices } from "../../services/user";
 import { Toast } from "../../utils/toast";
 import { getErrorMessage } from "../../utils/error";
 import { ContactPurchaseDataServices } from "../../services/contactPurchaseData";
-const MyPurchases = () => {
+import classNames from "classnames";
+import { BioDataServices } from "../../services/bioData";
+
+const FirstStepCard = ({
+  item,
+  index,
+  setFeedback,
+  setQa,
+  setIsFeedbackDialogOpen,
+  setBioDetailsModal,
+  setPayBioDetailsModal,
+}) => {
   const { userInfo, logOut } = useContext(UserContext);
-  const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState(false);
-  const [bioDetailsModal, setBioDetailsModal] = useState(false);
-  const [payDetailsModal, setPayBioDetailsModal] = useState(false);
-  const [qA, setQa] = useState('"');
-  const [feedback, setFeedback] = useState("");
+  const { data, isLoading } = useQuery({
+    queryKey: ["bio-data", "stat", item?.bio_user],
+    queryFn: async () => {
+      return await BioDataServices.getBioDataStatistics(item?.bio_user);
+    },
+    retry: false,
+    enabled: !!item?.bio_userr,
+  });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const {
-    data: bioChoiceFirstStep,
-    isLoading: bioChoiceFirstStepLoading,
-    refetch: bioChoiceFirstStepRefetch,
-  } = useQuery({
-    queryKey: ["bio-choice-data", "first-step"],
-    queryFn: async () => {
-      return await BioChoiceDataServices.getBioChoiceDataFirstStep(
-        getToken().token
-      );
-    },
-    retry: false,
-  });
+  const buyWithBkashHandler = async (value, bioId) => {
+    let response;
+    // ? verification check
+    try {
+      response = await userServices.verifyToken(getToken()?.token);
+      console.log("navbar-verify-token~", response);
+      const data = response?.data;
+      const user_id = userInfo?.data[0]?.id;
 
-  const {
-    data: bioChoiceSecondStep,
-    isLoading: bioChoiceSecondStepLoading,
-    refetch: bioChoiceSecondStepRefetch,
-  } = useQuery({
-    queryKey: ["bio-choice-data", "second-step"],
-    queryFn: async () => {
-      return await BioChoiceDataServices.getBioChoiceDataSecondStep(
-        getToken().token
-      );
-    },
-    retry: false,
-  });
+      if (data?.user_id !== user_id) {
+        await logOut();
+        removeToken();
+        Toast.errorToast("You are not authorized");
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("navbar-verify-token~", error);
+      let msg = getErrorMessage(error);
+      Toast.errorToast(msg);
+      await logOut();
+      removeToken();
+      navigate("/login");
+    }
+
+    // ? bkash payment api call
+    const amount = parseInt(value);
+    if (isNaN(amount) || +amount <= 0) {
+      alert("Please enter a valid amount.");
+    } else if (response?.success === true) {
+      BkashCreatePaymentAPICall(amount, bioId);
+    } else {
+      await logOut();
+      removeToken();
+      navigate("/login");
+    }
+  };
+  console.log("bio-stats", data);
   const bioDetailsOpenModalHandler = (text) => {
     setQa(text);
     setBioDetailsModal(true);
@@ -120,46 +145,120 @@ const MyPurchases = () => {
     });
   };
 
-  const buyWithBkashHandler = async (value, bioId) => {
-    let response;
-    // ? verification check
-    try {
-      response = await userServices.verifyToken(getToken()?.token);
-      console.log("navbar-verify-token~", response);
-      const data = response?.data;
-      const user_id = userInfo?.data[0]?.id;
-
-      if (data?.user_id !== user_id) {
-        await logOut();
-        removeToken();
-        Toast.errorToast("You are not authorized");
-        navigate("/login");
-      }
-    } catch (error) {
-      console.error("navbar-verify-token~", error);
-      let msg = getErrorMessage(error);
-      Toast.errorToast(msg);
-      await logOut();
-      removeToken();
-      navigate("/login");
-    }
-
-    // ? bkash payment api call
-    const amount = parseInt(value);
-    if (isNaN(amount) || +amount <= 0) {
-      alert("Please enter a valid amount.");
-    } else if (response?.success === true) {
-      BkashCreatePaymentAPICall(amount, bioId);
-    } else {
-      await logOut();
-      removeToken();
-      navigate("/login");
-    }
-  };
-
   const viewBioIdHandler = (bioId) => {
     navigate(`/biodata/${bioId}`);
   };
+
+  return (
+    <tr className="border-b">
+      <td className="px-4 py-2 text-center border-l w-1/10">{index + 1}</td>
+      <td className="px-4 py-2 text-center border-l w-1/10">{item?.bio_id}</td>
+      <td className="px-4 py-2 text-center border-l w-1/10">
+        {item?.city},{item?.division}
+      </td>
+      <td
+        className={classNames(
+          "px-4 py-2 capitalize  w-1/10 text-center font-bold text-base border-l w-1/7",
+          {
+            "text-orange-500": item?.status === "pending",
+            "text-green-600": item?.status === "approved",
+            "text-red-600": item?.status === "rejected",
+          }
+        )}
+      >
+        {item?.status}
+      </td>
+      <td className="px-4 py-2 text-center border-l w-1/10">
+        <div
+          onClick={() => bioDetailsOpenModalHandler(item?.bio_details)}
+          className="flex items-center justify-center cursor-pointer"
+        >
+          <FaInfo color="gray" size={22} />
+        </div>
+      </td>
+      <td className="px-4 py-2 text-center border-l w-1/10">
+        <div
+          onClick={() => feedbackDetailsModalHandler(item?.feedback)}
+          className="flex items-center justify-center cursor-pointer"
+        >
+          <MdFeedback color="gray" size={22} />
+        </div>
+      </td>
+      <td className="px-4 py-2 text-center border-l w-1/10">
+        {data?.results.approvedPercentage}%
+      </td>
+      <td className="px-4 py-2 text-center border-l w-1/10">
+        {data?.results.rejectedPercentage}%
+      </td>
+      <td className="px-4 py-2 text-center border-l w-1/10">
+        {data?.results.pending}
+      </td>
+      <td className="flex items-center px-4 py-2 text-center border-l w-1/10">
+        {item?.status === "approved" && (
+          <>
+            <Button
+              onClick={() => payButtonHandler(item?.bio_id)}
+              size="xs"
+              className="mr-2"
+              style={{
+                background: `linear-gradient(to right,${Colors.lnRight},${Colors.lnLeft} )`,
+              }}
+            >
+              {loading ? <LoadingCircle /> : "Pay"}
+            </Button>
+            <AiFillQuestionCircle
+              onClick={() => setPayBioDetailsModal(true)}
+              className="w-6 h-6 mr-2 text-red-700 cursor-pointer hover:text-red-900"
+            />
+          </>
+        )}
+        <Button
+          onClick={() => viewBioIdHandler(item?.bio_id)}
+          color="green"
+          size="xs"
+          className=""
+        >
+          <FaEye />
+        </Button>
+      </td>
+    </tr>
+  );
+};
+const MyPurchases = () => {
+  const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState(false);
+  const [bioDetailsModal, setBioDetailsModal] = useState(false);
+  const [payDetailsModal, setPayBioDetailsModal] = useState(false);
+  const [qA, setQa] = useState('"');
+  const [feedback, setFeedback] = useState("");
+
+  const {
+    data: bioChoiceFirstStep,
+    isLoading: bioChoiceFirstStepLoading,
+    refetch: bioChoiceFirstStepRefetch,
+  } = useQuery({
+    queryKey: ["bio-choice-data", "first-step"],
+    queryFn: async () => {
+      return await BioChoiceDataServices.getBioChoiceDataFirstStep(
+        getToken().token
+      );
+    },
+    retry: false,
+  });
+
+  const {
+    data: bioChoiceSecondStep,
+    isLoading: bioChoiceSecondStepLoading,
+    refetch: bioChoiceSecondStepRefetch,
+  } = useQuery({
+    queryKey: ["bio-choice-data", "second-step"],
+    queryFn: async () => {
+      return await BioChoiceDataServices.getBioChoiceDataSecondStep(
+        getToken().token
+      );
+    },
+    retry: false,
+  });
+
   // console.log("bio-choice-second-step~", bioChoiceSecondStep);
   // console.log("bio-choice-first-step~", bioChoiceFirstStep);
 
@@ -182,7 +281,7 @@ const MyPurchases = () => {
                   <thead>
                     <tr className="border-t border-b">
                       <th className="px-4 py-2 text-center w-1/10">SL</th>
-                      <th className="px-4 py-2 text-center w-1/10">
+                      <th className="px-4 whitespace-nowrap py-2 text-center w-1/10">
                         বায়োডাটা নং
                       </th>
                       <th className="px-4 py-2 text-center w-1/10">
@@ -214,79 +313,16 @@ const MyPurchases = () => {
                       bioChoiceFirstStep?.data?.length > 0 &&
                       bioChoiceFirstStep?.data?.map((item, index) => {
                         return (
-                          <tr key={index} className="border-b">
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {index + 1}
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {item?.bio_id}
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {item?.city},{item?.division}
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {item?.status}
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              <div
-                                onClick={() =>
-                                  bioDetailsOpenModalHandler(item?.bio_details)
-                                }
-                                className="flex items-center justify-center cursor-pointer"
-                              >
-                                <FaInfo color="gray" size={22} />
-                              </div>
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              <div
-                                onClick={() =>
-                                  feedbackDetailsModalHandler(item?.feedback)
-                                }
-                                className="flex items-center justify-center cursor-pointer"
-                              >
-                                <MdFeedback color="gray" size={22} />
-                              </div>
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {(item?.approval_rate * 1).toFixed(2)}%
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {(item?.rejection_rate * 1).toFixed(2)}%
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {item?.pending_count}
-                            </td>
-                            <td className="flex items-center px-4 py-2 text-center border-l w-1/10">
-                              {item?.status === "Approved" && (
-                                <>
-                                  <Button
-                                    onClick={() =>
-                                      payButtonHandler(item?.bio_id)
-                                    }
-                                    size="xs"
-                                    className="mr-2"
-                                    style={{
-                                      background: `linear-gradient(to right,${Colors.lnRight},${Colors.lnLeft} )`,
-                                    }}
-                                  >
-                                    {loading ? <LoadingCircle /> : "Pay"}
-                                  </Button>
-                                  <AiFillQuestionCircle
-                                    onClick={() => setPayBioDetailsModal(true)}
-                                    className="w-6 h-6 mr-2 text-red-700 cursor-pointer hover:text-red-900"
-                                  />
-                                </>
-                              )}
-                              <Button
-                                onClick={() => viewBioIdHandler(item?.bio_id)}
-                                color="green"
-                                size="xs"
-                                className=""
-                              >
-                                <FaEye />
-                              </Button>
-                            </td>
-                          </tr>
+                          <FirstStepCard
+                            item={item}
+                            key={index}
+                            index={index}
+                            setQa={setQa}
+                            setFeedback={setFeedback}
+                            setIsFeedbackDialogOpen={setIsFeedbackDialogOpen}
+                            setBioDetailsModal={setBioDetailsModal}
+                            setPayBioDetailsModal={setPayBioDetailsModal}
+                          />
                         );
                       })
                     )}

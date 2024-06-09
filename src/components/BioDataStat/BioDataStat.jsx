@@ -10,30 +10,31 @@ import { Toast } from "../../utils/toast";
 
 const BioDataStat = ({ id }) => {
   const { bio } = useContext(BioContext);
+
   const generalInfo = bio?.generalInfo || null;
   const { data, isLoading } = useQuery({
-    queryKey: ["bio-data", "stat", id],
+    queryKey: ["bio-data", "stat", generalInfo?.user],
     queryFn: async () => {
-      return await BioDataServices.getBioDataStatistics(id);
+      return await BioDataServices.getBioDataStatistics(generalInfo?.user);
     },
     retry: false,
-    enabled: !!id,
+    enabled: !!generalInfo?.user,
   });
 
-  console.log("bioStats~", generalInfo);
-  console.log("bioStats", data);
+  // console.log("bioStats~", generalInfo);
+  // console.log("bioStats", data);
 
-  const rejected = data?.results?.rejected;
-  const approved = data?.results?.approved;
-  const total = rejected + approved;
-  let approvedRate = 0;
-  let rejectedRate = 0;
-  if (total) {
-    approvedRate = approved / total;
-    approvedRate = approvedRate.toFixed(2);
-    rejectedRate = rejected / total;
-    rejectedRate = rejectedRate.toFixed(2);
-  }
+  // const rejected = data?.results?.rejected;
+  // const approved = data?.results?.approved;
+  // const total = rejected + approved;
+  // let approvedRate = 0;
+  // let rejectedRate = 0;
+  // if (total) {
+  //   approvedRate = approved / total;
+  //   approvedRate = approvedRate.toFixed(2);
+  //   rejectedRate = rejected / total;
+  //   rejectedRate = rejectedRate.toFixed(2);
+  // }
   if (isLoading) {
     return <LoadingCircle />;
   }
@@ -58,7 +59,9 @@ const BioDataStat = ({ id }) => {
           <thead>
             <tr className="border-b">
               <td className="px-4 text-left  py-2">Total Views</td>
-              <td className="px-4 text-left  py-2">{generalInfo?.views}</td>
+              <td className="px-4 text-left  py-2">
+                {generalInfo?.views_count}
+              </td>
             </tr>
           </thead>
           <tbody>
@@ -80,11 +83,21 @@ const BioDataStat = ({ id }) => {
             </tr>
             <tr className="border-b">
               <td className="px-4 text-left  py-2">Approval Rate</td>
-              <td className="px-4 text-left  py-2">{approvedRate * 100}%</td>
+              <td className="px-4 text-left  py-2">
+                {data?.results.approvedPercentage}%
+              </td>
             </tr>
             <tr>
               <td className="px-4 text-left  py-2">Rejection Rate</td>
-              <td className="px-4 text-left  py-2">{rejectedRate * 100}%</td>
+              <td className="px-4 text-left  py-2">
+                {data?.results.rejectedPercentage}%
+              </td>
+            </tr>
+            <tr>
+              <td className="px-4 text-left  py-2">Pending Rate</td>
+              <td className="px-4 text-left  py-2">
+                {data?.results.pendingPercentage}%
+              </td>
             </tr>
           </tbody>
         </table>

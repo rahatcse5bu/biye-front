@@ -50,12 +50,12 @@ const getAllUpzilla = async (district) => {
 };
 
 const getALLGeneralInfo = async (query) => {
-  console.log(query);
+  // console.log(query);
   const queryString = convertToQuery(query);
-  console.log(
-    "🚀 ~ file: bioData.jsx:55 ~ getALLGeneralInfo ~ queryString:",
-    queryString
-  );
+  // console.log(
+  //   "🚀 ~ file: bioData.jsx:55 ~ getALLGeneralInfo ~ queryString:",
+  //   queryString
+  // );
 
   const generalInfo = await axios.get(baseUrl + `/general-info?${queryString}`);
   return generalInfo.data;
