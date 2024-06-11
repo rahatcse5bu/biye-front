@@ -45,6 +45,31 @@ const getUserLikesList = async (token) => {
   });
   return response.data;
 };
+const getMyLikesList = async (token) => {
+  if (!token) {
+    return null;
+  }
+  const response = await axios.get(`${baseUrl}/favorites`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+const getLikesListByUser = async (token, bio_user) => {
+  if (!token) {
+    return null;
+  }
+  const response = await axios.get(
+    `${baseUrl}/favorites/bio-user/${bio_user}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
 const getUserLikesByWhoList = async (token) => {
   if (!token) {
     return null;
@@ -63,4 +88,6 @@ export const LikesServices = {
   getUserLikesList,
   getUserLikesByWhoList,
   checkLikes,
+  getMyLikesList,
+  getLikesListByUser,
 };

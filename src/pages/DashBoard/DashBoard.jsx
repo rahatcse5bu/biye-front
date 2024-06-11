@@ -10,7 +10,7 @@ const DashBoard = () => {
   //Stats Code
   const { bio } = useContext(BioContext);
   const generalInfo = bio?.generalInfo || null;
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["bio-data", "stat", userInfo?.data?._id],
     queryFn: async () => {
       return await BioDataServices.getBioDataStatistics(userInfo?.data?._id);
@@ -19,7 +19,7 @@ const DashBoard = () => {
     enabled: !!userInfo?.data?._id,
   });
 
-  console.log("bioStats~", generalInfo);
+  // console.log("bioStats~", generalInfo);
   console.log("bioStats", data);
 
   const rejected = data?.results?.rejected;
@@ -61,7 +61,7 @@ const DashBoard = () => {
               className="text-lg font-semibold text-center"
               style={{ color: Colors.titleText }}
             >
-              আমার বর্তমান পয়েন্টঃ {userInfo?.data[0]?.points}
+              আমার বর্তমান পয়েন্টঃ {userInfo?.data?.points}
             </h2>
           </div>
           <p className="text-gray-700">
@@ -200,7 +200,7 @@ const DashBoard = () => {
               className="text-lg font-semibold text-center"
               style={{ color: Colors.titleText }}
             >
-              বায়োডাটা ভিজিট সংখ্যা: {userInfo?.data[0]?.views}
+              বায়োডাটা ভিজিট সংখ্যা: {userInfo?.data?.views}
             </h2>
           </div>
           <p className="text-gray-700">
@@ -216,7 +216,7 @@ const DashBoard = () => {
               className="text-lg font-semibold text-center"
               style={{ color: Colors.titleText }}
             >
-              আমার আপ্রুভাল রেটঃ {approvedRate * 100}%
+              আমার আপ্রুভাল রেটঃ {data?.results?.approvedPercentage}%
             </h2>
           </div>
           <p className="text-gray-700">
@@ -234,7 +234,7 @@ const DashBoard = () => {
               className="text-lg font-semibold text-center"
               style={{ color: Colors.titleText }}
             >
-              আমার রিজেকশন রেটঃ {rejectedRate * 100}%
+              আমার রিজেকশন রেটঃ {data?.results?.rejectedPercentage}%
             </h2>
           </div>
           <p className="text-gray-700">

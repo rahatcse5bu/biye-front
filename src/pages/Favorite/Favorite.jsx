@@ -9,37 +9,47 @@ import { getToken } from "../../utils/cookies";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 import { formatDate, getDateMonthYear } from "../../utils/date";
 import { useNavigate } from "react-router-dom";
+import { BioDataServices } from "../../services/bioData";
+import { useContext } from "react";
+import UserContext from "../../contexts/UserContext";
 
 const LikeItem = ({ item, index, favoriteByWho }) => {
   const navigate = useNavigate();
 
+  const { data } = useQuery({
+    queryKey: ["bio-data", "stat", item?.bio_user],
+    queryFn: async () => {
+      return await BioDataServices.getBioDataStatistics(item?.bio_user);
+    },
+    retry: false,
+    enabled: !!item?.bio_user,
+  });
+  const total =
+    data?.results.approved + data?.results.pending + data?.results.rejected;
+
   // console.log("favorite-item", data);
   const viewButtonHandler = () => {
-    navigate(`/biodata/${favoriteByWho ? item?.user_id : item.bio_id}`);
+    navigate(`/biodata/${item.bio_id}`);
   };
   return (
     <tr className="border-b">
       <td className="px-4 py-2 text-center border-l w-1/9">{index + 1}</td>
-      <td className="px-4 py-2 text-center border-l w-1/9">
-        {favoriteByWho ? item?.user_id : item?.bio_id}
-      </td>
+      <td className="px-4 py-2 text-center border-l w-1/9">{item?.bio_id}</td>
       <td className="px-4 py-2 text-center border-l w-1/9">
         {formatDate(getDateMonthYear(item?.date_of_birth))}
       </td>
       <td className="px-4 py-2 text-center border-l w-1/9">
         {item?.permanent_address}
       </td>
+      <td className="px-4 py-2 text-center border-l w-1/9">{total}</td>
       <td className="px-4 py-2 text-center border-l w-1/9">
-        {item?.total_count}
+        {data?.results.approvedPercentage}%
       </td>
       <td className="px-4 py-2 text-center border-l w-1/9">
-        {(item?.approval_rate * 1).toFixed(2)}%
+        {data?.results.rejectedPercentage}%
       </td>
       <td className="px-4 py-2 text-center border-l w-1/9">
-        {(item?.rejection_rate * 1).toFixed(2)}%
-      </td>
-      <td className="px-4 py-2 text-center border-l w-1/9">
-        {item?.total_pending}
+        {data?.results.pending}
       </td>
       <td className="px-4 py-2 text-center border-l w-1/9">
         <Button onClick={viewButtonHandler} color="green" className="mr-2">
@@ -51,26 +61,31 @@ const LikeItem = ({ item, index, favoriteByWho }) => {
 };
 
 const Favorite = () => {
+  const { userInfo } = useContext(UserContext);
   const { data, isLoading } = useQuery({
-    queryKey: ["likes", "user", "all"],
+    queryKey: ["my-likes", getToken().token],
     queryFn: async () => {
-      return await LikesServices.getUserLikesList(getToken().token);
+      return await LikesServices.getMyLikesList(getToken().token);
     },
     retry: false,
   });
   const { data: favoritesByWho, isLoading: favoritesByWhoLoading } = useQuery({
-    queryKey: ["likes-who"],
+    queryKey: ["user-likes", userInfo?.data?._id],
     queryFn: async () => {
-      return await LikesServices.getUserLikesByWhoList(getToken().token);
+      return await LikesServices.getLikesListByUser(
+        getToken().token,
+        userInfo?.data?._id
+      );
     },
     retry: false,
   });
   if (isLoading) {
     return <LoadingCircle />;
   }
+  // console.log(userInfo);
   console.log("favorites-by-who~", favoritesByWho);
 
-  console.log("likes~", data);
+  // console.log("likes~", data);
   return (
     <div className="py-12 mx-auto ">
       <div className="">
