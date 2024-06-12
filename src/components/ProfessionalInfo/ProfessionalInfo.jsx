@@ -12,7 +12,7 @@ const ProfessionalInfo = () => {
           <tr className="border-b border-t">
             <td className="px-4 py-2 text-left  w-1/2">পেশা</td>
             <td className="px-4 py-2 text-left  w-1/2 border-l">
-              {occupation?.occupation}
+              {occupation?.occupation?.join(", ")}
             </td>
           </tr>
         </thead>

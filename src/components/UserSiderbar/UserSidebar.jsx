@@ -11,15 +11,17 @@ import { getGender } from "../../utils/localStorage";
 import { FiLogOut } from "react-icons/fi";
 import { removeToken } from "../../utils/cookies";
 
-const UserSidebar = ({ openSidebar }) => {
+const UserSidebar = ({ openSidebar, setOpenSidebar }) => {
   const navigate = useNavigate();
   const gender = getGender();
   const { userInfo, logOut } = useContext(UserContext);
   const myBioDataHandler = () => {
+    setOpenSidebar(false);
     navigate(`/user/account/preview-biodata/${userInfo?.data?.user_id}`);
   };
 
   const logOutHandler = async () => {
+    setOpenSidebar(false);
     await logOut();
     removeToken();
     navigate("/");
@@ -64,6 +66,7 @@ const UserSidebar = ({ openSidebar }) => {
       <div className="mt-6 overflow-x-hidden overflow-y-auto">
         {sidebarDetails.map((data, index) => (
           <OptionCart
+            setOpenSidebar={setOpenSidebar}
             key={index}
             icon={data.icon}
             title={data.title}
