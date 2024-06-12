@@ -23,7 +23,12 @@ import { useEffect } from "react";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
 // import { useNavigate } from "react-router-dom";
 import MultipleSelect from "../MultitpleSelect/MultipleSelect";
-import { dataToMultiple, getDataFromMultipleInput } from "../../utils/form";
+import {
+  dataToMultiple,
+  dataToMultipleExpectedPartner,
+  getDataFromMultipleInput,
+  getDataFromMultipleInputExpectedPartner,
+} from "../../utils/form";
 import { getErrorMessage } from "../../utils/error";
 import { Toast } from "../../utils/toast";
 import { EducationalQualificationInfoServices } from "../../services/educationalQualification";
@@ -31,7 +36,7 @@ import { getToken } from "../../utils/cookies";
 
 const EducationalQualificationForm = ({ setUserForm, userForm }) => {
   const [eduType, setEduType] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState([]);
   const [maxEdu, setMaxEdu] = useState("");
   const [selectedClass, setSelectedClass] = useState("");
   const [othersEdu, setOthersEdu] = useState("");
@@ -169,7 +174,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
         setSelectedClass(before_ssc);
       }
       if (deeni_edu) {
-        setStatus(dataToMultiple(deeni_edu));
+        setStatus(dataToMultipleExpectedPartner(deeni_edu));
       }
       if (ssc_year) {
         setSscPassYear(ssc_year);
@@ -299,8 +304,8 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
       if (takhassus_sub) {
         setTakhassusSub(takhassus_sub);
       }
-      if (status) {
-        setStatus(dataToMultiple(status));
+      if (Array.isArray(status)) {
+        setStatus(dataToMultipleExpectedPartner(status));
       }
     }
   }, [educationalQualification?.data]);
@@ -316,7 +321,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
       education_medium: eduType,
       highest_edu_level: maxEdu,
       others_edu: othersEdu,
-      deeni_edu: getDataFromMultipleInput(status),
+      deeni_edu: getDataFromMultipleInputExpectedPartner(status),
     };
     // জেনারেল  এস.এস.সি'র নিচে
     if (

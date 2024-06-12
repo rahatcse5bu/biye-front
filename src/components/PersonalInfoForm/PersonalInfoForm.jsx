@@ -11,14 +11,13 @@ import Textarea from "../Textarea/Textarea";
 import { Colors } from "../../constants/colors";
 import { useQuery } from "@tanstack/react-query";
 import UserContext from "../../contexts/UserContext";
-import { userServices } from "../../services/user";
-import { getToken, removeToken } from "../../utils/cookies";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { getToken } from "../../utils/cookies";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import MultipleSelect from "../MultitpleSelect/MultipleSelect";
-import { dataToMultiple, getDataFromMultipleInput } from "../../utils/form";
-import { verifyToken } from "../../services/verifyToken";
+import {
+  dataToMultipleExpectedPartner,
+  getDataFromMultipleInputExpectedPartner,
+} from "../../utils/form";
 import { GeneralInfoServices } from "../../services/generalInfo";
 import { PersonalInfoInfoServices } from "../../services/personalInfo";
 import { getErrorMessage } from "../../utils/error";
@@ -29,7 +28,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
   const [isDeenContribution, setIsDeenContribution] = useState("");
   const [mazar, setMazar] = useState("");
   const [fiqh, setFiqh] = useState("");
-  const [personalCategory, setPersonalCategory] = useState("");
+  const [personalCategory, setPersonalCategory] = useState([]);
   const [salatKaza, setSalatKaza] = useState("");
   const [fromWhenBeard, setFromWhenBeard] = useState("");
   const [fromWhenFiveSalat, setFromWhenFiveSalat] = useState("");
@@ -51,14 +50,13 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
   const [isNeshaDrobbo, setIsNeshaDrobbo] = useState("");
   const [isBeard, setIsBeard] = useState("");
   const [aboutMiladQiyam, setAboutMiladQiyam] = useState("");
-  const navigate = useNavigate();
 
   const backButtonHandler = () => {
     if (userForm > 1) {
       setUserForm((prev) => prev - 1);
     }
   };
-  const { userInfo, logOut } = useContext(UserContext);
+  const { userInfo } = useContext(UserContext);
   const { data: generalInfo = null } = useQuery({
     queryKey: ["general-info", userInfo?.data?._id, getToken()?.token],
     queryFn: async () => {
@@ -127,7 +125,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
       setIsMahram(mahram_non_mahram);
       setFiqh(fiqh);
       setMazar(mazar);
-      setPersonalCategory(dataToMultiple(my_categories));
+      setPersonalCategory(dataToMultipleExpectedPartner(my_categories));
       setScholars(islamic_scholars);
       setBooks(islamic_books);
       setAboutMe(about_me);
@@ -163,7 +161,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
       mazar: mazar,
       islamic_books: books,
       islamic_scholars: scholars,
-      my_categories: getDataFromMultipleInput(personalCategory),
+      my_categories: getDataFromMultipleInputExpectedPartner(personalCategory),
       about_me: aboutMe,
       my_phone: phone,
       from_when_nikhab: fromWhenNikhab,
@@ -217,6 +215,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
   };
 
   // console.log(personalInfo);
+  // console.log("personalCategory~~", personalCategory);
 
   return (
     <div className="mt-5">
@@ -409,14 +408,15 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
             setValue={setPersonalCategory}
           />
 
-          {personalCategory === "নওমুসলিম" && (
-            <Textarea
-              title="আপনার ইসলাম গ্রহণের সময় ও ঘটনা উল্লেখ করুন"
-              value={acceptIslam}
-              setValue={setAcceptIslam}
-              required
-            />
-          )}
+          {personalCategory?.length > 0 &&
+            personalCategory.some((item) => item.value === "নওমুসলিম") && (
+              <Textarea
+                title="আপনার ইসলাম গ্রহণের সময় ও ঘটনা উল্লেখ করুন"
+                value={acceptIslam}
+                setValue={setAcceptIslam}
+                required
+              />
+            )}
           <Textarea
             title="মিলাদ ও কিয়াম সম্পর্কে আপনার ধারনা কি?"
             value={aboutMiladQiyam}

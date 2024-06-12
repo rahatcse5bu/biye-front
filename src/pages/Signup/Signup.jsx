@@ -16,6 +16,7 @@ import { setToken } from "../../utils/cookies";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 import { sendFirebaseError } from "../../utils/fiirebaseError";
 import toast from "react-hot-toast";
+import { Toast } from "../../utils/toast";
 export function Signup() {
   const { handleGoogleSignIn, createUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ export function Signup() {
       const { data } = await userServices.createUserInfoForGoogleSignIn(
         userInfo
       );
-      console.log(data);
+      // console.log(data);
       if (data?.success === true) {
         setToken({
           token: data?.data.token,
@@ -105,19 +106,12 @@ export function Signup() {
       const response1 = await createUser(email, password);
 
       if (!response1?.user?.uid) {
-        //	alert("Something went wrong,please try again");
-        toast.error("Something went wrong,please try again", {
-          duration: 5000,
-          position: "bottom-right",
-          style: { backgroundColor: "red", color: "#fff" },
-        });
+        Toast.errorToast("Something went wrong,please try again");
         return;
       }
 
       const userInfo = {
         email,
-        password: "iampassword",
-        phone: "iamphone",
         username,
         gender,
       };
@@ -126,7 +120,7 @@ export function Signup() {
       const { data } = await userServices.createUserInfoForGoogleSignIn(
         userInfo
       );
-      console.log(data);
+      // console.log(data);
       if (data?.success === true) {
         setEmail("");
         setPassword("");

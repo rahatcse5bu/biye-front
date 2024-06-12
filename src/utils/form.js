@@ -35,7 +35,7 @@ export const getDataFromMultipleInput = (data) => {
 };
 
 export const dataToMultipleExpectedPartner = (data = []) => {
-  if (data.length === 0) {
+  if (!Array.isArray(data) || data.length === 0) {
     return [];
   }
   const responseData = [];

@@ -10,7 +10,10 @@ import { useQuery } from "@tanstack/react-query";
 import { getToken } from "../../utils/cookies";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import MultipleSelect from "../MultitpleSelect/MultipleSelect";
-import { dataToMultiple, getDataFromMultipleInput } from "../../utils/form";
+import {
+  dataToMultipleExpectedPartner,
+  getDataFromMultipleInputExpectedPartner,
+} from "../../utils/form";
 import { ProfessionalInfoServices } from "../../services/professionalInfo";
 import { getErrorMessage } from "../../utils/error";
 import { Toast } from "../../utils/toast";
@@ -50,7 +53,7 @@ const ProfessionInfoForm = ({ userForm, setUserForm }) => {
     if (professionalInfo?.data) {
       const { occupation, occupation_details, monthly_income } =
         professionalInfo.data;
-      setOccupation(dataToMultiple(occupation));
+      setOccupation(dataToMultipleExpectedPartner(occupation));
       setOccupationInfo(occupation_details);
       setIncome(monthly_income);
     }
@@ -60,7 +63,7 @@ const ProfessionInfoForm = ({ userForm, setUserForm }) => {
     e.preventDefault();
 
     let professionalInfoData = {
-      occupation: getDataFromMultipleInput(occupation),
+      occupation: getDataFromMultipleInputExpectedPartner(occupation),
       occupation_details: occupationInfo,
       monthly_income: income,
     };

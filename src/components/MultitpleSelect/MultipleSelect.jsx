@@ -12,6 +12,7 @@ export default function MultipleSelect({
   value,
   setValue,
   classes = "z-40",
+  required = false,
 }) {
   // console.log(value);
   return (
@@ -27,6 +28,7 @@ export default function MultipleSelect({
         value={value}
         components={animatedComponents}
         isMulti
+        required={required}
         options={options}
         className={`text-left ${classes}`}
       />

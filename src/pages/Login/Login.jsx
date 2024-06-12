@@ -12,7 +12,7 @@ import { Toast } from "../../utils/toast";
 export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { handleGoogleSignIn, signIn, setUserInfo } = useContext(UserContext);
+  const { handleGoogleSignIn, signIn } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/user/account/dashboard";
@@ -42,7 +42,7 @@ export function Login() {
         setToken({
           token: data?.data.token,
         });
-        setUserInfo(data.data);
+
         navigate(from, {
           replace: true,
         });

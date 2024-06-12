@@ -14,11 +14,7 @@ import {
 } from "./familyInfoForm.constant";
 import { Colors } from "../../constants/colors";
 import { useQuery } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { userServices } from "../../services/user";
-import { useNavigate } from "react-router-dom";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
-import { verifyToken } from "../../services/verifyToken";
 import { FamilyStatusInfoServices } from "../../services/familyStatus";
 import { getErrorMessage } from "../../utils/error";
 import { Toast } from "../../utils/toast";
@@ -39,9 +35,8 @@ const FamilyInfoForm = ({ setUserForm, userForm }) => {
   const [uncleInfo, setUncleInfo] = useState("");
   const [familyDeen, setFamilyDeen] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
-  const { userInfo, logOut } = useContext(UserContext);
+  const { userInfo } = useContext(UserContext);
   const { data: familyInfo = null, isLoading } = useQuery({
     queryKey: ["family-info", userInfo?.data?._id, getToken()?.token],
     queryFn: async () => {
@@ -220,14 +215,16 @@ const FamilyInfoForm = ({ setUserForm, userForm }) => {
             options={quantityOptions}
             required
           />
+          {+numOfBrother !== 0 && (
+            <Textarea
+              title="ভাইদের তথ্য"
+              subtitle="শিক্ষাগত যোগ্যতা, বৈবাহিক অবস্থা এবং পেশা লিখবেন। একাধিক ভাই থাকলে কমা দিয়ে নিচের লাইনে লিখবেন।"
+              value={brothersInfo}
+              setValue={setBrothersInfo}
+              required
+            />
+          )}
 
-          <Textarea
-            title="ভাইদের তথ্য"
-            subtitle="শিক্ষাগত যোগ্যতা, বৈবাহিক অবস্থা এবং পেশা লিখবেন। একাধিক ভাই থাকলে কমা দিয়ে নিচের লাইনে লিখবেন।"
-            value={brothersInfo}
-            setValue={setBrothersInfo}
-            required
-          />
           <Select
             title="আপনার কতজন বোন আছে?"
             value={numOfSister}
@@ -235,13 +232,15 @@ const FamilyInfoForm = ({ setUserForm, userForm }) => {
             options={quantityOptions}
             required
           />
-          <Textarea
-            title="বোনদের তথ্য "
-            subtitle="শিক্ষাগত যোগ্যতা, বৈবাহিক অবস্থা এবং পেশা লিখবেন। একাধিক ভাই থাকলে কমা দিয়ে নিচের লাইনে লিখবেন।"
-            value={sistersInfo}
-            setValue={setSistersInfo}
-            required
-          />
+          {+numOfSister !== 0 && (
+            <Textarea
+              title="বোনদের তথ্য "
+              subtitle="শিক্ষাগত যোগ্যতা, বৈবাহিক অবস্থা এবং পেশা লিখবেন। একাধিক ভাই থাকলে কমা দিয়ে নিচের লাইনে লিখবেন।"
+              value={sistersInfo}
+              setValue={setSistersInfo}
+              required
+            />
+          )}
 
           <Textarea
             title="চাচা মামাদের পেশা "
