@@ -402,7 +402,9 @@ function EducationInfo() {
                 কোনো দ্বীনি শিক্ষাগত যোগ্যতা
               </td>
               <td className="w-1/2 px-4 py-2 text-left border-l">
-                {educationInfo?.deeni_edu.join(", ")}
+                {Array.isArray(educationInfo?.deeni_edu)
+                  ? educationInfo?.deeni_edu.join(", ")
+                  : educationInfo?.deeni_edu}
               </td>
             </tr>
           )}

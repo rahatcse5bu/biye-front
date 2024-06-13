@@ -20,13 +20,12 @@ const ReviewForm = () => {
     retry: false,
     enabled: !!userInfo?.data?._id,
   });
-  const submitReviewButtonHandler = async (e) => {
-    e.preventDefault();
+  const submitReviewButtonHandler = async (user_status) => {
     try {
       setLoading(true);
       const result = await UserInfoServices.updateUserInfo(
         {
-          user_status: "in review",
+          user_status,
         },
         getToken().token
       );
@@ -42,12 +41,12 @@ const ReviewForm = () => {
       Toast.errorToast(msg);
     }
   };
-  console.log(userStatus);
+  // console.log(userStatus);
   return (
-    <form onSubmit={submitReviewButtonHandler}>
+    <div>
       <FormTitle title="Review form" />
       <div className="flex items-center justify-center h-[80vh]">
-        {userStatus?.data?.user_status !== "in review" ? (
+        {userStatus?.data?.user_status === "pending" ? (
           <button
             type="submit"
             className="px-4 py-2 text-white rounded-md"
@@ -57,20 +56,31 @@ const ReviewForm = () => {
           >
             {loading ? <LoadingCircle /> : "Submit for review"}
           </button>
-        ) : (
+        ) : userStatus?.data?.user_status === "active" ? (
           <button
-            type="submit"
-            disabled={true}
-            className="px-4 py-2 text-white rounded-md cursor-not-allowed"
+            onClick={() => submitReviewButtonHandler("inactive")}
+            className="px-4 py-2 text-white capitalize font-medium rounded-md disabled:cursor-not-allowed"
             style={{
               background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
             }}
           >
-            {userStatus?.data?.user_status}
+            {loading ? <LoadingCircle /> : " Submit for Inactive"}
           </button>
-        )}
+        ) : (
+          userStatus?.data?.user_status === "inactive" && (
+            <button
+              onClick={() => submitReviewButtonHandler("active")}
+              className="px-4 py-2 text-white capitalize font-medium rounded-md disabled:cursor-not-allowed"
+              style={{
+                background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
+              }}
+            >
+              {loading ? <LoadingCircle /> : " Submit for active"}
+            </button>
+          )
+        )}{" "}
       </div>
-    </form>
+    </div>
   );
 };
 
