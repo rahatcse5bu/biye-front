@@ -12,6 +12,28 @@ const getUserInfoStatus = async (bioId) => {
   const response = await axios.get(baseUrl + `/user-info/status/${bioId}`);
   return response.data;
 };
+const getAllUsersInfoId = async (token) => {
+  if (!token) {
+    return null;
+  }
+  const response = await axios.get(baseUrl + `/user-info/all-users-id`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+const verifyTokenByUser = async (token) => {
+  if (!token) {
+    return null;
+  }
+  const response = await axios.get(baseUrl + `/user-info/verify-token`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
 const updateUserInfo = async (data, token) => {
   if (!token) {
     return null;
@@ -28,4 +50,6 @@ const updateUserInfo = async (data, token) => {
 export const UserInfoServices = {
   getUserInfoStatus,
   updateUserInfo,
+  verifyTokenByUser,
+  getAllUsersInfoId,
 };

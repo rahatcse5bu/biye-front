@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useContext, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   VerticalTimeline,
   VerticalTimelineElement,
@@ -9,14 +11,44 @@ import "react-vertical-timeline-component/style.min.css"; // Import the CSS for 
 import { FaCheck } from "react-icons/fa";
 import { Colors } from "../../constants/colors";
 import UserContext from "../../contexts/UserContext";
+import { UserInfoServices } from "../../services/userInfo";
+import { getToken, removeToken } from "../../utils/cookies";
+import { Toast } from "../../utils/toast";
+import { useNavigate } from "react-router-dom";
 
 const Numbering = ({ setUserForm, userForm }) => {
-  const { userInfo } = useContext(UserContext);
+  const { userInfo, logOut } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const {
+    data: tokenData,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["user-info", getToken()?.token],
+    queryFn: async () => {
+      return await UserInfoServices.verifyTokenByUser(getToken()?.token);
+    },
+    retry: false,
+    enabled: !!getToken()?.token,
+  });
 
   useEffect(() => {
     const lastEditedIndex = userInfo?.data?.last_edited_timeline_index || 1;
     setUserForm(lastEditedIndex);
   }, [setUserForm, userInfo]);
+  const logoutHandler = async () => {
+    await logOut();
+    removeToken();
+    navigate("/");
+  };
+
+  useEffect(() => {
+    if (isError && error && getToken()?.token) {
+      Toast.errorToast(error?.response.data?.error);
+      logoutHandler();
+    }
+  }, [isError, error]);
 
   const editedTimelineIndex = userInfo?.data?.edited_timeline_index || 1;
   // console.log("Numbering", userInfo);

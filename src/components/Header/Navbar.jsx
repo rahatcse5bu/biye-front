@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -18,7 +19,7 @@ import { MdExitToApp } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { BiSolidDashboard } from "react-icons/bi";
 import navLogo from "../../assets/icons/logo.png";
-import { removeToken } from "../../utils/cookies";
+import { getToken, removeToken } from "../../utils/cookies";
 import { Modal } from "../Modal/Modal";
 import { getGender } from "../../utils/localStorage";
 import female from "../../assets/icons/female.svg";
@@ -26,6 +27,8 @@ import male from "../../assets/icons/male.svg";
 import { useQuery } from "@tanstack/react-query";
 import { userServices } from "../../services/user";
 import classNames from "classnames";
+import { UserInfoServices } from "../../services/userInfo";
+import { Toast } from "../../utils/toast";
 
 export default function NavBar() {
   const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
@@ -47,12 +50,38 @@ export default function NavBar() {
     retry: false,
     enabled: !!user?.email,
   });
+  const {
+    data: tokenData,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["user-info", getToken()?.token],
+    queryFn: async () => {
+      return await UserInfoServices.verifyTokenByUser(getToken()?.token);
+    },
+    retry: false,
+    enabled: !!getToken()?.token,
+    refetchInterval: 3600000, // every hour
+    // refetchInterval: 10000, // 10s
+  });
+  const logoutHandler = async () => {
+    await logOut();
+    setIsHovered(false);
+    removeToken();
+    navigate("/");
+  };
 
   useEffect(() => {
     if (data) {
       setUserInfo(data);
     }
   }, [data, setUserInfo]);
+  useEffect(() => {
+    if (isError && error && getToken()?.token) {
+      Toast.errorToast(error?.response?.data?.error);
+      logoutHandler();
+    }
+  }, [isError, error]);
   // console.log("user~~~", user);
 
   // console.log("user-info", userInfo);
@@ -68,12 +97,6 @@ export default function NavBar() {
 
   const handleIconHover = () => {
     setIsHovered(true);
-  };
-  const logoutHandler = async () => {
-    await logOut();
-    setIsHovered(false);
-    removeToken();
-    navigate("/");
   };
 
   const handleIconLeave = () => {

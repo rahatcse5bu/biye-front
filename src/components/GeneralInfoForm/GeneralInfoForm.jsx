@@ -30,9 +30,12 @@ import { verifyToken } from "../../services/verifyToken";
 import { getErrorMessage } from "../../utils/error";
 import { Toast } from "../../utils/toast";
 import { GeneralInfoServices } from "../../services/generalInfo";
+import SingleSelect from "../SingleSelect/SingleSelect";
+import { UserInfoServices } from "../../services/userInfo";
 
 const GeneralInfoForm = ({ userForm, setUserForm }) => {
   const { userInfo, logOut } = useContext(UserContext);
+  const [referId, setReferId] = useState("");
   const [bioType, setBioType] = useState("");
   const [maritalStatus, setMaritalStatus] = useState("");
   const [dob, setDob] = useState("");
@@ -54,15 +57,23 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
     retry: false,
     enabled: !!userInfo?.data?._id,
   });
+  const { data: userInfoIds = null } = useQuery({
+    queryKey: ["all-users-id", getToken()?.token],
+    queryFn: async () => {
+      return await UserInfoServices.getAllUsersInfoId(getToken()?.token);
+    },
+    retry: false,
+    enabled: !!getToken()?.token,
+  });
   // useEffect(() => {
   // 	verifyToken(userInfo?.data?._id, logOut, "general-info-verify-token");
   // }, [logOut, userInfo?.data]);
 
-  console.log("general-info~~", generalInfo);
+  // console.log("general-info~~", generalInfo);
 
   //! set init data
   useEffect(() => {
-    console.log(generalInfo?.data);
+    // console.log(generalInfo?.data);
     if (generalInfo?.data) {
       const {
         gender,
@@ -74,6 +85,7 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
         marital_status,
         weight,
         blood_group,
+        refer_user,
       } = generalInfo.data;
 
       setGender(gender);
@@ -85,8 +97,20 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
       setHeight(height);
       setWeight(convertToBengaliNumerals(weight.toString()));
       setColor(screen_color);
+      // console.log("refer_user", refer_user);
+      // console.log("userInfoIds", userInfoIds);
+      if (refer_user && userInfoIds) {
+        const user = userInfoIds?.data.find((item) => item._id === refer_user);
+        console.log("filtered-user_id", user);
+        if (user) {
+          setReferId({
+            value: user?._id,
+            label: user?.user_id,
+          });
+        }
+      }
     }
-  }, [generalInfo]);
+  }, [generalInfo, userInfoIds]);
 
   // console.log(userInfo?.data?._id);
 
@@ -134,12 +158,10 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
       nationality: nationality,
       gender: gender,
       user_id: userInfo?.data?._id,
-      isMarriageDone: false,
-      isFeatured: false,
-      isFbPosted: false,
-      views_count: 0,
-      purchases_count: 0,
+      refer_user: referId?.value,
     };
+
+    console.log("general_info_data~~", formData);
 
     // console.log("userInfo?.data?._id~~", userInfo?.data?._id);
     // console.log("!getToken()?.token~~", getToken()?.token);
@@ -189,6 +211,18 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
         <LoadingCircle />
       ) : (
         <form onSubmit={submitGeneralFormHandler}>
+          {userInfoIds && (
+            <SingleSelect
+              title="রেফার আইডি"
+              value={referId}
+              setValue={setReferId}
+              required={false}
+              options={userInfoIds?.data.map((item) => {
+                return { value: item._id, label: item.user_id };
+              })}
+            />
+          )}
+
           <Select
             title="বায়োডাটার ধরণ"
             options={bioDataTypes}
@@ -253,6 +287,7 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
             setValue={setBlood}
             options={bloodGroup}
           />
+
           <Select
             title="জাতীয়তা"
             required
