@@ -149,8 +149,8 @@ const ContactInfo = ({ contact, status }) => {
   };
 
   const buyWithBkashHandler = async (value, bioId) => {
-    let response;
     // ? verification check
+    let response;
     try {
       response = await userServices.verifyToken(getToken()?.token);
       console.log("navbar-verify-token~", response);
