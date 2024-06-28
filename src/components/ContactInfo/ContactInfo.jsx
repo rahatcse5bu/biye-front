@@ -111,7 +111,7 @@ const ContactInfo = ({ contact, status }) => {
       }
     };
     check();
-  }, [bio_user, generalInfo.user, token]);
+  }, [bio_user, generalInfo?.user, token]);
 
   const comHandler = () => {
     if (!userInfo?.data?._id) {
