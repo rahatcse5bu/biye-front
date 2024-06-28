@@ -75,3 +75,35 @@ export function formatDate(dateStr) {
   // Format the parsed date as "9th Jan 1998"
   return format(parsedDate, "do MMM yyyy");
 }
+
+export function formatDateAndCalculateAge(dateString) {
+  const date = new Date(dateString);
+
+  if (isNaN(date)) {
+    // throw new Error("Invalid date format");
+    return {};
+  }
+
+  // Extract day, month, and year
+  const day = date.getUTCDate().toString().padStart(2, "0");
+  const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+  const year = date.getUTCFullYear();
+
+  const formattedDate = `${day}-${month}-${year}`;
+
+  // Calculate age
+  const today = new Date();
+  let age = today.getUTCFullYear() - year;
+  const monthDiff = today.getUTCMonth() - date.getUTCMonth();
+  const dayDiff = today.getUTCDate() - date.getUTCDate();
+
+  // Adjust age if the birthday hasn't occurred yet this year
+  if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+    age--;
+  }
+
+  return {
+    formattedDate,
+    age,
+  };
+}

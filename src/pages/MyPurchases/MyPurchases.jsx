@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import "./MyPurchases.css";
 import { useState } from "react";
 import { Button } from "@material-tailwind/react";
 import { useQuery } from "@tanstack/react-query";
@@ -25,6 +24,8 @@ import { getErrorMessage } from "../../utils/error";
 import { ContactPurchaseDataServices } from "../../services/contactPurchaseData";
 import classNames from "classnames";
 import { BioDataServices } from "../../services/bioData";
+import "./MyPurchases.css";
+import { formatDateAndCalculateAge } from "../../utils/date";
 
 const FirstStepCard = ({
   item,
@@ -34,15 +35,17 @@ const FirstStepCard = ({
   setIsFeedbackDialogOpen,
   setBioDetailsModal,
   setPayBioDetailsModal,
+  bioChoiceFirstStepRefetch,
+  bioChoiceSecondStepRefetch,
 }) => {
   const { userInfo, logOut } = useContext(UserContext);
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["bio-data", "stat", item?.bio_user],
     queryFn: async () => {
       return await BioDataServices.getBioDataStatistics(item?.bio_user);
     },
     retry: false,
-    enabled: !!item?.bio_userr,
+    enabled: !!item?.bio_user,
   });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -54,7 +57,7 @@ const FirstStepCard = ({
       response = await userServices.verifyToken(getToken()?.token);
       console.log("navbar-verify-token~", response);
       const data = response?.data;
-      const user_id = userInfo?.data[0]?.id;
+      const user_id = userInfo?.data?._id;
 
       if (data?.user_id !== user_id) {
         await logOut();
@@ -83,7 +86,7 @@ const FirstStepCard = ({
       navigate("/login");
     }
   };
-  console.log("bio-stats", data);
+  // console.log("bio-stats", data);
   const bioDetailsOpenModalHandler = (text) => {
     setQa(text);
     setBioDetailsModal(true);
@@ -94,8 +97,8 @@ const FirstStepCard = ({
     setFeedback(item);
   };
 
-  const payButtonHandler = (bioId) => {
-    const points = userInfo?.data[0]?.points;
+  const payButtonHandler = (bio_user) => {
+    const points = userInfo?.data?.points;
     Swal.fire({
       title: "আপনি কি তথ্য দেখতে চান?",
       text: `যোগাযোগ তথ্য দেখতে আপনার আরও ৭০ পয়েন্ট খরচ হবে 
@@ -124,23 +127,24 @@ const FirstStepCard = ({
           const data =
             await ContactPurchaseDataServices.createContactPurchaseData(
               {
-                user_id: userInfo?.data[0]?.id,
-                bio_id: bioId,
+                bio_user,
               },
               getToken().token
             );
 
           if (data.success) {
             Toast.successToast("আপনার বায়োডাটা ক্রয় সম্পূর্ন  হয়েছে।");
+            await bioChoiceFirstStepRefetch();
+            await bioChoiceSecondStepRefetch();
           }
-          setLoading(false);
         } catch (error) {
-          setLoading(false);
           let msg = getErrorMessage(error);
           Toast.errorToast(msg);
+        } finally {
+          setLoading(false);
         }
       } else {
-        buyWithBkashHandler(70 - points, bioId);
+        buyWithBkashHandler(70 - points, bio_user);
       }
     });
   };
@@ -197,7 +201,7 @@ const FirstStepCard = ({
         {item?.status === "approved" && (
           <>
             <Button
-              onClick={() => payButtonHandler(item?.bio_id)}
+              onClick={() => payButtonHandler(item?.bio_user)}
               size="xs"
               className="mr-2"
               style={{
@@ -208,7 +212,7 @@ const FirstStepCard = ({
             </Button>
             <AiFillQuestionCircle
               onClick={() => setPayBioDetailsModal(true)}
-              className="w-6 h-6 mr-2 text-red-700 cursor-pointer hover:text-red-900"
+              className="w-6 h-6 mr-2 text-yellow-600 cursor-pointer hover:text-yellow-800"
             />
           </>
         )}
@@ -219,6 +223,75 @@ const FirstStepCard = ({
           className=""
         >
           <FaEye />
+        </Button>
+      </td>
+    </tr>
+  );
+};
+
+const SecondCard = ({ item, index }) => {
+  const navigate = useNavigate();
+  const { data } = useQuery({
+    queryKey: ["bio-data", "stat", item?.bio_user],
+    queryFn: async () => {
+      return await BioDataServices.getBioDataStatistics(item?.bio_user);
+    },
+    retry: false,
+    enabled: !!item?.bio_user,
+  });
+  const total =
+    data?.results?.rejected + data?.results?.approved + data?.results?.pending;
+
+  const viewBioIdHandler = (bioId) => {
+    navigate(`/biodata/${bioId}`);
+  };
+  // console.log("data~", data);
+  return (
+    <tr className="border-b">
+      <td className="px-4 py-2 text-center border-l w-1/10">{index + 1}</td>
+      <td className="px-4 py-2 text-center border-l w-1/10">{item?.bio_id}</td>
+      <td className="px-4 py-2 text-center border-l w-1/10">
+        {item?.full_name}
+      </td>
+      <td className="px-4 py-2 text-center border-l w-1/10">
+        {item?.bio_receiving_email}
+      </td>
+      <td className="px-4 py-2 whitespace-nowrap text-center border-l w-1/10">
+        {formatDateAndCalculateAge(item?.date_of_birth)?.formattedDate}
+      </td>
+      <td className="px-4 py-2 whitespace-nowrap text-center border-l w-1/10">
+        {item?.permanent_area}
+      </td>
+      <td className="px-4 py-2 whitespace-nowrap text-center border-l w-1/10">
+        {item?.present_area}
+      </td>
+      <td className="px-4 py-2 text-center border-l w-1/10">
+        {item?.family_number}
+      </td>
+      <td className="px-4 py-2 text-center border-l w-1/10">
+        {item?.relation}
+      </td>
+      <td className="px-4 py-2 text-center border-l w-1/10">{total}</td>
+      <td className="px-4 py-2 text-center border-l w-1/10">
+        {data?.results?.approvedPercentage}%
+      </td>
+      <td className="px-4 py-2 text-center border-l w-1/10">
+        {data?.results?.rejectedPercentage}%
+      </td>
+      <td className="px-4 py-2 text-center border-l w-1/10">
+        {data?.results?.pending}
+      </td>
+      <td className="flex px-4 py-2 text-center border-l w-1/10">
+        <Button
+          color="green"
+          size="xs"
+          onClick={() => viewBioIdHandler(item?.bio_id)}
+          className="mr-2"
+        >
+          <FaEye size={12} />
+        </Button>
+        <Button color="red" size="xs">
+          <FaTrash size={12} />
         </Button>
       </td>
     </tr>
@@ -322,6 +395,12 @@ const MyPurchases = () => {
                             setIsFeedbackDialogOpen={setIsFeedbackDialogOpen}
                             setBioDetailsModal={setBioDetailsModal}
                             setPayBioDetailsModal={setPayBioDetailsModal}
+                            bioChoiceFirstStepRefetch={
+                              bioChoiceFirstStepRefetch
+                            }
+                            bioChoiceSecondStepRefetch={
+                              bioChoiceSecondStepRefetch
+                            }
                           />
                         );
                       })
@@ -332,8 +411,8 @@ const MyPurchases = () => {
             </div>
           </div>
           <div className="h-5 lg:h-12"></div>
-          <div className="col right-sidebar-main my-favs">
-            <div className="w-auto border-t-2 rounded shadow my-favs-info">
+          <div className="col right-sidebar-main overflow-hidden my-favs">
+            <div className="w-auto overflow-hidden border-t-2 rounded shadow my-favs-info">
               <h5 className="mt-3 text-2xl text-center card-title">
                 আমার ফাইনাল বায়োডাটা ক্রয়সমূহ (২য় স্টেপ)
               </h5>
@@ -350,11 +429,17 @@ const MyPurchases = () => {
                       <th className="w-1/12 px-4 py-2 text-center">
                         বায়োডাটা নং
                       </th>
-                      <th className="w-1/12 px-4 py-2 text-center">Name</th>
+                      <th className="w-1/12 px-4 py-2 text-center">নাম</th>
+                      <th className="w-1/12 px-4 py-2 text-center">ই-মেইল</th>
                       <th className="w-1/12 px-4 py-2 text-center">
                         জন্ম তারিখ
                       </th>
-                      <th className="w-1/12 px-4 py-2 text-center">ঠিকানা</th>
+                      <th className="w-1/12 whitespace-nowrap px-4 py-2 text-center">
+                        স্থায়ী ঠিকানা
+                      </th>
+                      <th className="w-1/12 whitespace-nowrap  px-4 py-2 text-center">
+                        বর্তমান ঠিকানা{" "}
+                      </th>
                       <th className="w-1/12 px-4 py-2 text-center">
                         যোগাযোগের নাম্বার
                       </th>
@@ -381,49 +466,7 @@ const MyPurchases = () => {
                       bioChoiceSecondStep?.data?.length > 0 &&
                       bioChoiceSecondStep?.data?.map((item, index) => {
                         return (
-                          <tr key={index} className="border-b">
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {index + 1}
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {item?.bio_id}
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {item?.full_name}
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {item?.date_of_birth}
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {item?.present_address}
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {item?.family_number}
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {item?.relation}
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {item?.total_count}
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {(item?.approval_rate * 1).toFixed(2)}%
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {(item?.rejection_rate * 1).toFixed(2)}%
-                            </td>
-                            <td className="px-4 py-2 text-center border-l w-1/10">
-                              {item?.pending_count}
-                            </td>
-                            <td className="flex px-4 py-2 text-center border-l w-1/10">
-                              <Button color="green" size="xs" className="mr-2">
-                                <FaEye size={12} />
-                              </Button>
-                              <Button color="red" size="xs">
-                                <FaTrash size={12} />
-                              </Button>
-                            </td>
-                          </tr>
+                          <SecondCard key={index} index={index} item={item} />
                         );
                       })
                     )}

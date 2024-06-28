@@ -77,7 +77,12 @@ export default function NavBar() {
     }
   }, [data, setUserInfo]);
   useEffect(() => {
-    if (isError && error && getToken()?.token) {
+    if (
+      isError &&
+      error &&
+      getToken()?.token &&
+      import.meta.env.VITE_REACT_APP_NODE_ENV === "production"
+    ) {
       Toast.errorToast(error?.response?.data?.error);
       logoutHandler();
     }

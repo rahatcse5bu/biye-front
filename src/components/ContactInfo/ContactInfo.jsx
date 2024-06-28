@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import BioContext from "../../contexts/BioContext";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,8 +21,20 @@ const ContactInfo = ({ contact, status }) => {
   const { userInfo, logOut } = useContext(UserContext);
   const generalInfo = bio?.generalInfo || null;
   const points = Number(userInfo?.data?.points);
+  const token = getToken()?.token;
+  const bio_user = generalInfo?.user;
 
-  console.log("Contact-info-generalInfo~~", generalInfo);
+  const { data: contactInfo = null } = useQuery({
+    queryKey: ["contact", generalInfo?.user, getToken()?.token],
+    queryFn: async () =>
+      await BioChoiceDataServices.checkBioChoiceDataSecondStep(
+        generalInfo?.user,
+        getToken()?.token
+      ),
+    retry: false,
+  });
+  // console.log("contact", contact);
+  console.log("Contact-info~~", contactInfo);
 
   // console.log({ points });
   const navigate = useNavigate();
@@ -38,66 +51,67 @@ const ContactInfo = ({ contact, status }) => {
     const check = async () => {
       try {
         //? check first step
-        const token = getToken()?.token;
-        const bioId = generalInfo?.user_id;
-        if (!token || !bioId) {
+
+        if (!getToken()?.token || !generalInfo?.user) {
           // Toast.errorToast("Please,Login to view more");
           return;
         }
 
         const checkFirst =
-          await BioChoiceDataServices.checkBioChoiceDataFirstStep(bioId, token);
-        console.log("bio-check-first-step~", checkFirst);
+          await BioChoiceDataServices.checkBioChoiceDataFirstStep(
+            generalInfo?.user,
+            getToken()?.token
+          );
+        // console.log("bio-check-first-step~", checkFirst);
         const status = checkFirst?.data?.status;
         let msg = "";
 
-        if (checkFirst?.data?.count > 0) {
-          console.log({ status });
-          if (status === "Approved" || status === "Accepted") {
+        if (status) {
+          // console.log({ status });
+          if (status === "approved" || status === "accepted") {
             msg = "আপনার প্রথম পদক্ষেপ সম্পূর্ন হয়েছে।";
-            Toast.successToast(msg);
+            // Toast.successToast(msg);
             setCheckMsg(msg);
-          } else if (status === "Rejected") {
+          } else if (status === "rejected") {
             msg = "দুংক্ষিত ,আপনি প্রতাক্ষিত হয়েছেন এই বায়োডাটা  থেকে।";
-            Toast.successToast(msg);
+            // Toast.successToast(msg);
             setCheckMsg(msg);
-          } else if (status === "Pending") {
+          } else if (status === "pending") {
             msg = "দুংক্ষিত ,আপনি পেন্ডিং  আছেন এই বায়োডাটা  থেকে।";
-            Toast.successToast(msg);
+            // Toast.successToast(msg);
             setCheckMsg(msg);
           }
         }
 
-        const checkSecond =
-          await BioChoiceDataServices.checkBioChoiceDataSecondStep(
-            bioId,
-            token
-          );
-        console.log("bio-choice-second-step~", checkSecond);
-        if (checkSecond?.data?.count > 0) {
-          const payment_status = checkSecond?.data?.payment_status;
-          const refund_status = checkSecond?.data?.refund_status;
-
-          if (payment_status === "Completed" && refund_status !== "refunded") {
-            msg = "দুংক্ষিত ,আপনি এই বায়োডাটা ইতিমধ্যে কিনছেন";
-            Toast.successToast(msg);
-            setCheckMsg(msg);
-          }
-          if (payment_status === "Completed" && refund_status === "refunded") {
-            msg =
-              "দুংক্ষিত ,আপনি এই বায়োডাটার ইতিমধ্যে প্রথম পদক্ষেপ  কিনছেন,\n আপনি দ্বিতীয় পদক্ষেপ এর জন্য টাকা পরিশোধ করুন ";
-            Toast.successToast(msg);
-            setCheckMsg(msg);
-          }
-        }
+        // const checkSecond =
+        //   await BioChoiceDataServices.checkBioChoiceDataSecondStep(
+        //     bio_user,
+        //     token
+        //   );
+        // console.log("bio-choice-second-step~", checkSecond);
+        // if (checkSecond?.success) {
+        //   const payment_status = checkSecond?.data?.payment_status;
+        //   const refund_status = checkSecond?.data?.refund_status;
+        //   if (payment_status === "Completed" && refund_status !== "refunded") {
+        //     msg = "দুংক্ষিত ,আপনি এই বায়োডাটা ইতিমধ্যে কিনছেন";
+        //     Toast.successToast(msg);
+        //     setCheckMsg(msg);
+        //   }
+        //   if (payment_status === "Completed" && refund_status === "refunded") {
+        //     msg =
+        //       "দুংক্ষিত ,আপনি এই বায়োডাটার ইতিমধ্যে প্রথম পদক্ষেপ  কিনছেন,\n আপনি দ্বিতীয় পদক্ষেপ এর জন্য টাকা পরিশোধ করুন ";
+        //     Toast.successToast(msg);
+        //     setCheckMsg(msg);
+        //   }
+        // }
       } catch (error) {
-        let msg = error?.response?.data?.message || error?.message;
-        console.log("contact-info-error~", error);
-        Toast.errorToast(msg);
+        // let msg = error?.response?.data?.message || error?.message;
+        // console.log("contact-info-error~", error);
+        // Toast.errorToast(msg);
       }
     };
     check();
-  }, [generalInfo?.user_id]);
+  }, [bio_user, generalInfo.user, token]);
 
   const comHandler = () => {
     if (!userInfo?.data?._id) {
@@ -173,7 +187,7 @@ const ContactInfo = ({ contact, status }) => {
 
   return (
     <div className="rounded shadow single-bio-contact-info">
-      {contact && status?.user_status !== "hidden" ? (
+      {contactInfo ? (
         <>
           <h5 className="my-3 text-2xl text-center card-title">যোগাযোগ</h5>
           <div className="paid-contact-info">
@@ -188,7 +202,7 @@ const ContactInfo = ({ contact, status }) => {
                       : "পাত্রের নাম"}{" "}
                   </td>
                   <td className="w-1/2 px-4 py-2 text-left border-l">
-                    {contact?.full_name}
+                    {contactInfo.data?.contact_info.full_name}
                   </td>
                 </tr>
               </thead>
@@ -198,7 +212,15 @@ const ContactInfo = ({ contact, status }) => {
                     অভিভাবকের মোবাইল নাম্বার
                   </td>
                   <td className="w-1/2 px-4 py-2 text-left border-l">
-                    {contact?.family_number}
+                    {contactInfo.data?.contact_info.family_number}
+                  </td>
+                </tr>
+                <tr className="border-b">
+                  <td className="w-1/2 px-4 py-2 text-left">
+                    অভিভাবকের ই-মেইল
+                  </td>
+                  <td className="w-1/2 px-4 py-2 text-left border-l">
+                    {contactInfo.data?.contact_info.bio_receiving_email}
                   </td>
                 </tr>
                 <tr className="border-b">
@@ -206,13 +228,13 @@ const ContactInfo = ({ contact, status }) => {
                     অভিভাবকের সাথে সম্পর্ক
                   </td>
                   <td className="px-4 py-2 text-left border-l">
-                    {contact?.relation}
+                    {contactInfo.data?.contact_info.relation}
                   </td>
                 </tr>
               </tbody>
             </table>
             <div className="flex justify-center mt-5">
-              <button className="px-4 py-2 text-white bg-red-800 rounded bio-report-btn w-93">
+              <button className="px-4 py-2 text-white mb-4 bg-red-800 rounded bio-report-btn w-93">
                 রিপোর্ট করুন
               </button>
             </div>
@@ -254,7 +276,7 @@ const ContactInfo = ({ contact, status }) => {
                 </button>
               </div>
             ) : checkMsg ? (
-              <p className="px-5 py-3 mb-5 text-green-900 bg-green-500 border-2 border-green-900 rounded-lg">
+              <p className="px-5 py-3 mb-5 text-green-900 bg-green-200 border-2 border-green-600 rounded-lg">
                 {checkMsg}
               </p>
             ) : (

@@ -28,6 +28,7 @@ export default function SingleSelect({
         value={value}
         components={animatedComponents}
         isMulti={false}
+        isClearable={true}
         required={required}
         options={options}
         className={`text-left ${classes}`}
