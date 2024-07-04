@@ -39,7 +39,7 @@ function Payments() {
 
     const amount = parseInt(value);
     if (!isNaN(amount) || +amount >= 1) {
-      BkashCreatePaymentAPICall(amount);
+      BkashCreatePaymentAPICall(1);
     } else {
       // await logOut();
       // removeToken();
