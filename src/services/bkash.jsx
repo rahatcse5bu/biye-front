@@ -44,7 +44,7 @@ export function BkashExecutePaymentAPICall(paymentID) {
 }
 
 export const BkashCallAfterPay = async (data) => {
-  const response = await axios.post(baseUrl + "bkash/after-pay", data, {
+  const response = await axios.post(baseUrl + "/bkash/after-pay", data, {
     headers: {
       "Content-Type": "application/json",
     },
