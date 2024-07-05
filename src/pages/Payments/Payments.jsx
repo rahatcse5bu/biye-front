@@ -2,48 +2,20 @@
 import { Colors } from "../../constants/colors";
 import { packages } from "./payment.constant";
 import BkashCreatePaymentAPICall from "../../services/bkash";
-import { userServices } from "../../services/user";
-import { getToken, removeToken } from "../../utils/cookies";
 import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
 import { Toast } from "../../utils/toast";
-import { getErrorMessage } from "../../utils/error";
-import { useNavigate } from "react-router";
 
 function Payments() {
-  const { userInfo, logOut } = useContext(UserContext);
-  const navigate = useNavigate();
+  const { userInfo } = useContext(UserContext);
   const buyWithBkashHandler = async (value) => {
-    let response;
-    // ? verification check
-    // try {
-    // 	response = await userServices.verifyToken(getToken()?.token);
-    // 	console.log("navbar-verify-token~", response);
-    // 	const data = response?.data;
-    // 	const user_id = userInfo?.data[0]?.id;
-
-    // 	if (data?.user_id !== user_id) {
-    // 		await logOut();
-    // 		removeToken();
-    // 		Toast.errorToast("You are not authorized");
-    // 		navigate("/login");
-    // 	}
-    // } catch (error) {
-    // 	console.error("navbar-verify-token~", error);
-    // 	let msg = getErrorMessage(error);
-    // 	Toast.errorToast(msg);
-    // 	await logOut();
-    // 	removeToken();
-    // 	navigate("/login");
-    // }
+    if (!userInfo?.data?._id) {
+      Toast.errorToast("Please Login");
+    }
 
     const amount = parseInt(value);
     if (!isNaN(amount) || +amount >= 1) {
       BkashCreatePaymentAPICall(1);
-    } else {
-      // await logOut();
-      // removeToken();
-      // navigate("/login");
     }
   };
   return (

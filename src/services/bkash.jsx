@@ -4,9 +4,9 @@ const baseUrl =
     ? "http://localhost:5000/api/v1"
     : "https://server.pnc-nikah.com/api/v1";
 
-export default function BkashCreatePaymentAPICall(amount, bioId = 0) {
+export default function BkashCreatePaymentAPICall(amount) {
   console.log("Button Clicked !!");
-  let url = `https://pnc-nikah.com/pay${bioId > 0 ? `?bioId=${bioId}` : ""}`;
+  let url = `https://pnc-nikah.com/pay`;
   // console.log(url, bioId);
   axios
     .post(baseUrl + "/bkash/create", {
@@ -17,9 +17,9 @@ export default function BkashCreatePaymentAPICall(amount, bioId = 0) {
       // console.log("Data was successfully sent.", response);
       // console.log(response);
       if (response?.data?.bkashURL) {
-        // window.location.href = response?.data?.bkashURL;
+        window.location.href = response?.data?.bkashURL;
       } else {
-        // window.location.href = "/";
+        window.location.href = "/";
       }
     })
     .catch((error) => {
@@ -42,6 +42,15 @@ export function BkashExecutePaymentAPICall(paymentID) {
       });
   });
 }
+
+export const BkashCallAfterPay = async (data) => {
+  const response = await axios.post(baseUrl + "bkash/after-pay", data, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response.data;
+};
 
 export function BkashQueryPaymentAPICall(paymentID) {
   return new Promise((resolve, reject) => {
