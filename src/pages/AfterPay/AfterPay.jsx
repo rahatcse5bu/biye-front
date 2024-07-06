@@ -10,8 +10,7 @@ const AfterPay = () => {
   const navigate = useNavigate();
   const status = searchParams.get("status");
   const paymentID = searchParams.get("paymentID");
-  const bioId = searchParams.get("bioId");
-  const { userInfo } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   // console.log(searchParams);
   // console.log(status);
@@ -22,7 +21,7 @@ const AfterPay = () => {
       try {
         const response = await BkashCallAfterPay({
           paymentID,
-          user: userInfo?.data?._id,
+          email: user?.email,
         });
         if (response?.success) {
           navigate(
@@ -75,12 +74,12 @@ const AfterPay = () => {
     // 	}
     // }
 
-    if (status && status === "success" && userInfo?.data?._id) {
+    if (status && status === "success" && user?.email) {
       fetchData();
     } else {
       navigate("/pay/fail");
     }
-  }, [status, paymentID, navigate, bioId, userInfo?.data?._id]);
+  }, [status, paymentID, navigate, user?.email]);
 
   return (
     <div className="my-10">

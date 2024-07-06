@@ -7,8 +7,9 @@ import UserContext from "../../contexts/UserContext";
 import { Toast } from "../../utils/toast";
 
 function Payments() {
-  const { userInfo } = useContext(UserContext);
+  const { userInfo, user } = useContext(UserContext);
   console.log("userInfo", userInfo);
+  console.log("user", user);
   const buyWithBkashHandler = async (value) => {
     if (!userInfo?.data?._id) {
       Toast.errorToast("Please Login");
