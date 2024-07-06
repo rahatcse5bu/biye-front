@@ -42,7 +42,7 @@ export function Signup() {
         alert("Something went wrong,try again later");
         return;
       }
-      // console.log(response1?.user);
+      console.log(response1?.user);
 
       const userInfo = {
         email: response1?.user.email,
@@ -52,9 +52,10 @@ export function Signup() {
 
       //!store user info into db
       const { data } = await userServices.createUserInfoForGoogleSignIn(
-        userInfo
+        userInfo,
+        response1?._tokenResponse.idToken
       );
-      // console.log(data);
+      console.log(data);
       if (data?.success === true) {
         setToken({
           token: data?.data.token,
@@ -116,9 +117,11 @@ export function Signup() {
         gender,
       };
 
+      // console.log(response1);
       //store user info into db
       const { data } = await userServices.createUserInfoForGoogleSignIn(
-        userInfo
+        userInfo,
+        response1?._tokenResponse.idToken
       );
       // console.log(data);
       if (data?.success === true) {
@@ -131,7 +134,6 @@ export function Signup() {
         });
         navigate("/user/account/dashboard");
       }
-      setLoading(false);
     } catch (error) {
       //alert(error?.response?.data?.message || error.message);
       toast.error(
@@ -142,6 +144,7 @@ export function Signup() {
           style: { backgroundColor: "red", color: "#fff" },
         }
       );
+    } finally {
       setLoading(false);
     }
   };

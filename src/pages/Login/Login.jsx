@@ -33,7 +33,8 @@ export function Login() {
 
       //store user info into db
       const { data } = await userServices.createUserInfoForGoogleSignIn(
-        userInfo
+        userInfo,
+        response1?._tokenResponse.idToken
       );
 
       // console.log("response2~~", data);
@@ -60,13 +61,15 @@ export function Login() {
     }
     try {
       setLoading(true);
-      await signIn(email, password);
+      const response = await signIn(email, password);
       const userInfo = {
         email: email,
+        password,
       };
       //!store user info into db
       const { data } = await userServices.createUserInfoForGoogleSignIn(
-        userInfo
+        userInfo,
+        response?._tokenResponse.idToken
       );
 
       // console.log(data);

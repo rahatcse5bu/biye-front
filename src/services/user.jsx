@@ -20,10 +20,16 @@ const createUserInfo = async (data) => {
   return generalInfo;
 };
 
-const createUserInfoForGoogleSignIn = async (data) => {
+const createUserInfoForGoogleSignIn = async (data, token = "") => {
   const generalInfo = await axios.post(
     baseUrl + "/user-info/create-login-user",
-    data
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
   );
   return generalInfo;
 };

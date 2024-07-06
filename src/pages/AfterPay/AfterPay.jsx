@@ -33,6 +33,8 @@ const AfterPay = () => {
               response?.paymentCreateTime || response?.paymentExecuteTime
             }`
           );
+        } else {
+          navigate(`/pay/fail?message=${response.message}`);
         }
       } catch (error) {
         console.error("An error occurred:", error);
