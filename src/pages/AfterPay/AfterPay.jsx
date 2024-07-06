@@ -75,7 +75,7 @@ const AfterPay = () => {
     // 	}
     // }
 
-    if (status && status === "success") {
+    if (status && status === "success" && userInfo?.data?._id) {
       fetchData();
     } else {
       navigate("/pay/fail");
