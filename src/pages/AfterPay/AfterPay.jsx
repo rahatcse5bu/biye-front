@@ -9,7 +9,9 @@ const AfterPay = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const status = searchParams.get("status");
+  const bio_user = searchParams.get("bio_user");
   const paymentID = searchParams.get("paymentID");
+
   const { user } = useContext(UserContext);
 
   // console.log(searchParams);
@@ -31,7 +33,7 @@ const AfterPay = () => {
               response?.transactionStatus
             }&payment_create_time=${
               response?.paymentCreateTime || response?.paymentExecuteTime
-            }`
+            }&bio_user=${bio_user}`
           );
         } else {
           navigate(`/pay/fail?message=${response.message}`);

@@ -9,13 +9,6 @@ const PaySuccess = () => {
 
   const navigate = useNavigate();
 
-  // const { data: response = null } = useQuery({
-  // 	queryKey: ["pay,refund", paymentId],
-  // 	queryFn: async () => {
-  // 		return await BkashQueryPaymentAPICall(paymentId);
-  // 	},
-  // });
-
   useEffect(() => {
     if (showMessage) {
       const timeout = setTimeout(() => {
@@ -25,6 +18,13 @@ const PaySuccess = () => {
       return () => clearTimeout(timeout);
     }
   }, [navigate, showMessage]);
+
+  // const { data: response = null } = useQuery({
+  // 	queryKey: ["pay,refund", paymentId],
+  // 	queryFn: async () => {
+  // 		return await BkashQueryPaymentAPICall(paymentId);
+  // 	},
+  // });
 
   // console.log("bkash-query-api-call", response);
 

@@ -151,26 +151,26 @@ const ContactInfo = ({ contact, status }) => {
   const buyWithBkashHandler = async (value, bioId) => {
     // ? verification check
     let response;
-    try {
-      response = await userServices.verifyToken(getToken()?.token);
-      console.log("navbar-verify-token~", response);
-      const data = response?.data;
-      const user_id = userInfo?.data[0]?.id;
+    // try {
+    //   response = await userServices.verifyToken(getToken()?.token);
+    //   console.log("navbar-verify-token~", response);
+    //   const data = response?.data;
+    //   const user_id = userInfo?.data[0]?.id;
 
-      if (data?.user_id !== user_id) {
-        await logOut();
-        removeToken();
-        Toast.errorToast("You are not authorized");
-        navigate("/login");
-      }
-    } catch (error) {
-      console.error("navbar-verify-token~", error);
-      let msg = getErrorMessage(error);
-      Toast.errorToast(msg);
-      await logOut();
-      removeToken();
-      navigate("/login");
-    }
+    //   if (data?.user_id !== user_id) {
+    //     await logOut();
+    //     removeToken();
+    //     Toast.errorToast("You are not authorized");
+    //     navigate("/login");
+    //   }
+    // } catch (error) {
+    //   console.error("navbar-verify-token~", error);
+    //   let msg = getErrorMessage(error);
+    //   Toast.errorToast(msg);
+    //   await logOut();
+    //   removeToken();
+    //   navigate("/login");
+    // }
 
     // ? bkash payment api call
     const amount = parseInt(value);
@@ -268,7 +268,7 @@ const ContactInfo = ({ contact, status }) => {
                 <button
                   className="px-2 py-2 text-white bg-green-800 rounded-md hover:bg-green-900"
                   onClick={() =>
-                    buyWithBkashHandler(30 - points, generalInfo?.user_id)
+                    buyWithBkashHandler(30 - points, bio?.generalInfo?.user)
                   }
                 >
                   {convertToBengaliNumerals((30 - points).toString())} পয়েন্ট
