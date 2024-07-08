@@ -41,7 +41,7 @@ const ExpectedPartner = () => {
           </tr>
           <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">শিক্ষাগত যোগ্যতা</td>
-            <td className="w-1/2 px-4 py-2 text-left break-all border-l">
+            <td className="w-1/2 px-4 py-2 text-left overflow-hidden whitespace-pre-wrap break-words border-l">
               {expectedLifePartner?.educational_qualifications?.join(", ")}
             </td>
           </tr>
@@ -74,8 +74,8 @@ const ExpectedPartner = () => {
 
           <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">জেলা</td>
-            <td className="w-1/2 px-4  py-2 text-left border-l">
-              {expectedLifePartner?.zilla.join(",")}
+            <td className="w-1/2 px-4  py-2 text-left overflow-hidden whitespace-pre-wrap break-words border-l">
+              {expectedLifePartner?.zilla.join(" , ")}
             </td>
           </tr>
           <tr className="border-b">
@@ -86,13 +86,13 @@ const ExpectedPartner = () => {
           </tr>
           <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">পেশা</td>
-            <td className="w-1/2 px-4 py-2 text-left break-all border-l">
+            <td className="w-1/2 px-4 py-2 text-left overflow-hidden whitespace-pre-wrap break-words border-l">
               {expectedLifePartner?.occupation.join(", ")}
             </td>
           </tr>
           <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">অর্থনৈতিক অবস্থা</td>
-            <td className="w-1/2 px-4 py-2 text-left border-l">
+            <td className="w-1/2 px-4 py-2 text-left overflow-hidden whitespace-pre-wrap break-words border-l">
               {expectedLifePartner?.economical_condition.join(", ")}
             </td>
           </tr>
