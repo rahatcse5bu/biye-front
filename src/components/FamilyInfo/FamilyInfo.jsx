@@ -109,7 +109,7 @@ const FamilyInfo = () => {
 					</tr>
 					<tr className="border-b">
 						<td className="w-1/2 px-4 py-2 text-left">
-							পরিবারে/বাসায় পর্দার পরিবেশ নিছিট করতে পারবেন?
+							পরিবারে/বাসায় পর্দার পরিবেশ নিশ্চিত করতে পারবেন?
 						</td>
 						<td className="w-1/2 px-4 py-2 text-left border-l">
 							{familyStatus?.isPordaEnvironment === 1 ? "ইনশাআল্লাহ" : "না"}
