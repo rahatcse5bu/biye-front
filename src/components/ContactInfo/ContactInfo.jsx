@@ -41,7 +41,7 @@ const ContactInfo = ({ status }) => {
       ),
     retry: false,
   });
-  const  payButtonHandler = (bio_user) => {
+  const payButtonHandler = (bio_user) => {
     const points = userInfo?.data?.points;
     Swal.fire({
       title: "আপনি কি তথ্য দেখতে চান?",
@@ -67,7 +67,6 @@ const ContactInfo = ({ status }) => {
       if (points >= 70) {
         // console.log("clicked button");
         try {
-     
           const data =
             await ContactPurchaseDataServices.createContactPurchaseData(
               {
@@ -79,7 +78,6 @@ const ContactInfo = ({ status }) => {
           if (data.success) {
             Toast.successToast("আপনার বায়োডাটা ক্রয় সম্পূর্ন  হয়েছে।");
             window.location.reload();
-        
           }
         } catch (error) {
           let msg = error;
@@ -93,7 +91,7 @@ const ContactInfo = ({ status }) => {
     });
   };
 
-  console.log("checkFirst", checkFirst);
+  // console.log("checkFirst", checkFirst);
   // console.log("contact", contact);
   // console.log("Contact-info~~", contactInfo);
 
@@ -255,9 +253,10 @@ const ContactInfo = ({ status }) => {
           </h4>
           <h2 className="my-5 text-2xl text-center">
             এই বায়োডাটার অভিভাবকের যোগাযোগের তথ্য দেখতে আপনার{" "}
-            { isFirstStepDone? convertToBengaliNumerals("70"): convertToBengaliNumerals("30")
-              }
-            টি পয়েন্ট খরচ হবে। আপনার একাউন্টে {" "}
+            {isFirstStepDone
+              ? convertToBengaliNumerals("70")
+              : convertToBengaliNumerals("30")}
+            টি পয়েন্ট খরচ হবে। আপনার একাউন্টে{" "}
             {convertToBengaliNumerals(points.toString())} পয়েন্ট আছে!
           </h2>
           <div className="flex flex-col items-center justify-center ">
@@ -269,7 +268,6 @@ const ContactInfo = ({ status }) => {
                 </p>
                 <button
                   className="px-2 py-2 text-white bg-green-800 rounded-md hover:bg-green-900"
-            
                   onClick={() =>
                     buyWithBkashHandler(
                       30 - points,
@@ -289,7 +287,7 @@ const ContactInfo = ({ status }) => {
                     {checkMsg}
                   </p>{" "}
                   <button
-                        onClick={()=> payButtonHandler(bio?.generalInfo?.user)}
+                    onClick={() => payButtonHandler(bio?.generalInfo?.user)}
                     // onClick={() =>
                     //   buyWithBkashHandler(
                     //     70,
