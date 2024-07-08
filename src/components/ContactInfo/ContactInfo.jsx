@@ -4,7 +4,7 @@ import BioContext from "../../contexts/BioContext";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import UserContext from "../../contexts/UserContext";
 import { Toast } from "../../utils/toast";
@@ -22,6 +22,7 @@ const ContactInfo = ({ status }) => {
   const generalInfo = bio?.generalInfo || null;
   const points = Number(userInfo?.data?.points);
   const [isRejected, setIsRejected] = useState(false);
+  const location = useLocation();
   const [isFirstStepDone, setFirstStepDone] = useState(false);
   const { data: contactInfo = null } = useQuery({
     queryKey: ["contact", generalInfo?.user, getToken()?.token],
@@ -86,7 +87,12 @@ const ContactInfo = ({ status }) => {
           // setLoading(false);
         }
       } else {
-        buyWithBkashHandler(70 - points, bio_user);
+        buyWithBkashHandler(
+          70 - points,
+          bio_user,
+          "first_step",
+          location.pathname
+        );
       }
     });
   };
@@ -178,7 +184,7 @@ const ContactInfo = ({ status }) => {
       return;
     }
     if (+value > 0) {
-      BkashCreatePaymentAPICall(+value, bioId, purpose);
+      BkashCreatePaymentAPICall(+value, bioId, purpose, location.pathname);
     }
   };
 

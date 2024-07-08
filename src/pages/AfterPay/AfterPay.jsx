@@ -12,6 +12,7 @@ const AfterPay = () => {
   const bio_user = searchParams.get("bio_user");
   const purpose = searchParams.get("purpose");
   const paymentID = searchParams.get("paymentID");
+  const pathname = searchParams.get("pathname");
 
   const { user } = useContext(UserContext);
 
@@ -35,10 +36,12 @@ const AfterPay = () => {
               response?.transactionStatus
             }&payment_create_time=${
               response?.paymentCreateTime || response?.paymentExecuteTime
-            }&bio_user=${bio_user}`
+            }&bio_user=${bio_user}&pathname=${pathname}`
           );
         } else {
-          navigate(`/pay/fail?message=${response.message}`);
+          navigate(
+            `/pay/fail?message=${response.message}&pathname=${pathname}`
+          );
         }
       } catch (error) {
         console.error("An error occurred:", error);
@@ -85,7 +88,7 @@ const AfterPay = () => {
     } else {
       navigate("/pay/fail");
     }
-  }, [status, paymentID, navigate, user?.email, bio_user]);
+  }, [status, paymentID, navigate, user?.email, bio_user, purpose]);
 
   return (
     <div className="my-10">

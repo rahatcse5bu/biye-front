@@ -5,18 +5,27 @@ import BkashCreatePaymentAPICall from "../../services/bkash";
 import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
 import { Toast } from "../../utils/toast";
+import { useLocation } from "react-router-dom";
 
 function Payments() {
-  const { userInfo, user } = useContext(UserContext);
+  const { user } = useContext(UserContext);
+  const location = useLocation();
+
   // console.log("userInfo", userInfo);
   // console.log("user", user);
   const buyWithBkashHandler = async (value) => {
-    if (!userInfo?.data?._id) {
+    if (!user?.email) {
       Toast.errorToast("Please Login");
     }
 
     if (+value >= 1) {
-      BkashCreatePaymentAPICall(1);
+      // console.log("value", +value);
+      BkashCreatePaymentAPICall(
+        import.meta.env.VITE_REACT_APP_NODE_ENV === "development" ? 1 : +value,
+        "",
+        "buy_package",
+        location.pathname
+      );
     }
   };
   return (
