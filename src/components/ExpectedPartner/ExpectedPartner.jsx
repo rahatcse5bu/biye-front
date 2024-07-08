@@ -39,12 +39,31 @@ const ExpectedPartner = () => {
               ফূট পর্যন্ত
             </td>
           </tr>
-          <tr className="border-b">
+          {/* <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">শিক্ষাগত যোগ্যতা</td>
             <td className="w-1/2 px-4 py-2 text-left overflow-hidden whitespace-pre-wrap break-words border-l">
               {expectedLifePartner?.educational_qualifications?.join(", ")}
             </td>
+          </tr> */}
+               {/* for desktops */}
+               <tr className="border-b md:table-row md:w-full hidden">
+            <td className="lg:w-1/2 px-4 py-2 text-left">শিক্ষাগত যোগ্যতা</td>
+            <td className="lg:w-1/2 px-4  py-2 text-left desktop overflow-hidden whitespace-pre-wrap break-words border-l">
+            {expectedLifePartner?.educational_qualifications?.join(", ")}
+            </td>
           </tr>
+          {/* for mobiles  */}
+          <tr className=" w-full px-4 pt-2 table-row md:hidden text-left">
+            <td className="px-2 underline" colSpan={2}>
+            শিক্ষাগত যোগ্যতা
+            </td>
+          </tr>
+          <tr className="border-b w-full px-4  py-2 table-row md:hidden text-left overflow-hidden whitespace-pre-wrap break-words border-l">
+            <td className="px-2" colSpan={2}>
+            {expectedLifePartner?.educational_qualifications?.join(", ")}
+            </td>
+          </tr>
+          {/* end of mobile  */}
           {/* <tr className="border-b lg:block sm:hidden">
             <td className="w-1/2 px-4 py-2 text-left">জেলা</td>
             <td className="w-1/2 px-4 py-2 text-left break-all border-l">
@@ -71,39 +90,127 @@ const ExpectedPartner = () => {
               </div>
             </td>
           </tr>  */}
-
-          <tr className="border-b">
-            <td className="w-1/2 px-4 py-2 text-left">জেলা</td>
-            <td className="w-1/2 px-4  py-2 text-left overflow-hidden whitespace-pre-wrap break-words border-l">
+          {/* for desktops */}
+          <tr className="border-b md:table-row md:w-full hidden">
+            <td className="lg:w-1/2 px-4 py-2 text-left">জেলা</td>
+            <td className="lg:w-1/2 px-4  py-2 text-left desktop overflow-hidden whitespace-pre-wrap break-words border-l">
               {expectedLifePartner?.zilla.join(" , ")}
             </td>
           </tr>
-          <tr className="border-b">
+          {/* for mobiles  */}
+          <tr className=" w-full px-4 pt-2 table-row md:hidden text-left">
+            <td className="px-2 underline" colSpan={2}>
+              জেলা
+            </td>
+          </tr>
+          <tr className="border-b w-full pb-4  py-2 table-row md:hidden text-left overflow-hidden whitespace-pre-wrap break-words border-l">
+            <td className="px-2" colSpan={2}>
+              {expectedLifePartner?.zilla.join(" ,")}
+            </td>
+          </tr>
+          {/* end of mobile  */}
+          {/* <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">বৈবাহিক অবস্থা</td>
             <td className="w-1/2 px-4 py-2 text-left border-l">
               {expectedLifePartner?.marital_status.join(", ")}
             </td>
+          </tr> */}
+         {/* for desktops */}
+         <tr className="border-b md:table-row md:w-full hidden">
+            <td className="lg:w-1/2 px-4 py-2 text-left">বৈবাহিক অবস্থা</td>
+            <td className="lg:w-1/2 px-4  py-2 text-left desktop overflow-hidden whitespace-pre-wrap break-words border-l">
+            {expectedLifePartner?.marital_status.join(", ")}
+            </td>
           </tr>
-          <tr className="border-b">
+          {/* for mobiles  */}
+          <tr className=" w-full px-4 pt-2 table-row md:hidden text-left">
+            <td className="px-2 underline" colSpan={2}>
+            বৈবাহিক অবস্থা
+            </td>
+          </tr>
+          <tr className="border-b w-full pb-4  py-2 table-row md:hidden text-left overflow-hidden whitespace-pre-wrap break-words border-l">
+            <td className="px-2" colSpan={2}>
+            {expectedLifePartner?.marital_status.join(", ")}
+            </td>
+          </tr>
+          {/* end of mobile  */}
+          {/* <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">পেশা</td>
             <td className="w-1/2 px-4 py-2 text-left overflow-hidden whitespace-pre-wrap break-words border-l">
               {expectedLifePartner?.occupation.join(", ")}
             </td>
+          </tr> */}
+                    {/* for desktops */}
+                    <tr className="border-b md:table-row md:w-full hidden">
+            <td className="lg:w-1/2 px-4 py-2 text-left">পেশা</td>
+            <td className="lg:w-1/2 px-4  py-2 text-left desktop overflow-hidden whitespace-pre-wrap break-words border-l">
+            {expectedLifePartner?.occupation.join(", ")}
+            </td>
           </tr>
-          <tr className="border-b">
+          {/* for mobiles  */}
+          <tr className=" w-full px-4 pt-2 table-row md:hidden text-left">
+            <td className="px-2 underline" colSpan={2}>
+            পেশা
+            </td>
+          </tr>
+          <tr className="border-b w-full px-4  pb-2 table-row md:hidden text-left overflow-hidden whitespace-pre-wrap break-words border-l">
+            <td className="px-2" colSpan={2}>
+            {expectedLifePartner?.occupation.join(", ")}
+            </td>
+          </tr>
+          {/* end of mobile  */}
+          {/* <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">অর্থনৈতিক অবস্থা</td>
             <td className="w-1/2 px-4 py-2 text-left overflow-hidden whitespace-pre-wrap break-words border-l">
               {expectedLifePartner?.economical_condition.join(", ")}
             </td>
+          </tr> */}
+                      {/* for desktops */}
+                      <tr className="border-b md:table-row md:w-full hidden">
+            <td className="lg:w-1/2 px-4 py-2 text-left">অর্থনৈতিক অবস্থা</td>
+            <td className="lg:w-1/2 px-4  py-2 text-left desktop overflow-hidden whitespace-pre-wrap break-words border-l">
+            {expectedLifePartner?.economical_condition.join(", ")}
+            </td>
           </tr>
-          <tr className="border-b">
+          {/* for mobiles  */}
+          <tr className=" w-full px-4 pt-2 table-row md:hidden text-left">
+            <td className="px-2 underline" colSpan={2}>
+            অর্থনৈতিক অবস্থা
+            </td>
+          </tr>
+          <tr className="border-b w-full px-4  pb-2 table-row md:hidden text-left overflow-hidden whitespace-pre-wrap break-words border-l">
+            <td className="px-2" colSpan={2}>
+            {expectedLifePartner?.economical_condition.join(", ")}
+            </td>
+          </tr>
+          {/* end of mobile  */}
+          {/* <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">
               জীবনসঙ্গীর যেসব বৈশিষ্ট্য বা গুণাবলী প্রত্যাশা করেন
             </td>
             <td className="w-1/2 px-4 py-2 text-left break-all border-l">
               {expectedLifePartner?.expected_characteristics}
             </td>
+          </tr> */}
+                  {/* for desktops */}
+                  <tr className="border-b md:table-row md:w-full hidden">
+            <td className="lg:w-1/2 px-4 py-2 text-left">জীবনসঙ্গীর যেসব বৈশিষ্ট্য বা গুণাবলী প্রত্যাশা করেন</td>
+            <td className="lg:w-1/2 px-4  py-2 text-left desktop overflow-hidden whitespace-pre-wrap break-words border-l">
+            {expectedLifePartner?.expected_characteristics}
+            </td>
           </tr>
+          {/* for mobiles  */}
+          <tr className=" w-full px-4 pt-2 table-row md:hidden text-left">
+            <td className="px-2 underline" colSpan={2}>
+            জীবনসঙ্গীর যেসব বৈশিষ্ট্য বা গুণাবলী প্রত্যাশা করেন
+            </td>
+          </tr>
+          <tr className="border-b w-full px-4  pb-2 table-row md:hidden text-left overflow-hidden whitespace-pre-wrap break-words border-l">
+            <td className="px-2" colSpan={2}>
+            {expectedLifePartner?.expected_characteristics}
+            </td>
+          </tr>
+          {/* end of mobile  */}
           {/* <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">
               আকিদা ও মাজহাব কিরকম প্রত্যাশা করেন?{" "}
