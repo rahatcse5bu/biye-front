@@ -66,11 +66,11 @@ const ContactInfo = ({ status }) => {
           // Toast.successToast(msg);
           setCheckMsg(msg);
         } else if (status === "rejected") {
-          msg = "দুংক্ষিত ,আপনি প্রতাক্ষিত হয়েছেন এই বায়োডাটা  থেকে।";
+          msg = "দুঃখিত ,আপনি Rejected হয়েছেন এই বায়োডাটা  থেকে।";
           // Toast.successToast(msg);
           setCheckMsg(msg);
         } else if (status === "pending") {
-          msg = "দুংক্ষিত ,আপনি পেন্ডিং  আছেন এই বায়োডাটা  থেকে।";
+          msg = "দুঃখিত ,আপনি পেন্ডিং  আছেন এই বায়োডাটা  থেকে।";
           // Toast.successToast(msg);
           setCheckMsg(msg);
         }
