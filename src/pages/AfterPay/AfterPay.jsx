@@ -9,7 +9,10 @@ const AfterPay = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const status = searchParams.get("status");
+  const bio_user = searchParams.get("bio_user");
+  const purpose = searchParams.get("purpose");
   const paymentID = searchParams.get("paymentID");
+
   const { user } = useContext(UserContext);
 
   // console.log(searchParams);
@@ -22,6 +25,7 @@ const AfterPay = () => {
         const response = await BkashCallAfterPay({
           paymentID,
           email: user?.email,
+          purpose: purpose,
         });
         if (response?.success) {
           navigate(
@@ -31,7 +35,7 @@ const AfterPay = () => {
               response?.transactionStatus
             }&payment_create_time=${
               response?.paymentCreateTime || response?.paymentExecuteTime
-            }`
+            }&bio_user=${bio_user}`
           );
         } else {
           navigate(`/pay/fail?message=${response.message}`);
@@ -81,7 +85,7 @@ const AfterPay = () => {
     } else {
       navigate("/pay/fail");
     }
-  }, [status, paymentID, navigate, user?.email]);
+  }, [status, paymentID, navigate, user?.email, bio_user]);
 
   return (
     <div className="my-10">
