@@ -93,6 +93,10 @@ const router = createBrowserRouter([
         element: <Instructions />,
       },
       {
+        path: "/refund-policy",
+        element: <RefundPolicy />,
+      },
+      {
         path: "/points-package",
         element: <Payments />,
       },

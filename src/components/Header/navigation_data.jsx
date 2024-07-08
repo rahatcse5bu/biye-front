@@ -16,6 +16,10 @@ export const navData = [
 		path: "/instructions",
 	},
 	{
+		title: "রিফান্‌ড পলিসি",
+		path: "/refund-policy",
+	},
+	{
 		title: "সচরাচর জিজ্ঞাসা",
 		path: "/faq",
 	},
