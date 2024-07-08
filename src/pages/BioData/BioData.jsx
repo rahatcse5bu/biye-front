@@ -17,15 +17,14 @@ import { BioDataServices } from "../../services/bioData";
 import { ContactServices } from "../../services/contact";
 import { UserInfoServices } from "../../services/userInfo";
 import { getToken } from "../../utils/cookies";
-import LoadingBioData from "../../components/LoadingBioData/LoadingBioData";
-import { useContext, useEffect, useCallback } from "react";
+import { useContext, useEffect } from "react";
 import BioContext from "../../contexts/BioContext";
 import UserContext from "../../contexts/UserContext";
-import { ScrollToTop } from "../../constants/ScrolltoTop";
+// import { ScrollToTop } from "../../constants/ScrolltoTop";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
-import { GeneralInfoServices } from "../../services/generalInfo";
 import { FcLeft } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
+import ScrollToTop from "../../components/ScrollTop/ScrollTop";
 const BioData = () => {
   const { id } = useParams();
   const { setBio } = useContext(BioContext);
