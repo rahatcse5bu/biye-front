@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FcLike, FcDislike, FcSettings, FcSupport } from "react-icons/fc";
 import {
   Navbar,
@@ -37,6 +37,12 @@ export default function NavBar() {
   const [openNav, setOpenNav] = useState(false);
   const gender = getGender();
   const navigate = useNavigate();
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
 
   const {
     data,

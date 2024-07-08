@@ -17,7 +17,7 @@ const ContactInfo = ({ status }) => {
   const [displayText, setDisplayText] = useState(false);
   const [checkMsg, setCheckMsg] = useState("");
   const { bio } = useContext(BioContext);
-  const { userInfo } = useContext(UserContext);
+  const { userInfo, user } = useContext(UserContext);
   const generalInfo = bio?.generalInfo || null;
   const points = Number(userInfo?.data?.points);
   const token = getToken()?.token;
@@ -33,7 +33,7 @@ const ContactInfo = ({ status }) => {
     retry: false,
   });
   // console.log("contact", contact);
-  console.log("Contact-info~~", contactInfo);
+  // console.log("Contact-info~~", contactInfo);
 
   // console.log({ points });
   const navigate = useNavigate();
@@ -148,6 +148,9 @@ const ContactInfo = ({ status }) => {
   };
 
   const buyWithBkashHandler = async (value, bioId, purpose) => {
+    if (!user?.email) {
+      return;
+    }
     if (+value > 0) {
       BkashCreatePaymentAPICall(+value, bioId, purpose);
     }

@@ -8,15 +8,14 @@ import { Toast } from "../../utils/toast";
 
 function Payments() {
   const { userInfo, user } = useContext(UserContext);
-  console.log("userInfo", userInfo);
-  console.log("user", user);
+  // console.log("userInfo", userInfo);
+  // console.log("user", user);
   const buyWithBkashHandler = async (value) => {
     if (!userInfo?.data?._id) {
       Toast.errorToast("Please Login");
     }
 
-    const amount = parseInt(value);
-    if (!isNaN(amount) || +amount >= 1) {
+    if (+value >= 1) {
       BkashCreatePaymentAPICall(1);
     }
   };
