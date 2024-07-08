@@ -130,7 +130,7 @@ const Faq = () => {
                 {item.isOpen ? "-" : "+"}
               </button>
             </div>
-            {item.isOpen && <p className="mt-2">{item.answer}</p>}
+            {item.isOpen && <p className="mt-2 text-left">{item.answer}</p>}
           </li>
         ))}
       </ul>
