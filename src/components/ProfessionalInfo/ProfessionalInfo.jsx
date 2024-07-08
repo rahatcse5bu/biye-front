@@ -11,7 +11,7 @@ const ProfessionalInfo = () => {
         <thead>
           <tr className="border-b border-t">
             <td className="px-4 py-2 text-left  w-1/2">পেশা</td>
-            <td className="px-4 py-2 text-left  w-1/2 border-l">
+            <td className="px-4 py-2 text-left overflow-hidden whitespace-pre-wrap break-words  w-1/2 border-l">
               {Array.isArray(occupation?.occupation)
                 ? occupation?.occupation?.join(", ")
                 : occupation?.occupation}
