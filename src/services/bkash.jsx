@@ -7,13 +7,14 @@ const baseUrl =
 export default function BkashCreatePaymentAPICall(
   amount,
   bio_user = "",
-  purpose = "buy_package"
+  purpose = "buy_package",
+  pathname = "/"
 ) {
   console.log("Button Clicked !!");
   let url = `https://pnc-nikah.com/pay${
     bio_user
-      ? `?bio_user=${bio_user}&purpose=${purpose}`
-      : `?purpose=${purpose}`
+      ? `?bio_user=${bio_user}&purpose=${purpose}&pathname=${pathname}`
+      : `?purpose=${purpose}&pathname=${pathname}`
   }`;
   // console.log(url, bioId);
   axios
