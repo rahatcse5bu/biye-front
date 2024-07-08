@@ -6,7 +6,7 @@ const baseUrl =
 
 export default function BkashCreatePaymentAPICall(
   amount,
-  bio_user = null,
+  bio_user = "",
   purpose = "buy_package"
 ) {
   console.log("Button Clicked !!");
