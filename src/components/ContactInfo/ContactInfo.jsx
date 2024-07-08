@@ -20,8 +20,6 @@ const ContactInfo = ({ status }) => {
   const { userInfo, user } = useContext(UserContext);
   const generalInfo = bio?.generalInfo || null;
   const points = Number(userInfo?.data?.points);
-  const token = getToken()?.token;
-  const bio_user = generalInfo?.user;
 
   const { data: contactInfo = null } = useQuery({
     queryKey: ["contact", generalInfo?.user, getToken()?.token],
@@ -32,6 +30,17 @@ const ContactInfo = ({ status }) => {
       ),
     retry: false,
   });
+  const { data: checkFirst = null } = useQuery({
+    queryKey: ["first-step", generalInfo?.user],
+    queryFn: async () =>
+      await BioChoiceDataServices.checkBioChoiceDataFirstStep(
+        generalInfo?.user,
+        getToken()?.token
+      ),
+    retry: false,
+  });
+
+  console.log("checkFirst", checkFirst);
   // console.log("contact", contact);
   // console.log("Contact-info~~", contactInfo);
 
@@ -47,70 +56,29 @@ const ContactInfo = ({ status }) => {
   }, [displayText]);
 
   useEffect(() => {
-    const check = async () => {
-      try {
-        //? check first step
-
-        if (!getToken()?.token || !generalInfo?.user) {
-          // Toast.errorToast("Please,Login to view more");
-          return;
+    if (checkFirst) {
+      const status = checkFirst?.data?.status;
+      let msg = "";
+      if (status) {
+        // console.log({ status });
+        if (status === "approved" || status === "accepted") {
+          msg = "আপনার প্রথম পদক্ষেপ সম্পূর্ন হয়েছে।";
+          // Toast.successToast(msg);
+          setCheckMsg(msg);
+        } else if (status === "rejected") {
+          msg = "দুংক্ষিত ,আপনি প্রতাক্ষিত হয়েছেন এই বায়োডাটা  থেকে।";
+          // Toast.successToast(msg);
+          setCheckMsg(msg);
+        } else if (status === "pending") {
+          msg = "দুংক্ষিত ,আপনি পেন্ডিং  আছেন এই বায়োডাটা  থেকে।";
+          // Toast.successToast(msg);
+          setCheckMsg(msg);
         }
-
-        const checkFirst =
-          await BioChoiceDataServices.checkBioChoiceDataFirstStep(
-            generalInfo?.user,
-            getToken()?.token
-          );
-        // console.log("bio-check-first-step~", checkFirst);
-        const status = checkFirst?.data?.status;
-        let msg = "";
-
-        if (status) {
-          // console.log({ status });
-          if (status === "approved" || status === "accepted") {
-            msg = "আপনার প্রথম পদক্ষেপ সম্পূর্ন হয়েছে।";
-            // Toast.successToast(msg);
-            setCheckMsg(msg);
-          } else if (status === "rejected") {
-            msg = "দুংক্ষিত ,আপনি প্রতাক্ষিত হয়েছেন এই বায়োডাটা  থেকে।";
-            // Toast.successToast(msg);
-            setCheckMsg(msg);
-          } else if (status === "pending") {
-            msg = "দুংক্ষিত ,আপনি পেন্ডিং  আছেন এই বায়োডাটা  থেকে।";
-            // Toast.successToast(msg);
-            setCheckMsg(msg);
-          }
-        }
-
-        // const checkSecond =
-        //   await BioChoiceDataServices.checkBioChoiceDataSecondStep(
-        //     bio_user,
-        //     token
-        //   );
-        // console.log("bio-choice-second-step~", checkSecond);
-        // if (checkSecond?.success) {
-        //   const payment_status = checkSecond?.data?.payment_status;
-        //   const refund_status = checkSecond?.data?.refund_status;
-        //   if (payment_status === "Completed" && refund_status !== "refunded") {
-        //     msg = "দুংক্ষিত ,আপনি এই বায়োডাটা ইতিমধ্যে কিনছেন";
-        //     Toast.successToast(msg);
-        //     setCheckMsg(msg);
-        //   }
-        //   if (payment_status === "Completed" && refund_status === "refunded") {
-        //     msg =
-        //       "দুংক্ষিত ,আপনি এই বায়োডাটার ইতিমধ্যে প্রথম পদক্ষেপ  কিনছেন,\n আপনি দ্বিতীয় পদক্ষেপ এর জন্য টাকা পরিশোধ করুন ";
-        //     Toast.successToast(msg);
-        //     setCheckMsg(msg);
-        //   }
-        // }
-      } catch (error) {
-        // let msg = error?.response?.data?.message || error?.message;
-        // console.log("contact-info-error~", error);
-        // Toast.errorToast(msg);
       }
-    };
-    check();
-  }, [bio_user, generalInfo?.user, token]);
+    } else {
+      setCheckMsg("");
+    }
+  }, [checkFirst]);
 
   const comHandler = () => {
     if (!userInfo?.data?._id) {
@@ -245,7 +213,7 @@ const ContactInfo = ({ status }) => {
                     buyWithBkashHandler(
                       30 - points,
                       bio?.generalInfo?.user,
-                      "First Step"
+                      "First_Step"
                     )
                   }
                 >

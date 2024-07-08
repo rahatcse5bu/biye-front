@@ -7,7 +7,7 @@ const baseUrl =
 export default function BkashCreatePaymentAPICall(
   amount,
   bio_user = null,
-  purpose = "buy package"
+  purpose = "buy_package"
 ) {
   console.log("Button Clicked !!");
   let url = `https://pnc-nikah.com/pay${
