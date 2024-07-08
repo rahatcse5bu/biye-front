@@ -4,10 +4,16 @@ const baseUrl =
     ? "http://localhost:5000/api/v1"
     : "https://server.pnc-nikah.com/api/v1";
 
-export default function BkashCreatePaymentAPICall(amount, bio_user = null) {
+export default function BkashCreatePaymentAPICall(
+  amount,
+  bio_user = null,
+  purpose = "buy package"
+) {
   console.log("Button Clicked !!");
   let url = `https://pnc-nikah.com/pay${
-    bio_user ? `?bio_user=${bio_user}` : ""
+    bio_user
+      ? `?bio_user=${bio_user}&purpose=${purpose}`
+      : `?purpose=${purpose}`
   }`;
   // console.log(url, bioId);
   axios

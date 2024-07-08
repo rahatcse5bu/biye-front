@@ -10,6 +10,7 @@ const AfterPay = () => {
   const navigate = useNavigate();
   const status = searchParams.get("status");
   const bio_user = searchParams.get("bio_user");
+  const purpose = searchParams.get("purpose");
   const paymentID = searchParams.get("paymentID");
 
   const { user } = useContext(UserContext);
@@ -24,6 +25,7 @@ const AfterPay = () => {
         const response = await BkashCallAfterPay({
           paymentID,
           email: user?.email,
+          purpose: purpose,
         });
         if (response?.success) {
           navigate(

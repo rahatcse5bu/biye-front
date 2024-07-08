@@ -147,9 +147,9 @@ const ContactInfo = ({ status }) => {
     });
   };
 
-  const buyWithBkashHandler = async (value, bioId) => {
+  const buyWithBkashHandler = async (value, bioId, purpose) => {
     if (+value > 0) {
-      BkashCreatePaymentAPICall(+value, bioId);
+      BkashCreatePaymentAPICall(+value, bioId, purpose);
     }
   };
 
@@ -236,7 +236,11 @@ const ContactInfo = ({ status }) => {
                 <button
                   className="px-2 py-2 text-white bg-green-800 rounded-md hover:bg-green-900"
                   onClick={() =>
-                    buyWithBkashHandler(30 - points, bio?.generalInfo?.user)
+                    buyWithBkashHandler(
+                      30 - points,
+                      bio?.generalInfo?.user,
+                      "First Step"
+                    )
                   }
                 >
                   {convertToBengaliNumerals((30 - points).toString())} পয়েন্ট
