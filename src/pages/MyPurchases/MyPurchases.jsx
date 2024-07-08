@@ -97,7 +97,7 @@ const FirstStepCard = ({
     setFeedback(item);
   };
 
-  const payButtonHandler = (bio_user) => {
+  const  payButtonHandler = (bio_user) => {
     const points = userInfo?.data?.points;
     Swal.fire({
       title: "আপনি কি তথ্য দেখতে চান?",

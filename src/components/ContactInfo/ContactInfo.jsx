@@ -12,6 +12,7 @@ import BkashCreatePaymentAPICall from "../../services/bkash";
 import { convertToBengaliNumerals } from "../../utils/weight";
 import { getToken } from "../../utils/cookies";
 import { BioChoiceDataServices } from "../../services/bioChoiceData";
+import { ContactPurchaseDataServices } from "../../services/contactPurchaseData";
 
 const ContactInfo = ({ status }) => {
   const [displayText, setDisplayText] = useState(false);
@@ -20,7 +21,8 @@ const ContactInfo = ({ status }) => {
   const { userInfo, user } = useContext(UserContext);
   const generalInfo = bio?.generalInfo || null;
   const points = Number(userInfo?.data?.points);
-
+  const [isRejected, setIsRejected] = useState(false);
+  const [isFirstStepDone, setFirstStepDone] = useState(false);
   const { data: contactInfo = null } = useQuery({
     queryKey: ["contact", generalInfo?.user, getToken()?.token],
     queryFn: async () =>
@@ -39,6 +41,57 @@ const ContactInfo = ({ status }) => {
       ),
     retry: false,
   });
+  const  payButtonHandler = (bio_user) => {
+    const points = userInfo?.data?.points;
+    Swal.fire({
+      title: "আপনি কি তথ্য দেখতে চান?",
+      text: `যোগাযোগ তথ্য দেখতে আপনার আরও ৭০ পয়েন্ট খরচ হবে 
+			। ${
+        points >= 70
+          ? convertToBengaliNumerals((points - 70).toString()) +
+            " অবশিষ্ট থাকবে"
+          : "আপনার আরও " +
+            convertToBengaliNumerals((70 - points).toString()) +
+            " পয়েন্ট লাগবে"
+      }`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ok",
+    }).then(async (result) => {
+      //! for not confirm
+      if (!result.isConfirmed) {
+        return;
+      }
+      if (points >= 70) {
+        // console.log("clicked button");
+        try {
+     
+          const data =
+            await ContactPurchaseDataServices.createContactPurchaseData(
+              {
+                bio_user,
+              },
+              getToken().token
+            );
+
+          if (data.success) {
+            Toast.successToast("আপনার বায়োডাটা ক্রয় সম্পূর্ন  হয়েছে।");
+            window.location.reload();
+        
+          }
+        } catch (error) {
+          let msg = error;
+          Toast.errorToast(msg);
+        } finally {
+          // setLoading(false);
+        }
+      } else {
+        buyWithBkashHandler(70 - points, bio_user);
+      }
+    });
+  };
 
   console.log("checkFirst", checkFirst);
   // console.log("contact", contact);
@@ -63,20 +116,27 @@ const ContactInfo = ({ status }) => {
         // console.log({ status });
         if (status === "approved" || status === "accepted") {
           msg = "আপনার প্রথম পদক্ষেপ সম্পূর্ন হয়েছে।";
+          setFirstStepDone(true);
           // Toast.successToast(msg);
           setCheckMsg(msg);
         } else if (status === "rejected") {
+          setIsRejected(true);
           msg = "দুঃখিত ,আপনি Rejected হয়েছেন এই বায়োডাটা  থেকে।";
           // Toast.successToast(msg);
           setCheckMsg(msg);
+          setFirstStepDone(false);
         } else if (status === "pending") {
+          setIsRejected(false);
           msg = "দুঃখিত ,আপনি পেন্ডিং  আছেন এই বায়োডাটা  থেকে।";
           // Toast.successToast(msg);
           setCheckMsg(msg);
+          setFirstStepDone(false);
         }
       }
     } else {
       setCheckMsg("");
+      setFirstStepDone(false);
+      setIsRejected(false);
     }
   }, [checkFirst]);
 
@@ -195,10 +255,10 @@ const ContactInfo = ({ status }) => {
           </h4>
           <h2 className="my-5 text-2xl text-center">
             এই বায়োডাটার অভিভাবকের যোগাযোগের তথ্য দেখতে আপনার{" "}
-            {checkMsg === "দুংক্ষিত ,আপনি পেন্ডিং  আছেন এই বায়োডাটা  থেকে।"
-              ? convertToBengaliNumerals("70")
-              : convertToBengaliNumerals("30")}
-            টি পয়েন্ট খরচ হবে।
+            { isFirstStepDone? convertToBengaliNumerals("70"): convertToBengaliNumerals("30")
+              }
+            টি পয়েন্ট খরচ হবে। আপনার একাউন্টে {" "}
+            {convertToBengaliNumerals(points.toString())} পয়েন্ট আছে!
           </h2>
           <div className="flex flex-col items-center justify-center ">
             {displayText ? (
@@ -209,6 +269,7 @@ const ContactInfo = ({ status }) => {
                 </p>
                 <button
                   className="px-2 py-2 text-white bg-green-800 rounded-md hover:bg-green-900"
+            
                   onClick={() =>
                     buyWithBkashHandler(
                       30 - points,
@@ -222,9 +283,30 @@ const ContactInfo = ({ status }) => {
                 </button>
               </div>
             ) : checkMsg ? (
-              <p className="px-5 py-3 mb-5 text-green-900 bg-green-200 border-2 border-green-600 rounded-lg">
-                {checkMsg}
-              </p>
+              !isRejected && isFirstStepDone ? (
+                <div>
+                  <p className="px-5 py-3 mb-5 text-green-900 bg-green-200 border-2 border-green-600 rounded-lg">
+                    {checkMsg}
+                  </p>{" "}
+                  <button
+                        onClick={()=> payButtonHandler(bio?.generalInfo?.user)}
+                    // onClick={() =>
+                    //   buyWithBkashHandler(
+                    //     70,
+                    //     bio?.generalInfo?.user,
+                    //     "First_Step"
+                    //   )
+                    // }
+                    className="px-4 py-4 rounded-lg border bg-blue-700 text-white"
+                  >
+                    Pay Now for 2nd Step
+                  </button>
+                </div>
+              ) : (
+                <p className="px-5 py-3 mb-5 text-green-900 bg-green-200 border-2 border-green-600 rounded-lg">
+                  {checkMsg}
+                </p>
+              )
             ) : (
               <button
                 onClick={comHandler}
