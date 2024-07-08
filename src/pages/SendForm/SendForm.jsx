@@ -51,6 +51,7 @@ function SendForm() {
       );
       if (response?.success) {
         Toast.successToast("আপনার বায়োডাটা পাঠানো হয়েছে");
+        navigate("/user/account/purchases");
       }
       setGoto(true);
     } catch (error) {

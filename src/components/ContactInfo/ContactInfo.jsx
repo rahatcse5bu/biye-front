@@ -224,7 +224,10 @@ const ContactInfo = ({ status }) => {
           </h4>
           <h2 className="my-5 text-2xl text-center">
             এই বায়োডাটার অভিভাবকের যোগাযোগের তথ্য দেখতে আপনার{" "}
-            {convertToBengaliNumerals("30")} টি পয়েন্ট খরচ হবে।
+            {checkMsg === "দুংক্ষিত ,আপনি পেন্ডিং  আছেন এই বায়োডাটা  থেকে।"
+              ? convertToBengaliNumerals("70")
+              : convertToBengaliNumerals("30")}
+            টি পয়েন্ট খরচ হবে।
           </h2>
           <div className="flex flex-col items-center justify-center ">
             {displayText ? (
