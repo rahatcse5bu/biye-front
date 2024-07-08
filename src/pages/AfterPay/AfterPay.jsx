@@ -83,7 +83,7 @@ const AfterPay = () => {
     } else {
       navigate("/pay/fail");
     }
-  }, [status, paymentID, navigate, user?.email]);
+  }, [status, paymentID, navigate, user?.email, bio_user]);
 
   return (
     <div className="my-10">

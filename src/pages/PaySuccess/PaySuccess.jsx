@@ -6,6 +6,7 @@ const PaySuccess = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [searchParams] = useSearchParams();
   const message = searchParams.get("message");
+  const bio_user = searchParams.get("bio_user");
 
   const navigate = useNavigate();
 
@@ -13,11 +14,15 @@ const PaySuccess = () => {
     if (showMessage) {
       const timeout = setTimeout(() => {
         setShowMessage(false);
-        navigate("/user/account/dashboard");
+        if (bio_user) {
+          navigate(`/send-form/${bio_user}`);
+        } else {
+          navigate("/user/account/dashboard");
+        }
       }, 5000); // 10 seconds timeout
       return () => clearTimeout(timeout);
     }
-  }, [navigate, showMessage]);
+  }, [bio_user, navigate, showMessage]);
 
   // const { data: response = null } = useQuery({
   // 	queryKey: ["pay,refund", paymentId],

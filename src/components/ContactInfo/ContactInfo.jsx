@@ -10,15 +10,14 @@ import UserContext from "../../contexts/UserContext";
 import { Toast } from "../../utils/toast";
 import BkashCreatePaymentAPICall from "../../services/bkash";
 import { convertToBengaliNumerals } from "../../utils/weight";
-import { getToken, removeToken } from "../../utils/cookies";
+import { getToken } from "../../utils/cookies";
 import { BioChoiceDataServices } from "../../services/bioChoiceData";
-import { userServices } from "../../services/user";
-import { getErrorMessage } from "../../utils/error";
-const ContactInfo = ({ contact, status }) => {
+
+const ContactInfo = ({ status }) => {
   const [displayText, setDisplayText] = useState(false);
   const [checkMsg, setCheckMsg] = useState("");
   const { bio } = useContext(BioContext);
-  const { userInfo, logOut } = useContext(UserContext);
+  const { userInfo } = useContext(UserContext);
   const generalInfo = bio?.generalInfo || null;
   const points = Number(userInfo?.data?.points);
   const token = getToken()?.token;
@@ -149,39 +148,8 @@ const ContactInfo = ({ contact, status }) => {
   };
 
   const buyWithBkashHandler = async (value, bioId) => {
-    // ? verification check
-    let response;
-    // try {
-    //   response = await userServices.verifyToken(getToken()?.token);
-    //   console.log("navbar-verify-token~", response);
-    //   const data = response?.data;
-    //   const user_id = userInfo?.data[0]?.id;
-
-    //   if (data?.user_id !== user_id) {
-    //     await logOut();
-    //     removeToken();
-    //     Toast.errorToast("You are not authorized");
-    //     navigate("/login");
-    //   }
-    // } catch (error) {
-    //   console.error("navbar-verify-token~", error);
-    //   let msg = getErrorMessage(error);
-    //   Toast.errorToast(msg);
-    //   await logOut();
-    //   removeToken();
-    //   navigate("/login");
-    // }
-
-    // ? bkash payment api call
-    const amount = parseInt(value);
-    if (isNaN(amount) || +amount <= 0) {
-      alert("Please enter a valid amount.");
-    } else if (response?.success === true) {
-      BkashCreatePaymentAPICall(amount, bioId);
-    } else {
-      await logOut();
-      removeToken();
-      navigate("/login");
+    if (+value > 0) {
+      BkashCreatePaymentAPICall(+value, bioId);
     }
   };
 
