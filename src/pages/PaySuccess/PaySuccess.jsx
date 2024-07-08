@@ -19,7 +19,7 @@ const PaySuccess = () => {
 
   useEffect(() => {
     if (!showMessage) {
-      if (bio_user) {
+      if (bio_user && bio_user.length > 4) {
         navigate(`/send-form/${bio_user}`);
       } else {
         navigate("/user/account/dashboard");
