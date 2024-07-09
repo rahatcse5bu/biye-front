@@ -29,6 +29,7 @@ export default function MultipleSelect({
         components={animatedComponents}
         isMulti
         required={required}
+        isClearable={true}
         options={options}
         className={`text-left ${classes}`}
       />
