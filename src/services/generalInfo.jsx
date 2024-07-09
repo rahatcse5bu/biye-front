@@ -1,6 +1,7 @@
 import axios from "axios";
 import { baseUrl } from "../utils/url";
 import { convertToQuery } from "../utils/query";
+import axiosInstance from "../utils/axios";
 
 const getGeneralInfoByUser = async (token) => {
   if (!token) {
@@ -37,12 +38,14 @@ const updateWatchOfBioData = async (id) => {
 const getALLGeneralInfo = async (query) => {
   console.log(query);
   const queryString = convertToQuery(query);
-  // console.log(
-  //   "🚀 ~ file: bioData.jsx:55 ~ getALLGeneralInfo ~ queryString:",
-  //   queryString
-  // );
 
   const generalInfo = await axios.get(baseUrl + `/general-info?${queryString}`);
+  return generalInfo.data;
+};
+const getDashBoardData = async () => {
+  const generalInfo = await axiosInstance.get(
+    baseUrl + `/general-info/dash-board`
+  );
   return generalInfo.data;
 };
 
@@ -51,4 +54,5 @@ export const GeneralInfoServices = {
   updateGeneralInfo,
   updateWatchOfBioData,
   getALLGeneralInfo,
+  getDashBoardData,
 };

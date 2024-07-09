@@ -17,7 +17,7 @@ function Payments() {
     if (!user?.email) {
       Toast.errorToast("Please Login");
     }
-
+    // console.log("location", location.pathname);
     if (+value >= 1) {
       // console.log("value", +value);
       BkashCreatePaymentAPICall(

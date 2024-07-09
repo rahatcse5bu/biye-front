@@ -13,9 +13,10 @@ const PayFail = () => {
       if (pathname) {
         navigate(pathname);
       } else {
+        navigate("/points-package");
         console.error("Pathname is not provided");
       }
-    }, 10000); // 10 seconds timeout
+    }, 5000); // 10 seconds timeout
 
     return () => clearTimeout(timeout);
   }, [navigate, pathname]);
