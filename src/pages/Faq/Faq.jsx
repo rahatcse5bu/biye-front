@@ -136,7 +136,7 @@ const Faq = () => {
             <div className="flex justify-between items-center">
               <h2
                 // onClick={() => toggleItem(index)}
-                className="text-lg font-medium"
+                className="text-lg font-bold"
               >
                 {item.question}
               </h2>
