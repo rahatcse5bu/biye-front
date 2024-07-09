@@ -5,29 +5,6 @@ import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import { refundServices } from "../../services/refunds";
 import { Toast } from "../../utils/toast";
 
-function formatPurchaseType(purchaseType) {
-  // Split the purchaseType string by underscores and capitalize each word
-  const words = purchaseType
-    .split("_")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1));
-  // Join the words with spaces to create the final formatted string
-  return words.join(" ");
-}
-function readableDateTime(dateString) {
-  const date = new Date(dateString);
-  const options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    timeZoneName: "short",
-  };
-  const readableDate = date.toLocaleDateString(undefined, options);
-  return readableDate;
-}
-
 function formatDateString(dateString) {
   try {
     // Replace the colon before milliseconds with a dot
@@ -60,14 +37,14 @@ function formatDateString(dateString) {
 }
 const PaymentHistory = () => {
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["payments", "history"],
+    queryKey: ["payments", getToken()?.token],
     queryFn: async () => {
       return await paymentServices.getPaymentsByUser(getToken()?.token);
     },
     retry: false,
   });
 
-  console.log("data~~", data);
+  // console.log("data~~", data);
 
   const handleRequestRefund = async (item) => {
     try {
@@ -114,7 +91,7 @@ const PaymentHistory = () => {
               <thead>
                 <tr className="border-b border-t">
                   <th className="px-4 py-2 text-center w-1/7">SL</th>
-                  <th>পেমেন্ট আইডি</th>
+                  {/* <th>পেমেন্ট আইডি</th> */}
                   <th className="px-4 py-2 text-center w-1/7">
                     ট্রানজেকশন আইডি
                   </th>
@@ -132,7 +109,7 @@ const PaymentHistory = () => {
                   return (
                     <tr key={index} className="y-2">
                       <td>{index + 1}</td>
-                      <td className="text-xs">{item?.payment_id}</td>
+                      {/* <td className="text-xs">{item?.payment_id}</td> */}
                       <td className="text-xs">{item?.transaction_id}</td>
                       <td className="text-xs">{item?.points}</td>
                       <td className="text-xs">{item?.amount}</td>

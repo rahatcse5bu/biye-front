@@ -7,6 +7,9 @@ import { RouterProvider } from "react-router-dom";
 import router from "./routes/Routes";
 import toast, { Toaster } from "react-hot-toast";
 import { Toast } from "./utils/toast";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "./firebase/app";
+import AnalyticsService from "./firebase/analyticsService";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -31,6 +34,10 @@ function App() {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
+  }, []);
+
+  useEffect(() => {
+    AnalyticsService.logEvent("notification_received");
   }, []);
 
   return (

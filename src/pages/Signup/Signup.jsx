@@ -17,6 +17,7 @@ import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 import { sendFirebaseError } from "../../utils/fiirebaseError";
 import toast from "react-hot-toast";
 import { Toast } from "../../utils/toast";
+import AnalyticsService from "../../firebase/analyticsService";
 export function Signup() {
   const { handleGoogleSignIn, createUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -42,7 +43,11 @@ export function Signup() {
         alert("Something went wrong,try again later");
         return;
       }
-      console.log(response1?.user);
+      // console.log(response1?.user);
+
+      const user = response1.user;
+      AnalyticsService.setUserId(user.uid);
+      AnalyticsService.setUserProperties({ email: user.email });
 
       const userInfo = {
         email: response1?.user.email,
@@ -105,6 +110,12 @@ export function Signup() {
       setLoading(true);
 
       const response1 = await createUser(email, password);
+
+      // analytics
+
+      const user = response1.user;
+      AnalyticsService.setUserId(user.uid);
+      AnalyticsService.setUserProperties({ email: user.email });
 
       if (!response1?.user?.uid) {
         Toast.errorToast("Something went wrong,please try again");

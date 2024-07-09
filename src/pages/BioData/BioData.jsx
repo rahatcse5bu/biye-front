@@ -11,7 +11,7 @@ import ExpectedPartner from "../../components/ExpectedPartner/ExpectedPartner";
 import OngikarNama from "../../components/OngikarNama/OngikarNama";
 import ContactInfo from "../../components/ContactInfo/ContactInfo";
 import "./BioData.css";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { BioDataServices } from "../../services/bioData";
 import { ContactServices } from "../../services/contact";
@@ -25,6 +25,7 @@ import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 import { FcLeft } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import ScrollToTop from "../../components/ScrollTop/ScrollTop";
+import AnalyticsService from "../../firebase/analyticsService";
 const BioData = () => {
   const { id } = useParams();
   const { setBio } = useContext(BioContext);
@@ -41,7 +42,7 @@ const BioData = () => {
     enabled: !!id,
   });
 
-  console.log("data~~", data);
+  // console.log("data~~", data);
   const { data: userStatus = null } = useQuery({
     queryKey: ["bio-data", "status", id],
     queryFn: async () => {
@@ -71,6 +72,15 @@ const BioData = () => {
       setBio(data.data);
     }
   }, [data, setBio, id]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    AnalyticsService.logEvent("bio details page", {
+      page_path: location.pathname,
+      id,
+    });
+  }, [id, location]);
 
   // const incrementViewCount = useCallback(async () => {
   //   const generalId = data?.data?.generalInfo?._id;
