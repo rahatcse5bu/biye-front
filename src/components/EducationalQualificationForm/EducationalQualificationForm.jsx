@@ -1129,7 +1129,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={mscSub}
                     setValue={setMscSub}
                     placeholder="এমএসসি ইন টেক্সটাইল ইঞ্জিনিয়ারিং"
-                    required
+                    // required
                   />
 
                   <Input
@@ -1137,7 +1137,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={mscInst}
                     setValue={setMscInst}
                     placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
-                    required
+                    // required
                   />
 
                   <Input
@@ -1145,7 +1145,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={mscPassYear}
                     setValue={setMscPassYear}
                     placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
-                    required
+                    // required
                   />
                 </>
               ) : (

@@ -46,7 +46,7 @@ const AfterPay = () => {
       } catch (error) {
         console.error("An error occurred:", error);
         const msg = getErrorMessage(error);
-        navigate(`/pay/fail?message=${msg}`);
+        navigate(`/pay/fail?message=${msg}&pathname=${pathname}`);
       }
     }
     // async function fetchData() {
@@ -86,9 +86,9 @@ const AfterPay = () => {
     if (status && status === "success" && user?.email) {
       fetchData();
     } else {
-      navigate("/pay/fail");
+      navigate(`/pay/fail?pathname=${pathname}`);
     }
-  }, [status, paymentID, navigate, user?.email, bio_user, purpose]);
+  }, [status, paymentID, navigate, user?.email, bio_user, purpose, pathname]);
 
   return (
     <div className="my-10">

@@ -1,15 +1,16 @@
 import { useContext } from "react";
 import { Colors } from "../../constants/colors"; // Adjust the import path as needed
 import UserContext from "../../contexts/UserContext";
-import BioContext from "../../contexts/BioContext";
 import { useQuery } from "@tanstack/react-query";
 import { BioDataServices } from "../../services/bioData";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
+import { GeneralInfoServices } from "../../services/generalInfo";
 const DashBoard = () => {
   const { userInfo } = useContext(UserContext);
+  console.log("userInfo~~", userInfo);
   //Stats Code
-  const { bio } = useContext(BioContext);
-  const generalInfo = bio?.generalInfo || null;
+  // const { bio } = useContext(BioContext);
+  // const generalInfo = bio?.generalInfo || null;
   const { data, isLoading } = useQuery({
     queryKey: ["bio-data", "stat", userInfo?.data?._id],
     queryFn: async () => {
@@ -18,27 +19,20 @@ const DashBoard = () => {
     retry: false,
     enabled: !!userInfo?.data?._id,
   });
+  const { data: dashBoard } = useQuery({
+    queryKey: ["dash-board-bio-data", userInfo?.data?._id],
+    queryFn: async () => {
+      return await GeneralInfoServices.getDashBoardData();
+    },
+    retry: false,
+    enabled: !!userInfo?.data?._id,
+  });
 
-  // console.log("bioStats~", generalInfo);
-  console.log("bioStats", data);
-
-  const rejected = data?.results?.rejected;
-  const pending = data?.results?.pending;
-  const approved = data?.results?.approved;
-  const total = rejected + approved;
-  let approvedRate = 0;
-  let rejectedRate = 0;
-  if (total) {
-    approvedRate = approved / total;
-    approvedRate = approvedRate.toFixed(2);
-    rejectedRate = rejected / total;
-    rejectedRate = rejectedRate.toFixed(2);
-  }
   if (isLoading) {
     return <LoadingCircle />;
   }
-  //end stat code
 
+  // console.log("dashBoard", dashBoard);
   //console.log(userInfo);
   return (
     <div
@@ -111,7 +105,8 @@ const DashBoard = () => {
               className="text-lg font-semibold"
               style={{ color: Colors.titleText }}
             >
-              আপনার বায়োডাটা পছন্দের তালিকাভুক্ত হয়েছে: 9
+              আপনার বায়োডাটা পছন্দের তালিকাভুক্ত হয়েছে:{" "}
+              {dashBoard?.data.likes_count}
             </h2>
           </div>
           <p className="text-gray-700">
@@ -134,7 +129,7 @@ const DashBoard = () => {
               className="text-lg font-semibold text-center"
               style={{ color: Colors.titleText }}
             >
-              আমার পছন্দের তালিকায়ঃ ৩৪
+              আমার পছন্দের তালিকায়ঃ {dashBoard?.data.favorite_count}
             </h2>
           </div>
           <p className="text-gray-700">
@@ -157,7 +152,7 @@ const DashBoard = () => {
               className="text-lg font-semibold text-center"
               style={{ color: Colors.titleText }}
             >
-              আমার অপছন্দের তালিকায়ঃ ২
+              আমার অপছন্দের তালিকায়ঃ {dashBoard?.data.unFavorite_count}
             </h2>
           </div>
           <p className="text-gray-700">
@@ -179,7 +174,7 @@ const DashBoard = () => {
               className="text-lg font-semibold"
               style={{ color: Colors.titleText }}
             >
-              আমার ক্রয়সমূহ: ৯
+              আমার ক্রয়সমূহ: {dashBoard?.data.contact_purchase_count}
             </h2>
           </div>
           <p className="text-gray-700">আপনার ক্রয় সংক্রান্ত সমস্ত তথ্য।</p>
@@ -200,7 +195,7 @@ const DashBoard = () => {
               className="text-lg font-semibold text-center"
               style={{ color: Colors.titleText }}
             >
-              বায়োডাটা ভিজিট সংখ্যা: {userInfo?.data?.views}
+              বায়োডাটা ভিজিট সংখ্যা: {dashBoard?.data.views_count}
             </h2>
           </div>
           <p className="text-gray-700">

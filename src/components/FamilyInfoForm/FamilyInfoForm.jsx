@@ -221,7 +221,6 @@ const FamilyInfoForm = ({ setUserForm, userForm }) => {
               subtitle="শিক্ষাগত যোগ্যতা, বৈবাহিক অবস্থা এবং পেশা লিখবেন। একাধিক ভাই থাকলে কমা দিয়ে নিচের লাইনে লিখবেন।"
               value={brothersInfo}
               setValue={setBrothersInfo}
-              required
             />
           )}
 
@@ -238,7 +237,6 @@ const FamilyInfoForm = ({ setUserForm, userForm }) => {
               subtitle="শিক্ষাগত যোগ্যতা, বৈবাহিক অবস্থা এবং পেশা লিখবেন। একাধিক ভাই থাকলে কমা দিয়ে নিচের লাইনে লিখবেন।"
               value={sistersInfo}
               setValue={setSistersInfo}
-              required
             />
           )}
 
