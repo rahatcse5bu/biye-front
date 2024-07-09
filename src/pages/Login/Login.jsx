@@ -8,6 +8,7 @@ import { userServices } from "../../services/user";
 import { setToken } from "../../utils/cookies";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 import { Toast } from "../../utils/toast";
+import AnalyticsService from "../../firebase/analyticsService";
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -30,6 +31,11 @@ export function Login() {
       const userInfo = {
         email: response1?.user?.email,
       };
+
+      // analytics
+      const user = response1.user;
+      AnalyticsService.setUserId(user.uid);
+      AnalyticsService.setUserProperties({ email: user.email });
 
       //store user info into db
       const { data } = await userServices.createUserInfoForGoogleSignIn(
@@ -66,6 +72,12 @@ export function Login() {
         email: email,
         password,
       };
+
+      // analytics
+      const user = response.user;
+      AnalyticsService.setUserId(user.uid);
+      AnalyticsService.setUserProperties({ email: user.email });
+
       //!store user info into db
       const { data } = await userServices.createUserInfoForGoogleSignIn(
         userInfo,
