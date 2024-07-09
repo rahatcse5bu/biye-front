@@ -78,7 +78,6 @@ const BioData = () => {
   useEffect(() => {
     AnalyticsService.logEvent("bio details page", {
       page_path: location.pathname,
-      id,
     });
   }, [id, location]);
 
