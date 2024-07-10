@@ -70,6 +70,7 @@ const PaySuccess = () => {
       )}
       {loading && (
         <div>
+          <h3>Please,Waiting.....</h3>
           <LoadingCircle />
         </div>
       )}
