@@ -43,9 +43,7 @@ const getALLGeneralInfo = async (query) => {
   return generalInfo.data;
 };
 const getDashBoardData = async () => {
-  const generalInfo = await axiosInstance.get(
-    baseUrl + `/general-info/dash-board`
-  );
+  const generalInfo = await axiosInstance.get(`/general-info/dash-board`);
   return generalInfo.data;
 };
 

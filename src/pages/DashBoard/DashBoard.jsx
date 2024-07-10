@@ -7,7 +7,7 @@ import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 import { GeneralInfoServices } from "../../services/generalInfo";
 const DashBoard = () => {
   const { userInfo } = useContext(UserContext);
-  console.log("userInfo~~", userInfo);
+  // console.log("userInfo~~", userInfo);
   //Stats Code
   // const { bio } = useContext(BioContext);
   // const generalInfo = bio?.generalInfo || null;
@@ -55,7 +55,7 @@ const DashBoard = () => {
               className="text-lg font-semibold text-center"
               style={{ color: Colors.titleText }}
             >
-              আমার বর্তমান পয়েন্টঃ {userInfo?.data?.points}
+              আমার বর্তমান পয়েন্টঃ {userInfo?.data?.points.toFixed(2)}
             </h2>
           </div>
           <p className="text-gray-700">

@@ -26,8 +26,13 @@ const Home = () => {
     queryFn: async () =>
       GeneralInfoServices.getALLGeneralInfo({ isFeatured: true }),
   });
+  const { data: biosStats, isLoading: bioStatsLoading } = useQuery({
+    queryKey: ["bio-all-stats"],
+    queryFn: async () => BioDataServices.getAllBioDataStats(),
+  });
 
-  console.log(data);
+  // console.log("biosStats~~~", biosStats);
+  // console.log(data);
 
   useEffect(() => {
     //! Fetch division options when the component mounts
@@ -428,24 +433,34 @@ const Home = () => {
       >
         এক নজরে আমাদের সাইটঃ
       </h2>
-      <div className="grid grid-cols-1 py-5 md:grid-cols-2 lg:grid-cols-4">
-        <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
-          <h1 className="text-3xl font-semibold text-center">৪৩৪</h1>
-          <h3 className="text-xl text-center ">সর্বমোট বায়োডাটা</h3>
+      {bioStatsLoading ? (
+        <LoadingCircle />
+      ) : (
+        <div className="grid grid-cols-1 py-5 md:grid-cols-2 lg:grid-cols-4">
+          <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
+            <h1 className="text-3xl font-semibold text-center">
+              {biosStats?.data.total}
+            </h1>
+            <h3 className="text-xl text-center ">সর্বমোট বায়োডাটা</h3>
+          </div>
+          <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
+            <h1 className="text-3xl font-semibold text-center">
+              {biosStats?.data.মহিলা}
+            </h1>
+            <h3 className="text-xl text-center ">সর্বমোট পাত্রের বায়োডাটা</h3>
+          </div>
+          <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
+            <h1 className="text-3xl font-semibold text-center">
+              {biosStats?.data.পুরুষ}
+            </h1>
+            <h3 className="text-xl text-center ">সর্বমোট পাত্রীর বায়োডাটা</h3>
+          </div>
+          <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
+            <h1 className="text-3xl font-semibold text-center">0</h1>
+            <h3 className="text-xl text-center ">বিয়ে সম্পন্ন হয়েছে</h3>
+          </div>
         </div>
-        <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
-          <h1 className="text-3xl font-semibold text-center">২০০</h1>
-          <h3 className="text-xl text-center ">সর্বমোট পাত্রের বায়োডাটা</h3>
-        </div>
-        <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
-          <h1 className="text-3xl font-semibold text-center">২৩৪</h1>
-          <h3 className="text-xl text-center ">সর্বমোট পাত্রীর বায়োডাটা</h3>
-        </div>
-        <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
-          <h1 className="text-3xl font-semibold text-center">৪৫</h1>
-          <h3 className="text-xl text-center ">বিয়ে সম্পন্ন হয়েছে</h3>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

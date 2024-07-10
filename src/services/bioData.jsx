@@ -1,5 +1,6 @@
 import axios from "axios";
 import { convertToQuery } from "../utils/query";
+import axiosInstance from "../utils/axios";
 const baseUrl =
   import.meta.env.VITE_REACT_APP_NODE_ENV === "development"
     ? "http://localhost:5000/api/v1"
@@ -85,6 +86,10 @@ const getBioDataStatistics = async (id) => {
   );
   return bioData.data;
 };
+const getAllBioDataStats = async () => {
+  const bioData = await axiosInstance.get(`/bio-data/stats`);
+  return bioData.data;
+};
 
 export const BioDataServices = {
   getALLGeneralInfo,
@@ -94,4 +99,5 @@ export const BioDataServices = {
   getAllUpzilla,
   createGeneralInfo,
   getBioDataStatistics,
+  getAllBioDataStats,
 };

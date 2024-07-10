@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { FaCircle } from "react-icons/fa";
 import { FcLike, FcDislike, FcSettings, FcSupport } from "react-icons/fc";
 import {
   Navbar,
@@ -176,8 +177,18 @@ export default function NavBar() {
             onMouseEnter={handleIconHover}
             onMouseLeave={handleIconLeave}
           >
-            <div>
+            <div className="flex flex-row-reverse">
               <FaUserLarge className="w-6 h-8" />
+              {userInfo?.data.points > 0 && (
+                <div
+                  title={`${userInfo?.data.points.toFixed(2)} points`}
+                  className="flex items-center text-white bg-orange-700 px-2 rounded-lg mr-2"
+                >
+                  {userInfo?.data.points.toFixed(2)} P
+                  {/* <FaCircle className="text-orange-700 ml-2" />
+                   */}
+                </div>
+              )}
             </div>
             {isHovered && (
               <div
