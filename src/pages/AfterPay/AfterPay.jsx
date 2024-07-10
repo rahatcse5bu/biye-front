@@ -36,7 +36,7 @@ const AfterPay = () => {
               response?.transactionStatus
             }&payment_create_time=${
               response?.paymentCreateTime || response?.paymentExecuteTime
-            }&bio_user=${bio_user}&pathname=${pathname}`
+            }&bio_user=${bio_user}&pathname=${pathname}&purpose=${purpose}`
           );
         } else {
           navigate(

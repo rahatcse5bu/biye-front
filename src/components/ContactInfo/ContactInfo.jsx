@@ -155,10 +155,10 @@ const ContactInfo = ({ status }) => {
       text: `যোগাযোগ তথ্য দেখতে আপনার ৩০ পয়েন্ট খরচ হবে 
 			। ${
         points >= 30
-          ? convertToBengaliNumerals((points - 30).toString()) +
+          ? convertToBengaliNumerals((points - 30).toFixed(2).toString()) +
             " অবশিষ্ট থাকবে"
           : "আপনার আরও " +
-            convertToBengaliNumerals((30 - points).toString()) +
+            convertToBengaliNumerals((30 - points).toFixed(2).toString()) +
             " পয়েন্ট লাগবে"
       }`,
       icon: "question",
@@ -263,14 +263,15 @@ const ContactInfo = ({ status }) => {
               ? convertToBengaliNumerals("70")
               : convertToBengaliNumerals("30")}
             টি পয়েন্ট খরচ হবে। আপনার একাউন্টে{" "}
-            {convertToBengaliNumerals(points.toString())} পয়েন্ট আছে!
+            {convertToBengaliNumerals(points.toFixed(2).toString())} পয়েন্ট আছে!
           </h2>
           <div className="flex flex-col items-center justify-center ">
             {displayText ? (
               <div className="pb-5">
                 <p className="mb-2 text-xl">
                   আপনার একাউন্টে কোনো{" "}
-                  {convertToBengaliNumerals(points.toString())} পয়েন্ট আছে!
+                  {convertToBengaliNumerals(points.toFixed(2).toString())}{" "}
+                  পয়েন্ট আছে!
                 </p>
                 <button
                   className="px-2 py-2 text-white bg-green-800 rounded-md hover:bg-green-900"
@@ -278,12 +279,14 @@ const ContactInfo = ({ status }) => {
                     buyWithBkashHandler(
                       30 - points,
                       bio?.generalInfo?.user,
-                      "First_Step"
+                      "first_Step"
                     )
                   }
                 >
-                  {convertToBengaliNumerals((30 - points).toString())} পয়েন্ট
-                  কিনুন
+                  {convertToBengaliNumerals(
+                    (30 - points).toFixed(2).toString()
+                  )}{" "}
+                  পয়েন্ট কিনুন
                 </button>
               </div>
             ) : checkMsg ? (

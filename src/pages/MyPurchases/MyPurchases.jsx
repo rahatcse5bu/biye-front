@@ -4,13 +4,13 @@ import { Button } from "@material-tailwind/react";
 import { useQuery } from "@tanstack/react-query";
 import { FaEye, FaTrash, FaInfo } from "react-icons/fa";
 import { BioChoiceDataServices } from "../../services/bioChoiceData";
-import { getToken, removeToken } from "../../utils/cookies";
+import { getToken } from "../../utils/cookies";
 import { MdFeedback } from "react-icons/md";
 import { AiFillQuestionCircle } from "react-icons/ai";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 import { FeedbackModal } from "../../components/FeedbackModal/FeedbackModal";
 import { BioDetailsModal } from "../../components/BioDetailsModal/BioDetailsModal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Colors } from "../../constants/colors";
 import { PayDetailsModal } from "../../components/PayDetailsModal/PayDetailsModal";
 import { useContext } from "react";
@@ -18,7 +18,6 @@ import UserContext from "../../contexts/UserContext";
 import Swal from "sweetalert2";
 import { convertToBengaliNumerals } from "../../utils/weight";
 import BkashCreatePaymentAPICall from "../../services/bkash";
-import { userServices } from "../../services/user";
 import { Toast } from "../../utils/toast";
 import { getErrorMessage } from "../../utils/error";
 import { ContactPurchaseDataServices } from "../../services/contactPurchaseData";
@@ -38,7 +37,10 @@ const FirstStepCard = ({
   bioChoiceFirstStepRefetch,
   bioChoiceSecondStepRefetch,
 }) => {
-  const { userInfo, logOut } = useContext(UserContext);
+  const location = useLocation();
+  const { userInfo } = useContext(UserContext);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const { data } = useQuery({
     queryKey: ["bio-data", "stat", item?.bio_user],
     queryFn: async () => {
@@ -47,43 +49,14 @@ const FirstStepCard = ({
     retry: false,
     enabled: !!item?.bio_user,
   });
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-
-  const buyWithBkashHandler = async (value, bioId) => {
-    let response;
-    // ? verification check
-    try {
-      response = await userServices.verifyToken(getToken()?.token);
-      console.log("navbar-verify-token~", response);
-      const data = response?.data;
-      const user_id = userInfo?.data?._id;
-
-      if (data?.user_id !== user_id) {
-        await logOut();
-        removeToken();
-        Toast.errorToast("You are not authorized");
-        navigate("/login");
-      }
-    } catch (error) {
-      console.error("navbar-verify-token~", error);
-      let msg = getErrorMessage(error);
-      Toast.errorToast(msg);
-      await logOut();
-      removeToken();
-      navigate("/login");
-    }
-
-    // ? bkash payment api call
-    const amount = parseInt(value);
-    if (isNaN(amount) || +amount <= 0) {
-      alert("Please enter a valid amount.");
-    } else if (response?.success === true) {
-      BkashCreatePaymentAPICall(amount, bioId);
-    } else {
-      await logOut();
-      removeToken();
-      navigate("/login");
+  const buyWithBkashHandler = async (value, bio_user) => {
+    if (+value >= 0) {
+      BkashCreatePaymentAPICall(
+        +value,
+        bio_user,
+        "second_step",
+        location.pathname
+      );
     }
   };
   // console.log("bio-stats", data);
@@ -97,7 +70,32 @@ const FirstStepCard = ({
     setFeedback(item);
   };
 
-  const  payButtonHandler = (bio_user) => {
+  // buy contact after first step
+
+  const buyContact = async (bio_user) => {
+    try {
+      setLoading(true);
+      const data = await ContactPurchaseDataServices.createContactPurchaseData(
+        {
+          bio_user,
+        },
+        getToken().token
+      );
+
+      if (data.success) {
+        Toast.successToast("আপনার বায়োডাটা ক্রয় সম্পূর্ন  হয়েছে।");
+        await bioChoiceFirstStepRefetch();
+        await bioChoiceSecondStepRefetch();
+      }
+    } catch (error) {
+      let msg = getErrorMessage(error);
+      Toast.errorToast(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const payButtonHandler = (bio_user) => {
     const points = userInfo?.data?.points;
     Swal.fire({
       title: "আপনি কি তথ্য দেখতে চান?",
@@ -122,27 +120,7 @@ const FirstStepCard = ({
       }
       if (points >= 70) {
         // console.log("clicked button");
-        try {
-          setLoading(true);
-          const data =
-            await ContactPurchaseDataServices.createContactPurchaseData(
-              {
-                bio_user,
-              },
-              getToken().token
-            );
-
-          if (data.success) {
-            Toast.successToast("আপনার বায়োডাটা ক্রয় সম্পূর্ন  হয়েছে।");
-            await bioChoiceFirstStepRefetch();
-            await bioChoiceSecondStepRefetch();
-          }
-        } catch (error) {
-          let msg = getErrorMessage(error);
-          Toast.errorToast(msg);
-        } finally {
-          setLoading(false);
-        }
+        buyContact(bio_user);
       } else {
         buyWithBkashHandler(70 - points, bio_user);
       }
