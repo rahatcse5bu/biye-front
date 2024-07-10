@@ -1,10 +1,8 @@
 import "../../assets/styles/home.css";
 import { Colors } from "../../constants/colors";
 import FeaturedBioDataGrid from "../../components/FeaturedBioDataGrid/FeaturedBioDataGrid";
-import LoadingBioData from "../../components/LoadingBioData/LoadingBioData";
 import HadithSlider from "../../components/HadithSlider/HadithSlider";
-import { useState, useContext, useEffect } from "react";
-import BioContext from "../../contexts/BioContext";
+import { useState, useEffect } from "react";
 import { BioDataServices } from "../../services/bioData";
 import { useNavigate } from "react-router-dom";
 import { convertToQuery } from "../../utils/query";
@@ -13,10 +11,11 @@ import "../../fonts/fonts.css";
 import { useQuery } from "@tanstack/react-query";
 import { GeneralInfoServices } from "../../services/generalInfo";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
-//End Bio grid Import
+import { useBio } from "../../contexts/BioContext";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { setQuery } = useBio();
   const [selectedDivisions, setSelectedDivisions] = useState([]);
   const [selectedDistricts, setSelectedDistricts] = useState([]);
   const [divisionOptions, setDivisionOptions] = useState([]);
@@ -119,7 +118,7 @@ const Home = () => {
 
     if (selectedOptions.some((option) => option.value === "All Divisions")) {
       //! If "All Divisions" is selected, clear selected districts
-      setSelectedDistricts([]);
+      setSelectedDistricts(["all"]);
     }
   };
 
@@ -139,7 +138,7 @@ const Home = () => {
       // districtValues = districtOptions
       // 	.filter((district) => !districtValues.includes(district.value))
       // 	.map((district) => district.value);
-      divisionValues = [];
+      divisionValues = ["all"];
     }
     if (districtValues.includes("All Districts")) {
       districtValues.splice(0, districtValues.length);
@@ -154,13 +153,27 @@ const Home = () => {
         .map((district) => district.value);
       districtValues.push(...allDistricts);
     }
-    console.log(districtValues, divisionValues);
-    const query = convertToQuery({
+    // console.log(districtValues, divisionValues);
+
+    const query = {
       marital_status,
       bio_type,
       zilla: districtValues.join(","),
+      division: divisionValues.join(","),
+    };
+
+    // set query
+    setQuery((prev) => {
+      return {
+        ...prev,
+        ...query,
+      };
     });
-    navigate(`/biodatas?${query}`);
+
+    // convert query to string
+    const queryString = convertToQuery(query);
+
+    navigate(`/biodatas?${queryString}`);
   };
   // console.log(zillasOptions);
 

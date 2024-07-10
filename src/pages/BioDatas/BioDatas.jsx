@@ -1,6 +1,5 @@
 import BioDatasGrid from "../../components/BioDatasGrid/BioDatasGrid";
 import { SideBar } from "../../components/SideBar/SideBar";
-import LoadingBioData from "../../components/LoadingBioData/LoadingBioData";
 import { useContext, useState } from "react";
 import BioContext from "../../contexts/BioContext";
 import { FaXmark } from "react-icons/fa6";

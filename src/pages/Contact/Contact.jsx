@@ -19,7 +19,7 @@ const Contact = () => {
     return <LoadingCircle />;
   }
 
-  console.log("contact~~", contactInfo);
+  // console.log("contact~~", contactInfo);
 
   return (
     <div>
