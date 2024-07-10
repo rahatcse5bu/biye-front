@@ -26,6 +26,7 @@ import { FcLeft } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import ScrollToTop from "../../components/ScrollTop/ScrollTop";
 import AnalyticsService from "../../firebase/analyticsService";
+import Contact from "../Contact/Contact";
 const BioData = () => {
   const { id } = useParams();
   const { setBio } = useContext(BioContext);
@@ -108,6 +109,13 @@ const BioData = () => {
   // console.log(data);
   // console.log(error);
 
+  console.log(
+    "userInfo?.data?.user_id,id~~~",
+    id,
+    +userInfo?.data?.user_id,
+    id && +id !== +userInfo?.data?.user_id
+  );
+
   return (
     <div className=" py-2 w-full  ">
       <div
@@ -155,8 +163,13 @@ const BioData = () => {
             <OngikarNama />
 
             <div className="h-5"></div>
-
-            <ContactInfo contact={contact?.data} status={userStatus?.data} />
+            {id &&
+            userInfo?.data?.user_id &&
+            Number(id) !== Number(userInfo?.data?.user_id) ? (
+              <ContactInfo contact={contact?.data} status={userStatus?.data} />
+            ) : (
+              <Contact />
+            )}
           </div>
         </div>
       )}
