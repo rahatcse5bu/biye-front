@@ -7,11 +7,9 @@ import Input from "../Input/Input";
 import { Checkbox } from "@material-tailwind/react";
 import { Colors } from "../../constants/colors";
 import UserContext from "../../contexts/UserContext";
-import { getToken, removeToken } from "../../utils/cookies";
-import { userServices } from "../../services/user";
+import { getToken } from "../../utils/cookies";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import { AddressInfoServices } from "../../services/addressInfo";
 import { Toast } from "../../utils/toast";
@@ -28,8 +26,7 @@ const AddressInfoForm = ({ userForm, setUserForm }) => {
   const [pUpZilla, setPUpZilla] = useState("");
   const [isCheck, setIsCheck] = useState(false);
   const [grownUp, setGrownUp] = useState("");
-  const { userInfo, logOut } = useContext(UserContext);
-  const navigate = useNavigate();
+  const { userInfo } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
 
   const { data: addressInfo = null, isLoading: addressGetLoading } = useQuery({
@@ -135,8 +132,11 @@ const AddressInfoForm = ({ userForm, setUserForm }) => {
       grown_up: grownUp,
       zilla: district,
       upzilla: upZilla,
-      city: district,
       division: division,
+      present_zilla: isCheck ? district : pDistrict,
+      present_upzilla: isCheck ? upZilla : pUpZilla,
+      present_division: isCheck ? division : pDivision,
+      city: district,
       permanent_area: area,
       present_area: isCheck ? area : pArea,
       zip: 1,

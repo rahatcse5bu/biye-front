@@ -24,6 +24,8 @@ const BioDataFilter = () => {
   const [open, setOpen] = useState(3);
   const [bioType, setBioType] = useState("");
   const [maritalStatus, setMaritalStatus] = useState("");
+  const [zilla, setZilla] = useState("");
+  const [division, setDivision] = useState("");
   const [height, setHeight] = useState({
     min: 5.0,
     max: 6.0,
@@ -35,27 +37,42 @@ const BioDataFilter = () => {
   const [value, setValue] = useState(50);
   // console.log("searchParams~", searchParams.get("marital_status"));
 
-  // useEffect(() => {
-  //   setBioType(searchParams.get("bio_type"));
-  //   setMaritalStatus(searchParams.get("marital_status"));
-  // }, [searchParams]);
+  useEffect(() => {
+    setBioType(searchParams.get("bio_type"));
+    setMaritalStatus(searchParams.get("marital_status"));
+    setDivision(searchParams.get("division"));
+    setZilla(searchParams.get("zilla"));
+  }, [searchParams]);
 
-  // useEffect(() => {
-  //   let queryObj = {};
-  //   if (bioType) {
-  //     queryObj = {
-  //       ...queryObj,
-  //       bio_type: bioType,
-  //     };
-  //   }
-  //   if (maritalStatus) {
-  //     queryObj = {
-  //       ...queryObj,
-  //       marital_status: maritalStatus,
-  //     };
-  //   }
-  //   setQuery(queryObj);
-  // }, [bioType, maritalStatus, setQuery]);
+  useEffect(() => {
+    let queryObj = {};
+    if (bioType) {
+      queryObj = {
+        ...queryObj,
+        bio_type: bioType,
+      };
+    }
+    if (maritalStatus) {
+      queryObj = {
+        ...queryObj,
+        marital_status: maritalStatus,
+      };
+    }
+    if (division) {
+      queryObj = {
+        ...queryObj,
+        division: division,
+      };
+    }
+
+    if (zilla) {
+      queryObj = {
+        ...queryObj,
+        zilla: zilla,
+      };
+    }
+    setQuery(queryObj);
+  }, [bioType, division, maritalStatus, setQuery, zilla]);
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
