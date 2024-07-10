@@ -13,6 +13,8 @@ import { convertToBengaliNumerals } from "../../utils/weight";
 import { getToken } from "../../utils/cookies";
 import { BioChoiceDataServices } from "../../services/bioChoiceData";
 import { ContactPurchaseDataServices } from "../../services/contactPurchaseData";
+import { Colors } from "../../constants/colors";
+import LoadingCircle from "../LoadingCircle/LoadingCircle";
 
 const ContactInfo = ({ status }) => {
   const [displayText, setDisplayText] = useState(false);
@@ -24,6 +26,7 @@ const ContactInfo = ({ status }) => {
   const [isRejected, setIsRejected] = useState(false);
   const location = useLocation();
   const [isFirstStepDone, setFirstStepDone] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { data: contactInfo = null } = useQuery({
     queryKey: ["contact", generalInfo?.user, getToken()?.token],
     queryFn: async () =>
@@ -68,6 +71,7 @@ const ContactInfo = ({ status }) => {
       if (points >= 70) {
         // console.log("clicked button");
         try {
+          setLoading(true);
           const data =
             await ContactPurchaseDataServices.createContactPurchaseData(
               {
@@ -84,13 +88,13 @@ const ContactInfo = ({ status }) => {
           let msg = error;
           Toast.errorToast(msg);
         } finally {
-          // setLoading(false);
+          setLoading(false);
         }
       } else {
         buyWithBkashHandler(
           70 - points,
           bio_user,
-          "first_step",
+          "second_step",
           location.pathname
         );
       }
@@ -252,7 +256,7 @@ const ContactInfo = ({ status }) => {
           </h4>
         </div>
       ) : (
-        <div className="ask-contact-info">
+        <div className="ask-contact-info p-5">
           <h4 className="my-4 text-center">
             সতর্কতা - বিয়ের সিদ্ধান্ত নেয়ার পূর্বে স্থানীয়ভাবে খোঁজ নিয়ে
             বায়োডাটার সমস্ত তথ্য যাচাই করবেন।
@@ -292,7 +296,7 @@ const ContactInfo = ({ status }) => {
             ) : checkMsg ? (
               !isRejected && isFirstStepDone ? (
                 <div>
-                  <p className="px-5 py-3 mb-5 text-green-900 bg-green-200 border-2 border-green-600 rounded-lg">
+                  <p className="px-5 py-5 mb-5 text-green-900 bg-green-200 border-2 border-green-600 rounded-lg">
                     {checkMsg}
                   </p>{" "}
                   <button
@@ -304,13 +308,16 @@ const ContactInfo = ({ status }) => {
                     //     "First_Step"
                     //   )
                     // }
-                    className="px-4 py-4 rounded-lg border bg-blue-700 text-white"
+                    className="px-4 py-2 rounded-lg border  text-white"
+                    style={{
+                      backgroundColor: Colors.pncPrimaryColor,
+                    }}
                   >
-                    Pay Now for 2nd Step
+                    {loading ? <LoadingCircle /> : "Pay Now for 2nd Step"}
                   </button>
                 </div>
               ) : (
-                <p className="px-5 py-3 mb-5 text-green-900 bg-green-200 border-2 border-green-600 rounded-lg">
+                <p className="px-5 py-1 mb-5 text-green-900 bg-green-200 border-2 border-green-600 rounded-lg">
                   {checkMsg}
                 </p>
               )

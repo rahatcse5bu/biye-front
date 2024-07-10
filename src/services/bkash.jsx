@@ -23,7 +23,7 @@ export default function BkashCreatePaymentAPICall(
       callbackURL: url,
     })
     .then((response) => {
-      console.log("Data was successfully sent.", response);
+      // console.log("Data was successfully sent.", response);
       // console.log(response);
       if (response?.data?.bkashURL) {
         window.location.href = response?.data?.bkashURL;
