@@ -51,7 +51,6 @@ const getAllUpzilla = async (district) => {
 };
 
 const getALLGeneralInfo = async (query) => {
-  // console.log(query);
   const queryString = convertToQuery(query);
   // console.log(
   //   "🚀 ~ file: bioData.jsx:55 ~ getALLGeneralInfo ~ queryString:",
