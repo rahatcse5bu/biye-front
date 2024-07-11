@@ -20,6 +20,7 @@ import DoubleRangeSlider from "../DoubleRangeSlider/DoubleRangeSlider";
 
 const BioDataFilter = () => {
   const { setQuery } = useContext(BioContext);
+  const [openAccordions, setOpenAccordions] = useState({});
   const [searchParams] = useSearchParams();
   const [open, setOpen] = useState(3);
   const [bioType, setBioType] = useState("");
@@ -45,6 +46,20 @@ const BioDataFilter = () => {
   }, [searchParams]);
 
   useEffect(() => {
+    if (division || zilla) {
+      setOpenAccordions((prevState) => ({
+        ...prevState,
+        [1]: !prevState[1],
+      }));
+    }
+
+    if (maritalStatus || bioType) {
+      setOpenAccordions((prevState) => ({
+        ...prevState,
+        [3]: !prevState[3],
+      }));
+    }
+
     let queryObj = {};
     if (bioType) {
       queryObj = {
@@ -74,6 +89,8 @@ const BioDataFilter = () => {
     setQuery(queryObj);
   }, [bioType, division, maritalStatus, setQuery, zilla]);
 
+  // useEffect(() => {}, [division, zilla, maritalStatus, bioType]);
+
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
@@ -82,10 +99,18 @@ const BioDataFilter = () => {
     setValue(e.target.value);
   };
 
+  const handleToggle = (index) => {
+    setOpenAccordions((prevState) => ({
+      ...prevState,
+      [index]: !prevState[index],
+    }));
+  };
+
   return (
     <List className=" lg:h-[80vh] h-auto overflow-auto overflow-x-hidden">
       <Accordion
-        open={open === 3}
+        // open={open === 3}
+        open={openAccordions["3"]}
         icon={
           <ChevronDownIcon
             strokeWidth={2.5}
@@ -95,9 +120,9 @@ const BioDataFilter = () => {
           />
         }
       >
-        <ListItem className="p-0 " selected={open === 1}>
+        <ListItem className="p-0 " selected={openAccordions["3"]}>
           <AccordionHeader
-            onClick={() => handleOpen(3)}
+            onClick={() => handleToggle(3)}
             className="p-3 border-b-0"
           >
             <Typography color="gray" className="mr-auto font-normal">
@@ -190,7 +215,8 @@ const BioDataFilter = () => {
         </AccordionBody>
       </Accordion>
       <Accordion
-        open={open === 1}
+        // open={open === 1}
+        open={openAccordions["1"]}
         icon={
           <ChevronDownIcon
             strokeWidth={2.5}
@@ -200,9 +226,9 @@ const BioDataFilter = () => {
           />
         }
       >
-        <ListItem className="p-0 " selected={open === 1}>
+        <ListItem className="p-0 " selected={openAccordions["3"]}>
           <AccordionHeader
-            onClick={() => handleOpen(1)}
+            onClick={() => handleToggle(1)}
             className="p-3 border-b-0"
           >
             <Typography color="blue-gray" className="mr-auto font-normal">
@@ -309,7 +335,8 @@ const BioDataFilter = () => {
         </AccordionBody>
       </Accordion>
       <Accordion
-        open={open === 2}
+        // open={open === 2}
+        open={openAccordions["2"]}
         icon={
           <ChevronDownIcon
             strokeWidth={2.5}
@@ -321,7 +348,7 @@ const BioDataFilter = () => {
       >
         <ListItem className="p-0" selected={open === 2}>
           <AccordionHeader
-            onClick={() => handleOpen(2)}
+            onClick={() => handleToggle(2)}
             className="p-3 border-b-0"
           >
             <Typography color="blue-gray" className="mr-auto font-normal">
@@ -637,7 +664,8 @@ const BioDataFilter = () => {
         </AccordionBody>
       </Accordion>
       <Accordion
-        open={open === 4}
+        // open={open === 4}
+        open={openAccordions["4"]}
         icon={
           <ChevronDownIcon
             strokeWidth={2.5}
@@ -649,7 +677,7 @@ const BioDataFilter = () => {
       >
         <ListItem className="p-0" selected={open === 4}>
           <AccordionHeader
-            onClick={() => handleOpen(4)}
+            onClick={() => handleToggle(4)}
             className="p-3 border-b-0"
           >
             <Typography color="blue-gray" className="mr-auto font-normal">
@@ -1037,7 +1065,8 @@ const BioDataFilter = () => {
         </AccordionBody>
       </Accordion>
       <Accordion
-        open={open === 5}
+        // open={open === 5}
+        open={openAccordions["5"]}
         icon={
           <ChevronDownIcon
             strokeWidth={2.5}
@@ -1049,7 +1078,7 @@ const BioDataFilter = () => {
       >
         <ListItem className="p-0" selected={open === 5}>
           <AccordionHeader
-            onClick={() => handleOpen(5)}
+            onClick={() => handleToggle(5)}
             className="p-3 border-b-0"
           >
             <Typography color="blue-gray" className="mr-auto font-normal">
@@ -1538,7 +1567,8 @@ const BioDataFilter = () => {
       </Accordion>
 
       <Accordion
-        open={open === 6}
+        // open={open === 6}
+        open={openAccordions["6"]}
         icon={
           <ChevronDownIcon
             strokeWidth={2.5}
@@ -1550,7 +1580,7 @@ const BioDataFilter = () => {
       >
         <ListItem className="p-0" selected={open === 6}>
           <AccordionHeader
-            onClick={() => handleOpen(6)}
+            onClick={() => handleToggle(6)}
             className="p-3 border-b-0"
           >
             <Typography color="blue-gray" className="mr-auto font-normal">
