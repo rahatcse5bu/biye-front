@@ -1,12 +1,12 @@
 import BioDatasGrid from "../../components/BioDatasGrid/BioDatasGrid";
 import { SideBar } from "../../components/SideBar/SideBar";
 import { useContext, useState } from "react";
-import BioContext from "../../contexts/BioContext";
+import BioContext, { useBio } from "../../contexts/BioContext";
 import { FaXmark } from "react-icons/fa6";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 
 const BioDatas = () => {
-  const { bioLoading } = useContext(BioContext);
+  const { bioLoading } = useBio();
   const [sideBarDisplay, setSideBarDisplay] = useState(false);
   return (
     <div className="relative flex items-start">

@@ -15,13 +15,21 @@ import { Colors } from "../../constants/colors";
 import { AiOutlineDelete, AiOutlineSearch } from "react-icons/ai";
 import { useContext } from "react";
 import BioContext from "../../contexts/BioContext";
-import { useSearchParams } from "react-router-dom";
-import DoubleRangeSlider from "../DoubleRangeSlider/DoubleRangeSlider";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { convertToQuery } from "../../utils/query";
+import PrimaryFilter from "./PrimaryFilter";
+import { useQuery } from "@tanstack/react-query";
+import AddressFilter from "./AddressFilter";
 
 const BioDataFilter = () => {
   const { setQuery } = useContext(BioContext);
-  const [openAccordions, setOpenAccordions] = useState({});
-  const [searchParams] = useSearchParams();
+  const [openAccordions, setOpenAccordions] = useState({
+    3: true,
+  });
+  const navigate = useNavigate();
+  const [searchParams, currentQueryParameters, setSearchParams] =
+    useSearchParams();
+  const newQueryParameters = new URLSearchParams();
   const [open, setOpen] = useState(3);
   const [bioType, setBioType] = useState("");
   const [maritalStatus, setMaritalStatus] = useState("");
@@ -36,6 +44,7 @@ const BioDataFilter = () => {
     max: 30,
   });
   const [value, setValue] = useState(50);
+
   // console.log("searchParams~", searchParams.get("marital_status"));
 
   useEffect(() => {
@@ -49,14 +58,14 @@ const BioDataFilter = () => {
     if (division || zilla) {
       setOpenAccordions((prevState) => ({
         ...prevState,
-        [1]: !prevState[1],
+        [1]: true,
       }));
     }
 
     if (maritalStatus || bioType) {
       setOpenAccordions((prevState) => ({
         ...prevState,
-        [3]: !prevState[3],
+        [3]: true,
       }));
     }
 
@@ -73,19 +82,8 @@ const BioDataFilter = () => {
         marital_status: maritalStatus,
       };
     }
-    if (division) {
-      queryObj = {
-        ...queryObj,
-        division: division,
-      };
-    }
 
-    if (zilla) {
-      queryObj = {
-        ...queryObj,
-        zilla: zilla,
-      };
-    }
+    // const queryString = convertToQuery(queryObj);
     setQuery(queryObj);
   }, [bioType, division, maritalStatus, setQuery, zilla]);
 
@@ -106,234 +104,34 @@ const BioDataFilter = () => {
     }));
   };
 
+  // console.log("openAccordions~~", openAccordions);
   return (
-    <List className=" lg:h-[80vh] h-auto overflow-auto overflow-x-hidden">
-      <Accordion
-        // open={open === 3}
-        open={openAccordions["3"]}
-        icon={
-          <ChevronDownIcon
-            strokeWidth={2.5}
-            className={`mx-auto h-4 w-4  transition-transform ${
-              open === 3 ? "rotate-180" : ""
-            }`}
-          />
-        }
-      >
-        <ListItem className="p-0 " selected={openAccordions["3"]}>
-          <AccordionHeader
-            onClick={() => handleToggle(3)}
-            className="p-3 border-b-0"
-          >
-            <Typography color="gray" className="mr-auto font-normal">
-              প্রাথমিক
-            </Typography>
-          </AccordionHeader>
-        </ListItem>
-        <AccordionBody className="py-1 my-2 ">
-          <div className="lg:w-64 w-full">
-            <label
-              htmlFor="select"
-              className="block my-2 text-sm font-bold text-left text-gray-700"
-            >
-              আমি খুজছি
-            </label>
-            <div className="relative">
-              <select
-                id="select"
-                name="select"
-                onChange={(e) => setBioType(e.target.value)}
-                value={bioType}
-                className="block w-full px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
-              >
-                <option value="">সকল</option>
-                <option value="পাত্রের বায়োডাটা">পাত্রের বায়োডাটা</option>
-                <option value="পাত্রীর বায়োডাটা"> পাত্রীর বায়োডাটা </option>
-              </select>
-              <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
-                <svg
-                  className="w-4 h-4 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M6.293 9.293a1 1 0 011.414 0L10 11.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" />
-                </svg>
-              </div>
-            </div>
-          </div>
+    <List className=" lg:min-h-[80vh] lg:max-h-[200vh] h-auto overflow-auto overflow-x-hidden">
+      <PrimaryFilter
+        openAccordions={openAccordions}
+        handleToggle={handleToggle}
+        setBioType={setBioType}
+        bioType={bioType}
+        maritalStatus={maritalStatus}
+        setMaritalStatus={setMaritalStatus}
+        age={age}
+        setAge={setAge}
+        height={height}
+        setHeight={setHeight}
+        setSearchParams={setSearchParams}
+        newQueryParameters={newQueryParameters}
+        setOpenAccordions={setOpenAccordions}
+      />
 
-          <div className="lg:w-64 w-full">
-            <label
-              htmlFor="select"
-              className="block my-2 text-sm font-bold text-left text-gray-700"
-            >
-              বৈবাহিক অবস্থা
-            </label>
-            <div className="relative">
-              <select
-                id="select"
-                name="select"
-                value={maritalStatus}
-                onChange={(e) => setMaritalStatus(e.target.value)}
-                className="block w-full px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
-              >
-                <option value="">সকল</option>
-                <option value="অবিবাহিত"> অবিবাহিত </option>
-                <option value="বিবাহিত">বিবাহিত</option>
-                <option value="বিবাহিত"> ডিভোর্সড</option>
-                <option value="বিধবা">বিধবা</option>
-                <option value="বিপত্নীক">বিপত্নীক </option>
-              </select>
-              <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
-                <svg
-                  className="w-4 h-4 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M6.293 9.293a1 1 0 011.414 0L10 11.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-          <div className="px-2">
-            <label className="text-left text-gray-500 mt-4 mb-5 font-bold block">
-              বয়স
-            </label>
-            <DoubleRangeSlider value={age} setValue={setAge} />
-          </div>
-          <div className="lg:w-64 w-full px-2 py-2">
-            <DoubleRangeSlider
-              value={height}
-              setValue={setHeight}
-              maxValue={7.0}
-              minValue={4.5}
-              step={0.1}
-              title="উচ্চতা"
-              subtitle="5.1 বোঝায় ৫ ফুট ১ ইঞ্চি "
-            />
-          </div>
-        </AccordionBody>
-      </Accordion>
-      <Accordion
-        // open={open === 1}
-        open={openAccordions["1"]}
-        icon={
-          <ChevronDownIcon
-            strokeWidth={2.5}
-            className={`mx-auto h-4 w-4 transition-transform ${
-              open === 1 ? "rotate-180" : ""
-            }`}
-          />
-        }
-      >
-        <ListItem className="p-0 " selected={openAccordions["3"]}>
-          <AccordionHeader
-            onClick={() => handleToggle(1)}
-            className="p-3 border-b-0"
-          >
-            <Typography color="blue-gray" className="mr-auto font-normal">
-              ঠিকানা
-            </Typography>
-          </AccordionHeader>
-        </ListItem>
-        <AccordionBody className="py-1">
-          <div>
-            <p className="my-2 font-semibold text-left ">স্থায়ী ঠিকানা </p>
-            <div className="lg:w-64 w-full">
-              <div className="relative">
-                <select
-                  id="select"
-                  name="select"
-                  className="block w-full px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
-                >
-                  <option value="সকল">বিভাগ নির্বাচন করুন</option>
-                  <option value="পাত্রের">বরিশাল</option>
-                  <option value="পাত্রীর"> ঢাকা </option>
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
-                  <svg
-                    className="w-4 h-4 fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M6.293 9.293a1 1 0 011.414 0L10 11.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div className="lg:w-64 w-full my-5">
-              <div className="relative">
-                <select
-                  id="select১"
-                  name="select১"
-                  className="block w-full px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
-                >
-                  <option value="সকল">জেলা নির্বাচন করুন</option>
-                  <option value="পাত্রের">বরিশাল</option>
-                  <option value="পাত্রীর"> ঢাকা </option>
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
-                  <svg
-                    className="w-4 h-4 fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M6.293 9.293a1 1 0 011.414 0L10 11.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
+      <AddressFilter
+        handleToggle={handleToggle}
+        openAccordions={openAccordions}
+        division={division}
+        zilla={zilla}
+        setDivision={setDivision}
+        setZilla={setZilla}
+      />
 
-          <div>
-            <p className="my-2 font-semibold text-left "> বর্তমান ঠিকানা </p>
-            <div className="lg:w-64 w-full">
-              <div className="relative">
-                <select
-                  id="select"
-                  name="select"
-                  className="block w-full px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
-                >
-                  <option value="সকল">বিভাগ নির্বাচন করুন</option>
-                  <option value="পাত্রের">বরিশাল</option>
-                  <option value="পাত্রীর"> ঢাকা </option>
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
-                  <svg
-                    className="w-4 h-4 fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M6.293 9.293a1 1 0 011.414 0L10 11.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div className="lg:w-64 w-full my-5">
-              <div className="relative">
-                <select
-                  id="select১"
-                  name="select১"
-                  className="block w-full px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
-                >
-                  <option value="সকল">জেলা নির্বাচন করুন</option>
-                  <option value="পাত্রের">বরিশাল</option>
-                  <option value="পাত্রীর"> ঢাকা </option>
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
-                  <svg
-                    className="w-4 h-4 fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M6.293 9.293a1 1 0 011.414 0L10 11.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-        </AccordionBody>
-      </Accordion>
       <Accordion
         // open={open === 2}
         open={openAccordions["2"]}

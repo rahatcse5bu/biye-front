@@ -109,12 +109,12 @@ const BioData = () => {
   // console.log(data);
   // console.log(error);
 
-  console.log(
-    "userInfo?.data?.user_id,id~~~",
-    id,
-    +userInfo?.data?.user_id,
-    id && +id !== +userInfo?.data?.user_id
-  );
+  // console.log(
+  //   "userInfo?.data?.user_id,id~~~",
+  //   id,
+  //   +userInfo?.data?.user_id,
+  //   id && +id !== +userInfo?.data?.user_id
+  // );
 
   return (
     <div className=" py-2 w-full  ">

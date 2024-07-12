@@ -38,6 +38,7 @@ export const BioProvider = ({ children }) => {
     bioLoading,
     bioError,
     setQuery,
+    query,
   };
   // console.log("Bios-from-db~", bios);
   // console.log("Size-from-db~", bios?.size);

@@ -88,7 +88,7 @@ const BioData = ({ biodata }) => {
         const response = await GeneralInfoServices.updateWatchOfBioData(
           biodata?._id
         );
-        console.log("watch-response", response);
+        // console.log("watch-response", response);
       } catch (error) {
         console.error("Error incrementing view count", error);
       }

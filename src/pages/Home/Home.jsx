@@ -2,7 +2,7 @@ import "../../assets/styles/home.css";
 import { Colors } from "../../constants/colors";
 import FeaturedBioDataGrid from "../../components/FeaturedBioDataGrid/FeaturedBioDataGrid";
 import HadithSlider from "../../components/HadithSlider/HadithSlider";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { BioDataServices } from "../../services/bioData";
 import { useNavigate } from "react-router-dom";
 import { convertToQuery } from "../../utils/query";
@@ -15,7 +15,7 @@ import { useBio } from "../../contexts/BioContext";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { setQuery } = useBio();
+  const { setQuery, query } = useBio();
   const [selectedDivisions, setSelectedDivisions] = useState([]);
   const [selectedDistricts, setSelectedDistricts] = useState([]);
   // const [divisionOptions, setDivisionOptions] = useState([]);
@@ -124,19 +124,17 @@ const Home = () => {
       districtValues.push(...allDistricts);
     }
 
-    const query = {
+    const filterQuery = {
       marital_status,
       bio_type,
       zilla: districtValues.join(","),
       division: divisionValues.join(","),
+      ...query,
     };
 
-    setQuery((prev) => ({
-      ...prev,
-      ...query,
-    }));
+    setQuery(filterQuery);
 
-    const queryString = convertToQuery(query);
+    const queryString = convertToQuery(filterQuery);
     navigate(`/biodatas?${queryString}`);
   };
 
