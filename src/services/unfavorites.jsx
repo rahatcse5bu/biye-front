@@ -51,6 +51,32 @@ const getUserDisLikesList = async (token) => {
   });
   return response.data;
 };
+
+const getMyDisLikesList = async (token) => {
+  if (!token) {
+    return null;
+  }
+  const response = await axios.get(`${baseUrl}/un-favorites`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+const getDisLikesListByUser = async (token, bio_user) => {
+  if (!token) {
+    return null;
+  }
+  const response = await axios.get(
+    `${baseUrl}/un-favorites/bio-user/${bio_user}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
 const getUserDisLikesByWhoList = async (token) => {
   if (!token) {
     return null;
@@ -69,4 +95,6 @@ export const DisLikesServices = {
   getUserDisLikesList,
   getUserDisLikesByWhoList,
   checkDisLikes,
+  getMyDisLikesList,
+  getDisLikesListByUser,
 };

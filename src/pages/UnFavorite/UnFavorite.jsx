@@ -9,8 +9,22 @@ import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 import { formatDate, getDateMonthYear } from "../../utils/date";
 import { useNavigate } from "react-router-dom";
 import "./UnFavorite.css";
+import UserContext from "../../contexts/UserContext";
+import { useContext } from "react";
+import { BioDataServices } from "../../services/bioData";
 const DisLikeItem = ({ item, index, unFavoritesByWho }) => {
   const navigate = useNavigate();
+
+  const { data } = useQuery({
+    queryKey: ["bio-data", "stat", item?.bio_user],
+    queryFn: async () => {
+      return await BioDataServices.getBioDataStatistics(item?.bio_user);
+    },
+    retry: false,
+    enabled: !!item?.bio_user,
+  });
+  const total =
+    data?.results.approved + data?.results.pending + data?.results.rejected;
 
   // console.log("favorite-item", data);
   const viewButtonHandler = () => {
@@ -19,34 +33,25 @@ const DisLikeItem = ({ item, index, unFavoritesByWho }) => {
   return (
     <tr className="border-b">
       <td className="px-4 py-2 text-center border-l w-1/9">{index + 1}</td>
-      <td className="px-4 py-2 text-center border-l w-1/9">
-        {unFavoritesByWho ? item?.user_id : item?.bio_id}
-      </td>
+      <td className="px-4 py-2 text-center border-l w-1/9">{item?.bio_id}</td>
       <td className="px-4 py-2 text-center border-l w-1/9">
         {formatDate(getDateMonthYear(item?.date_of_birth))}
       </td>
       <td className="px-4 py-2 text-center border-l w-1/9">
         {item?.permanent_address}
       </td>
+      <td className="px-4 py-2 text-center border-l w-1/9">{total}</td>
       <td className="px-4 py-2 text-center border-l w-1/9">
-        {item?.total_count}
+        {data?.results.approvedPercentage}%
       </td>
       <td className="px-4 py-2 text-center border-l w-1/9">
-        {(item?.approval_rate * 1).toFixed(2)}%
+        {data?.results.rejectedPercentage}%
       </td>
       <td className="px-4 py-2 text-center border-l w-1/9">
-        {(item?.rejection_rate * 1).toFixed(2)}%
+        {data?.results.pending}
       </td>
       <td className="px-4 py-2 text-center border-l w-1/9">
-        {item?.total_pending}
-      </td>
-      <td className="px-4 py-2 text-center border-l w-1/9">
-        <Button
-          onClick={viewButtonHandler}
-          color="green"
-          size="xs"
-          className="mr-2"
-        >
+        <Button onClick={viewButtonHandler} color="green" className="mr-2">
           <FaEye size={12} />
         </Button>
       </td>
@@ -55,23 +60,29 @@ const DisLikeItem = ({ item, index, unFavoritesByWho }) => {
 };
 
 const UnFavorite = () => {
+  const { userInfo } = useContext(UserContext);
+
   const { data, isLoading } = useQuery({
-    queryKey: ["dis-likes", "user", "all"],
+    queryKey: ["my-dis-likes", getToken().token],
     queryFn: async () => {
-      return await DisLikesServices.getUserDisLikesList(getToken().token);
+      return await DisLikesServices.getMyDisLikesList(getToken().token);
     },
     retry: false,
   });
-  const { data: unFavoritesByWho, isLoading: unFavoritesByWhoLoading } =
+  const { data: unFavoritesByUser, isLoading: unFavoritesByWhoLoading } =
     useQuery({
-      queryKey: ["dis-likes-who"],
+      queryKey: ["user-dis-likes", userInfo?.data?._id],
       queryFn: async () => {
-        return await DisLikesServices.getUserDisLikesByWhoList(
-          getToken().token
+        return await DisLikesServices.getDisLikesListByUser(
+          getToken().token,
+          userInfo?.data?._id
         );
       },
       retry: false,
     });
+
+  // console.log("data~~", data);
+  // console.log("unFavoritesByWho~~", unFavoritesByUser);
   if (isLoading) {
     return <LoadingCircle />;
   }
@@ -153,7 +164,7 @@ const UnFavorite = () => {
                   {unFavoritesByWhoLoading ? (
                     <LoadingCircle />
                   ) : (
-                    unFavoritesByWho?.data?.map((item, index) => {
+                    unFavoritesByUser?.data?.map((item, index) => {
                       return (
                         <DisLikeItem
                           item={item}

@@ -32,7 +32,7 @@ const ContactInfoForm = ({ userForm, setUserForm }) => {
   });
   const gender = generalInfo?.data?.gender || "";
 
-  console.log("gender~~", gender);
+  // console.log("gender~~", gender);
 
   const backButtonHandler = () => {
     if (userForm > 1) {
@@ -148,7 +148,7 @@ const ContactInfoForm = ({ userForm, setUserForm }) => {
             required
             value={phone}
             setValue={setPhone}
-            subtitle="কেউ আপনার অভিভাবকের সাথে যোগাযোগ করতে চাইলে এই নাম্বারটি দেয়া হবে। এই নাম্বারে কল দিয়ে ভেরিফাই করার পর বায়োডাটা এপ্রুভ করা হবে। এখানে <b>বন্ধু, কলিগ, কাজিন বা পাত্রপাত্রীর নিজের নাম্বার </b>
+            subtitle="কেউ আপনার অভিভাবকের সাথে যোগাযোগ করতে চাইলে এই নাম্বারটি দেয়া হবে। এই নাম্বারে কল দিয়ে ভেরিফাই করার পর বায়োডাটা এপ্রুভ করা হবে। এখানে বন্ধু, কলিগ, কাজিন বা পাত্রপাত্রীর নিজের নাম্বার 
         লিখলে বায়োডাটা স্থায়ীভাবে ব্যান করা হবে।"
           />
 

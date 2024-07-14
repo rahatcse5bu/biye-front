@@ -11,7 +11,7 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
 } from "firebase/auth";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
 import { auth } from "../firebase/app.jsx";
 
 // Create a new context instance
