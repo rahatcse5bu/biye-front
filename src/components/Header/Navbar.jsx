@@ -66,10 +66,10 @@ export default function NavBar() {
     queryFn: async () => {
       return await UserInfoServices.verifyTokenByUser(getToken()?.token);
     },
-    retry: true,
+    retry: false,
     enabled: !!getToken()?.token,
-    refetchInterval: 3600000, // every hour
-    // refetchInterval: 10000, // 10s
+    // refetchInterval: 3600000, // every hour
+    refetchInterval: 300000, // 10s
   });
   const logoutHandler = async () => {
     await logOut();
