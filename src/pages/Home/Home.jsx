@@ -423,7 +423,7 @@ const Home = () => {
           </button>
         </div>
         <a
-          href="https://pncsofttech.xyz"
+          href="https://pncsoft.tech"
           target="_blank"
           rel="noreferrer"
           className="absolute text-sm text-white bottom-4 right-4"
