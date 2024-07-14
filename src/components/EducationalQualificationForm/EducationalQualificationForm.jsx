@@ -676,6 +676,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
                     value={sscPassYear}
                     setValue={setSscPassYear}
+                    type="number"
                   />
                   <Select
                     title="বিভাগ"
@@ -690,6 +691,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     setValue={setSscResult}
                     options={result}
                     required
+                    type="number"
                   />
                   <Select
                     title=" এইচ.এস.সি / আলিম / সমমান কোন বর্ষে পড়ছেন ?"
@@ -705,6 +707,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
                     value={sscPassYear}
                     setValue={setSscPassYear}
+                    type="number"
                   />
                   <Select
                     title="বিভাগ"
@@ -724,6 +727,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     title="এইচ.এস.সি / আলিম / সমমান পাসের সন "
                     value={hscPassYear}
                     setValue={setHscPassYear}
+                    type="number"
                   />
                   <Select
                     title="বিভাগ"
@@ -738,6 +742,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     setValue={setHscResult}
                     options={result}
                     required
+                    type="number"
                   />
                 </>
               ) : maxEdu === "ডিপ্লোমা চলমান" ? (
@@ -759,6 +764,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={sscResult}
                     setValue={setSscResult}
                     options={result}
+                    type="number"
                     required
                   />
 
@@ -788,6 +794,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
                     value={sscPassYear}
                     setValue={setSscPassYear}
+                    type="number"
                   />
                   <Select
                     title="বিভাগ"
@@ -802,6 +809,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     setValue={setSscResult}
                     options={result}
                     required
+                    type="number"
                   />
 
                   <Input
@@ -822,6 +830,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={diplomaPassYear}
                     setValue={setDiplomaPassYear}
                     placeholder="২০১৬"
+                    type="number"
                   />
                 </>
               ) : maxEdu === "স্নাতক চলমান" ? (
@@ -830,6 +839,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
                     value={sscPassYear}
                     setValue={setSscPassYear}
+                    type="number"
                     required
                   />
                   <Select
@@ -844,6 +854,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={sscResult}
                     setValue={setSscResult}
                     options={result}
+                    type="number"
                     required
                   />
                   <Select
@@ -876,6 +887,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                         setValue={setDiplomaPassYear}
                         placeholder=""
                         required
+                        type="number"
                       />
                     </>
                   ) : (
@@ -885,6 +897,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                         value={hscPassYear}
                         setValue={setHscPassYear}
                         required
+                        type="number"
                       />
                       <Select
                         title="বিভাগ"
@@ -898,6 +911,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                         value={hscResult}
                         setValue={setHscResult}
                         options={result}
+                        type="number"
                         required
                       />{" "}
                     </>
@@ -931,6 +945,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={sscPassYear}
                     setValue={setSscPassYear}
                     required
+                    type="number"
                   />
                   <Select
                     title="বিভাগ"
@@ -944,6 +959,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={sscResult}
                     setValue={setSscResult}
                     options={result}
+                    type="number"
                     required
                   />
                   <Select
@@ -975,6 +991,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                         value={diplomaPassYear}
                         setValue={setDiplomaPassYear}
                         placeholder=""
+                        type="number"
                         required
                       />
                     </>
@@ -984,6 +1001,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                         title="এইচ.এস.সি / আলিম / সমমান পাসের সন "
                         value={hscPassYear}
                         setValue={setHscPassYear}
+                        type="number"
                         required
                       />
                       <Select
@@ -998,6 +1016,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                         value={hscResult}
                         setValue={setHscResult}
                         options={result}
+                        type="number"
                         required
                       />{" "}
                     </>
@@ -1021,6 +1040,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={bscPassYear}
                     setValue={setBscPassYear}
                     placeholder="২০১৬"
+                    type="number"
                     required
                   />
                 </>
@@ -1030,6 +1050,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
                     value={sscPassYear}
                     setValue={setSscPassYear}
+                    type="number"
                     required
                   />
                   <Select
@@ -1044,6 +1065,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={sscResult}
                     setValue={setSscResult}
                     options={result}
+                    type="number"
                     required
                   />
                   <Select
@@ -1075,6 +1097,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                         value={diplomaPassYear}
                         setValue={setDiplomaPassYear}
                         placeholder=""
+                        type="number"
                         required
                       />
                     </>
@@ -1084,6 +1107,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                         title="এইচ.এস.সি / আলিম / সমমান পাসের সন "
                         value={hscPassYear}
                         setValue={setHscPassYear}
+                        type="number"
                         required
                       />
                       <Select
@@ -1098,6 +1122,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                         value={hscResult}
                         setValue={setHscResult}
                         options={result}
+                        type="number"
                         required
                       />{" "}
                     </>
@@ -1120,6 +1145,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     title="পাসের সন "
                     value={bscPassYear}
                     setValue={setBscPassYear}
+                    type="number"
                     placeholder="২০১৬"
                     required
                   />
@@ -1144,7 +1170,8 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     title="পাসের সন"
                     value={mscPassYear}
                     setValue={setMscPassYear}
-                    placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
+                    placeholder="2021"
+                    type="number"
                     // required
                   />
                 </>
@@ -1155,6 +1182,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                       title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
                       value={sscPassYear}
                       setValue={setSscPassYear}
+                      type="number"
                       required
                     />
                     <Select
@@ -1168,6 +1196,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                       title="ফলাফল"
                       value={sscResult}
                       setValue={setSscResult}
+                      type="number"
                       options={result}
                       required
                     />
@@ -1200,6 +1229,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                           value={diplomaPassYear}
                           setValue={setDiplomaPassYear}
                           placeholder=""
+                          type="number"
                           required
                         />
                       </>
@@ -1209,6 +1239,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                           title="এইচ.এস.সি / আলিম / সমমান পাসের সন "
                           value={hscPassYear}
                           setValue={setHscPassYear}
+                          type="number"
                           required
                         />
                         <Select
@@ -1223,6 +1254,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                           value={hscResult}
                           setValue={setHscResult}
                           options={result}
+                          type="number"
                           required
                         />{" "}
                       </>
@@ -1247,6 +1279,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                       setValue={setBscPassYear}
                       placeholder="২০১৬"
                       required
+                      type="number"
                     />
 
                     <Input
@@ -1269,7 +1302,8 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                       title="পাসের সন"
                       value={mscPassYear}
                       setValue={setMscPassYear}
-                      placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
+                      type="number"
+                      placeholder="2024"
                       // required
                     />
 
@@ -1294,6 +1328,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                       value={phdPassYear}
                       setValue={setPhdPassYear}
                       placeholder=""
+                      type="number"
                       required
                     />
                   </>
@@ -1326,12 +1361,14 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={ibtiResult}
                     setValue={setIbtiResult}
                     options={qawmiResult}
+                    type="number"
                     required
                   />
                   <Input
                     title="পাসের সন"
                     value={ibtiPassYear}
                     setValue={setIbtiPassYear}
+                    type="number"
                     required
                   />
                 </>
@@ -1349,12 +1386,14 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={mutawasResult}
                     setValue={setMutawasResult}
                     options={qawmiResult}
+                    type="number"
                     required
                   />
                   <Input
                     title="পাসের সন"
                     value={mutawasPassYear}
                     setValue={setMutawasPassYear}
+                    type="number"
                     required
                   />
                 </>
@@ -1372,12 +1411,14 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={sanabiyaResult}
                     setValue={setSanabiyaResult}
                     options={qawmiResult}
+                    type="number"
                     required
                   />
                   <Input
                     title="পাসের সন"
                     value={sanabiyaPassYear}
                     setValue={setSanabiyaPassYear}
+                    type="number"
                     required
                   />
                 </>
@@ -1395,12 +1436,14 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={fozilatResult}
                     setValue={setFozilatResult}
                     options={qawmiResult}
+                    type="number"
                     required
                   />
                   <Input
                     title="পাসের সন"
                     value={fozilatPassYear}
                     setValue={setFozilatPassYear}
+                    type="number"
                     required
                   />
                 </>
@@ -1418,12 +1461,14 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={takmilResult}
                     setValue={setTakmilResult}
                     options={qawmiResult}
+                    type="number"
                     required
                   />
                   <Input
                     title="পাসের সন"
                     value={takmilPassYear}
                     setValue={setTakmilPassYear}
+                    type="number"
                     required
                   />
                 </>
@@ -1441,12 +1486,14 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={takmilResult}
                     setValue={setTakmilResult}
                     options={qawmiResult}
+                    type="number"
                     required
                   />
                   <Input
                     title="পাসের সন"
                     value={takmilPassYear}
                     setValue={setTakmilPassYear}
+                    type="number"
                     required
                   />
                   <Input
@@ -1466,12 +1513,14 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     value={takhassusResult}
                     setValue={setTakhassusResult}
                     options={qawmiResult}
+                    type="number"
                     required
                   />
                   <Input
                     title="পাসের সন"
                     value={takhassusPassYear}
                     setValue={setTakhassusPassYear}
+                    type="number"
                     required
                   />
                 </>
