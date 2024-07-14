@@ -676,6 +676,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
                     value={sscPassYear}
                     setValue={setSscPassYear}
+                    type="number"
                   />
                   <Select
                     title="বিভাগ"
@@ -705,6 +706,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
                     value={sscPassYear}
                     setValue={setSscPassYear}
+                    type="number"
                   />
                   <Select
                     title="বিভাগ"
@@ -724,6 +726,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     title="এইচ.এস.সি / আলিম / সমমান পাসের সন "
                     value={hscPassYear}
                     setValue={setHscPassYear}
+                    type="number"
                   />
                   <Select
                     title="বিভাগ"

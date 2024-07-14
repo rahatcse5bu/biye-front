@@ -139,7 +139,6 @@ const AddressInfoForm = ({ userForm, setUserForm }) => {
       city: district,
       permanent_area: area,
       present_area: isCheck ? area : pArea,
-      zip: 1,
     };
 
     if (!getToken()?.token) {
