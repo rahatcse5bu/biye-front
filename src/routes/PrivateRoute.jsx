@@ -5,8 +5,7 @@ import LoadingCircle from "../components/LoadingCircle/LoadingCircle";
 import UserContext from "../contexts/UserContext";
 
 const PrivateRoute = ({ children }) => {
-  const { userInfo, userLoading, user, userInfoFetchLoading } =
-    useContext(UserContext);
+  const { userLoading, user } = useContext(UserContext);
   const location = useLocation();
 
   if (userLoading) {

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { Colors } from "../../constants/colors";
+import { ContactServices } from "../../services/contact";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -29,9 +29,11 @@ const ContactUs = () => {
     setErrorMessage("");
     setSuccessMessage("");
 
+    console.log("formData~~", formData);
+
     try {
-      const response = await axios.post("/api/contact", formData);
-      if (response.status === 200) {
+      const response = await ContactServices.createContactUsByEmail(formData);
+      if (response.success === true) {
         setSuccessMessage("Your message has been sent successfully.");
         setFormData({
           name: "",
@@ -55,7 +57,7 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="bg-gray-400 py-16">
+    <div className="bg-gray-100 py-16">
       <div className="container mx-auto p-4">
         <h1
           className="text-3xl font-semibold mb-4 text-center"
@@ -63,16 +65,16 @@ const ContactUs = () => {
         >
           যোগাযোগ করুন
         </h1>
-        <div className="text-center">
+        <div className="text-center mb-8">
           <p className="text-gray-700 text-xl md:text-2xl lg:text-3xl">
             আপনার যে কোন জিজ্ঞাসা, নিম্নোক্ত ফর্মে পূরণ করে আমাদের কাছে পাঠিয়ে
-            দিন।{" "}
+            দিন।
           </p>
           <p className="text-gray-700 text-xl md:text-2xl lg:text-3xl">
-            আমরা শীঘ্রই আপনার সাথে যোগাযোগ করবো ইন শা আল্লাহ।{" "}
+            আমরা শীঘ্রই আপনার সাথে যোগাযোগ করবো ইন শা আল্লাহ।
           </p>
         </div>
-        <div className="max-w-lg mx-auto px-8 py-8">
+        <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-8">
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label
@@ -175,7 +177,7 @@ const ContactUs = () => {
             <div className="text-center">
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-600 transition duration-300"
+                className="text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-600 transition duration-300"
                 style={{
                   background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
                 }}
