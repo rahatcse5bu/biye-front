@@ -152,6 +152,7 @@ const Footer = () => {
 					{" "}
 					Copyright © 2023 by PNC Nikah | PNC Soft Tech{" "}
 				</p>
+				<div className="powr-hit-counter" id="2c3bf98a_1720928514"></div><script src="https://www.powr.io/powr.js?platform=html"></script>
 			</div>
 		</div>
 	);
