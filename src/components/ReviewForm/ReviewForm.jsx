@@ -50,6 +50,7 @@ const ReviewForm = () => {
           <button
             type="submit"
             className="px-4 py-2 text-white rounded-md"
+            onClick={() => submitReviewButtonHandler("in review")}
             style={{
               background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
             }}
@@ -66,19 +67,26 @@ const ReviewForm = () => {
           >
             {loading ? <LoadingCircle /> : " Submit for Inactive"}
           </button>
+        ) : userStatus?.data?.user_status === "inactive" ? (
+          <button
+            onClick={() => submitReviewButtonHandler("in review")}
+            className="px-4 py-2 text-white capitalize font-medium rounded-md disabled:cursor-not-allowed"
+            style={{
+              background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
+            }}
+          >
+            {loading ? <LoadingCircle /> : " Submit for review"}
+          </button>
         ) : (
-          userStatus?.data?.user_status === "inactive" && (
-            <button
-              onClick={() => submitReviewButtonHandler("active")}
-              className="px-4 py-2 text-white capitalize font-medium rounded-md disabled:cursor-not-allowed"
-              style={{
-                background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
-              }}
-            >
-              {loading ? <LoadingCircle /> : " Submit for active"}
-            </button>
+          userStatus?.data?.user_status === "in review" && (
+            <div className="bg-gray-100 border border-gray-300 rounded-lg p-6 my-4 text-lg text-gray-800 text-center shadow-sm">
+              <strong className="text-red-600">
+                Your bio data is currently in review. You will be notified when
+                your status changes.
+              </strong>
+            </div>
           )
-        )}{" "}
+        )}
       </div>
     </div>
   );

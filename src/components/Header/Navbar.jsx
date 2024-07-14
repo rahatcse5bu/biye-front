@@ -66,7 +66,7 @@ export default function NavBar() {
     queryFn: async () => {
       return await UserInfoServices.verifyTokenByUser(getToken()?.token);
     },
-    retry: false,
+    retry: true,
     enabled: !!getToken()?.token,
     refetchInterval: 3600000, // every hour
     // refetchInterval: 10000, // 10s

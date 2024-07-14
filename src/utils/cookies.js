@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 const setToken = (data) => {
-  Cookies.set("pnc-nikha-tokenInfo", JSON.stringify(data), { expires: 7 });
+  Cookies.set("pnc-nikha-tokenInfo", JSON.stringify(data));
 };
 
 const getToken = () => {
