@@ -168,7 +168,7 @@ const BioData = () => {
             Number(id) !== Number(userInfo?.data?.user_id) ? (
               <ContactInfo contact={contact?.data} status={userStatus?.data} />
             ) : (
-              <Contact />
+              userInfo?.data?.user_id && <Contact />
             )}
           </div>
         </div>
