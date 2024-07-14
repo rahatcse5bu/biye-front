@@ -110,11 +110,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/contact-us",
-        element: (
-          <PrivateRoute>
-            <ContactUs />
-          </PrivateRoute>
-        ),
+        element: <ContactUs />,
       },
       {
         path: "/forgot-password",

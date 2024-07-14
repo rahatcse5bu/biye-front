@@ -30,13 +30,21 @@ const createContact = async (data, token) => {
   if (!token) {
     return null;
   }
-  const generalInfo = await axios.post(baseUrl + "/contact", data, {
+  const contact = await axios.post(baseUrl + "/contact", data, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   });
-  return generalInfo.data;
+  return contact.data;
+};
+const createContactUsByEmail = async (data) => {
+  const contact = await axios.post(baseUrl + "/contact/send-email", data, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return contact.data;
 };
 
 const getContactForBuyer = async (userId, bioId, token) => {
@@ -59,4 +67,5 @@ export const ContactServices = {
   getContactByUser,
   updateContact,
   createContact,
+  createContactUsByEmail,
 };

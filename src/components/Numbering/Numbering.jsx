@@ -29,7 +29,7 @@ const Numbering = ({ setUserForm, userForm }) => {
     queryFn: async () => {
       return await UserInfoServices.verifyTokenByUser(getToken()?.token);
     },
-    retry: false,
+    retry: true,
     enabled: !!getToken()?.token,
   });
 
@@ -37,6 +37,7 @@ const Numbering = ({ setUserForm, userForm }) => {
     const lastEditedIndex = userInfo?.data?.last_edited_timeline_index || 1;
     setUserForm(lastEditedIndex);
   }, [setUserForm, userInfo]);
+
   const logoutHandler = async () => {
     await logOut();
     removeToken();

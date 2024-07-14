@@ -16,6 +16,7 @@ function Payments() {
   const buyWithBkashHandler = async (value) => {
     if (!user?.email) {
       Toast.errorToast("Please Login");
+      return;
     }
     // console.log("location", location.pathname);
     if (+value >= 1) {
