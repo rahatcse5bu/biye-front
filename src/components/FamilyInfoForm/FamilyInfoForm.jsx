@@ -234,7 +234,7 @@ const FamilyInfoForm = ({ setUserForm, userForm }) => {
           {+numOfSister !== 0 && (
             <Textarea
               title="বোনদের তথ্য "
-              subtitle="শিক্ষাগত যোগ্যতা, বৈবাহিক অবস্থা এবং পেশা লিখবেন। একাধিক ভাই থাকলে কমা দিয়ে নিচের লাইনে লিখবেন।"
+              subtitle="শিক্ষাগত যোগ্যতা, বৈবাহিক অবস্থা এবং পেশা লিখবেন। একাধিক বোন থাকলে কমা দিয়ে নিচের লাইনে লিখবেন।"
               value={sistersInfo}
               setValue={setSistersInfo}
             />
@@ -242,7 +242,7 @@ const FamilyInfoForm = ({ setUserForm, userForm }) => {
 
           <Textarea
             title="চাচা মামাদের পেশা "
-            subtitle="শিক্ষাগত যোগ্যতা, বৈবাহিক অবস্থা এবং পেশা লিখবেন। একাধিক ভাই থাকলে কমা দিয়ে নিচের লাইনে লিখবেন।"
+            subtitle="শিক্ষাগত যোগ্যতা, বৈবাহিক অবস্থা এবং পেশা লিখবেন। একাধিক চাচা বা মামা থাকলে কমা দিয়ে নিচের লাইনে লিখবেন।"
             value={uncleInfo}
             setValue={setUncleInfo}
             required
