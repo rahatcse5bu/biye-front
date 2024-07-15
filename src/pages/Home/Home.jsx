@@ -130,6 +130,10 @@ const Home = () => {
       zilla: districtValues.join(","),
       division: divisionValues.join(","),
       ...query,
+      user_status:
+        import.meta.env.VITE_REACT_APP_NODE_ENV === "development"
+          ? "in review"
+          : "active",
     };
 
     setQuery(filterQuery);
