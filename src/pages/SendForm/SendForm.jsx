@@ -23,7 +23,7 @@ function SendForm() {
       const timeout = setTimeout(() => {
         setGoto(false);
         navigate("/user/account/dashboard");
-      }, 10000); // 10 seconds timeout
+      }, 3000); // 10 seconds timeout
       return () => clearTimeout(timeout);
     }
   }, [goTo, loading, navigate]);
@@ -36,6 +36,7 @@ function SendForm() {
     text += `===salatInRain==${salatInRain}`;
     text += `===startingUniv==${startingUniv}`;
     text += `===studyingAtUniversity==${studyingAtUniversity}`;
+    text += `===bioInput==${bioInput}`;
 
     const bioChoiceData = {
       bio_details: text,
