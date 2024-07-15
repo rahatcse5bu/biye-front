@@ -19,7 +19,7 @@ const PersonalInfo = () => {
                 <td className="w-1/2 px-4 py-2 text-left">
                   ঘরের বাহিরে সাধারণত কি ধরণের পোষাক পরেন?
                 </td>
-                <td className="w-1/2 px-4 py-2 text-left break-all border-l">
+                <td className="w-1/2 px-4 py-2 text-left break--all border-l">
                   {personalInfo?.outside_clothings}
                 </td>
               </tr>
@@ -27,7 +27,7 @@ const PersonalInfo = () => {
                 <td className="w-1/2 px-4 py-2 text-left">
                   কবে থেকে নিকাব সহ পর্দা করছেন?
                 </td>
-                <td className="w-1/2 px-4 py-2 text-left break-all border-l">
+                <td className="w-1/2 px-4 py-2 text-left break--all border-l">
                   {personalInfo?.porda_with_niqab_from}
                 </td>
               </tr>
@@ -100,7 +100,7 @@ const PersonalInfo = () => {
             <td className="w-1/2 px-4 py-2 text-left">
               মাহরাম/নন-মাহরাম(অনলাইন-অফলাইন) মেনে চলেন কি?
             </td>
-            <td className="w-1/2 px-4 py-2 text-left break-all border-l">
+            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
               {personalInfo?.mahram_non_mahram}
             </td>
           </tr>
@@ -108,13 +108,13 @@ const PersonalInfo = () => {
             <td className="w-1/2 px-4 py-2 text-left">
               শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?
             </td>
-            <td className="w-1/2 px-4 py-2 text-left break-all border-l">
+            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
               {personalInfo?.quran_tilawat}
             </td>
           </tr>
           <tr className="border-b">
             <td className="w-1/2 px-4 py-2 text-left">কোন ফিকহ অনুসরণ করেন?</td>
-            <td className="w-1/2 px-4 py-2 text-left break-all border-l">
+            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
               {personalInfo?.fiqh}
             </td>
           </tr>
@@ -142,7 +142,7 @@ const PersonalInfo = () => {
               <td className="w-1/2 px-4 py-2 text-left">
                 আপনার শারীরিক কোনো রোগ আছে?
               </td>
-              <td className="w-1/2 px-4 py-2 text-left break-all border-l">
+              <td className="w-1/2 px-4 py-2 text-left break--all border-l">
                 {personalInfo?.physical_problem}
               </td>
             </tr>
@@ -169,7 +169,7 @@ const PersonalInfo = () => {
             <td className="w-1/2 px-4 py-2 text-left">
               মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি?
             </td>
-            <td className="w-1/2 px-4 py-2 text-left break-all border-l">
+            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
               {personalInfo?.mazar}
             </td>
           </tr>
@@ -177,7 +177,7 @@ const PersonalInfo = () => {
             <td className="w-1/2 px-4 py-2 text-left">
               আপনার পছন্দের অন্তত ৩ টি ইসলামি বই এর নাম লিখুন
             </td>
-            <td className="w-1/2 px-4 py-2 text-left break-all border-l">
+            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
               {personalInfo?.islamic_books}
             </td>
           </tr>
@@ -185,7 +185,7 @@ const PersonalInfo = () => {
             <td className="w-1/2 px-4 py-2 text-left">
               আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন
             </td>
-            <td className="w-1/2 px-4 py-2 text-left break-all border-l">
+            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
               {personalInfo?.islamic_scholars}
             </td>
           </tr>
@@ -202,7 +202,7 @@ const PersonalInfo = () => {
             <td className="w-1/2 px-4 py-2 text-left">
               মিলাদ ও কিয়াম সম্পর্কে আপনার ধারনা কি?
             </td>
-            <td className="w-1/2 px-4 py-2 text-left break-all border-l">
+            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
               <p>{personalInfo?.about_milad_qiyam}</p>
             </td>
           </tr>
@@ -210,7 +210,7 @@ const PersonalInfo = () => {
             <td className="w-1/2 px-4 py-2 text-left">
               নিজের সম্পর্কে কিছু লিখুন
             </td>
-            <td className="w-1/2 px-4 py-2 text-left break-all border-l">
+            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
               <p>{personalInfo?.about_me}</p>
             </td>
           </tr>

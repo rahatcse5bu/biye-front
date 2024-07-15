@@ -1555,6 +1555,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
           </div>
         </form>
       )}
+    
     </div>
   );
 };
