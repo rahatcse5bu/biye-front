@@ -30,7 +30,7 @@ const Home = () => {
     queryFn: async () => BioDataServices.getAllBioDataStats(),
   });
 
-  console.log("biosStats~~~", biosStats);
+  // console.log("biosStats~~~", biosStats);
   // console.log(data);
 
   const { data: divisionOptions, isLoading: divisionLoading } = useQuery({
