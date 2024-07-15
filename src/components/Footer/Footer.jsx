@@ -110,7 +110,7 @@ const Footer = () => {
 					</h1>
 
 					<a
-						href="https://www.facebook.com/pncsoft.tech"
+						href="https://www.facebook.com/profile.php?id=61551063894495"
 						className="flex flex-row gap-3 cursor-pointer "
 					>
 						<p className="cursor-pointer bg-[#505e96]  p-2 border-solid border-[0px] border-[#fff]  hover:bg-[#fff] rounded-full transition ease-in duration-700 ">
@@ -122,7 +122,7 @@ const Footer = () => {
 					</a>
 
 					<a
-						href="https://www.linkedin.com/company/pnc-soft-tech/"
+						href="https://www.linkedin.com/showcase/pnc-nikah/"
 						className="flex flex-row gap-3 cursor-pointer "
 					>
 						<p className="cursor-pointer bg-[#505e96]  p-2 border-solid border-[0px] border-[#fff]  hover:bg-[#fff] rounded-full transition ease-in duration-700 ">

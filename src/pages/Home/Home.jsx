@@ -286,7 +286,7 @@ const Home = () => {
   // console.log(zillasOptions);
 
   return (
-    <div className="px-10">
+    <div className="px-2 lg:px-10">
       <div className="pt-6 text-3xl font-bold home-titlee md:text-4xl lg:text-5xl">
         <h1>বাংলাদেশী ইসলামিক</h1>
         <h1>
