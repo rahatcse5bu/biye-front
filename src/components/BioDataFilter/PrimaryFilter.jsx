@@ -147,9 +147,7 @@ const PrimaryFilter = ({
                     marital_status: value,
                   };
                 });
-
-                console.log("query~~", query);
-
+                // console.log("query~~", query);
                 const queryString = convertToQuery({
                   ...query,
                   marital_status: value,

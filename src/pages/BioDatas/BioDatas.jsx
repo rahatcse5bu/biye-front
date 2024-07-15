@@ -1,13 +1,27 @@
 import BioDatasGrid from "../../components/BioDatasGrid/BioDatasGrid";
 import { SideBar } from "../../components/SideBar/SideBar";
-import { useContext, useState } from "react";
-import BioContext, { useBio } from "../../contexts/BioContext";
+import { useContext, useState, useEffect } from "react";
+import BioContext from "../../contexts/BioContext";
 import { FaXmark } from "react-icons/fa6";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 
 const BioDatas = () => {
-  const { bioLoading } = useBio();
+  const { bioLoading, setQuery, query } = useContext(BioContext);
   const [sideBarDisplay, setSideBarDisplay] = useState(false);
+
+  useEffect(() => {
+    console.log("query~~", query);
+    setQuery((prev) => {
+      return {
+        ...prev,
+        user_status:
+          import.meta.env.VITE_REACT_APP_NODE_ENV === "development"
+            ? "in review"
+            : "active",
+      };
+    });
+  }, []);
+  console.log("query~~", query);
   return (
     <div className="relative flex items-start">
       <div

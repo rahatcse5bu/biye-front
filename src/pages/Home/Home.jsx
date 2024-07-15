@@ -30,7 +30,7 @@ const Home = () => {
     queryFn: async () => BioDataServices.getAllBioDataStats(),
   });
 
-  // console.log("biosStats~~~", biosStats);
+  console.log("biosStats~~~", biosStats);
   // console.log(data);
 
   const { data: divisionOptions, isLoading: divisionLoading } = useQuery({
@@ -566,13 +566,14 @@ const Home = () => {
           </div>
           <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
             <h1 className="text-3xl font-semibold text-center">
-              {biosStats?.data.পুরুষ}
+              {biosStats?.data.পুরুষ ? biosStats?.data.পুরুষ : 0}
             </h1>
             <h3 className="text-xl text-center ">সর্বমোট পাত্রের বায়োডাটা</h3>
           </div>
           <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
             <h1 className="text-3xl font-semibold text-center">
               {biosStats?.data.মহিলা}
+              {biosStats?.data.মহিলা ? biosStats?.data.মহিলা : 0}
             </h1>
             <h3 className="text-xl text-center ">সর্বমোট পাত্রীর বায়োডাটা</h3>
           </div>

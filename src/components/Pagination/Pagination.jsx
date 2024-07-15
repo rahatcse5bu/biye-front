@@ -17,6 +17,10 @@ export function Pagination() {
     setQuery((prev) => {
       return {
         ...prev,
+        user_status:
+          import.meta.env.VITE_REACT_APP_NODE_ENV === "development"
+            ? "in review"
+            : "active",
         page: active,
         limit: limit,
       };

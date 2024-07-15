@@ -55,7 +55,8 @@ const DashBoard = () => {
               className="text-lg font-semibold text-center"
               style={{ color: Colors.titleText }}
             >
-              আমার বর্তমান পয়েন্টঃ {userInfo?.data?.points.toFixed(2)}
+              আমার বর্তমান পয়েন্টঃ{" "}
+              {userInfo?.data?.points ? userInfo?.data?.points.toFixed(2) : 0}
             </h2>
           </div>
           <p className="text-gray-700">
@@ -81,7 +82,8 @@ const DashBoard = () => {
               className="text-lg font-semibold"
               style={{ color: Colors.titleText }}
             >
-              আমার পেন্ডিং প্রস্তাবঃ {data?.results?.pending} টি
+              আমার পেন্ডিং প্রস্তাবঃ{" "}
+              {data?.results?.pending ? data?.results?.pending : 0} টি
             </h2>
           </div>
           <p className="text-gray-700">
@@ -106,7 +108,7 @@ const DashBoard = () => {
               style={{ color: Colors.titleText }}
             >
               আপনার বায়োডাটা পছন্দের তালিকাভুক্ত হয়েছে:{" "}
-              {dashBoard?.data.likes_count}
+              {dashBoard?.data.likes_count ? dashBoard?.data.likes_count : 0}
             </h2>
           </div>
           <p className="text-gray-700">
@@ -129,7 +131,10 @@ const DashBoard = () => {
               className="text-lg font-semibold text-center"
               style={{ color: Colors.titleText }}
             >
-              আমার পছন্দের তালিকায়ঃ {dashBoard?.data.favorite_count}
+              আমার পছন্দের তালিকায়ঃ{" "}
+              {dashBoard?.data.favorite_count
+                ? dashBoard?.data.favorite_count
+                : 0}
             </h2>
           </div>
           <p className="text-gray-700">
@@ -152,7 +157,10 @@ const DashBoard = () => {
               className="text-lg font-semibold text-center"
               style={{ color: Colors.titleText }}
             >
-              আমার অপছন্দের তালিকায়ঃ {dashBoard?.data.unFavorite_count}
+              আমার অপছন্দের তালিকায়ঃ{" "}
+              {dashBoard?.data.unFavorite_count
+                ? dashBoard?.data.unFavorite_count
+                : 0}
             </h2>
           </div>
           <p className="text-gray-700">
@@ -174,7 +182,10 @@ const DashBoard = () => {
               className="text-lg font-semibold"
               style={{ color: Colors.titleText }}
             >
-              আমার ক্রয়সমূহ: {dashBoard?.data.contact_purchase_count}
+              আমার ক্রয়সমূহ:{" "}
+              {dashBoard?.data.contact_purchase_count
+                ? dashBoard?.data.contact_purchase_count
+                : 0}
             </h2>
           </div>
           <p className="text-gray-700">আপনার ক্রয় সংক্রান্ত সমস্ত তথ্য।</p>
@@ -195,7 +206,8 @@ const DashBoard = () => {
               className="text-lg font-semibold text-center"
               style={{ color: Colors.titleText }}
             >
-              বায়োডাটা ভিজিট সংখ্যা: {dashBoard?.data.views_count}
+              বায়োডাটা ভিজিট সংখ্যা:{" "}
+              {dashBoard?.data.views_count ? dashBoard?.data.views_count : 0}
             </h2>
           </div>
           <p className="text-gray-700">

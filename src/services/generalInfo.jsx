@@ -36,8 +36,10 @@ const updateWatchOfBioData = async (id) => {
 };
 
 const getALLGeneralInfo = async (query) => {
-  console.log(query);
+  // console.log(query);
   const queryString = convertToQuery(query);
+
+  console.log("query string~~", queryString);
 
   const generalInfo = await axios.get(baseUrl + `/general-info?${queryString}`);
   return generalInfo.data;
