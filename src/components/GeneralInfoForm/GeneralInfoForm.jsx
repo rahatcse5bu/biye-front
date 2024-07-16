@@ -101,7 +101,7 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
       // console.log("userInfoIds", userInfoIds);
       if (refer_user && userInfoIds) {
         const user = userInfoIds?.data.find((item) => item._id === refer_user);
-        console.log("filtered-user_id", user);
+        // console.log("filtered-user_id", user);
         if (user) {
           setReferId({
             value: user?._id,

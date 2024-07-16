@@ -68,8 +68,8 @@ export default function NavBar() {
     },
     retry: false,
     enabled: !!getToken()?.token,
-    // refetchInterval: 3600000, // every hour
-    refetchInterval: 300000, // 10s
+    refetchInterval: 3600000, // every hour
+    // refetchInterval: 300000, // 10s
   });
   const logoutHandler = async () => {
     await logOut();
@@ -94,6 +94,19 @@ export default function NavBar() {
       logoutHandler();
     }
   }, [isError, error]);
+
+  document.addEventListener("keydown", function (event) {
+    // Prevent Ctrl+C (67) keypress
+    if (
+      import.meta.env.VITE_REACT_APP_NODE_ENV === "production" &&
+      event.ctrlKey &&
+      (event.keyCode === 67 || event.keyCode === 99)
+    ) {
+      event.preventDefault();
+      return false;
+    }
+  });
+
   // console.log("user~~~", user);
 
   // console.log("user-info", userInfo);

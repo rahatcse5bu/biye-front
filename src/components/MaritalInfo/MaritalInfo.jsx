@@ -119,7 +119,7 @@ const MaritalInfo = () => {
               </tr>
               <tr className="border-b">
                 <td className="px-4 py-2 text-left  w-1/2">
-                  বিয়ের পর থাকবেন কোথায়?
+                  বিয়ের পর স্ত্রীকে কোথায় নিয়ে থাকবেন?
                 </td>
                 <td className="px-4 py-2 text-left  w-1/2 border-l">
                   {maritalInfo?.after_marriage_where}
