@@ -17,7 +17,7 @@ import { Toast } from "../../utils/toast";
 import { useNavigate } from "react-router-dom";
 
 const Numbering = ({ setUserForm, userForm }) => {
-  const { userInfo, logOut } = useContext(UserContext);
+  const { userInfo, logOut, user } = useContext(UserContext);
   const navigate = useNavigate();
 
   const {
@@ -59,8 +59,10 @@ const Numbering = ({ setUserForm, userForm }) => {
     ) {
       Toast.errorToast(error?.response.data?.error);
       logoutHandler();
+    } else if (user && user?.email && !getToken?.token) {
+      logoutHandler();
     }
-  }, [isError, error]);
+  }, [isError, error, user]);
 
   const editedTimelineIndex = userInfo?.data?.edited_timeline_index || 1;
   // console.log("Numbering", userInfo);

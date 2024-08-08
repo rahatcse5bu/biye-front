@@ -31,7 +31,7 @@ const BioDatas = () => {
       };
     });
   }, []);
-  console.log("filterTabs~~", filterFields);
+  // console.log("filterTabs~~", filterFields);
   return (
     <div className="relative flex items-start">
       <div

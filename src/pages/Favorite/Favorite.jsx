@@ -16,6 +16,12 @@ import UserContext from "../../contexts/UserContext";
 const LikeItem = ({ item, index, favoriteByWho }) => {
   const navigate = useNavigate();
 
+  // for token expire
+  const { logOut } = useContext(UserContext);
+  if (!getToken()?.token) {
+    logOut();
+    navigate("/");
+  }
   const { data } = useQuery({
     queryKey: ["bio-data", "stat", item?.bio_user],
     queryFn: async () => {
@@ -63,9 +69,9 @@ const LikeItem = ({ item, index, favoriteByWho }) => {
 const Favorite = () => {
   const { userInfo } = useContext(UserContext);
   const { data, isLoading } = useQuery({
-    queryKey: ["my-likes", getToken().token],
+    queryKey: ["my-likes", getToken()?.token],
     queryFn: async () => {
-      return await LikesServices.getMyLikesList(getToken().token);
+      return await LikesServices.getMyLikesList(getToken()?.token);
     },
     retry: false,
   });
@@ -73,7 +79,7 @@ const Favorite = () => {
     queryKey: ["user-likes", userInfo?.data?._id],
     queryFn: async () => {
       return await LikesServices.getLikesListByUser(
-        getToken().token,
+        getToken()?.token,
         userInfo?.data?._id
       );
     },

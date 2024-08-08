@@ -14,7 +14,12 @@ import { useContext } from "react";
 import { BioDataServices } from "../../services/bioData";
 const DisLikeItem = ({ item, index, unFavoritesByWho }) => {
   const navigate = useNavigate();
+  const { logOut } = useContext(UserContext);
 
+  if (!getToken()?.token) {
+    logOut();
+    navigate("/");
+  }
   const { data } = useQuery({
     queryKey: ["bio-data", "stat", item?.bio_user],
     queryFn: async () => {
@@ -63,9 +68,9 @@ const UnFavorite = () => {
   const { userInfo } = useContext(UserContext);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["my-dis-likes", getToken().token],
+    queryKey: ["my-dis-likes", getToken()?.token],
     queryFn: async () => {
-      return await DisLikesServices.getMyDisLikesList(getToken().token);
+      return await DisLikesServices.getMyDisLikesList(getToken()?.token);
     },
     retry: false,
   });
@@ -74,7 +79,7 @@ const UnFavorite = () => {
       queryKey: ["user-dis-likes", userInfo?.data?._id],
       queryFn: async () => {
         return await DisLikesServices.getDisLikesListByUser(
-          getToken().token,
+          getToken()?.token,
           userInfo?.data?._id
         );
       },
