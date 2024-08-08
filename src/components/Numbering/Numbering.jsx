@@ -59,7 +59,7 @@ const Numbering = ({ setUserForm, userForm }) => {
     ) {
       Toast.errorToast(error?.response.data?.error);
       logoutHandler();
-    } else if (user && user?.email && !getToken?.token) {
+    } else if (!getToken?.token) {
       logoutHandler();
     }
   }, [isError, error, user]);
