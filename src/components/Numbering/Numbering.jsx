@@ -34,6 +34,12 @@ const Numbering = ({ setUserForm, userForm }) => {
   });
 
   useEffect(() => {
+    Toast.tipsToast(
+      "If you have any technical issues,please logout and login again"
+    );
+  }, []);
+
+  useEffect(() => {
     const lastEditedIndex = userInfo?.data?.last_edited_timeline_index || 1;
     setUserForm(lastEditedIndex);
   }, [setUserForm, userInfo]);

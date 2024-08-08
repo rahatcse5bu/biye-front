@@ -7,6 +7,13 @@ const successToast = (message) => {
     style: { backgroundColor: "green", color: "#fff" },
   });
 };
+const tipsToast = (message) => {
+  return toast.success(message, {
+    position: "bottom-left",
+    duration: 10000,
+    style: { backgroundColor: "purple", color: "#fff" },
+  });
+};
 
 const errorToast = (message) => {
   return toast.error(message, {
@@ -19,4 +26,5 @@ const errorToast = (message) => {
 export const Toast = {
   successToast,
   errorToast,
+  tipsToast,
 };
