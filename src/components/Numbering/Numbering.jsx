@@ -59,10 +59,14 @@ const Numbering = ({ setUserForm, userForm }) => {
     ) {
       Toast.errorToast(error?.response.data?.error);
       logoutHandler();
-    } else if (!getToken?.token) {
+    }
+  }, [isError, error]);
+
+  useEffect(() => {
+    if (user && user?.email && !getToken()?.token) {
       logoutHandler();
     }
-  }, [isError, error, user]);
+  }, []);
 
   const editedTimelineIndex = userInfo?.data?.edited_timeline_index || 1;
   // console.log("Numbering", userInfo);
