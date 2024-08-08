@@ -12,6 +12,7 @@ const BioContext = createContext();
 export const BioProvider = ({ children }) => {
   const [bio, setBio] = useState(null);
   const [query, setQuery] = useState({});
+  const [filterFields, setFilterFields] = useState({});
 
   //! get all bio datas
   const {
@@ -39,6 +40,8 @@ export const BioProvider = ({ children }) => {
     bioError,
     setQuery,
     query,
+    setFilterFields,
+    filterFields,
   };
   // console.log("Bios-from-db~", bios);
   // console.log("Size-from-db~", bios?.size);

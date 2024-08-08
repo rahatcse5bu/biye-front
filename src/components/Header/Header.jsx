@@ -7,9 +7,49 @@ import { useEffect, useContext } from "react";
 import { getToken, removeToken } from "../../utils/cookies";
 import UserContext from "../../contexts/UserContext";
 import { Toast } from "../../utils/toast";
+import { UserInfoServices } from "../../services/userInfo";
+import { useQuery } from "@tanstack/react-query";
 
 const Header = () => {
   const navigate = useNavigate();
+  const { logOut, user } = useContext(UserContext);
+
+  const {
+    data: tokenData,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["user-info", getToken()?.token],
+    queryFn: async () => {
+      return await UserInfoServices.verifyTokenByUser(getToken()?.token);
+    },
+    retry: false,
+    enabled: !!getToken()?.token,
+  });
+
+  console.log("error~~", error);
+
+  const logoutHandler = async () => {
+    await logOut();
+    removeToken();
+    navigate("/");
+  };
+
+  // console.log("user~~", user);
+
+  useEffect(() => {
+    if (
+      isError &&
+      error &&
+      getToken()?.token &&
+      import.meta.env.VITE_REACT_APP_NODE_ENV === "production"
+    ) {
+      console.error("Error", error);
+      logoutHandler();
+      Toast.errorToast("logout");
+      // Toast.errorToast(error?.response?.data?.error);
+    }
+  }, [isError, error]);
 
   useEffect(() => {
     Toast.tipsToast(

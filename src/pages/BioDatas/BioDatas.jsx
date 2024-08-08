@@ -6,11 +6,12 @@ import { FaXmark } from "react-icons/fa6";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 
 const BioDatas = () => {
-  const { bioLoading, setQuery, query } = useContext(BioContext);
+  const { bioLoading, setQuery, setFilterFields, filterFields, query } =
+    useContext(BioContext);
   const [sideBarDisplay, setSideBarDisplay] = useState(false);
 
   useEffect(() => {
-    console.log("query~~", query);
+    // console.log("query~~", query);
     setQuery((prev) => {
       return {
         ...prev,
@@ -20,8 +21,17 @@ const BioDatas = () => {
             : "active",
       };
     });
+    setFilterFields((prev) => {
+      return {
+        ...prev,
+        user_status:
+          import.meta.env.VITE_REACT_APP_NODE_ENV === "development"
+            ? "in review"
+            : "active",
+      };
+    });
   }, []);
-  console.log("query~~", query);
+  console.log("filterTabs~~", filterFields);
   return (
     <div className="relative flex items-start">
       <div

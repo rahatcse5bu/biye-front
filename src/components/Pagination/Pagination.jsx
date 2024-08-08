@@ -5,7 +5,7 @@ import BioContext from "../../contexts/BioContext";
 
 export function Pagination() {
   const [active, setActive] = React.useState(1);
-  const { setQuery, limit, size } = useContext(BioContext);
+  const { setQuery, setFilterFields, limit, size } = useContext(BioContext);
 
   const totalPage = size ? Math.ceil(size / limit) : 0;
 
@@ -25,7 +25,18 @@ export function Pagination() {
         limit: limit,
       };
     });
-  }, [active, limit, setQuery]);
+    setFilterFields((prev) => {
+      return {
+        ...prev,
+        user_status:
+          import.meta.env.VITE_REACT_APP_NODE_ENV === "development"
+            ? "in review"
+            : "active",
+        page: active,
+        limit: limit,
+      };
+    });
+  }, [active, limit, setQuery, setFilterFields]);
 
   const getItemProps = (index) => ({
     variant: active === index ? "filled" : "text",

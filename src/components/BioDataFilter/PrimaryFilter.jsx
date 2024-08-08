@@ -27,7 +27,7 @@ const PrimaryFilter = ({
   setHeight,
   setOpenAccordions,
 }) => {
-  const { setQuery, query } = useBio();
+  const { setQuery, query, setFilterFields, filterFields } = useBio();
   const navigate = useNavigate();
   const { data: divisionOptions, isLoading: divisionLoading } = useQuery({
     queryKey: ["divisions"],
@@ -97,6 +97,13 @@ const PrimaryFilter = ({
                   bio_type: value,
                 });
 
+                setFilterFields((filterFields) => {
+                  return {
+                    ...filterFields,
+                    bio_type: value,
+                  };
+                });
+
                 setOpenAccordions((prev) => {
                   return {
                     ...prev,
@@ -157,6 +164,12 @@ const PrimaryFilter = ({
                   return {
                     ...prev,
                     3: true,
+                  };
+                });
+                setFilterFields((filterFields) => {
+                  return {
+                    ...filterFields,
+                    bio_type: value,
                   };
                 });
                 navigate(`/biodatas?${queryString}`);

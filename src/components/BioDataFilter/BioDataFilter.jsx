@@ -22,7 +22,7 @@ import { useQuery } from "@tanstack/react-query";
 import AddressFilter from "./AddressFilter";
 
 const BioDataFilter = () => {
-  const { setQuery } = useContext(BioContext);
+  const { setQuery, setFilterFields, filterFields } = useContext(BioContext);
   const [openAccordions, setOpenAccordions] = useState({
     3: true,
   });
@@ -85,7 +85,8 @@ const BioDataFilter = () => {
 
     // const queryString = convertToQuery(queryObj);
     setQuery(queryObj);
-  }, [bioType, division, maritalStatus, setQuery, zilla]);
+    setFilterFields(queryObj);
+  }, [bioType, division, maritalStatus, setFilterFields, setQuery, zilla]);
 
   // useEffect(() => {}, [division, zilla, maritalStatus, bioType]);
 
@@ -105,6 +106,7 @@ const BioDataFilter = () => {
   };
 
   // console.log("openAccordions~~", openAccordions);
+  // console.log("filterFields~", filterFields);
   return (
     <List className=" lg:min-h-[80vh] lg:max-h-[200vh] h-auto overflow-auto overflow-x-hidden">
       <PrimaryFilter

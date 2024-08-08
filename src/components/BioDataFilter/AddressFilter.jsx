@@ -20,7 +20,7 @@ const AddressFilter = ({
   zilla,
 }) => {
   const [searchParams] = useSearchParams();
-  const { setQuery } = useBio();
+  const { setQuery, setFilterFields } = useBio();
 
   useEffect(() => {
     setDivision(searchParams.get("division"));
@@ -48,7 +48,13 @@ const AddressFilter = ({
         ...queryObj,
       };
     });
-  }, [division, setQuery, zilla]);
+    setFilterFields((prev) => {
+      return {
+        ...prev,
+        ...queryObj,
+      };
+    });
+  }, [division, setFilterFields, setQuery, zilla]);
   return (
     <Accordion
       // open={open === 1}

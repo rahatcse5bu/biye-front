@@ -15,7 +15,7 @@ import { useBio } from "../../contexts/BioContext";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { setQuery, query } = useBio();
+  const { setQuery, query, setFilterFields } = useBio();
   const [selectedDivisions, setSelectedDivisions] = useState([]);
   const [selectedDistricts, setSelectedDistricts] = useState([]);
   // const [divisionOptions, setDivisionOptions] = useState([]);
@@ -137,6 +137,7 @@ const Home = () => {
     };
 
     setQuery(filterQuery);
+    setFilterFields(filterQuery);
 
     const queryString = convertToQuery(filterQuery);
     navigate(`/biodatas?${queryString}`);
