@@ -9,10 +9,10 @@ import {
 } from "@material-tailwind/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
-import { useBio } from "../../contexts/BioContext";
 import { convertToQuery } from "../../utils/query";
 import { BioDataServices } from "../../services/bioData";
 import { useQuery } from "@tanstack/react-query";
+import { useBio } from "../../contexts/useBio";
 
 const PrimaryFilter = ({
   openAccordions,

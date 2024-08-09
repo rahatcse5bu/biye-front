@@ -11,7 +11,7 @@ import "../../fonts/fonts.css";
 import { useQuery } from "@tanstack/react-query";
 import { GeneralInfoServices } from "../../services/generalInfo";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
-import { useBio } from "../../contexts/BioContext";
+import { useBio } from "../../contexts/useBio";
 
 const Home = () => {
   const navigate = useNavigate();

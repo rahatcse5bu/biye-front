@@ -20,6 +20,7 @@ import { convertToQuery } from "../../utils/query";
 import PrimaryFilter from "./PrimaryFilter";
 import { useQuery } from "@tanstack/react-query";
 import AddressFilter from "./AddressFilter";
+import BioDataButton from "./BioDataButton";
 
 const BioDataFilter = () => {
   const { setQuery, setFilterFields, filterFields } = useContext(BioContext);
@@ -1803,27 +1804,7 @@ const BioDataFilter = () => {
           </div>
         </AccordionBody>
       </Accordion>
-
-      <div className="flex items-center justify-between my-10 ">
-        <Button
-          className="flex items-center px-5"
-          style={{
-            background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
-          }}
-        >
-          <AiOutlineSearch className="w-4 h-6" />
-          খুজুন
-        </Button>
-        <Button
-          style={{
-            background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
-          }}
-          className="flex items-center px-5"
-        >
-          <AiOutlineDelete className="w-4 h-6" />
-          মুছে ফেলুন
-        </Button>
-      </div>
+      <BioDataButton />
     </List>
   );
 };

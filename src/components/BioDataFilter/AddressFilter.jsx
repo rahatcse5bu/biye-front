@@ -9,7 +9,7 @@ import {
 import { useEffect } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useSearchParams } from "react-router-dom";
-import { useBio } from "../../contexts/BioContext";
+import { useBio } from "../../contexts/useBio";
 
 const AddressFilter = ({
   openAccordions,

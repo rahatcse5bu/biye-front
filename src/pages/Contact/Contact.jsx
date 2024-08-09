@@ -1,8 +1,8 @@
-import { useBio } from "../../contexts/BioContext";
 import { getToken } from "../../utils/cookies";
 import { ContactServices } from "../../services/contact";
 import { useQuery } from "@tanstack/react-query";
 import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
+import { useBio } from "../../contexts/useBio";
 const Contact = () => {
   const { bio } = useBio();
   const generalInfo = bio?.generalInfo || null;

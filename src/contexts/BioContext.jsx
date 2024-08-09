@@ -2,7 +2,7 @@
 // src/contexts/BioContext.js
 
 import { useQuery } from "@tanstack/react-query";
-import { createContext, useState, useContext } from "react";
+import { createContext, useState } from "react";
 import { BioDataServices } from "../services/bioData";
 
 // Create a new context instance
@@ -51,5 +51,3 @@ export const BioProvider = ({ children }) => {
 };
 
 export default BioContext;
-
-export const useBio = () => useContext(BioContext);
