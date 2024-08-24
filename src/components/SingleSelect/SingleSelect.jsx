@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
-import { Colors } from "../../constants/colors";
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+import { Colors } from '../../constants/colors';
 
 const animatedComponents = makeAnimated();
 
@@ -11,7 +11,7 @@ export default function SingleSelect({
   subtitle,
   value,
   setValue,
-  classes = "z-40",
+  classes = 'z-40',
   required = false,
 }) {
   // console.log(value);

@@ -1,22 +1,22 @@
-import { Card, Input, Button, Typography } from "@material-tailwind/react";
-import { FaGoogle } from "react-icons/fa";
-import { Colors } from "../../constants/colors";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
-import UserContext from "../../contexts/UserContext";
-import { userServices } from "../../services/user";
-import { setToken } from "../../utils/cookies";
-import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
-import { Toast } from "../../utils/toast";
-import AnalyticsService from "../../firebase/analyticsService";
+import { Card, Input, Button, Typography } from '@material-tailwind/react';
+import { FaGoogle } from 'react-icons/fa';
+import { Colors } from '../../constants/colors';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import UserContext from '../../contexts/UserContext';
+import { userServices } from '../../services/user';
+import { setToken } from '../../utils/cookies';
+import LoadingCircle from '../../components/LoadingCircle/LoadingCircle';
+import { Toast } from '../../utils/toast';
+import AnalyticsService from '../../firebase/analyticsService';
 
 export function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const { handleGoogleSignIn, signIn } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
-  const from = location?.state?.from?.pathname || "/user/account/dashboard";
+  const from = location?.state?.from?.pathname || '/user/account/dashboard';
   const navigate = useNavigate();
   const googleSignin = async () => {
     try {
@@ -24,7 +24,7 @@ export function Login() {
       const response1 = await handleGoogleSignIn();
 
       if (!response1?.user?.uid) {
-        alert("Something went wrong,try again later");
+        alert('Something went wrong,try again later');
         return;
       }
 
@@ -62,7 +62,7 @@ export function Login() {
   const handleSignIn = async (event) => {
     event.preventDefault();
     if (!email && !password) {
-      Toast.errorToast("Fill all the blank fields");
+      Toast.errorToast('Fill all the blank fields');
       return;
     }
     try {
@@ -95,14 +95,14 @@ export function Login() {
       }
     } catch (error) {
       console.log(error);
-      Toast.errorToast("Invalid login credentials");
+      Toast.errorToast('Invalid login credentials');
     } finally {
       setLoading(false);
     }
   };
 
   const handleforgotPasswordButtonHandler = () => {
-    navigate("/forgot-password");
+    navigate('/forgot-password');
   };
 
   return (
@@ -141,18 +141,19 @@ export function Login() {
               background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
             }}
           >
-            {loading ? <LoadingCircle /> : "Login"}
+            {loading ? <LoadingCircle /> : 'Login'}
           </Button>
-          <p
+          <button
             onClick={handleforgotPasswordButtonHandler}
             className="mt-5 text-right cursor-pointer"
             style={{ color: Colors.pncPrimaryColor }}
+            type="button"
           >
             Forgot Password
-          </p>
+          </button>
           <div className="flex items-center my-4">
             <p className="h-[1px] bg-gray-600 w-full"></p>
-            <span className="mx-2">OR</span>{" "}
+            <span className="mx-2">OR</span>{' '}
             <p className="h-[1px] bg-gray-600 w-full"></p>
           </div>
           <Button

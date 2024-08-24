@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-vars */
-import { Link, useNavigate } from "react-router-dom";
-import Tittle from "./Title";
-import NavBar from "./Navbar";
-import { Colors } from "../../constants/colors";
-import { useEffect, useContext } from "react";
-import { getToken, removeToken } from "../../utils/cookies";
-import UserContext from "../../contexts/UserContext";
-import { Toast } from "../../utils/toast";
-import { UserInfoServices } from "../../services/userInfo";
-import { useQuery } from "@tanstack/react-query";
+import { Link, useNavigate } from 'react-router-dom';
+import Tittle from './Title';
+import NavBar from './Navbar';
+import { Colors } from '../../constants/colors';
+import { useEffect, useContext } from 'react';
+import { getToken, removeToken } from '../../utils/cookies';
+import UserContext from '../../contexts/UserContext';
+import { Toast } from '../../utils/toast';
+import { UserInfoServices } from '../../services/userInfo';
+import { useQuery } from '@tanstack/react-query';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const Header = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["user-info", getToken()?.token],
+    queryKey: ['user-info', getToken()?.token],
     queryFn: async () => {
       return await UserInfoServices.verifyTokenByUser(getToken()?.token);
     },
@@ -27,12 +27,13 @@ const Header = () => {
     enabled: !!getToken()?.token,
   });
 
-  console.log("error~~", error);
+  // console.log('error~~', error);
 
   const logoutHandler = async () => {
     await logOut();
     removeToken();
-    navigate("/");
+    // navigate('/');
+    window.location.href = '/';
   };
 
   // console.log("user~~", user);
@@ -42,18 +43,18 @@ const Header = () => {
       isError &&
       error &&
       getToken()?.token &&
-      import.meta.env.VITE_REACT_APP_NODE_ENV === "production"
+      import.meta.env.VITE_REACT_APP_NODE_ENV === 'production'
     ) {
-      console.error("Error", error);
+      console.error('Error', error);
       logoutHandler();
-      Toast.errorToast("logout");
+      Toast.errorToast('logout');
       // Toast.errorToast(error?.response?.data?.error);
     }
   }, [isError, error]);
 
   useEffect(() => {
     Toast.tipsToast(
-      "If you have any technical issues,please logout and login again"
+      'If you have any technical issues,please logout and login again'
     );
   }, []);
 

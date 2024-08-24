@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
-import { useContext } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import LoadingCircle from "../components/LoadingCircle/LoadingCircle";
-import UserContext from "../contexts/UserContext";
+import { useContext } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import LoadingCircle from '../components/LoadingCircle/LoadingCircle';
+import UserContext from '../contexts/UserContext';
 
 const PrivateRoute = ({ children }) => {
   const { userLoading, user } = useContext(UserContext);

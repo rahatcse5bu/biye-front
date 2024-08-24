@@ -1,22 +1,14 @@
 /* eslint-disable react/prop-types */
-import DoubleRangeSlider from "../DoubleRangeSlider/DoubleRangeSlider";
-import {
-  Typography,
-  ListItem,
-  Accordion,
-  AccordionHeader,
-  AccordionBody,
-} from "@material-tailwind/react";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
-import { convertToQuery } from "../../utils/query";
-import { BioDataServices } from "../../services/bioData";
-import { useQuery } from "@tanstack/react-query";
-import { useBio } from "../../contexts/useBio";
+import DoubleRangeSlider from '../DoubleRangeSlider/DoubleRangeSlider';
+import { useNavigate } from 'react-router-dom';
+import { convertToQuery } from '../../utils/query';
+import { BioDataServices } from '../../services/bioData';
+import { useQuery } from '@tanstack/react-query';
+import { useBio } from '../../contexts/useBio';
+import CustomAccordion from '../CustomAccordion/CustomAccordion';
+import { useState } from 'react';
 
 const PrimaryFilter = ({
-  openAccordions,
-  handleToggle,
   setBioType,
   bioType,
   maritalStatus,
@@ -27,15 +19,16 @@ const PrimaryFilter = ({
   setHeight,
   setOpenAccordions,
 }) => {
+  const [primaryFilterOpen, setPrimaryFilterOpen] = useState(false);
   const { setQuery, query, setFilterFields, filterFields } = useBio();
   const navigate = useNavigate();
   const { data: divisionOptions, isLoading: divisionLoading } = useQuery({
-    queryKey: ["divisions"],
+    queryKey: ['divisions'],
     queryFn: async () => {
       const divisions = await BioDataServices.getAllDivisions();
       const allDivisionsOption = {
-        value: "All Divisions",
-        label: "All Divisions",
+        value: 'All Divisions',
+        label: 'All Divisions',
       };
       const formattedDivisionOptions = divisions.map((division) => ({
         value: division.value,
@@ -46,29 +39,12 @@ const PrimaryFilter = ({
     },
   });
   return (
-    <Accordion
-      // open={open === 3}
-      open={openAccordions["3"]}
-      icon={
-        <ChevronDownIcon
-          strokeWidth={2.5}
-          className={`mx-auto h-4 w-4  transition-transform ${
-            open === 3 ? "rotate-180" : ""
-          }`}
-        />
-      }
-    >
-      <ListItem className="p-0 " selected={openAccordions["3"]}>
-        <AccordionHeader
-          onClick={() => handleToggle(3)}
-          className="p-3 border-b-0"
-        >
-          <Typography color="gray" className="mr-auto font-normal">
-            প্রাথমিক
-          </Typography>
-        </AccordionHeader>
-      </ListItem>
-      <AccordionBody className="py-1 my-2 ">
+    <div>
+      <CustomAccordion
+        isOpen={primaryFilterOpen}
+        onToggle={() => setPrimaryFilterOpen((prev) => !prev)}
+        title="প্রাথমিক"
+      >
         <div className="lg:w-64 w-full">
           <label
             htmlFor="select"
@@ -85,12 +61,12 @@ const PrimaryFilter = ({
 
                 setBioType(value);
 
-                setQuery((prev) => {
-                  return {
-                    ...prev,
-                    bio_type: value,
-                  };
-                });
+                // setQuery((prev) => {
+                //   return {
+                //     ...prev,
+                //     bio_type: value,
+                //   };
+                // });
 
                 const queryString = convertToQuery({
                   ...query,
@@ -110,10 +86,10 @@ const PrimaryFilter = ({
                     3: true,
                   };
                 });
-                navigate(`/biodatas?${queryString}`);
+                // navigate(`/biodatas?${queryString}`);
               }}
               value={bioType}
-              className="block w-full px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
+              className="block w-[90%] px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
             >
               <option value="">সকল</option>
               <option value="পাত্রের বায়োডাটা">পাত্রের বায়োডাটা</option>
@@ -148,12 +124,12 @@ const PrimaryFilter = ({
 
                 setMaritalStatus(value);
 
-                setQuery((prev) => {
-                  return {
-                    ...prev,
-                    marital_status: value,
-                  };
-                });
+                // setQuery((prev) => {
+                //   return {
+                //     ...prev,
+                //     marital_status: value,
+                //   };
+                // });
                 // console.log("query~~", query);
                 const queryString = convertToQuery({
                   ...query,
@@ -172,9 +148,9 @@ const PrimaryFilter = ({
                     bio_type: value,
                   };
                 });
-                navigate(`/biodatas?${queryString}`);
+                // navigate(`/biodatas?${queryString}`);
               }}
-              className="block w-full px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
+              className="block  w-[90%]  px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
             >
               <option value="">সকল</option>
               <option value="অবিবাহিত"> অবিবাহিত </option>
@@ -195,10 +171,13 @@ const PrimaryFilter = ({
           </div>
         </div>
         <div className="px-2">
-          <label className="text-left text-gray-500 mt-4 mb-5 font-bold block">
+          <label
+            htmlFor="age"
+            className="text-left text-gray-500 mt-4 mb-5 font-bold block"
+          >
             বয়স
           </label>
-          <DoubleRangeSlider value={age} setValue={setAge} />
+          <DoubleRangeSlider id="age" value={age} setValue={setAge} />
         </div>
         <div className="lg:w-64 w-full px-2 py-2">
           <DoubleRangeSlider
@@ -211,8 +190,8 @@ const PrimaryFilter = ({
             subtitle="5.1 বোঝায় ৫ ফুট ১ ইঞ্চি "
           />
         </div>
-      </AccordionBody>
-    </Accordion>
+      </CustomAccordion>
+    </div>
   );
 };
 

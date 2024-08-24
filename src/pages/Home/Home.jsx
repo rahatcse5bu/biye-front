@@ -138,7 +138,6 @@ const Home = () => {
 
     setQuery(filterQuery);
     setFilterFields(filterQuery);
-
     const queryString = convertToQuery(filterQuery);
     navigate(`/biodatas?${queryString}`);
   };

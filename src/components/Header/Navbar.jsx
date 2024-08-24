@@ -1,35 +1,35 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import { useState, useEffect, useContext } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { FaCircle } from "react-icons/fa";
-import { FcLike, FcDislike, FcSettings, FcSupport } from "react-icons/fc";
+import { useState, useEffect, useContext } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { FaCircle } from 'react-icons/fa';
+import { FcLike, FcDislike, FcSettings, FcSupport } from 'react-icons/fc';
 import {
   Navbar,
   Collapse,
   Typography,
   IconButton,
   Button,
-} from "@material-tailwind/react";
-import { navData } from "./navigation_data";
-import SubLinks from "./Sublinks.jsx";
-import "../../assets/styles/nav-bar.css";
-import UserContext from "../../contexts/UserContext";
-import { FaUserLarge } from "react-icons/fa6";
-import { MdExitToApp } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
-import { BiSolidDashboard } from "react-icons/bi";
-import navLogo from "../../assets/icons/logo.png";
-import { getToken, removeToken } from "../../utils/cookies";
-import { Modal } from "../Modal/Modal";
-import { getGender } from "../../utils/localStorage";
-import female from "../../assets/icons/female.svg";
-import male from "../../assets/icons/male.svg";
-import { useQuery } from "@tanstack/react-query";
-import { userServices } from "../../services/user";
-import classNames from "classnames";
-import { UserInfoServices } from "../../services/userInfo";
-import { Toast } from "../../utils/toast";
+} from '@material-tailwind/react';
+import { navData } from './navigation_data';
+import SubLinks from './Sublinks.jsx';
+import '../../assets/styles/nav-bar.css';
+import UserContext from '../../contexts/UserContext';
+import { FaUserLarge } from 'react-icons/fa6';
+import { MdExitToApp } from 'react-icons/md';
+import { FaEdit } from 'react-icons/fa';
+import { BiSolidDashboard } from 'react-icons/bi';
+import navLogo from '../../assets/icons/logo.png';
+import { getToken, removeToken } from '../../utils/cookies';
+import { Modal } from '../Modal/Modal';
+import { getGender } from '../../utils/localStorage';
+import female from '../../assets/icons/female.svg';
+import male from '../../assets/icons/male.svg';
+import { useQuery } from '@tanstack/react-query';
+import { userServices } from '../../services/user';
+import classNames from 'classnames';
+import { UserInfoServices } from '../../services/userInfo';
+import { Toast } from '../../utils/toast';
 
 export default function NavBar() {
   const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
@@ -42,7 +42,7 @@ export default function NavBar() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [pathname]);
 
   const {
@@ -50,7 +50,7 @@ export default function NavBar() {
     isLoading: userInfoFetchLoading,
     refetch: userInfoRefetch,
   } = useQuery({
-    queryKey: ["user-info", user?.email],
+    queryKey: ['user-info', user?.email],
     queryFn: async () => {
       return await userServices.getUserInfoByEmail(user?.email);
     },
@@ -62,7 +62,7 @@ export default function NavBar() {
     isError,
     error,
   } = useQuery({
-    queryKey: ["user-info", getToken()?.token],
+    queryKey: ['user-info', getToken()?.token],
     queryFn: async () => {
       return await UserInfoServices.verifyTokenByUser(getToken()?.token);
     },
@@ -75,7 +75,8 @@ export default function NavBar() {
     await logOut();
     setIsHovered(false);
     removeToken();
-    navigate("/");
+    // navigate("/");
+    window.location.href = '/';
   };
 
   useEffect(() => {
@@ -88,17 +89,17 @@ export default function NavBar() {
       isError &&
       error &&
       getToken()?.token &&
-      import.meta.env.VITE_REACT_APP_NODE_ENV === "production"
+      import.meta.env.VITE_REACT_APP_NODE_ENV === 'production'
     ) {
       Toast.errorToast(error?.response?.data?.error);
       logoutHandler();
     }
   }, [isError, error]);
 
-  document.addEventListener("keydown", function (event) {
+  document.addEventListener('keydown', function (event) {
     // Prevent Ctrl+C (67) keypress
     if (
-      import.meta.env.VITE_REACT_APP_NODE_ENV === "production" &&
+      import.meta.env.VITE_REACT_APP_NODE_ENV === 'production' &&
       event.ctrlKey &&
       (event.keyCode === 67 || event.keyCode === 99)
     ) {
@@ -111,7 +112,7 @@ export default function NavBar() {
 
   // console.log("user-info", userInfo);
   useEffect(() => {
-    window.addEventListener("resize", () => {
+    window.addEventListener('resize', () => {
       if (window.innerWidth >= 960) {
         setOpenNav(false);
       } else {
@@ -155,9 +156,9 @@ export default function NavBar() {
               variant="small"
               color="white"
               className={`text-lg  font-semibold   ${
-                _navDataItem.title === "Dashboard"
-                  ? "h-full py-[11px] px-[15px] w-[120px] bg-[#FFD66C] hover:bg-[#01503b] hover:text-[#fff] "
-                  : "nav-item-primary"
+                _navDataItem.title === 'Dashboard'
+                  ? 'h-full py-[11px] px-[15px] w-[120px] bg-[#FFD66C] hover:bg-[#01503b] hover:text-[#fff] '
+                  : 'nav-item-primary'
               } `}
             >
               <Link
@@ -206,7 +207,7 @@ export default function NavBar() {
             {isHovered && (
               <div
                 className={`absolute ${
-                  !isHovered ? "hidden" : "block"
+                  !isHovered ? 'hidden' : 'block'
                 }  w-[250px] rounded-md profile-card mx-5 h-[450px] transition-all duration-300 ease-in p-4  bg-gradient-to-r from-[#071952] to-[#071952] top-12 right-[100px]  scrollbar-thumb-blue scrollbar-thumb-rounded-full scrollbar-track-blue-lighter scrollbar-w-2 translate-x-1/2 overflow-y-scroll overflow-x-hidden z-40`}
                 id="profile-card"
               >
@@ -215,25 +216,25 @@ export default function NavBar() {
                   <div className="">
                     <img
                       className="w-24 h-24 py-2 mx-auto rounded-full"
-                      src={gender === "মহিলা" ? female : male}
+                      src={gender === 'মহিলা' ? female : male}
                       alt="Person"
                     />
                   </div>
                   {import.meta.env.VITE_REACT_APP_NODE_ENV ===
-                    "development" && <h5>ID: {userInfo?.data?.user_id}</h5>}
+                    'development' && <h5>ID: {userInfo?.data?.user_id}</h5>}
 
                   <h4 className="pt-2 font-bold text-gray-500">
                     Biodata Status
                   </h4>
                   <h6
-                    className={classNames("font-bold  capitalize", {
-                      "text-green-600":
-                        userInfo?.data?.user_status === "active",
-                      "text-orange-600":
-                        userInfo?.data?.user_status === "in review",
-                      "text-purple-600":
-                        userInfo?.data?.user_status === "pending",
-                      "text-red-600": userInfo?.data?.user_status === "banned",
+                    className={classNames('font-bold  capitalize', {
+                      'text-green-600':
+                        userInfo?.data?.user_status === 'active',
+                      'text-orange-600':
+                        userInfo?.data?.user_status === 'in review',
+                      'text-purple-600':
+                        userInfo?.data?.user_status === 'pending',
+                      'text-red-600': userInfo?.data?.user_status === 'banned',
                     })}
                   >
                     {userInfo?.data?.user_status}
@@ -391,7 +392,7 @@ export default function NavBar() {
                 {isHovered && (
                   <div
                     className={`absolute ${
-                      !isHovered ? "hidden" : "block"
+                      !isHovered ? 'hidden' : 'block'
                     }  w-[250px] rounded-md profile-card mx-5 h-[450px] transition-all duration-300 ease-in p-4  bg-gradient-to-r from-[#071952] to-[#071952] top-12 right-[100px]  scrollbar-thumb-blue scrollbar-thumb-rounded-full scrollbar-track-blue-lighter scrollbar-w-2 translate-x-1/2 overflow-y-scroll overflow-x-hidden z-40`}
                     id="profile-card"
                   >
@@ -401,15 +402,15 @@ export default function NavBar() {
                         Biodata Status
                       </h4>
                       <h6
-                        className={classNames("font-bold  capitalize", {
-                          "text-green-600":
-                            userInfo?.data?.user_status === "active",
-                          "text-orange-600":
-                            userInfo?.data?.user_status === "in review",
-                          "text-purple-600":
-                            userInfo?.data?.user_status === "pending",
-                          "text-red-600":
-                            userInfo?.data?.user_status === "banned",
+                        className={classNames('font-bold  capitalize', {
+                          'text-green-600':
+                            userInfo?.data?.user_status === 'active',
+                          'text-orange-600':
+                            userInfo?.data?.user_status === 'in review',
+                          'text-purple-600':
+                            userInfo?.data?.user_status === 'pending',
+                          'text-red-600':
+                            userInfo?.data?.user_status === 'banned',
                         })}
                       >
                         {userInfo?.data?.user_status}
@@ -489,7 +490,7 @@ export default function NavBar() {
 
         <Collapse
           open={openNav}
-          className={`mobile-nav ${openNav ? "mobile-nav-open" : ""}`}
+          className={`mobile-nav ${openNav ? 'mobile-nav-open' : ''}`}
         >
           <NavList />
         </Collapse>

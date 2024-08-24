@@ -1,14 +1,14 @@
-import { getToken } from "../../utils/cookies";
-import { ContactServices } from "../../services/contact";
-import { useQuery } from "@tanstack/react-query";
-import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
-import { useBio } from "../../contexts/useBio";
+import { getToken } from '../../utils/cookies';
+import { ContactServices } from '../../services/contact';
+import { useQuery } from '@tanstack/react-query';
+import LoadingCircle from '../../components/LoadingCircle/LoadingCircle';
+import { useBio } from '../../contexts/useBio';
 const Contact = () => {
   const { bio } = useBio();
   const generalInfo = bio?.generalInfo || null;
 
   const { data: contactInfo, isLoading } = useQuery({
-    queryKey: ["my-contact", getToken()?.token],
+    queryKey: ['my-contact', getToken()?.token],
     queryFn: async () => {
       return await ContactServices.getContactByUser(getToken()?.token);
     },
@@ -29,11 +29,11 @@ const Contact = () => {
           <thead>
             <tr className="border-t border-b">
               <td className="w-1/2 px-4 py-2 text-left">
-                {" "}
-                {generalInfo?.gender === "মহিলা" ||
-                generalInfo?.bio_type === "পাত্রীর বায়োডাটা"
-                  ? "পাত্রীর নাম"
-                  : "পাত্রের নাম"}{" "}
+                {' '}
+                {generalInfo?.gender === 'মহিলা' ||
+                generalInfo?.bio_type === 'পাত্রীর বায়োডাটা'
+                  ? 'পাত্রীর নাম'
+                  : 'পাত্রের নাম'}{' '}
               </td>
               <td className="w-1/2 px-4 py-2 text-left border-l">
                 {contactInfo?.data.full_name}
