@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Colors } from "../../constants/colors";
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css'
 const Instructions = () => {
   // Initialize state to keep track of the open/closed status of each Instructions item
   const [instructionItems, setInstructionItems] = useState([
@@ -102,6 +104,14 @@ const Instructions = () => {
       >
         নির্দেশনা সমুহ
       </h1>
+      <div>
+        <h4   className="text-md md:text-lg lg:text-xl font-semibold mb-4"
+        style={{ color: Colors.titleText }}>PNC নিকাহ তে কিভাবে পাত্রের বায়োডাটা দিতে হয়? How to create bridegroom's biodata on PNC NIkah  for free || PNC Nikah</h4>
+    <LiteYouTubeEmbed 
+        id="26Kj5LuD2DY"
+        title="PNC নিকাহ তে কিভাবে পাত্রের বায়োডাটা দিতে হয়? How to create bridegroom's biodata on PNC NIkah  for free || PNC Nikah"
+    />
+  </div>
       {/* <ul>
         {instructionItems.map((item, index) => (
           <li key={index}  onClick={() => toggleItem(index)} className="border-b py-4 bg-gray-300 px-8 py-4 mb-4 rounded cursor-pointer" style={{borderBottomColor:`rgba(${Colors.titleText}, 0.7)`}}  >
