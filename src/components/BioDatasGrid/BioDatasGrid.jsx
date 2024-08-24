@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { useContext } from "react";
-import BioContext from "../../contexts/BioContext";
-import BioData from "../BioData/BioData";
-import { Colors } from "../../constants/colors";
-import { FaFilter } from "react-icons/fa";
-import { Pagination } from "../Pagination/Pagination";
+import { useContext } from 'react';
+import BioContext from '../../contexts/BioContext';
+import BioData from '../BioData/BioData';
+import { Colors } from '../../constants/colors';
+import { FaFilter } from 'react-icons/fa';
+import { Pagination } from '../Pagination/Pagination';
 
 const BioDatasGrid = ({ sideBarDisplay, setSideBarDisplay }) => {
   const { bios } = useContext(BioContext);
@@ -21,13 +21,13 @@ const BioDatasGrid = ({ sideBarDisplay, setSideBarDisplay }) => {
       </h1>
       <p className="text-gray-500">{bios?.length} টি বায়োডাটা পাওয়া গেছে </p>
       <div className="flex items-center justify-between text-right ">
-        <div
+        <button
           onClick={() => setSideBarDisplay((prev) => !prev)}
           className="flex items-center px-3 py-1 text-xl text-white bg-purple-700 rounded-md cursor-pointer lg:hidden hover:bg-purple-900 ml-right"
         >
           <FaFilter />
           <span className="ml-1">Filter</span>
-        </div>
+        </button>
         <select className="block  px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-[200px] lg:ml-auto ml-0 sm:text-sm">
           <option value="নতুন">নতুন</option>
           <option value="পুরাতন">পুরাতন</option>

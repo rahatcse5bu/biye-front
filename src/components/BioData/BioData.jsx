@@ -1,23 +1,23 @@
 /* eslint-disable react/prop-types */
-import { Button } from "@material-tailwind/react";
-import female from "../../assets/icons/female.svg";
-import male from "../../assets/icons/male.svg";
-import { Colors } from "../../constants/colors";
-import { formatDate, getDateMonthYear } from "../../utils/date";
-import { useNavigate } from "react-router-dom";
-import { ScrollToTop } from "../../constants/ScrolltoTop";
-import { FaBan, FaEye, FaHeart, FaRegHeart } from "react-icons/fa";
-import { LikesServices } from "../../services/favorites";
-import { getToken } from "../../utils/cookies";
-import { Toast } from "../../utils/toast";
-import { useQuery } from "@tanstack/react-query";
-import { useContext } from "react";
-import UserContext from "../../contexts/UserContext";
-import { DisLikesServices } from "../../services/unfavorites";
-import { RiProhibitedFill, RiProhibitedLine } from "react-icons/ri";
-import { convertHeightToBengali } from "../../utils/height";
-import { GeneralInfoServices } from "../../services/generalInfo";
-import { useState, useEffect } from "react";
+import { Button } from '@material-tailwind/react';
+import female from '../../assets/icons/female.svg';
+import male from '../../assets/icons/male.svg';
+import { Colors } from '../../constants/colors';
+import { formatDate, getDateMonthYear } from '../../utils/date';
+import { useNavigate } from 'react-router-dom';
+import { ScrollToTop } from '../../constants/ScrolltoTop';
+import { FaBan, FaEye, FaHeart, FaRegHeart } from 'react-icons/fa';
+import { LikesServices } from '../../services/favorites';
+import { getToken } from '../../utils/cookies';
+import { Toast } from '../../utils/toast';
+import { useQuery } from '@tanstack/react-query';
+import { useContext } from 'react';
+import UserContext from '../../contexts/UserContext';
+import { DisLikesServices } from '../../services/unfavorites';
+import { RiProhibitedFill, RiProhibitedLine } from 'react-icons/ri';
+import { convertHeightToBengali } from '../../utils/height';
+import { GeneralInfoServices } from '../../services/generalInfo';
+import { useState, useEffect } from 'react';
 
 const BioData = ({ biodata }) => {
   const [likes, setLikes] = useState(false);
@@ -29,7 +29,7 @@ const BioData = ({ biodata }) => {
 
   const { data: checkLikes } = useQuery({
     queryKey: [
-      "check-likes",
+      'check-likes',
       biodata?.user,
       userInfo?.data?._id,
       getToken()?.token,
@@ -41,7 +41,7 @@ const BioData = ({ biodata }) => {
   });
   const { data: checkDisLikes } = useQuery({
     queryKey: [
-      "check-dislikes",
+      'check-dislikes',
       biodata?.user,
       userInfo?.data?._id,
       getToken()?.token,
@@ -90,7 +90,7 @@ const BioData = ({ biodata }) => {
         );
         // console.log("watch-response", response);
       } catch (error) {
-        console.error("Error incrementing view count", error);
+        console.error('Error incrementing view count', error);
       }
     }
     // navigate to biodata page
@@ -100,7 +100,7 @@ const BioData = ({ biodata }) => {
   // ? FOR GIVING like REACTION
   const likeButtonHandler = async () => {
     if (!userInfo?.data?._id || !getToken()?.token) {
-      Toast.errorToast("Please,Login First");
+      Toast.errorToast('Please,Login First');
       return;
     }
 
@@ -123,7 +123,7 @@ const BioData = ({ biodata }) => {
         getToken().token
       );
       if (data?.success) {
-        Toast.successToast("আপনার রিয়াকশন যুক্ত করা হয়েছে");
+        Toast.successToast('আপনার রিয়াকশন যুক্ত করা হয়েছে');
       }
       // console.log("likes~~", data);
     } catch (error) {
@@ -133,7 +133,7 @@ const BioData = ({ biodata }) => {
   // ? FOR GIVING dis-like REACTION
   const DisLikeButtonHandler = async () => {
     if (!userInfo?.data?._id || !getToken().token) {
-      Toast.errorToast("Please,Login First");
+      Toast.errorToast('Please,Login First');
       return;
     }
 
@@ -156,9 +156,9 @@ const BioData = ({ biodata }) => {
         { bio_user: biodata?.user },
         getToken().token
       );
-      console.log("dislikes~~", data);
+      console.log('dislikes~~', data);
       if (data?.success) {
-        Toast.successToast("আপনার রিয়াকশন যুক্ত করা হয়েছে");
+        Toast.successToast('আপনার রিয়াকশন যুক্ত করা হয়েছে');
       }
       // console.log(data);
     } catch (error) {
@@ -180,12 +180,12 @@ const BioData = ({ biodata }) => {
       >
         <img
           className="w-16 h-16 mx-auto rounded-full "
-          src={biodata?.gender === "মহিলা" ? female : male}
+          src={biodata?.gender === 'মহিলা' ? female : male}
           alt=""
         />
         <h4 className="my-2"> বায়োডাটা নং </h4>
         <h3>
-          {biodata?.gender === "মহিলা" ? "PNCF-" : "PNCM-"}
+          {biodata?.gender === 'মহিলা' ? 'PNCF-' : 'PNCM-'}
           {biodata?.user_id}
         </h3>
         {/* view icons */}
@@ -223,12 +223,12 @@ const BioData = ({ biodata }) => {
                 জন্মসন
               </td>
               <td className="px-6 py-4 text-sm whitespace-nowrap border-b border-t">
-                {formatDate(getDateMonthYear(biodata.date_of_birth))}
+                {formatDate(getDateMonthYear(biodata?.date_of_birth))}
               </td>
             </tr>
             <tr>
               <td className="px-6 py-4 whitespace-nowrap border-r  border-b">
-                উচ্চতা{" "}
+                উচ্চতা{' '}
               </td>
               <td className="px-6 py-4 whitespace-nowrap border-b">
                 <span>{convertHeightToBengali(biodata?.height)}</span>
@@ -236,10 +236,18 @@ const BioData = ({ biodata }) => {
             </tr>
             <tr>
               <td className="px-6 py-4 whitespace-nowrap border-r border-b">
-                গাত্রবর্ন{" "}
+                গাত্রবর্ন{' '}
               </td>
               <td className="px-6 py-4 whitespace-nowrap border-b">
-                {biodata.screen_color}
+                {biodata?.screen_color}
+              </td>
+            </tr>
+            <tr>
+              <td className="px-6 py-4 whitespace-nowrap border-r border-b">
+                উপজেলা{' '}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap border-b">
+                {biodata?.upzilla}
               </td>
             </tr>
           </tbody>
