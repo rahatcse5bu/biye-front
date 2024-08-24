@@ -106,10 +106,10 @@ const Instructions = () => {
       </h1>
       <div>
         <h4   className="text-md md:text-lg lg:text-xl font-semibold mb-4"
-        style={{ color: Colors.titleText }}>PNC নিকাহ তে কিভাবে বায়োডাটা দিতে হয়? How to create my biodata on PNC NIkah for free || PNC Nikah</h4>
+        style={{ color: Colors.titleText }}>PNC নিকাহ তে কিভাবে পাত্রের বায়োডাটা দিতে হয়? How to create bridegroom's biodata on PNC NIkah  for free || PNC Nikah</h4>
     <LiteYouTubeEmbed 
         id="26Kj5LuD2DY"
-        title="PNC নিকাহ তে কিভাবে বায়োডাটা দিতে হয়? How to create my biodata on PNC NIkah for free || PNC Nikah"
+        title="PNC নিকাহ তে কিভাবে পাত্রের বায়োডাটা দিতে হয়? How to create bridegroom's biodata on PNC NIkah  for free || PNC Nikah"
     />
   </div>
       {/* <ul>
