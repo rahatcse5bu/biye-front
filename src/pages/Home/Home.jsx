@@ -1,17 +1,18 @@
-import "../../assets/styles/home.css";
-import { Colors } from "../../constants/colors";
-import FeaturedBioDataGrid from "../../components/FeaturedBioDataGrid/FeaturedBioDataGrid";
-import HadithSlider from "../../components/HadithSlider/HadithSlider";
-import { useState } from "react";
-import { BioDataServices } from "../../services/bioData";
-import { useNavigate } from "react-router-dom";
-import { convertToQuery } from "../../utils/query";
-import Select from "react-select";
-import "../../fonts/fonts.css";
-import { useQuery } from "@tanstack/react-query";
-import { GeneralInfoServices } from "../../services/generalInfo";
-import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
-import { useBio } from "../../contexts/useBio";
+import '../../assets/styles/home.css';
+import { Colors } from '../../constants/colors';
+import FeaturedBioDataGrid from '../../components/FeaturedBioDataGrid/FeaturedBioDataGrid';
+import HadithSlider from '../../components/HadithSlider/HadithSlider';
+import { useState } from 'react';
+import { BioDataServices } from '../../services/bioData';
+import { useNavigate } from 'react-router-dom';
+import { convertToQuery } from '../../utils/query';
+import Select from 'react-select';
+import '../../fonts/fonts.css';
+import { useQuery } from '@tanstack/react-query';
+import { GeneralInfoServices } from '../../services/generalInfo';
+import LoadingCircle from '../../components/LoadingCircle/LoadingCircle';
+import { useBio } from '../../contexts/useBio';
+import BioStats from '../../components/Home/BioStats/BioStats';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -21,25 +22,21 @@ const Home = () => {
   // const [divisionOptions, setDivisionOptions] = useState([]);
   // const [districtOptions, setDistrictOptions] = useState([]);
   const { data, isLoading } = useQuery({
-    queryKey: ["general-info", "featured"],
+    queryKey: ['general-info', 'featured'],
     queryFn: async () =>
       GeneralInfoServices.getALLGeneralInfo({ isFeatured: true }),
-  });
-  const { data: biosStats, isLoading: bioStatsLoading } = useQuery({
-    queryKey: ["bio-all-stats"],
-    queryFn: async () => BioDataServices.getAllBioDataStats(),
   });
 
   // console.log("biosStats~~~", biosStats);
   // console.log(data);
 
   const { data: divisionOptions, isLoading: divisionLoading } = useQuery({
-    queryKey: ["divisions"],
+    queryKey: ['divisions'],
     queryFn: async () => {
       const divisions = await BioDataServices.getAllDivisions();
       const allDivisionsOption = {
-        value: "All Divisions",
-        label: "All Divisions",
+        value: 'All Divisions',
+        label: 'All Divisions',
       };
       const formattedDivisionOptions = divisions.map((division) => ({
         value: division.value,
@@ -51,16 +48,16 @@ const Home = () => {
   });
 
   const { data: districtOptions, isLoading: districtLoading } = useQuery(
-    ["districts", selectedDivisions],
+    ['districts', selectedDivisions],
     async () => {
       const selectedDivisionValues = selectedDivisions.map(
         (division) => division.value
       );
-      if (selectedDivisionValues.includes("All Divisions")) {
+      if (selectedDivisionValues.includes('All Divisions')) {
         const allDistricts = await BioDataServices.getAllDistricts(null);
         const allDistrictsOption = {
-          value: "All Districts",
-          label: "All Districts",
+          value: 'All Districts',
+          label: 'All Districts',
         };
         const formattedAllDistricts = allDistricts.map((district) => ({
           value: district.value,
@@ -69,7 +66,7 @@ const Home = () => {
         formattedAllDistricts.unshift(allDistrictsOption);
         return formattedAllDistricts;
       } else if (selectedDivisionValues.length === 0) {
-        return [{ value: "All Districts", label: "All Districts" }];
+        return [{ value: 'All Districts', label: 'All Districts' }];
       } else {
         const districtPromises = selectedDivisionValues.map((divisionValue) =>
           BioDataServices.getAllDistricts(divisionValue)
@@ -83,8 +80,8 @@ const Home = () => {
           }))
         );
         const allDistrictsOption = {
-          value: "All Districts",
-          label: "All Districts",
+          value: 'All Districts',
+          label: 'All Districts',
         };
         formattedDistrictOptions.unshift(allDistrictsOption);
         return formattedDistrictOptions;
@@ -94,8 +91,8 @@ const Home = () => {
 
   const handleDivisionChange = (selectedOptions) => {
     setSelectedDivisions(selectedOptions);
-    if (selectedOptions.some((option) => option.value === "All Divisions")) {
-      setSelectedDistricts(["all"]);
+    if (selectedOptions.some((option) => option.value === 'All Divisions')) {
+      setSelectedDistricts(['all']);
     }
   };
 
@@ -108,10 +105,10 @@ const Home = () => {
     let divisionValues = selectedDivisions.map((division) => division.value);
     let districtValues = selectedDistricts.map((district) => district.value);
 
-    if (divisionValues.includes("All Divisions")) {
-      divisionValues = ["all"];
+    if (divisionValues.includes('All Divisions')) {
+      divisionValues = ['all'];
     }
-    if (districtValues.includes("All Districts")) {
+    if (districtValues.includes('All Districts')) {
       districtValues.splice(0, districtValues.length);
       const selectedDivisionValues = selectedDivisions.map(
         (division) => division.value
@@ -127,13 +124,13 @@ const Home = () => {
     const filterQuery = {
       marital_status,
       bio_type,
-      zilla: districtValues.join(","),
-      division: divisionValues.join(","),
+      zilla: districtValues.join(','),
+      division: divisionValues.join(','),
       ...query,
       user_status:
-        import.meta.env.VITE_REACT_APP_NODE_ENV === "development"
-          ? "in review"
-          : "active",
+        import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+          ? 'in review'
+          : 'active',
     };
 
     setQuery(filterQuery);
@@ -294,7 +291,7 @@ const Home = () => {
       <div className="pt-6 text-3xl font-bold home-titlee md:text-4xl lg:text-5xl">
         <h1>বাংলাদেশী ইসলামিক</h1>
         <h1>
-          ম্যাট্রিমনি{" "}
+          ম্যাট্রিমনি{' '}
           <span
             style={{
               color: Colors.titleText,
@@ -421,8 +418,8 @@ const Home = () => {
               rel="noreferrer"
               className="text-sm text-white"
             >
-              {" "}
-              মেসেজ দিন{" "}
+              {' '}
+              মেসেজ দিন{' '}
             </a>
           </button>
         </div>
@@ -451,6 +448,7 @@ const Home = () => {
             style={{
               color: Colors.titleText,
             }}
+            htmlFor="ans"
           >
             আমি খুঁজছি:
           </label>
@@ -470,6 +468,7 @@ const Home = () => {
         {/* Dropdown 2 */}
         <div className="mb-4 lg:mb-0">
           <label
+            htmlFor="ans"
             className="block mb-2 text-xl md:text-2xl lg:text-2xl lg:inline-block lg:mb-0 lg:mr-4"
             style={{
               color: Colors.titleText,
@@ -500,6 +499,7 @@ const Home = () => {
             style={{
               color: Colors.titleText,
             }}
+            htmlFor="ans"
           >
             স্থায়ী ঠিকানা:
           </label>
@@ -549,44 +549,7 @@ const Home = () => {
       </h2>
 
       <HadithSlider />
-
-      <h2
-        className="mt-8 mb-2 text-xl font-bold text-center md:text-2xl lg:text-4xl text-uppercase"
-        style={{
-          color: Colors.titleText,
-        }}
-      >
-        এক নজরে আমাদের সাইটঃ
-      </h2>
-      {bioStatsLoading ? (
-        <LoadingCircle />
-      ) : (
-        <div className="grid grid-cols-1 py-5 md:grid-cols-2 lg:grid-cols-4">
-          <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
-            <h1 className="text-3xl font-semibold text-center">
-              {biosStats?.data.total}
-            </h1>
-            <h3 className="text-xl text-center ">সর্বমোট বায়োডাটা</h3>
-          </div>
-          <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
-            <h1 className="text-3xl font-semibold text-center">
-              {biosStats?.data.পুরুষ ? biosStats?.data.পুরুষ : 0}
-            </h1>
-            <h3 className="text-xl text-center ">সর্বমোট পাত্রের বায়োডাটা</h3>
-          </div>
-          <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
-            <h1 className="text-3xl font-semibold text-center">
-              {biosStats?.data.মহিলা}
-              {biosStats?.data.মহিলা ? biosStats?.data.মহিলা : 0}
-            </h1>
-            <h3 className="text-xl text-center ">সর্বমোট পাত্রীর বায়োডাটা</h3>
-          </div>
-          <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
-            <h1 className="text-3xl font-semibold text-center">0</h1>
-            <h3 className="text-xl text-center ">বিয়ে সম্পন্ন হয়েছে</h3>
-          </div>
-        </div>
-      )}
+      <BioStats />
     </div>
   );
 };
