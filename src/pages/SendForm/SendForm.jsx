@@ -1,28 +1,28 @@
-import { useEffect, useState } from "react";
-import { Colors } from "../../constants/colors";
-import Textarea from "../../components/Textarea/Textarea";
-import { BioChoiceDataServices } from "../../services/bioChoiceData";
-import { getToken } from "../../utils/cookies";
-import { useNavigate, useParams } from "react-router-dom";
-import { Toast } from "../../utils/toast";
-import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
+import { useEffect, useState } from 'react';
+import { Colors } from '../../constants/colors';
+import Textarea from '../../components/Textarea/Textarea';
+import { BioChoiceDataServices } from '../../services/bioChoiceData';
+import { getToken } from '../../utils/cookies';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Toast } from '../../utils/toast';
+import LoadingCircle from '../../components/LoadingCircle/LoadingCircle';
 function SendForm() {
   const { bio_user } = useParams();
   const navigate = useNavigate();
-  const [opinionOnNikhab, setOpinionOnNikhab] = useState("");
-  const [salatInRain, setSalatInRain] = useState("");
-  const [studyingAtUniversity, setStudyingAtUniversity] = useState("");
-  const [startingUniv, setStartingUniv] = useState("");
-  const [onlineModeling, setOnlineModeling] = useState("");
-  const [malePhotoCapture, setMalePhotoCapture] = useState("");
-  const [bioInput, setBioInput] = useState("");
+  const [opinionOnNikhab, setOpinionOnNikhab] = useState('');
+  const [salatInRain, setSalatInRain] = useState('');
+  const [studyingAtUniversity, setStudyingAtUniversity] = useState('');
+  const [startingUniv, setStartingUniv] = useState('');
+  const [onlineModeling, setOnlineModeling] = useState('');
+  const [malePhotoCapture, setMalePhotoCapture] = useState('');
+  const [bioInput, setBioInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [goTo, setGoto] = useState(false);
   useEffect(() => {
     if (goTo & !loading) {
       const timeout = setTimeout(() => {
         setGoto(false);
-        navigate("/user/account/dashboard");
+        navigate('/user/account/dashboard');
       }, 3000); // 10 seconds timeout
       return () => clearTimeout(timeout);
     }
@@ -40,7 +40,7 @@ function SendForm() {
 
     const bioChoiceData = {
       bio_details: text,
-      status: "pending",
+      status: 'pending',
       bio_user: bio_user,
     };
 
@@ -51,8 +51,8 @@ function SendForm() {
         getToken()?.token
       );
       if (response?.success) {
-        Toast.successToast("আপনার বায়োডাটা পাঠানো হয়েছে");
-        navigate("/user/account/purchases");
+        Toast.successToast('আপনার বায়োডাটা পাঠানো হয়েছে');
+        navigate('/user/account/purchases');
       }
       setGoto(true);
     } catch (error) {
@@ -120,7 +120,7 @@ function SendForm() {
           value={bioInput}
           setValue={setBioInput}
           required={true}
-          title="আপনার নিজের বায়োডাটা বিস্তারিত লিখুন(বিশেষ কিছু জানাতে চাইলে তাও লিখুন)"
+          title="আপনার নিজের বায়োডাটা লিখুন অথবা বায়োডাটার লিঙ্ক শেয়ার করুন"
         />
 
         <div className="mb-4">
@@ -131,7 +131,7 @@ function SendForm() {
               background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
             }}
           >
-            {loading ? <LoadingCircle /> : "আমার বায়োডাটা শেয়ার করুন"}
+            {loading ? <LoadingCircle /> : 'আমার বায়োডাটা শেয়ার করুন'}
           </button>
         </div>
       </form>
