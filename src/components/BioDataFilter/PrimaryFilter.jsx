@@ -1,12 +1,8 @@
 /* eslint-disable react/prop-types */
 import DoubleRangeSlider from '../DoubleRangeSlider/DoubleRangeSlider';
-import { useNavigate } from 'react-router-dom';
-import { convertToQuery } from '../../utils/query';
-import { BioDataServices } from '../../services/bioData';
-import { useQuery } from '@tanstack/react-query';
 import { useBio } from '../../contexts/useBio';
 import CustomAccordion from '../CustomAccordion/CustomAccordion';
-import { useState } from 'react';
+import { useFilter } from '../../contexts/useFilter';
 
 const PrimaryFilter = ({
   setBioType,
@@ -19,25 +15,9 @@ const PrimaryFilter = ({
   setHeight,
   setOpenAccordions,
 }) => {
-  const [primaryFilterOpen, setPrimaryFilterOpen] = useState(false);
-  const { setQuery, query, setFilterFields, filterFields } = useBio();
-  const navigate = useNavigate();
-  const { data: divisionOptions, isLoading: divisionLoading } = useQuery({
-    queryKey: ['divisions'],
-    queryFn: async () => {
-      const divisions = await BioDataServices.getAllDivisions();
-      const allDivisionsOption = {
-        value: 'All Divisions',
-        label: 'All Divisions',
-      };
-      const formattedDivisionOptions = divisions.map((division) => ({
-        value: division.value,
-        label: division.value,
-      }));
-      formattedDivisionOptions.unshift(allDivisionsOption);
-      return formattedDivisionOptions;
-    },
-  });
+  const { setFilterFields } = useBio();
+  const { primaryFilterOpen, setPrimaryFilterOpen } = useFilter();
+
   return (
     <div>
       <CustomAccordion
@@ -60,18 +40,6 @@ const PrimaryFilter = ({
                 const value = e.target.value;
 
                 setBioType(value);
-
-                // setQuery((prev) => {
-                //   return {
-                //     ...prev,
-                //     bio_type: value,
-                //   };
-                // });
-
-                const queryString = convertToQuery({
-                  ...query,
-                  bio_type: value,
-                });
 
                 setFilterFields((filterFields) => {
                   return {
@@ -123,18 +91,6 @@ const PrimaryFilter = ({
                 const value = e.target.value;
 
                 setMaritalStatus(value);
-
-                // setQuery((prev) => {
-                //   return {
-                //     ...prev,
-                //     marital_status: value,
-                //   };
-                // });
-                // console.log("query~~", query);
-                const queryString = convertToQuery({
-                  ...query,
-                  marital_status: value,
-                });
 
                 setOpenAccordions((prev) => {
                   return {

@@ -1,61 +1,56 @@
 /* eslint-disable react/prop-types */
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useBio } from '../../contexts/useBio';
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Select from 'react-select';
 import { BioDataServices } from '../../services/bioData';
 import CustomAccordion from '../CustomAccordion/CustomAccordion';
+import { useFilter } from '../../contexts/useFilter';
 
-const AddressFilter = ({ division, setDivision, setZilla, zilla }) => {
-  const [addressFilterOpen, setAddressFilterOpen] = useState(false);
-  const [searchParams] = useSearchParams();
-  const { setQuery, setFilterFields } = useBio();
+const AddressFilter = () => {
+  const { setFilterFields } = useBio();
+  const { addressFilterOpen, setAddressFilterOpen } = useFilter();
   const [selectedDivisions, setSelectedDivisions] = useState([]);
   const [selectedDistricts, setSelectedDistricts] = useState([]);
-
-  const handleDivisionChange = (selectedOptions) => {
-    setSelectedDivisions(selectedOptions);
-    if (selectedOptions.some((option) => option.value === 'All Divisions')) {
-      setSelectedDistricts(['all']);
-    }
-  };
+  const [selectedPresentDivisions, setSelectedPresentDivisions] = useState([]);
+  const [selectedPresentDistricts, setSelectedPresentDistricts] = useState([]);
 
   useEffect(() => {
-    setDivision(searchParams.get('division'));
-    setZilla(searchParams.get('zilla'));
-  }, [searchParams, setDivision, setZilla]);
-
-  useEffect(() => {
-    let queryObj = {};
-    if (division) {
-      queryObj = {
-        ...queryObj,
-        division: division,
-      };
-    }
-
-    if (zilla) {
-      queryObj = {
-        ...queryObj,
-        zilla: zilla,
-      };
-    }
-    setQuery((prev) => {
-      return {
-        ...prev,
-        ...queryObj,
-      };
-    });
     setFilterFields((prev) => {
       return {
         ...prev,
-        ...queryObj,
+        division: selectedDivisions.map((division) => division.value),
+        district: selectedDistricts.map((district) => district.value),
+        presentDivision: selectedPresentDivisions.map(
+          (division) => division.value
+        ),
+        presentDistrict: selectedPresentDistricts.map(
+          (district) => district.value
+        ),
       };
     });
-  }, [division, setFilterFields, setQuery, zilla]);
+  }, [
+    selectedDivisions,
+    selectedDistricts,
+    selectedPresentDivisions,
+    selectedPresentDistricts,
+  ]);
+
+  const handleDivisionChange = (selectedOptions, type) => {
+    if (type === 'permanent') {
+      setSelectedDivisions(selectedOptions);
+      if (selectedOptions.some((option) => option.value === 'All Divisions')) {
+        setSelectedDistricts(['all']);
+      }
+    } else if (type === 'present') {
+      setSelectedPresentDivisions(selectedOptions);
+      if (selectedOptions.some((option) => option.value === 'All Divisions')) {
+        setSelectedPresentDistricts(['all']);
+      }
+    }
+  };
 
   const { data: divisionOptions, isLoading: divisionLoading } = useQuery({
     queryKey: ['divisions'],
@@ -116,29 +111,67 @@ const AddressFilter = ({ division, setDivision, setZilla, zilla }) => {
     }
   );
 
+  const { data: presentDistrictOptions, isLoading: presentDistrictLoading } =
+    useQuery(['presentDistricts', selectedPresentDivisions], async () => {
+      const selectedDivisionValues = selectedPresentDivisions.map(
+        (division) => division.value
+      );
+      if (selectedDivisionValues.includes('All Divisions')) {
+        const allDistricts = await BioDataServices.getAllDistricts(null);
+        const allDistrictsOption = {
+          value: 'All Districts',
+          label: 'All Districts',
+        };
+        const formattedAllDistricts = allDistricts.map((district) => ({
+          value: district.value,
+          label: district.label,
+        }));
+        formattedAllDistricts.unshift(allDistrictsOption);
+        return formattedAllDistricts;
+      } else if (selectedDivisionValues.length === 0) {
+        return [{ value: 'All Districts', label: 'All Districts' }];
+      } else {
+        const districtPromises = selectedDivisionValues.map((divisionValue) =>
+          BioDataServices.getAllDistricts(divisionValue)
+        );
+        const results = await Promise.all(districtPromises);
+        const formattedDistrictOptions = results.flatMap((districts, index) =>
+          districts.map((district) => ({
+            value: district.value,
+            label: district.label,
+            division: selectedDivisionValues[index],
+          }))
+        );
+        const allDistrictsOption = {
+          value: 'All Districts',
+          label: 'All Districts',
+        };
+        formattedDistrictOptions.unshift(allDistrictsOption);
+        return formattedDistrictOptions;
+      }
+    });
+
   const customStyles = {
     option: (provided, state) => ({
       ...provided,
-      height: 40, // Set the height for each option (in pixels)
+      height: 40,
       display: 'flex',
       alignItems: 'center',
     }),
     menuList: (provided) => ({
       ...provided,
-      maxHeight: 200, // Set the maximum height for the entire list of options
+      maxHeight: 200,
       padding: 0,
       position: 'absolute',
       width: '100%',
-      backgroundColor: 'red',
-      zIndex: '10000000000000',
+      backgroundColor: 'white',
+      zIndex: 10000,
     }),
     menu: (provided) => ({
       ...provided,
-      zIndex: 9999, // Adjust the zIndex as needed
+      zIndex: 9999,
     }),
   };
-
-  console.log('districtOptions~~', districtOptions);
 
   return (
     <div>
@@ -148,15 +181,18 @@ const AddressFilter = ({ division, setDivision, setZilla, zilla }) => {
         title="ঠিকানা"
       >
         <div>
-          <p className="my-2 font-semibold text-left ">স্থায়ী ঠিকানা </p>
-
-          <div className=" mx-auto pb-3">
+          <p className="my-2 font-semibold text-left">স্থায়ী ঠিকানা</p>
+          <div className="mx-auto pb-3">
             <Select
               options={divisionOptions}
-              onChange={handleDivisionChange}
+              onChange={(selectedOptions) =>
+                handleDivisionChange(selectedOptions, 'permanent')
+              }
               value={selectedDivisions}
               placeholder="Select Division(s)"
               isMulti
+              styles={customStyles}
+              isSearchable
             />
             <br />
             <Select
@@ -165,28 +201,35 @@ const AddressFilter = ({ division, setDivision, setZilla, zilla }) => {
               value={selectedDistricts}
               placeholder="Select District(s)"
               isMulti
+              styles={customStyles}
+              isSearchable
             />
           </div>
         </div>
         <hr className="bg-gray-700" />
         <div>
-          <p className="my-2 font-semibold text-left "> বর্তমান ঠিকানা </p>
-
-          <div className=" mx-auto pb-3">
+          <p className="my-2 font-semibold text-left">বর্তমান ঠিকানা</p>
+          <div className="mx-auto pb-3">
             <Select
               options={divisionOptions}
-              onChange={handleDivisionChange}
-              value={selectedDivisions}
+              onChange={(selectedOptions) =>
+                handleDivisionChange(selectedOptions, 'present')
+              }
+              value={selectedPresentDivisions}
               placeholder="Select Division(s)"
               isMulti
+              styles={customStyles}
+              isSearchable
             />
             <br />
             <Select
-              options={districtOptions}
-              onChange={setSelectedDistricts}
-              value={selectedDistricts}
+              options={presentDistrictOptions}
+              onChange={setSelectedPresentDistricts}
+              value={selectedPresentDistricts}
               placeholder="Select District(s)"
               isMulti
+              styles={customStyles}
+              isSearchable
             />
           </div>
         </div>

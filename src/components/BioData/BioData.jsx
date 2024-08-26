@@ -10,7 +10,7 @@ import {
 } from '../../utils/date';
 import { useNavigate } from 'react-router-dom';
 import { ScrollToTop } from '../../constants/ScrolltoTop';
-import { FaBan, FaEye, FaHeart, FaRegHeart } from 'react-icons/fa';
+import { FaEye, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { LikesServices } from '../../services/favorites';
 import { getToken } from '../../utils/cookies';
 import { Toast } from '../../utils/toast';

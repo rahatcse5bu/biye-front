@@ -22,7 +22,6 @@ import { getToken } from '../../utils/cookies';
 import { useContext, useEffect } from 'react';
 import BioContext from '../../contexts/BioContext';
 import UserContext from '../../contexts/UserContext';
-// import { ScrollToTop } from "../../constants/ScrolltoTop";
 import LoadingCircle from '../../components/LoadingCircle/LoadingCircle';
 import { FcLeft } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
@@ -67,9 +66,6 @@ const BioData = () => {
     enabled: !!userInfo?.data?._id,
   });
 
-  // console.log("contact-bio-user~", contact);
-  // console.log("user-info-status~", userStatus);
-
   useEffect(() => {
     if (data && data?.data) {
       setBio(data.data);
@@ -83,40 +79,6 @@ const BioData = () => {
       page_path: location.pathname,
     });
   }, [id, location]);
-
-  // const incrementViewCount = useCallback(async () => {
-  //   const generalId = data?.data?.generalInfo?._id;
-  //   if (generalId) {
-  //     try {
-  //       const response = await GeneralInfoServices.updateWatchOfBioData(
-  //         generalId
-  //       );
-  //       console.log("watch~~", response);
-  //     } catch (error) {
-  //       console.error("Error incrementing view count", error);
-  //     }
-  //   }
-  // }, [data?.data?.generalInfo?._id]);
-
-  // useEffect(() => {
-  //   if (data?.data?.generalInfo?._id) {
-  //     incrementViewCount();
-  //   }
-  // }, [data?.data?.generalInfo?._id, incrementViewCount]);
-
-  // if (isLoading) {
-  // 	return <LoadingBioData />;
-  // }
-
-  // console.log(data);
-  // console.log(error);
-
-  // console.log(
-  //   "userInfo?.data?.user_id,id~~~",
-  //   id,
-  //   +userInfo?.data?.user_id,
-  //   id && +id !== +userInfo?.data?.user_id
-  // );
 
   return (
     <div className=" py-2 w-full  ">

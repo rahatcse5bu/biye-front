@@ -8,7 +8,8 @@ import { useFilter } from '../../contexts/useFilter';
 
 const BioDataButton = () => {
   const { filterFields, setQuery } = useBio();
-  const { setSideBarDisplay } = useFilter();
+  const { setSideBarDisplay, setAddressFilterOpen, setPrimaryFilterOpen } =
+    useFilter();
   const navigate = useNavigate();
   const buttonHandler = async (type) => {
     // console.log('type~', type);
@@ -27,8 +28,9 @@ const BioDataButton = () => {
       setQuery({});
       navigate('/biodatas');
     }
-
-    setSideBarDisplay((prev) => !prev);
+    setSideBarDisplay(false);
+    setAddressFilterOpen(true);
+    setPrimaryFilterOpen(true);
   };
   return (
     <div className="flex items-center justify-between my-10 ">
