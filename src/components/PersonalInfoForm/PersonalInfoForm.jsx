@@ -1,55 +1,55 @@
 /* eslint-disable react/prop-types */
-import { useContext, useEffect, useState } from "react";
-import FormTitle from "../FormTitle/FormTitle";
-import Input from "../Input/Input";
-import Select from "../Select/Select";
+import { useContext, useEffect, useState } from 'react';
+import FormTitle from '../FormTitle/FormTitle';
+import Input from '../Input/Input';
+import Select from '../Select/Select';
 import {
   fiqhOptions,
   personalCategoryOptions,
-} from "./personalInfoForm.constant";
-import Textarea from "../Textarea/Textarea";
-import { Colors } from "../../constants/colors";
-import { useQuery } from "@tanstack/react-query";
-import UserContext from "../../contexts/UserContext";
-import { getToken } from "../../utils/cookies";
-import LoadingCircle from "../LoadingCircle/LoadingCircle";
-import MultipleSelect from "../MultitpleSelect/MultipleSelect";
+} from './personalInfoForm.constant';
+import Textarea from '../Textarea/Textarea';
+import { Colors } from '../../constants/colors';
+import { useQuery } from '@tanstack/react-query';
+import UserContext from '../../contexts/UserContext';
+import { getToken } from '../../utils/cookies';
+import LoadingCircle from '../LoadingCircle/LoadingCircle';
+import MultipleSelect from '../MultitpleSelect/MultipleSelect';
 import {
   dataToMultipleExpectedPartner,
   getDataFromMultipleInputExpectedPartner,
-} from "../../utils/form";
-import { GeneralInfoServices } from "../../services/generalInfo";
-import { PersonalInfoInfoServices } from "../../services/personalInfo";
-import { getErrorMessage } from "../../utils/error";
-import { Toast } from "../../utils/toast";
+} from '../../utils/form';
+import { GeneralInfoServices } from '../../services/generalInfo';
+import { PersonalInfoInfoServices } from '../../services/personalInfo';
+import { getErrorMessage } from '../../utils/error';
+import { Toast } from '../../utils/toast';
 
 const PersonalInfoForm = ({ setUserForm, userForm }) => {
-  const [cloth, setCloth] = useState("");
-  const [isDeenContribution, setIsDeenContribution] = useState("");
-  const [mazar, setMazar] = useState("");
-  const [fiqh, setFiqh] = useState("");
+  const [cloth, setCloth] = useState('');
+  const [isDeenContribution, setIsDeenContribution] = useState('');
+  const [mazar, setMazar] = useState('');
+  const [fiqh, setFiqh] = useState('');
   const [personalCategory, setPersonalCategory] = useState([]);
-  const [salatKaza, setSalatKaza] = useState("");
-  const [fromWhenBeard, setFromWhenBeard] = useState("");
-  const [fromWhenFiveSalat, setFromWhenFiveSalat] = useState("");
-  const [fromWhenNikhab, setFromWhenNikhab] = useState("");
-  const [uponTakhno, setUponTakhno] = useState("");
-  const [isDailyFive, setIsDailyFive] = useState("");
-  const [isMahram, setIsMahram] = useState("");
-  const [isNatok, setIsNatok] = useState("");
-  const [isPureRecite, setIsPureRecite] = useState("");
-  const [isDisease, setIsDisease] = useState("");
-  const [books, setBooks] = useState("");
-  const [scholars, setScholars] = useState("");
-  const [aboutMe, setAboutMe] = useState("");
-  const [acceptIslam, setAcceptIslam] = useState("");
-  const [phone, setPhone] = useState("");
-  const [fromWhenFiveSalatJamat, setFromWhenFiveSalatJamat] = useState("");
-  const [isDailyFiveJamaat, setIsDailyFiveJamaat] = useState("");
+  const [salatKaza, setSalatKaza] = useState('');
+  const [fromWhenBeard, setFromWhenBeard] = useState('');
+  const [fromWhenFiveSalat, setFromWhenFiveSalat] = useState('');
+  const [fromWhenNikhab, setFromWhenNikhab] = useState('');
+  const [uponTakhno, setUponTakhno] = useState('');
+  const [isDailyFive, setIsDailyFive] = useState('');
+  const [isMahram, setIsMahram] = useState('');
+  const [isNatok, setIsNatok] = useState('');
+  const [isPureRecite, setIsPureRecite] = useState('');
+  const [isDisease, setIsDisease] = useState('');
+  const [books, setBooks] = useState('');
+  const [scholars, setScholars] = useState('');
+  const [aboutMe, setAboutMe] = useState('');
+  const [acceptIslam, setAcceptIslam] = useState('');
+  const [phone, setPhone] = useState('');
+  const [fromWhenFiveSalatJamat, setFromWhenFiveSalatJamat] = useState('');
+  const [isDailyFiveJamaat, setIsDailyFiveJamaat] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isNeshaDrobbo, setIsNeshaDrobbo] = useState("");
-  const [isBeard, setIsBeard] = useState("");
-  const [aboutMiladQiyam, setAboutMiladQiyam] = useState("");
+  const [isNeshaDrobbo, setIsNeshaDrobbo] = useState('');
+  const [isBeard, setIsBeard] = useState('');
+  const [aboutMiladQiyam, setAboutMiladQiyam] = useState('');
 
   const backButtonHandler = () => {
     if (userForm > 1) {
@@ -58,7 +58,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
   };
   const { userInfo } = useContext(UserContext);
   const { data: generalInfo = null } = useQuery({
-    queryKey: ["general-info", userInfo?.data?._id, getToken()?.token],
+    queryKey: ['general-info', userInfo?.data?._id, getToken()?.token],
     queryFn: async () => {
       return await GeneralInfoServices.getGeneralInfoByUser(getToken()?.token);
     },
@@ -67,7 +67,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
   });
 
   const { data: personalInfo = null, isLoading } = useQuery({
-    queryKey: ["personal-info", userInfo?.data?._id],
+    queryKey: ['personal-info', userInfo?.data?._id],
     queryFn: async () => {
       return await PersonalInfoInfoServices.getPersonalInfoInfoByUser(
         getToken()?.token
@@ -83,7 +83,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
   // 		"personal-info-form-verify-token"
   // 	);
   // }, [logOut, userInfo?.data]);
-  const gender = generalInfo?.data?.gender || "";
+  const gender = generalInfo?.data?.gender || '';
   useEffect(() => {
     if (personalInfo?.data) {
       const {
@@ -172,7 +172,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
     };
 
     if (!getToken()?.token || !userInfo?.data?._id) {
-      alert("Please logout and try again");
+      alert('Please logout and try again');
       return;
     }
 
@@ -195,7 +195,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
         );
       }
       if (data.success) {
-        Toast.successToast("আপনার তথ্য সেভ করা হয়েছে ");
+        Toast.successToast('আপনার তথ্য সেভ করা হয়েছে ');
         setUserForm((prev) => prev + 1);
       }
     } catch (error) {
@@ -224,55 +224,59 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
         <LoadingCircle classes="mt-10" />
       ) : (
         <form action="" onSubmit={submitHandler}>
-          <Input
+          <Textarea
             title="ঘরের বাহিরে সাধারণত কি ধরণের পোষাক পরেন?"
             value={cloth}
+            rows={2}
             setValue={setCloth}
             required
           />
-          {gender && gender === "মহিলা" && (
-            <Input
+
+          {gender && gender === 'মহিলা' && (
+            <Textarea
               title=" কবে থেকে নিকাব সহ পর্দা করছেন?"
               value={fromWhenNikhab}
               setValue={setFromWhenNikhab}
+              rows={2}
               required
             />
           )}
-          {gender && gender === "পুরুষ" && (
+          {gender && gender === 'পুরুষ' && (
             <>
               <Select
                 title=" সুন্নতি দাড়ি আছে কি না?"
                 options={[
                   {
-                    value: "জ্বী ,আলহামদুলিল্লাহ",
+                    value: 'জ্বী ,আলহামদুলিল্লাহ',
                   },
                   {
-                    value: "না",
+                    value: 'না',
                   },
                 ]}
                 value={isBeard}
                 setValue={setIsBeard}
                 required
               />
-              {isBeard === "জ্বী ,আলহামদুলিল্লাহ" && (
-                <Input
+              {isBeard === 'জ্বী ,আলহামদুলিল্লাহ' && (
+                <Textarea
                   title="কবে থেকে রেখেছেন?"
                   required={true}
                   value={fromWhenBeard}
                   setValue={setFromWhenBeard}
+                  rows={2}
                 />
               )}
             </>
           )}
-          {gender && gender === "পুরুষ" && (
+          {gender && gender === 'পুরুষ' && (
             <Select
               title="টাখনুর উপরে কাপড় পরেন? "
               options={[
                 {
-                  value: "জ্বী ,আলহামদুলিল্লাহ",
+                  value: 'জ্বী ,আলহামদুলিল্লাহ',
                 },
                 {
-                  value: "না",
+                  value: 'না',
                 },
               ]}
               value={uponTakhno}
@@ -285,17 +289,17 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
             title="প্রতিদিন পাঁচ ওয়াক্ত নামাজ পড়েন কি? "
             options={[
               {
-                value: "জ্বী ,আলহামদুলিল্লাহ",
+                value: 'জ্বী ,আলহামদুলিল্লাহ',
               },
               {
-                value: "না",
+                value: 'না',
               },
             ]}
             value={isDailyFive}
             setValue={setIsDailyFive}
             required
           />
-          {isDailyFive === "জ্বী ,আলহামদুলিল্লাহ" && (
+          {isDailyFive === 'জ্বী ,আলহামদুলিল্লাহ' && (
             <Input
               title="কবে থেকে পড়ছেন?"
               value={fromWhenFiveSalat}
@@ -303,46 +307,50 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
               required
             />
           )}
-          {gender && gender === "পুরুষ" && (
+          {gender && gender === 'পুরুষ' && (
             <>
               <Select
                 title="প্রতিদিন পাঁচ ওয়াক্ত নামাজ জামায়াতে পড়েন কি? "
                 options={[
                   {
-                    value: "জ্বী ,আলহামদুলিল্লাহ",
+                    value: 'জ্বী ,আলহামদুলিল্লাহ',
                   },
                   {
-                    value: "না",
+                    value: 'না',
                   },
                 ]}
                 value={isDailyFiveJamaat}
                 setValue={setIsDailyFiveJamaat}
                 required
               />
-              {isDailyFiveJamaat === "জ্বী ,আলহামদুলিল্লাহ" && (
-                <Input
+              {isDailyFiveJamaat === 'জ্বী ,আলহামদুলিল্লাহ' && (
+                <Textarea
                   title="প্রতিদিন পাঁচ ওয়াক্ত কবে থেকে নিয়মিত জামায়াতে পড়ছেন?"
                   value={fromWhenFiveSalatJamat}
                   setValue={setFromWhenFiveSalatJamat}
                   required
+                  rows={2}
                 />
               )}
             </>
           )}
 
-          <Input
+          <Textarea
             title="সাধারণত সপ্তাহে কত ওয়াক্ত নামায আপনার কাযা হয়?"
             value={salatKaza}
             setValue={setSalatKaza}
             required
+            rows={2}
           />
-          <Input
+          <Textarea
             title=" মাহরাম/নন-মাহরাম মেনে চলেন কি?"
             value={isMahram}
+            rows={2}
             setValue={setIsMahram}
             required
           />
-          <Input
+          <Textarea
+            rows={2}
             title="শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?"
             value={isPureRecite}
             setValue={setIsPureRecite}
@@ -355,43 +363,49 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
             setValue={setFiqh}
           />
 
-          <Input
+          <Textarea
             title="নাটক / সিনেমা / সিরিয়াল / গান এসব দেখেন বা শুনেন?"
             value={isNatok}
             setValue={setIsNatok}
             required
+            rows={2}
           />
 
-          <Input
+          <Textarea
             title="আপনার মানসিক বা শারীরিক কোনো রোগ আছে?"
             value={isDisease}
             setValue={setIsDisease}
+            rows={2}
             required
           />
-          <Input
+          <Textarea
             title="দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন? "
             value={isDeenContribution}
             setValue={setIsDeenContribution}
+            rows={2}
             required
           />
-          <Input
+          <Textarea
             title="মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি? "
             value={mazar}
             setValue={setMazar}
+            rows={3}
             required
           />
-          <Input
+          <Textarea
             title="আপনার পড়া হয়েছে এমন অন্তত ৩ টি ইসলামি বই এর নাম লিখুন "
             value={books}
             setValue={setBooks}
+            rows={2}
             required
           />
 
-          <Input
+          <Textarea
             title="আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন"
             value={scholars}
             setValue={setScholars}
             required
+            rows={2}
           />
 
           {/* <Select
@@ -409,7 +423,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
           />
 
           {personalCategory?.length > 0 &&
-            personalCategory.some((item) => item.value === "নওমুসলিম") && (
+            personalCategory.some((item) => item.value === 'নওমুসলিম') && (
               <Textarea
                 title="আপনার ইসলাম গ্রহণের সময় ও ঘটনা উল্লেখ করুন"
                 value={acceptIslam}
@@ -433,10 +447,10 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
             title="কোনো নেশাদ্রব্য পান করেন?"
             options={[
               {
-                value: "জ্বী",
+                value: 'জ্বী',
               },
               {
-                value: "না,আলহামদুলিল্লাহ",
+                value: 'না,আলহামদুলিল্লাহ',
               },
             ]}
             value={isNeshaDrobbo}
@@ -465,7 +479,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
                 background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
               }}
             >
-              {loading ? <LoadingCircle /> : "Save & Next"}
+              {loading ? <LoadingCircle /> : 'Save & Next'}
             </button>
           </div>
         </form>
