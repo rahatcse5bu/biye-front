@@ -1,21 +1,21 @@
-import axios from "axios";
-import { convertToQuery } from "../utils/query";
-import axiosInstance from "../utils/axios";
+import axios from 'axios';
+import { convertToQuery } from '../utils/query';
+import axiosInstance from '../utils/axios';
 const baseUrl =
-  import.meta.env.VITE_REACT_APP_NODE_ENV === "development"
-    ? "http://localhost:5000/api/v1"
-    : "https://server.pnc-nikah.com/api/v1";
+  import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+    ? 'http://localhost:5000/api/v1'
+    : 'https://server.pnc-nikah.com/api/v1';
 
 const getAllDivisions = async () => {
-  const response = await axios.get("/divisions.json");
+  const response = await axios.get('/divisions.json');
   //console.log(response);
   return response.data;
 };
 
 const getAllDistricts = async (division) => {
-  const res1 = await axios.get("/divisions.json");
+  const res1 = await axios.get('/divisions.json');
   const divisions = res1?.data;
-  const resp2 = await axios.get("/districts.json");
+  const resp2 = await axios.get('/districts.json');
   const districts = resp2?.data;
   if (!division) {
     return districts;
@@ -32,9 +32,9 @@ const getAllDistricts = async (division) => {
 };
 
 const getAllUpzilla = async (district) => {
-  const res1 = await axios.get("/upzila.json");
+  const res1 = await axios.get('/upzila.json');
   const upzillas = res1?.data;
-  const resp2 = await axios.get("/districts.json");
+  const resp2 = await axios.get('/districts.json');
   const districts = resp2?.data;
   if (!district) {
     return upzillas;
@@ -53,7 +53,7 @@ const getAllUpzilla = async (district) => {
 const getALLGeneralInfo = async (query) => {
   const queryString = convertToQuery(query);
   console.log(
-    "🚀 ~ file: bioData.jsx:55 ~ getALLGeneralInfo ~ queryString:",
+    '🚀 ~ file: bioData.jsx:55 ~ getALLGeneralInfo ~ queryString:',
     queryString
   );
 
@@ -62,15 +62,15 @@ const getALLGeneralInfo = async (query) => {
 };
 
 const getBioData = async (id) => {
-  const { data } = await axios.get(baseUrl + "/bio-data/" + Number(id));
+  const { data } = await axios.get(baseUrl + '/bio-data/' + Number(id));
   return data;
 };
 
 const createGeneralInfo = async (data, token) => {
-  const generalInfo = await axios.post(baseUrl + "/general-info", data, {
+  const generalInfo = await axios.post(baseUrl + '/general-info', data, {
     headers: {
-      Authorization: "Bearer " + token,
-      "Content-Type": "application/json",
+      Authorization: 'Bearer ' + token,
+      'Content-Type': 'application/json',
     },
   });
   return generalInfo.data;

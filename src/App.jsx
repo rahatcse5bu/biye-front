@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
-import { useState, useEffect } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import { RouterProvider } from "react-router-dom";
-import router from "./routes/Routes";
-import toast, { Toaster } from "react-hot-toast";
-import { Toast } from "./utils/toast";
-import { logEvent } from "firebase/analytics";
-import { analytics } from "./firebase/app";
-import AnalyticsService from "./firebase/analyticsService";
+import { useState, useEffect } from 'react';
+import reactLogo from './assets/react.svg';
+import viteLogo from '/vite.svg';
+import './App.css';
+import { RouterProvider } from 'react-router-dom';
+import router from './routes/Routes';
+import toast, { Toaster } from 'react-hot-toast';
+import { Toast } from './utils/toast';
+import { logEvent } from 'firebase/analytics';
+import { analytics } from './firebase/app';
+import AnalyticsService from './firebase/analyticsService';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -19,25 +19,25 @@ function App() {
   useEffect(() => {
     const handleOnline = () => {
       setIsOnline(true);
-      Toast.successToast("You are back online!");
+      Toast.successToast('You are back online!');
     };
 
     const handleOffline = () => {
       setIsOnline(false);
-      Toast.errorToast("You are offline. Check your network connection");
+      Toast.errorToast('You are offline. Check your network connection');
     };
 
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
 
     return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
     };
   }, []);
 
   useEffect(() => {
-    AnalyticsService.logEvent("notification_received");
+    AnalyticsService.logEvent('notification_received');
   }, []);
 
   return (

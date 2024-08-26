@@ -10,9 +10,9 @@ import {
   updatePassword,
   GoogleAuthProvider,
   onAuthStateChanged,
-} from "firebase/auth";
-import { createContext, useEffect, useState } from "react";
-import { auth } from "../firebase/app.jsx";
+} from 'firebase/auth';
+import { createContext, useEffect, useState } from 'react';
+import { auth } from '../firebase/app.jsx';
 
 // Create a new context instance
 const UserContext = createContext();

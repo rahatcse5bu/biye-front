@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 // src/contexts/BioContext.js
 
-import { useQuery } from "@tanstack/react-query";
-import { createContext, useState } from "react";
-import { BioDataServices } from "../services/bioData";
+import { useQuery } from '@tanstack/react-query';
+import { createContext, useState } from 'react';
+import { BioDataServices } from '../services/bioData';
 
 // Create a new context instance
 const BioContext = createContext();
@@ -20,7 +20,7 @@ export const BioProvider = ({ children }) => {
     error: bioError,
     data: bios,
   } = useQuery({
-    queryKey: ["bioData", "generalInfo", query],
+    queryKey: ['bioData', 'generalInfo', query],
     queryFn: async () => {
       return await BioDataServices.getALLGeneralInfo(query);
     },

@@ -1,15 +1,15 @@
 /* eslint-disable react/prop-types */
-import { sidebarDetails } from "../../constants/Sidebardata";
-import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import UserContext from "../../contexts/UserContext";
-import { Colors } from "../../constants/colors";
-import OptionCart from "../OptionCart/OptionCart";
-import female from "../../assets/icons/female.svg";
-import male from "../../assets/icons/male.svg";
-import { getGender } from "../../utils/localStorage";
-import { FiLogOut } from "react-icons/fi";
-import { removeToken } from "../../utils/cookies";
+import { sidebarDetails } from '../../constants/Sidebardata';
+import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import UserContext from '../../contexts/UserContext';
+import { Colors } from '../../constants/colors';
+import OptionCart from '../OptionCart/OptionCart';
+import female from '../../assets/icons/female.svg';
+import male from '../../assets/icons/male.svg';
+import { getGender } from '../../utils/localStorage';
+import { FiLogOut } from 'react-icons/fi';
+import { removeToken } from '../../utils/cookies';
 
 const UserSidebar = ({ openSidebar, setOpenSidebar }) => {
   const navigate = useNavigate();
@@ -24,26 +24,26 @@ const UserSidebar = ({ openSidebar, setOpenSidebar }) => {
     setOpenSidebar(false);
     await logOut();
     removeToken();
-    navigate("/");
+    navigate('/');
   };
 
   return (
     <div
       className={`min-h-screen w-full bg-white shadow-xl rounded-b-lg border-l-2 border-gray-400 flex-col relative ${
-        !openSidebar && "hidden"
+        !openSidebar && 'hidden'
       } `}
     >
       <div className="flex flex-col ">
         <div className="h-[80px] w-[80px] pt-2  self-center mb-3 ">
           <img
             className="w-24 h-24 py-2 mx-auto rounded-full"
-            src={gender === "মহিলা" ? female : male}
+            src={gender === 'মহিলা' ? female : male}
             alt="Person"
           />
         </div>
         <div className="mt-2">
           <h3 style={{ color: Colors.siteGlobal }} className="font-semibold">
-            {gender === "মহিলা" ? "PNCF-" : "PNCM-"}
+            {gender === 'মহিলা' ? 'PNCF-' : 'PNCM-'}
             {userInfo?.data?.user_id}
           </h3>
         </div>
@@ -73,13 +73,13 @@ const UserSidebar = ({ openSidebar, setOpenSidebar }) => {
             path={data.path}
           />
         ))}
-        <div
+        <button
           onClick={logOutHandler}
           className="flex items-center p-5 cursor-pointer hover:bg-gray-300"
         >
           <FiLogOut className="h-8 w-8 text-[12px] p-1 bg-gray-100 rounded-md " />
           <span className="ml-2">লগআউট</span>
-        </div>
+        </button>
       </div>
     </div>
   );

@@ -1,0 +1,20 @@
+import { createContext, useState } from 'react';
+
+export const FilterContext = createContext();
+
+const FilterProvider = ({ children }) => {
+  const [openSidebar, setOpenSidebar] = useState(true);
+  const [sideBarDisplay, setSideBarDisplay] = useState(false);
+
+  const value = {
+    openSidebar,
+    setOpenSidebar,
+    sideBarDisplay,
+    setSideBarDisplay,
+  };
+  return (
+    <FilterContext.Provider value={value}>{children}</FilterContext.Provider>
+  );
+};
+
+export default FilterProvider;

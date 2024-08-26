@@ -4,12 +4,14 @@ import { AiOutlineDelete, AiOutlineSearch } from 'react-icons/ai';
 import { useBio } from '../../contexts/useBio';
 import { useNavigate } from 'react-router-dom';
 import { convertToQuery } from '../../utils/query';
+import { useFilter } from '../../contexts/useFilter';
 
 const BioDataButton = () => {
   const { filterFields, setQuery } = useBio();
+  const { setSideBarDisplay } = useFilter();
   const navigate = useNavigate();
   const buttonHandler = async (type) => {
-    console.log('type~', type);
+    // console.log('type~', type);
     // console.log("filterFields~", filterFields);
 
     if (type === 'search') {
@@ -25,6 +27,8 @@ const BioDataButton = () => {
       setQuery({});
       navigate('/biodatas');
     }
+
+    setSideBarDisplay((prev) => !prev);
   };
   return (
     <div className="flex items-center justify-between my-10 ">
