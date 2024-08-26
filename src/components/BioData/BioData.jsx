@@ -3,7 +3,11 @@ import { Button } from '@material-tailwind/react';
 import female from '../../assets/icons/female.svg';
 import male from '../../assets/icons/male.svg';
 import { Colors } from '../../constants/colors';
-import { formatDate, getDateMonthYear } from '../../utils/date';
+import {
+  formatDate,
+  formatDateAndCalculateAge,
+  getDateMonthYear,
+} from '../../utils/date';
 import { useNavigate } from 'react-router-dom';
 import { ScrollToTop } from '../../constants/ScrolltoTop';
 import { FaBan, FaEye, FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -85,9 +89,7 @@ const BioData = ({ biodata }) => {
     // update watch count
     if (biodata?._id) {
       try {
-        const response = await GeneralInfoServices.updateWatchOfBioData(
-          biodata?._id
-        );
+        await GeneralInfoServices.updateWatchOfBioData(biodata?._id);
         // console.log("watch-response", response);
       } catch (error) {
         console.error('Error incrementing view count', error);
@@ -169,6 +171,12 @@ const BioData = ({ biodata }) => {
   // console.log("like count~", data);
   // console.log("dislikes~", userDisLikesData);
 
+  // console.log(
+  //   'biodata?.date_of_birth',
+  //   biodata?.date_of_birth,
+  //   formatDateAndCalculateAge(biodata?.date_of_birth)?.age
+  // );
+
   return (
     <div className="my-5 min-w-[280px] relative hover:shadow-2xl transition-all  duration-300 ease-in rounded-md border-2">
       <ScrollToTop />
@@ -224,6 +232,9 @@ const BioData = ({ biodata }) => {
               </td>
               <td className="px-6 py-4 text-sm whitespace-nowrap border-b border-t">
                 {formatDate(getDateMonthYear(biodata?.date_of_birth))}
+                <b className="text-indigo-900">
+                  {` [${formatDateAndCalculateAge(biodata?.date_of_birth)?.age}Y]`}
+                </b>
               </td>
             </tr>
             <tr>
