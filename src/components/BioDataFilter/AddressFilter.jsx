@@ -11,9 +11,15 @@ import { useFilter } from '../../contexts/useFilter';
 
 const AddressFilter = () => {
   const { setFilterFields } = useBio();
-  const { addressFilterOpen, setAddressFilterOpen } = useFilter();
-  const [selectedDivisions, setSelectedDivisions] = useState([]);
-  const [selectedDistricts, setSelectedDistricts] = useState([]);
+  const {
+    addressFilterOpen,
+    setAddressFilterOpen,
+    setSelectedDistricts,
+    setSelectedDivisions,
+    selectedDivisions,
+    selectedDistricts,
+  } = useFilter();
+
   const [selectedPresentDivisions, setSelectedPresentDivisions] = useState([]);
   const [selectedPresentDistricts, setSelectedPresentDistricts] = useState([]);
 
