@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
-import FormTitle from "../FormTitle/FormTitle";
+import { useState } from 'react';
+import FormTitle from '../FormTitle/FormTitle';
 
 import {
   educationOptionsMultiple,
@@ -8,31 +8,27 @@ import {
   maritalStatusMultiple,
   professionMultiple,
   screenColorOptionsMultiple,
-} from "./expectedPartnerForm.constant";
+} from './expectedPartnerForm.constant';
 
-import "./expectedPartner.css";
-import DoubleRangeSlider from "../DoubleRangeSlider/DoubleRangeSlider";
-import MultipleSelect from "../MultitpleSelect/MultipleSelect";
-import { useQuery } from "@tanstack/react-query";
-import { BioDataServices } from "../../services/bioData";
-import Textarea from "../Textarea/Textarea";
-import { Colors } from "../../constants/colors";
+import './expectedPartner.css';
+import DoubleRangeSlider from '../DoubleRangeSlider/DoubleRangeSlider';
+import MultipleSelect from '../MultitpleSelect/MultipleSelect';
+import { useQuery } from '@tanstack/react-query';
+import { BioDataServices } from '../../services/bioData';
+import Textarea from '../Textarea/Textarea';
+import { Colors } from '../../constants/colors';
 import {
-  dataToMultiple,
   dataToMultipleExpectedPartner,
-  dataToRange,
-  getDataFromMultipleInput,
   getDataFromMultipleInputExpectedPartner,
-  getDataFromRange,
-} from "../../utils/form";
-import { useContext } from "react";
-import UserContext from "../../contexts/UserContext";
-import { useEffect } from "react";
-import { getToken } from "../../utils/cookies";
-import LoadingCircle from "../LoadingCircle/LoadingCircle";
-import { getErrorMessage } from "../../utils/error";
-import { Toast } from "../../utils/toast";
-import { ExpectedPartnerServices } from "../../services/expectedPartner";
+} from '../../utils/form';
+import { useContext } from 'react';
+import UserContext from '../../contexts/UserContext';
+import { useEffect } from 'react';
+import { getToken } from '../../utils/cookies';
+import LoadingCircle from '../LoadingCircle/LoadingCircle';
+import { getErrorMessage } from '../../utils/error';
+import { Toast } from '../../utils/toast';
+import { ExpectedPartnerServices } from '../../services/expectedPartner';
 
 const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
   const [zilla, setZilla] = useState([]);
@@ -50,7 +46,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
   const [profession, setProfession] = useState([]);
   const [maritalStatus, setMaritalStatus] = useState([]);
   const [financial, setFinancial] = useState([]);
-  const [expected, setExpected] = useState("");
+  const [expected, setExpected] = useState('');
   const { userInfo } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
 
@@ -61,9 +57,9 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
   // );
 
   const { data: districtsOptions = [] } = useQuery({
-    queryKey: ["districts"],
+    queryKey: ['districts'],
     queryFn: async () => {
-      return await BioDataServices.getAllDistricts("");
+      return await BioDataServices.getAllDistricts('');
     },
   });
   // useEffect(() => {
@@ -75,7 +71,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
   // }, [logOut, userInfo?.data]);
   const { data: expectedPartnerInfo = null, isLoading } = useQuery({
     queryKey: [
-      "expected-life-partner-info",
+      'expected-life-partner-info',
       userInfo?.data?._id,
       getToken()?.token,
     ],
@@ -135,7 +131,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
     };
 
     if (!getToken()?.token || !userInfo?.data?._id) {
-      alert("Please logout and try again");
+      alert('Please logout and try again');
       return;
     }
 
@@ -156,7 +152,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
         );
       }
       if (data.success) {
-        Toast.successToast("আপনার তথ্য সেভ করা হয়েছে ");
+        Toast.successToast('আপনার তথ্য সেভ করা হয়েছে ');
         setUserForm((prev) => prev + 1);
       }
     } catch (error) {
@@ -187,7 +183,10 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
         <LoadingCircle classes="mt-10" />
       ) : (
         <form onSubmit={submitHandler} action="">
-          <label className="block mt-4 mb-5 font-bold text-left text-gray-500">
+          <label
+            htmlFor="anis"
+            className="block mt-4 mb-5 font-bold text-left text-gray-500"
+          >
             বয়স
           </label>
           <DoubleRangeSlider value={age} setValue={setAge} />
@@ -277,7 +276,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
                 background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
               }}
             >
-              {loading ? <LoadingCircle /> : "Save & Next"}
+              {loading ? <LoadingCircle /> : 'Save & Next'}
             </button>
           </div>
         </form>

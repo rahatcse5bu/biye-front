@@ -26,9 +26,11 @@ import EducationFilter from './EducationFilter';
 import PersonalInfoFilter from './PersonalInfoFilte';
 import OccupationFilter from './OccupationFilter';
 import OthersFilter from './OthersFilter';
+import { useFilter } from '../../contexts/useFilter';
 
 const BioDataFilter = () => {
   const { setQuery, setFilterFields, filterFields } = useContext(BioContext);
+  const { setAddressFilterOpen, setPrimaryFilterOpen } = useFilter();
 
   const [openAccordions, setOpenAccordions] = useState({
     3: true,
@@ -53,7 +55,10 @@ const BioDataFilter = () => {
   const [value, setValue] = useState(50);
 
   // console.log("searchParams~", searchParams.get("marital_status"));
-
+  useEffect(() => {
+    setPrimaryFilterOpen(true);
+    setAddressFilterOpen(true);
+  }, []);
   useEffect(() => {
     setBioType(searchParams.get('bio_type'));
     setMaritalStatus(searchParams.get('marital_status'));

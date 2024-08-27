@@ -1,36 +1,37 @@
 /* eslint-disable react/prop-types */
-import { useContext, useState } from "react";
-import Select from "../Select/Select";
-import { useQuery } from "@tanstack/react-query";
-import { BioDataServices } from "../../services/bioData";
-import Input from "../Input/Input";
-import { Checkbox } from "@material-tailwind/react";
-import { Colors } from "../../constants/colors";
-import UserContext from "../../contexts/UserContext";
-import { getToken } from "../../utils/cookies";
-import toast from "react-hot-toast";
-import { useEffect } from "react";
-import LoadingCircle from "../LoadingCircle/LoadingCircle";
-import { AddressInfoServices } from "../../services/addressInfo";
-import { Toast } from "../../utils/toast";
-import { getErrorMessage } from "../../utils/error";
+import { useContext, useState } from 'react';
+import Select from '../Select/Select';
+import { useQuery } from '@tanstack/react-query';
+import { BioDataServices } from '../../services/bioData';
+import Input from '../Input/Input';
+import { Checkbox } from '@material-tailwind/react';
+import { Colors } from '../../constants/colors';
+import UserContext from '../../contexts/UserContext';
+import { getToken } from '../../utils/cookies';
+import toast from 'react-hot-toast';
+import { useEffect } from 'react';
+import LoadingCircle from '../LoadingCircle/LoadingCircle';
+import { AddressInfoServices } from '../../services/addressInfo';
+import { Toast } from '../../utils/toast';
+import { getErrorMessage } from '../../utils/error';
+import Textarea from '../Textarea/Textarea';
 
 const AddressInfoForm = ({ userForm, setUserForm }) => {
-  const [division, setDivision] = useState("");
-  const [district, setDistrict] = useState("");
-  const [upZilla, setUpZilla] = useState("");
-  const [area, setArea] = useState("");
-  const [pArea, setPArea] = useState("");
-  const [pDivision, setPDivision] = useState("");
-  const [pDistrict, setPDistrict] = useState("");
-  const [pUpZilla, setPUpZilla] = useState("");
+  const [division, setDivision] = useState('');
+  const [district, setDistrict] = useState('');
+  const [upZilla, setUpZilla] = useState('');
+  const [area, setArea] = useState('');
+  const [pArea, setPArea] = useState('');
+  const [pDivision, setPDivision] = useState('');
+  const [pDistrict, setPDistrict] = useState('');
+  const [pUpZilla, setPUpZilla] = useState('');
   const [isCheck, setIsCheck] = useState(false);
-  const [grownUp, setGrownUp] = useState("");
+  const [grownUp, setGrownUp] = useState('');
   const { userInfo } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
 
   const { data: addressInfo = null, isLoading: addressGetLoading } = useQuery({
-    queryKey: ["address-info", userInfo?.data?._id, getToken()?.token],
+    queryKey: ['address-info', userInfo?.data?._id, getToken()?.token],
     queryFn: async () => {
       return await AddressInfoServices.getAddressInfoByUser(getToken()?.token);
     },
@@ -39,42 +40,42 @@ const AddressInfoForm = ({ userForm, setUserForm }) => {
   });
 
   const { data: divisionOptions = [] } = useQuery({
-    queryKey: ["divisions"],
+    queryKey: ['divisions'],
     queryFn: async () => {
       return await BioDataServices.getAllDivisions();
     },
   });
 
   const { isLoading, data: districtsOptions = [] } = useQuery({
-    queryKey: ["districts", division],
+    queryKey: ['districts', division],
     queryFn: async () => {
       return await BioDataServices.getAllDistricts(division);
     },
   });
 
   const { isLoading: upZillaLoading, data: upZillaOptions = [] } = useQuery({
-    queryKey: ["upzillas", district, division],
+    queryKey: ['upzillas', district, division],
     queryFn: async () => {
       return await BioDataServices.getAllUpzilla(district);
     },
   });
 
   const { data: pDivisionOptions = [] } = useQuery({
-    queryKey: ["pdivisions"],
+    queryKey: ['pdivisions'],
     queryFn: async () => {
       return await BioDataServices.getAllDivisions();
     },
   });
 
   const { pDistrictLoading, data: pDistrictsOptions = [] } = useQuery({
-    queryKey: ["pdistricts", pDivision],
+    queryKey: ['pdistricts', pDivision],
     queryFn: async () => {
       return await BioDataServices.getAllDistricts(pDivision);
     },
   });
 
   const { isLoading: pUpZillaLoading, data: pUpZillaOptions = [] } = useQuery({
-    queryKey: ["pupzillas", pDistrict, pDivision],
+    queryKey: ['pupzillas', pDistrict, pDivision],
     queryFn: async () => {
       return await BioDataServices.getAllUpzilla(pDistrict);
     },
@@ -103,7 +104,7 @@ const AddressInfoForm = ({ userForm, setUserForm }) => {
         setPDistrict(zilla);
         setPDivision(division);
       } else {
-        const address = present_address.split(",");
+        const address = present_address.split(',');
         setPDivision(address[0].trim());
         setPDistrict(address[1].trim());
         setPUpZilla(address[2].trim());
@@ -142,12 +143,12 @@ const AddressInfoForm = ({ userForm, setUserForm }) => {
     };
 
     if (!getToken()?.token) {
-      alert("Please logout and try again");
+      alert('Please logout and try again');
       return;
     }
 
     if (!userInfo?.data?._id) {
-      alert("Please login and try again");
+      alert('Please login and try again');
       return;
     }
 
@@ -172,10 +173,10 @@ const AddressInfoForm = ({ userForm, setUserForm }) => {
       }
 
       if (data.success) {
-        toast.success("আপনার তথ্য সেভ করা হয়েছে ", {
-          position: "bottom-right",
+        toast.success('আপনার তথ্য সেভ করা হয়েছে ', {
+          position: 'bottom-right',
           duration: 3000,
-          style: { backgroundColor: "green", color: "#fff" },
+          style: { backgroundColor: 'green', color: '#fff' },
         });
         setUserForm((prev) => prev + 1);
       }
@@ -260,7 +261,7 @@ const AddressInfoForm = ({ userForm, setUserForm }) => {
 
           <div className="flex my-2 items-center">
             <Checkbox color="teal" onChange={checkBoxHandler} />
-            <label>স্থায়ী ও বর্তমান ঠিকানা একই</label>
+            <label htmlFor="anismolla">স্থায়ী ও বর্তমান ঠিকানা একই</label>
           </div>
 
           {!isCheck && (
@@ -312,10 +313,11 @@ const AddressInfoForm = ({ userForm, setUserForm }) => {
             </div>
           )}
           <br />
-          <Input
+          <Textarea
             title="কোথায় বড় হয়েছেন ?"
             value={grownUp}
             setValue={setGrownUp}
+            rows={2}
             required
           />
 
@@ -334,7 +336,7 @@ const AddressInfoForm = ({ userForm, setUserForm }) => {
                 background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
               }}
             >
-              {loading ? <LoadingCircle /> : "Save & Next"}
+              {loading ? <LoadingCircle /> : 'Save & Next'}
             </button>
           </div>
         </form>

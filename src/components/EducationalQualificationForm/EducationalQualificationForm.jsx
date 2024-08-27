@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
-import Select from "../Select/Select";
-import Input from "../Input/Input";
+import { useState } from 'react';
+import Select from '../Select/Select';
+import Input from '../Input/Input';
 import {
   afterSscOptions,
   classType,
@@ -13,81 +13,81 @@ import {
   qawmiEducationOptions,
   qawmiResult,
   result,
-} from "./educationQualification.constant";
-import Textarea from "../Textarea/Textarea";
-import { Colors } from "../../constants/colors";
-import { useQuery } from "@tanstack/react-query";
-import { useContext } from "react";
-import UserContext from "../../contexts/UserContext";
-import { useEffect } from "react";
-import LoadingCircle from "../LoadingCircle/LoadingCircle";
+} from './educationQualification.constant';
+import Textarea from '../Textarea/Textarea';
+import { Colors } from '../../constants/colors';
+import { useQuery } from '@tanstack/react-query';
+import { useContext } from 'react';
+import UserContext from '../../contexts/UserContext';
+import { useEffect } from 'react';
+import LoadingCircle from '../LoadingCircle/LoadingCircle';
 // import { useNavigate } from "react-router-dom";
-import MultipleSelect from "../MultitpleSelect/MultipleSelect";
+import MultipleSelect from '../MultitpleSelect/MultipleSelect';
 import {
   dataToMultiple,
   dataToMultipleExpectedPartner,
   getDataFromMultipleInput,
   getDataFromMultipleInputExpectedPartner,
-} from "../../utils/form";
-import { getErrorMessage } from "../../utils/error";
-import { Toast } from "../../utils/toast";
-import { EducationalQualificationInfoServices } from "../../services/educationalQualification";
-import { getToken } from "../../utils/cookies";
+} from '../../utils/form';
+import { getErrorMessage } from '../../utils/error';
+import { Toast } from '../../utils/toast';
+import { EducationalQualificationInfoServices } from '../../services/educationalQualification';
+import { getToken } from '../../utils/cookies';
 
 const EducationalQualificationForm = ({ setUserForm, userForm }) => {
-  const [eduType, setEduType] = useState("");
+  const [eduType, setEduType] = useState('');
   const [status, setStatus] = useState([]);
-  const [maxEdu, setMaxEdu] = useState("");
-  const [selectedClass, setSelectedClass] = useState("");
-  const [othersEdu, setOthersEdu] = useState("");
-  const [sscPassYear, setSscPassYear] = useState("");
-  const [sscGroup, setSscGroup] = useState("");
-  const [sscResult, setSscResult] = useState("");
-  const [hscRunning, setHscRunning] = useState("");
-  const [hscPassYear, setHscPassYear] = useState("");
-  const [hscGroup, setHscGroup] = useState("");
-  const [hscResult, setHscResult] = useState("");
-  const [diplomaInst, setDiplomaInst] = useState("");
-  const [diplomaSub, setDiplomaSub] = useState("");
-  const [diplomaYear, setDiplomaYear] = useState("");
-  const [diplomaPassYear, setDiplomaPassYear] = useState("");
-  const [afterSsc, setAfterSsc] = useState("");
-  const [bscInst, setBscInst] = useState("");
-  const [bscSub, setBscSub] = useState("");
-  const [bscYear, setBscYear] = useState("");
-  const [bscPassYear, setBscPassYear] = useState("");
-  const [mscPassYear, setMscPassYear] = useState("");
-  const [mscSub, setMscSub] = useState("");
-  const [mscInst, setMscInst] = useState("");
-  const [phdSub, setPhdSub] = useState("");
-  const [phdInst, setPhdInst] = useState("");
-  const [phdPassYear, setPhdPassYear] = useState("");
-  const [ibtiInst, setIbtiInst] = useState("");
-  const [ibtiPassYear, setIbtiPassYear] = useState("");
-  const [ibtiResult, setIbtiResult] = useState("");
-  const [mutawasInst, setMutawasInst] = useState("");
-  const [mutawasResult, setMutawasResult] = useState("");
-  const [mutawasPassYear, setMutawasPassYear] = useState("");
-  const [sanabiyaInst, setSanaInst] = useState("");
-  const [sanabiyaPassYear, setSanabiyaPassYear] = useState("");
-  const [sanabiyaResult, setSanabiyaResult] = useState("");
-  const [fozilatInst, setFozilatInst] = useState("");
-  const [fozilatPassYear, setFozilatPassYear] = useState("");
-  const [fozilatResult, setFozilatResult] = useState("");
-  const [takmilInst, setTakmilInst] = useState("");
-  const [takmilPassYear, setTakmilPassYear] = useState("");
-  const [takmilResult, setTakmilResult] = useState("");
-  const [takhassusInst, setTakhassusInst] = useState("");
-  const [takhassusResult, setTakhassusResult] = useState("");
-  const [takhassusPassYear, setTakhassusPassYear] = useState("");
-  const [takhassusSub, setTakhassusSub] = useState("");
-  const { userInfo, logOut } = useContext(UserContext);
+  const [maxEdu, setMaxEdu] = useState('');
+  const [selectedClass, setSelectedClass] = useState('');
+  const [othersEdu, setOthersEdu] = useState('');
+  const [sscPassYear, setSscPassYear] = useState('');
+  const [sscGroup, setSscGroup] = useState('');
+  const [sscResult, setSscResult] = useState('');
+  const [hscRunning, setHscRunning] = useState('');
+  const [hscPassYear, setHscPassYear] = useState('');
+  const [hscGroup, setHscGroup] = useState('');
+  const [hscResult, setHscResult] = useState('');
+  const [diplomaInst, setDiplomaInst] = useState('');
+  const [diplomaSub, setDiplomaSub] = useState('');
+  const [diplomaYear, setDiplomaYear] = useState('');
+  const [diplomaPassYear, setDiplomaPassYear] = useState('');
+  const [afterSsc, setAfterSsc] = useState('');
+  const [bscInst, setBscInst] = useState('');
+  const [bscSub, setBscSub] = useState('');
+  const [bscYear, setBscYear] = useState('');
+  const [bscPassYear, setBscPassYear] = useState('');
+  const [mscPassYear, setMscPassYear] = useState('');
+  const [mscSub, setMscSub] = useState('');
+  const [mscInst, setMscInst] = useState('');
+  const [phdSub, setPhdSub] = useState('');
+  const [phdInst, setPhdInst] = useState('');
+  const [phdPassYear, setPhdPassYear] = useState('');
+  const [ibtiInst, setIbtiInst] = useState('');
+  const [ibtiPassYear, setIbtiPassYear] = useState('');
+  const [ibtiResult, setIbtiResult] = useState('');
+  const [mutawasInst, setMutawasInst] = useState('');
+  const [mutawasResult, setMutawasResult] = useState('');
+  const [mutawasPassYear, setMutawasPassYear] = useState('');
+  const [sanabiyaInst, setSanaInst] = useState('');
+  const [sanabiyaPassYear, setSanabiyaPassYear] = useState('');
+  const [sanabiyaResult, setSanabiyaResult] = useState('');
+  const [fozilatInst, setFozilatInst] = useState('');
+  const [fozilatPassYear, setFozilatPassYear] = useState('');
+  const [fozilatResult, setFozilatResult] = useState('');
+  const [takmilInst, setTakmilInst] = useState('');
+  const [takmilPassYear, setTakmilPassYear] = useState('');
+  const [takmilResult, setTakmilResult] = useState('');
+  const [takhassusInst, setTakhassusInst] = useState('');
+  const [takhassusResult, setTakhassusResult] = useState('');
+  const [takhassusPassYear, setTakhassusPassYear] = useState('');
+  const [takhassusSub, setTakhassusSub] = useState('');
+  const { userInfo } = useContext(UserContext);
   // const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const { data: educationalQualification = null, isLoading } = useQuery({
     queryKey: [
-      "educational-qualification",
+      'educational-qualification',
       userInfo?.data?._id,
       getToken()?.token,
     ],
@@ -326,15 +326,15 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
     // জেনারেল  এস.এস.সি'র নিচে
     if (
       maxEdu === "এস.এস.সি'র নিচে" &&
-      (eduType === "জেনারেল" || eduType === "আলিয়া")
+      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
     ) {
       educationQualificationData = {
         ...educationQualificationData,
         before_ssc: selectedClass,
       };
     } else if (
-      maxEdu === "এস.এস.সি" &&
-      (eduType === "জেনারেল" || eduType === "আলিয়া")
+      maxEdu === 'এস.এস.সি' &&
+      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
     ) {
       educationQualificationData = {
         ...educationQualificationData,
@@ -344,8 +344,8 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
         after_ssc_running: hscRunning,
       };
     } else if (
-      maxEdu === "এইচ.এস.সি" &&
-      (eduType === "জেনারেল" || eduType === "আলিয়া")
+      maxEdu === 'এইচ.এস.সি' &&
+      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
     ) {
       educationQualificationData = {
         ...educationQualificationData,
@@ -357,8 +357,8 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
         after_ssc_group: hscGroup,
       };
     } else if (
-      maxEdu === "ডিপ্লোমা চলমান" &&
-      (eduType === "জেনারেল" || eduType === "আলিয়া")
+      maxEdu === 'ডিপ্লোমা চলমান' &&
+      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
     ) {
       educationQualificationData = {
         ...educationQualificationData,
@@ -370,8 +370,8 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
         diploma_sub: diplomaSub,
       };
     } else if (
-      maxEdu === "ডিপ্লোমা" &&
-      (eduType === "জেনারেল" || eduType === "আলিয়া")
+      maxEdu === 'ডিপ্লোমা' &&
+      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
     ) {
       educationQualificationData = {
         ...educationQualificationData,
@@ -383,9 +383,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
         diploma_sub: diplomaSub,
       };
     } else if (
-      maxEdu === "স্নাতক চলমান" &&
-      afterSsc === "HSC" &&
-      (eduType === "জেনারেল" || eduType === "আলিয়া")
+      maxEdu === 'স্নাতক চলমান' &&
+      afterSsc === 'HSC' &&
+      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
     ) {
       educationQualificationData = {
         ...educationQualificationData,
@@ -401,9 +401,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
         after_ssc_medium: afterSsc,
       };
     } else if (
-      maxEdu === "স্নাতক চলমান" &&
-      afterSsc === "ডিপ্লোমা" &&
-      (eduType === "জেনারেল" || eduType === "আলিয়া")
+      maxEdu === 'স্নাতক চলমান' &&
+      afterSsc === 'ডিপ্লোমা' &&
+      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
     ) {
       educationQualificationData = {
         ...educationQualificationData,
@@ -419,9 +419,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
         after_ssc_medium: afterSsc,
       };
     } else if (
-      maxEdu === "স্নাতক" &&
-      afterSsc === "ডিপ্লোমা" &&
-      (eduType === "জেনারেল" || eduType === "আলিয়া")
+      maxEdu === 'স্নাতক' &&
+      afterSsc === 'ডিপ্লোমা' &&
+      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
     ) {
       educationQualificationData = {
         ...educationQualificationData,
@@ -437,9 +437,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
         hons_pass_year: bscPassYear,
       };
     } else if (
-      maxEdu === "স্নাতক" &&
-      afterSsc === "HSC" &&
-      (eduType === "জেনারেল" || eduType === "আলিয়া")
+      maxEdu === 'স্নাতক' &&
+      afterSsc === 'HSC' &&
+      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
     ) {
       educationQualificationData = {
         ...educationQualificationData,
@@ -455,9 +455,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
         hons_pass_year: bscPassYear,
       };
     } else if (
-      maxEdu === "স্নাতকোত্তর" &&
-      afterSsc === "HSC" &&
-      (eduType === "জেনারেল" || eduType === "আলিয়া")
+      maxEdu === 'স্নাতকোত্তর' &&
+      afterSsc === 'HSC' &&
+      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
     ) {
       educationQualificationData = {
         ...educationQualificationData,
@@ -476,9 +476,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
         msc_sub: mscSub,
       };
     } else if (
-      maxEdu === "স্নাতকোত্তর" &&
-      afterSsc === "ডিপ্লোমা" &&
-      (eduType === "জেনারেল" || eduType === "আলিয়া")
+      maxEdu === 'স্নাতকোত্তর' &&
+      afterSsc === 'ডিপ্লোমা' &&
+      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
     ) {
       educationQualificationData = {
         ...educationQualificationData,
@@ -497,9 +497,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
         msc_sub: mscSub,
       };
     } else if (
-      maxEdu === "ডক্টরেট" &&
-      afterSsc === "ডিপ্লোমা" &&
-      (eduType === "জেনারেল" || eduType === "আলিয়া")
+      maxEdu === 'ডক্টরেট' &&
+      afterSsc === 'ডিপ্লোমা' &&
+      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
     ) {
       educationQualificationData = {
         ...educationQualificationData,
@@ -521,9 +521,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
         phd_sub: phdSub,
       };
     } else if (
-      maxEdu === "ডক্টরেট" &&
-      afterSsc === "HSC" &&
-      (eduType === "জেনারেল" || eduType === "আলিয়া")
+      maxEdu === 'ডক্টরেট' &&
+      afterSsc === 'HSC' &&
+      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
     ) {
       educationQualificationData = {
         ...educationQualificationData,
@@ -544,42 +544,42 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
         phd_inst: phdInst,
         phd_sub: phdSub,
       };
-    } else if (maxEdu === "ইবতিদাইয়্যাহ" && eduType === "কওমি") {
+    } else if (maxEdu === 'ইবতিদাইয়্যাহ' && eduType === 'কওমি') {
       educationQualificationData = {
         ...educationQualificationData,
         ibti_pass_year: ibtiPassYear,
         ibti_inst: ibtiInst,
         ibti_result: ibtiResult,
       };
-    } else if (maxEdu === "মুতাওয়াসসিতাহ" && eduType === "কওমি") {
+    } else if (maxEdu === 'মুতাওয়াসসিতাহ' && eduType === 'কওমি') {
       educationQualificationData = {
         ...educationQualificationData,
         mutawas_pass_year: mutawasPassYear,
         mutawas_inst: mutawasInst,
         mutawas_result: mutawasResult,
       };
-    } else if (maxEdu === "সানাবিয়া উলইয়া" && eduType === "কওমি") {
+    } else if (maxEdu === 'সানাবিয়া উলইয়া' && eduType === 'কওমি') {
       educationQualificationData = {
         ...educationQualificationData,
         sanabiya_pass_year: sanabiyaPassYear,
         sanabiya_inst: sanabiyaInst,
         sanabiya_result: sanabiyaResult,
       };
-    } else if (maxEdu === "ফযীলত" && eduType === "কওমি") {
+    } else if (maxEdu === 'ফযীলত' && eduType === 'কওমি') {
       educationQualificationData = {
         ...educationQualificationData,
         fozilat_pass_year: fozilatPassYear,
         fozilat_inst: fozilatInst,
         fozilat_result: fozilatResult,
       };
-    } else if (maxEdu === "তাকমীল" && eduType === "কওমি") {
+    } else if (maxEdu === 'তাকমীল' && eduType === 'কওমি') {
       educationQualificationData = {
         ...educationQualificationData,
         takmil_pass_year: takmilPassYear,
         takmil_inst: takmilInst,
         takmil_result: takmilResult,
       };
-    } else if (maxEdu === "তাখাসসুস" && eduType === "কওমি") {
+    } else if (maxEdu === 'তাখাসসুস' && eduType === 'কওমি') {
       educationQualificationData = {
         ...educationQualificationData,
         takmil_pass_year: takmilPassYear,
@@ -612,7 +612,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
       }
 
       if (data.success) {
-        Toast.successToast("আপনার তথ্য আপডেট  করা হয়েছে ");
+        Toast.successToast('আপনার তথ্য আপডেট  করা হয়েছে ');
         setUserForm((prev) => prev + 1);
       }
     } catch (error) {
@@ -651,7 +651,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
             options={educationTypeOptions}
             required
           />
-          {eduType === "জেনারেল" || eduType === "আলিয়া" ? (
+          {eduType === 'জেনারেল' || eduType === 'আলিয়া' ? (
             <>
               <Select
                 title=" সর্বোচ্চ শিক্ষাগত যোগ্যতা"
@@ -669,9 +669,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                   options={classType}
                   required
                 />
-              ) : maxEdu === "এস.এস.সি" ? (
+              ) : maxEdu === 'এস.এস.সি' ? (
                 <>
-                  {" "}
+                  {' '}
                   <Input
                     title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
                     value={sscPassYear}
@@ -699,9 +699,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     options={hscOptions}
                   />
                 </>
-              ) : maxEdu === "এইচ.এস.সি" ? (
+              ) : maxEdu === 'এইচ.এস.সি' ? (
                 <>
-                  {" "}
+                  {' '}
                   <Input
                     title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
                     value={sscPassYear}
@@ -743,7 +743,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     required
                   />
                 </>
-              ) : maxEdu === "ডিপ্লোমা চলমান" ? (
+              ) : maxEdu === 'ডিপ্লোমা চলমান' ? (
                 <>
                   <Input
                     title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
@@ -786,7 +786,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     placeholder=""
                   />
                 </>
-              ) : maxEdu === "ডিপ্লোমা" ? (
+              ) : maxEdu === 'ডিপ্লোমা' ? (
                 <>
                   <Input
                     title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
@@ -830,7 +830,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     type="number"
                   />
                 </>
-              ) : maxEdu === "স্নাতক চলমান" ? (
+              ) : maxEdu === 'স্নাতক চলমান' ? (
                 <>
                   <Input
                     title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
@@ -861,7 +861,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     required
                   />
 
-                  {afterSsc === "ডিপ্লোমা" ? (
+                  {afterSsc === 'ডিপ্লোমা' ? (
                     <>
                       <Input
                         title="ডিপ্লোমা কোন বিষয়ে পড়েছেন?"
@@ -908,7 +908,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                         setValue={setHscResult}
                         options={result}
                         required
-                      />{" "}
+                      />{' '}
                     </>
                   )}
                   <Input
@@ -933,7 +933,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     required
                   />
                 </>
-              ) : maxEdu === "স্নাতক" ? (
+              ) : maxEdu === 'স্নাতক' ? (
                 <>
                   <Input
                     title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
@@ -964,7 +964,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     required
                   />
 
-                  {afterSsc === "ডিপ্লোমা" ? (
+                  {afterSsc === 'ডিপ্লোমা' ? (
                     <>
                       <Input
                         title="ডিপ্লোমা কোন বিষয়ে পড়েছেন?"
@@ -1011,7 +1011,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                         setValue={setHscResult}
                         options={result}
                         required
-                      />{" "}
+                      />{' '}
                     </>
                   )}
                   <Input
@@ -1037,7 +1037,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     required
                   />
                 </>
-              ) : maxEdu === "স্নাতকোত্তর" ? (
+              ) : maxEdu === 'স্নাতকোত্তর' ? (
                 <>
                   <Input
                     title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
@@ -1068,7 +1068,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     required
                   />
 
-                  {afterSsc === "ডিপ্লোমা" ? (
+                  {afterSsc === 'ডিপ্লোমা' ? (
                     <>
                       <Input
                         title="ডিপ্লোমা কোন বিষয়ে পড়েছেন?"
@@ -1115,7 +1115,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                         setValue={setHscResult}
                         options={result}
                         required
-                      />{" "}
+                      />{' '}
                     </>
                   )}
                   <Input
@@ -1168,7 +1168,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                   />
                 </>
               ) : (
-                maxEdu === "ডক্টরেট" && (
+                maxEdu === 'ডক্টরেট' && (
                   <>
                     <Input
                       title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
@@ -1199,7 +1199,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                       required
                     />
 
-                    {afterSsc === "ডিপ্লোমা" ? (
+                    {afterSsc === 'ডিপ্লোমা' ? (
                       <>
                         <Input
                           title="ডিপ্লোমা কোন বিষয়ে পড়েছেন?"
@@ -1246,7 +1246,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                           setValue={setHscResult}
                           options={result}
                           required
-                        />{" "}
+                        />{' '}
                       </>
                     )}
                     <Input
@@ -1326,7 +1326,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                 )
               )}
             </>
-          ) : eduType === "কওমি" ? (
+          ) : eduType === 'কওমি' ? (
             <>
               <Select
                 title=" সর্বোচ্চ শিক্ষাগত যোগ্যতা"
@@ -1336,11 +1336,11 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                 required
               />
 
-              {maxEdu === "প্রাথমিক দ্বীনি শিক্ষা" ? (
+              {maxEdu === 'প্রাথমিক দ্বীনি শিক্ষা' ? (
                 <></>
-              ) : maxEdu === "ইবতিদাইয়্যাহ" ? (
+              ) : maxEdu === 'ইবতিদাইয়্যাহ' ? (
                 <>
-                  {" "}
+                  {' '}
                   <Input
                     title=" ইবতিদাইয়্যাহ কোন মাদ্রাসা থেকে পড়েছেন?"
                     value={ibtiInst}
@@ -1362,9 +1362,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     required
                   />
                 </>
-              ) : maxEdu === "মুতাওয়াসসিতাহ" ? (
+              ) : maxEdu === 'মুতাওয়াসসিতাহ' ? (
                 <>
-                  {" "}
+                  {' '}
                   <Input
                     title="মুতাওয়াসসিতাহ কোন মাদ্রাসা থেকে পড়েছেন?"
                     value={mutawasInst}
@@ -1386,9 +1386,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     required
                   />
                 </>
-              ) : maxEdu === "সানাবিয়া উলইয়া" ? (
+              ) : maxEdu === 'সানাবিয়া উলইয়া' ? (
                 <>
-                  {" "}
+                  {' '}
                   <Input
                     title="সানাবিয়া উলইয়া কোন মাদ্রাসা থেকে পড়েছেন?"
                     value={sanabiyaInst}
@@ -1410,9 +1410,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     required
                   />
                 </>
-              ) : maxEdu === "ফযীলত" ? (
+              ) : maxEdu === 'ফযীলত' ? (
                 <>
-                  {" "}
+                  {' '}
                   <Input
                     title="ফযীলত  কোন মাদ্রাসা থেকে পড়েছেন?"
                     value={fozilatInst}
@@ -1434,9 +1434,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     required
                   />
                 </>
-              ) : maxEdu === "তাকমীল" ? (
+              ) : maxEdu === 'তাকমীল' ? (
                 <>
-                  {" "}
+                  {' '}
                   <Input
                     title="তাকমীল কোন মাদ্রাসা থেকে পড়েছেন? "
                     value={takmilInst}
@@ -1458,9 +1458,9 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                     required
                   />
                 </>
-              ) : maxEdu === "তাখাসসুস" ? (
+              ) : maxEdu === 'তাখাসসুস' ? (
                 <>
-                  {" "}
+                  {' '}
                   <Input
                     title="তাকমীল কোন মাদ্রাসা থেকে পড়েছেন? "
                     value={takmilInst}
@@ -1550,12 +1550,11 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
                 background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
               }}
             >
-              {loading ? <LoadingCircle /> : "Save & Next"}
+              {loading ? <LoadingCircle /> : 'Save & Next'}
             </button>
           </div>
         </form>
       )}
-    
     </div>
   );
 };
