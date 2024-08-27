@@ -33,11 +33,11 @@ const BioDataInput = () => {
 					className="flex items-center px-5 py-1 text-[16px]"
 					onClick={() => setBioId(0)}
 					style={{
-						background: `red`,
+						background: `#c41010`,
 					}}
 				>
 					<FaTrash className="w-4 h-6 pr-2" />
-					<span>মুছে ফেলুন</span>
+					<span>ক্লিয়ার</span>
 				</Button>
 				<Button
 					className="flex items-center px-5 text-[16px]"
@@ -46,7 +46,7 @@ const BioDataInput = () => {
 					}}
 					onClick={navigateHandler}
 				>
-					<AiOutlineSearch className="w-4 h-6 " /> <span>খুজুন</span>
+					<AiOutlineSearch className="w-4 h-6 " /> <span>বায়োডাটা খুজুন</span>
 				</Button>
 			</div>
 		</div>

@@ -37,13 +37,13 @@ const BioDataButton = () => {
     
       <Button
         style={{
-          background: `red`,
+          background: `#c41010`,
         }}
         className="flex items-center px-5"
         onClick={() => buttonHandler('delete')}
       >
         <AiOutlineDelete className="w-4 h-6" />
-        মুছে ফেলুন
+        ক্লিয়ার
       </Button>
       <Button
         className="flex items-center px-5"
@@ -53,7 +53,7 @@ const BioDataButton = () => {
         onClick={() => buttonHandler('search')}
       >
         <AiOutlineSearch className="w-4 h-6" />
-        খুজুন
+        বায়োডাটা খুজুন
       </Button>
     </div>
   );
