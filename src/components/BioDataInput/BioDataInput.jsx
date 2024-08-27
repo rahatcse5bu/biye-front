@@ -28,6 +28,17 @@ const BioDataInput = () => {
 			</div>
 
 			<div className="grid grid-cols-2 gap-4 my-10 mr-8 ">
+			
+				<Button
+					className="flex items-center px-5 py-1 text-[16px]"
+					onClick={() => setBioId(0)}
+					style={{
+						background: `red`,
+					}}
+				>
+					<FaTrash className="w-4 h-6 pr-2" />
+					<span>মুছে ফেলুন</span>
+				</Button>
 				<Button
 					className="flex items-center px-5 text-[16px]"
 					style={{
@@ -36,16 +47,6 @@ const BioDataInput = () => {
 					onClick={navigateHandler}
 				>
 					<AiOutlineSearch className="w-4 h-6 " /> <span>খুজুন</span>
-				</Button>
-				<Button
-					className="flex items-center px-5 py-1 text-[16px]"
-					onClick={() => setBioId(0)}
-					style={{
-						background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
-					}}
-				>
-					<FaTrash className="w-4 h-6 pr-2" />
-					<span>মুছে ফেলুন</span>
 				</Button>
 			</div>
 		</div>

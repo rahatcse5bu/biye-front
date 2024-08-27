@@ -34,6 +34,17 @@ const BioDataButton = () => {
   };
   return (
     <div className="flex items-center justify-between my-10 ">
+    
+      <Button
+        style={{
+          background: `red`,
+        }}
+        className="flex items-center px-5"
+        onClick={() => buttonHandler('delete')}
+      >
+        <AiOutlineDelete className="w-4 h-6" />
+        মুছে ফেলুন
+      </Button>
       <Button
         className="flex items-center px-5"
         style={{
@@ -43,16 +54,6 @@ const BioDataButton = () => {
       >
         <AiOutlineSearch className="w-4 h-6" />
         খুজুন
-      </Button>
-      <Button
-        style={{
-          background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
-        }}
-        className="flex items-center px-5"
-        onClick={() => buttonHandler('delete')}
-      >
-        <AiOutlineDelete className="w-4 h-6" />
-        মুছে ফেলুন
       </Button>
     </div>
   );
