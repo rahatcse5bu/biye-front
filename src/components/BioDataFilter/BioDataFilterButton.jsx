@@ -35,6 +35,16 @@ const BioDataFilterButton = () => {
   return (
     <div className="flex items-center justify-between my-10 ">
       <Button
+        style={{
+          background: `#c41010`,
+        }}
+        className="flex items-center px-5"
+        onClick={() => buttonHandler('delete')}
+      >
+        <AiOutlineDelete className="w-4 h-6" />
+        ক্লিয়ার
+      </Button>
+      <Button
         className="flex items-center px-5"
         style={{
           background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
