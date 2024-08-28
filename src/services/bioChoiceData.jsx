@@ -1,18 +1,18 @@
-import axios from "axios";
+import axios from 'axios';
 
 const baseUrl =
-  import.meta.env.VITE_REACT_APP_NODE_ENV === "development"
-    ? "http://localhost:5000/api/v1"
-    : "https://server.pnc-nikah.com/api/v1";
+  import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+    ? 'http://localhost:5000/api/v1'
+    : 'https://server.pnc-nikah.com/api/v1';
 
 const createBioChoiceData = async (data, token) => {
   if (!token) {
     return null;
   }
-  const response = await axios.post(baseUrl + "/bio-choice-data", data, {
+  const response = await axios.post(baseUrl + '/bio-choice-data', data, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
   return response.data;
@@ -24,7 +24,7 @@ const updateBioChoiceData = async (data, token) => {
   const response = await axios.put(baseUrl + `/bio-choice-data`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
   return response.data;
@@ -33,7 +33,7 @@ const getBioChoiceDataFirstStep = async (token) => {
   if (!token) {
     return null;
   }
-  const response = await axios.get(baseUrl + "/bio-choice-data/first-step", {
+  const response = await axios.get(baseUrl + '/bio-choice-data/first-step', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -44,7 +44,7 @@ const getBioChoiceDataSecondStep = async (token) => {
   if (!token) {
     return null;
   }
-  const response = await axios.get(baseUrl + "/bio-choice-data/second-step", {
+  const response = await axios.get(baseUrl + '/bio-choice-data/second-step', {
     headers: {
       Authorization: `Bearer ${token}`,
     },

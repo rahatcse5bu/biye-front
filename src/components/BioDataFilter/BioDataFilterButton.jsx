@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { convertToQuery } from '../../utils/query';
 import { useFilter } from '../../contexts/useFilter';
 
-const BioDataButton = () => {
+const BioDataFilterButton = () => {
   const { filterFields, setQuery } = useBio();
   const { setSideBarDisplay, setAddressFilterOpen, setPrimaryFilterOpen } =
     useFilter();
@@ -46,7 +46,7 @@ const BioDataButton = () => {
       </Button>
       <Button
         style={{
-          background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
+          background: `linear-gradient(90deg,rgba(255, 0, 0, 0.8),rgba(255, 0, 0, 1))`,
         }}
         className="flex items-center px-5"
         onClick={() => buttonHandler('delete')}
@@ -58,4 +58,4 @@ const BioDataButton = () => {
   );
 };
 
-export default BioDataButton;
+export default BioDataFilterButton;

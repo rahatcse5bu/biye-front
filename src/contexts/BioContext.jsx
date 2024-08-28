@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
 // src/contexts/BioContext.js
-
+import { useState, useEffect, createContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { createContext, useState } from 'react';
 import { BioDataServices } from '../services/bioData';
 
 // Create a new context instance
@@ -11,14 +10,15 @@ const BioContext = createContext();
 // Create a provider component to wrap your app
 export const BioProvider = ({ children }) => {
   const [bio, setBio] = useState(null);
+  const [bioLoading, setBioLoading] = useState(false);
   const [query, setQuery] = useState({});
   const [filterFields, setFilterFields] = useState({});
 
   //! get all bio datas
   const {
-    isLoading: bioLoading = false,
-    error: bioError,
     data: bios,
+    error: bioError,
+    isLoading,
   } = useQuery({
     queryKey: ['bioData', 'generalInfo', query],
     queryFn: async () => {
@@ -27,6 +27,10 @@ export const BioProvider = ({ children }) => {
     retry: false,
     refetchInterval: 300000, //every five minutes
   });
+
+  useEffect(() => {
+    setBioLoading(isLoading);
+  }, [isLoading]);
 
   // console.log("bios~~", bios);
   const value = {

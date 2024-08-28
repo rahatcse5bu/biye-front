@@ -24,9 +24,7 @@ import LoadingCircle from '../LoadingCircle/LoadingCircle';
 // import { useNavigate } from "react-router-dom";
 import MultipleSelect from '../MultitpleSelect/MultipleSelect';
 import {
-  dataToMultiple,
   dataToMultipleExpectedPartner,
-  getDataFromMultipleInput,
   getDataFromMultipleInputExpectedPartner,
 } from '../../utils/form';
 import { getErrorMessage } from '../../utils/error';

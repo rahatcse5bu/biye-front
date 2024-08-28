@@ -1,5 +1,6 @@
-import { useContext } from "react";
-import BioContext from "../../contexts/BioContext";
+import { useContext } from 'react';
+import BioContext from '../../contexts/BioContext';
+import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswerCard';
 
 const MaritalInfo = () => {
   const { bio } = useContext(BioContext);
@@ -10,144 +11,69 @@ const MaritalInfo = () => {
       <h5 className="card-title text-center text-2xl my-3">
         বিবাহ সম্পর্কিত তথ্য
       </h5>
-      <table className="table-auto w-full">
-        <thead>
-          <tr className="border-b border-t">
-            <td className="px-4 py-2 text-left  w-1/2">
-              অভিভাবক আপনার বিয়েতে রাজি কি না?
-            </td>
-            <td className="px-4 py-2 text-left  w-1/2 border-l">
-              {maritalInfo?.isFamilyAgree}
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-          {/* <tr className="border-b">
-            <td className="px-4 py-2 text-left  w-1/2">
-              বিয়ের পুরো আয়োজন সুন্নতি নিয়মে করতে চান?
-            </td>
-            <td className="px-4 py-2 text-left  w-1/2 border-l">
-              {maritalInfo?.isSunnotiBiya === true
-                ? " জি আলহামদুলিল্লাহ"
-                : "না"}
-            </td>
-          </tr> */}
 
-          {generalInfo?.gender === "মহিলা" ||
-          generalInfo?.bio_type === "পাত্রীর বায়োডাটা" ? (
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-0 my-3">
+        <>
+          <GridQuestionAnswerCard
+            question="অভিভাবক আপনার বিয়েতে রাজি কি না?"
+            answer={maritalInfo?.isFamilyAgree}
+          />
+          {generalInfo?.gender === 'মহিলা' ||
+          generalInfo?.bio_type === 'পাত্রীর বায়োডাটা' ? (
             <>
-              <tr className="border-b">
-                <td className="px-4 py-2 text-left  w-1/2">
-                  আপনি কি বিয়ের পর চাকরি করতে ইচ্ছুক?
-                </td>
-                <td className="px-4 py-2 text-left  w-1/2 border-l">
-                  {maritalInfo?.after_marriage_running_job}
-                </td>
-              </tr>
-              <tr className="border-b">
-                <td className="px-4 py-2 text-left  w-1/2">
-                  বিয়ের পর পড়াশোনা চালিয়ে যেতে চান?
-                </td>
-                <td className="px-4 py-2 text-left  w-1/2 border-l">
-                  {maritalInfo?.is_running_study}
-                </td>
-              </tr>
-              <tr className="border-b">
-                <td className="px-4 py-2 text-left  w-1/2">
-                  বিয়ের পর চাকরি চালিয়ে যেতে চান?
-                </td>
-                <td className="px-4 py-2 text-left  w-1/2 border-l">
-                  {maritalInfo?.is_running_job}
-                </td>
-              </tr>
-              {/* <tr className="border-b">
-                <td className="px-4 py-2 text-left  w-1/2">
-                  তালাক হয়ে থাকলে কারণ উল্লেখ করুন
-                </td>
-                <td className="px-4 py-2 text-left  w-1/2 border-l">
-                  {maritalInfo?.devorced_reason === true
-                    ? " জি "
-                    : "না আলহামদুলিল্লাহ"}
-                </td>
-              </tr> */}
-
-              {/* <tr className="border-b">
-                <td className="px-4 py-2 text-left  w-1/2">
-                  তালাক হয়ে থাকলে এবং সন্তান থাকলে সন্তান সম্পর্কে বিস্তারিত
-                  উল্লেখ করুন
-                </td>
-                <td className="px-4 py-2 text-left  w-1/2 border-l">
-                  {maritalInfo?.children_details}
-                </td>
-              </tr> */}
+              <GridQuestionAnswerCard
+                question="আপনি কি বিয়ের পর চাকরি করতে ইচ্ছুক?"
+                answer={maritalInfo?.after_marriage_running_job}
+              />
+              <GridQuestionAnswerCard
+                question="বিয়ের পর পড়াশোনা চালিয়ে যেতে চান?"
+                answer={maritalInfo?.is_running_study}
+              />
+              <GridQuestionAnswerCard
+                question="বিয়ের পর চাকরি চালিয়ে যেতে চান?"
+                answer={maritalInfo?.is_running_job}
+              />
+              {/* Uncomment and modify these as needed */}
+              {/* <GridQuestionAnswerCard
+        question="তালাক হয়ে থাকলে কারণ উল্লেখ করুন"
+        answer={maritalInfo?.devorced_reason === true ? " জি " : "না আলহামদুলিল্লাহ"}
+      /> */}
+              {/* <GridQuestionAnswerCard
+        question="তালাক হয়ে থাকলে এবং সন্তান থাকলে সন্তান সম্পর্কে বিস্তারিত উল্লেখ করুন"
+        answer={maritalInfo?.children_details}
+      /> */}
             </>
           ) : (
             <>
-              <tr className="border-b">
-                <td className="px-4 py-2 text-left  w-1/2">
-                  বিয়ের পর স্ত্রীকে পর্দায় রাখতে পারবেন?
-                </td>
-                <td className="px-4 py-2 text-left  w-1/2 border-l">
-                  {maritalInfo?.isPordaToWife}
-                </td>
-              </tr>
-              <tr className="border-b">
-                <td className="px-4 py-2 text-left  w-1/2">
-                  আপনি কি বিয়ের পর বউকে চাকরি করতে দিতে ইচ্ছুক?
-                </td>
-                <td className="px-4 py-2 text-left  w-1/2 border-l">
-                  {maritalInfo?.permission_for_job}
-                </td>
-              </tr>
-
-              <tr className="border-b">
-                <td className="px-4 py-2 text-left  w-1/2">
-                  বিয়ের পর আহলিয়াকে পড়াশোনা চালিয়ে যেতে দিতে চান?
-                </td>
-                <td className="px-4 py-2 text-left  w-1/2 border-l">
-                  {maritalInfo?.permission_for_study}
-                </td>
-              </tr>
-              <tr className="border-b">
-                <td className="px-4 py-2 text-left  w-1/2">
-                  আপনি বা আপনার পরিবার পাত্রীপক্ষের কাছে কোনো উপহার আশা করবেন কি
-                  না?
-                </td>
-                <td className="px-4 py-2 text-left  w-1/2 border-l">
-                  {maritalInfo?.isJoutuk}
-                </td>
-              </tr>
-              <tr className="border-b">
-                <td className="px-4 py-2 text-left  w-1/2">
-                  বিয়ের পর স্ত্রীকে কোথায় নিয়ে থাকবেন?
-                </td>
-                <td className="px-4 py-2 text-left  w-1/2 border-l">
-                  {maritalInfo?.after_marriage_where}
-                </td>
-              </tr>
+              <GridQuestionAnswerCard
+                question="বিয়ের পর স্ত্রীকে পর্দায় রাখতে পারবেন?"
+                answer={maritalInfo?.isPordaToWife}
+              />
+              <GridQuestionAnswerCard
+                question="আপনি কি বিয়ের পর বউকে চাকরি করতে দিতে ইচ্ছুক?"
+                answer={maritalInfo?.permission_for_job}
+              />
+              <GridQuestionAnswerCard
+                question="বিয়ের পর আহলিয়াকে পড়াশোনা চালিয়ে যেতে দিতে চান?"
+                answer={maritalInfo?.permission_for_study}
+              />
+              <GridQuestionAnswerCard
+                question="আপনি বা আপনার পরিবার পাত্রীপক্ষের কাছে কোনো উপহার আশা করবেন কি না?"
+                answer={maritalInfo?.isJoutuk}
+              />
+              <GridQuestionAnswerCard
+                question="বিয়ের পর স্ত্রীকে কোথায় নিয়ে থাকবেন?"
+                answer={maritalInfo?.after_marriage_where}
+              />
             </>
           )}
 
-          {/* <tr className="border-b">
-            <td className="px-4 py-2 text-left  w-1/2">
-              বিয়েতে যৌতুক নিবেন বা দিবেন?
-            </td>
-            <td className="px-4 py-2 text-left  w-1/2 border-l">
-              {" "}
-              {maritalInfo?.isJoutuk}
-            </td>
-          </tr> */}
-
-          <tr className="border-b">
-            <td className="px-4 py-2 text-left  w-1/2">
-              কেন বিয়ে করছেন? বিয়ে সম্পর্কে আপনার ধারণা কি?
-            </td>
-            <td className="px-4 py-2 text-left  w-1/2 border-l">
-              {maritalInfo?.why_marriage}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          <GridQuestionAnswerCard
+            question="কেন বিয়ে করছেন? বিয়ে সম্পর্কে আপনার ধারণা কি?"
+            answer={maritalInfo?.why_marriage}
+          />
+        </>
+      </div>
     </div>
   );
 };

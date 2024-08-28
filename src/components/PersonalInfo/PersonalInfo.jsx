@@ -1,5 +1,6 @@
-import { useContext } from "react";
-import BioContext from "../../contexts/BioContext";
+import { useContext } from 'react';
+import BioContext from '../../contexts/BioContext';
+import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswerCard';
 
 const PersonalInfo = () => {
   const { bio } = useContext(BioContext);
@@ -10,212 +11,128 @@ const PersonalInfo = () => {
   return (
     <div className="w-auto border-t-2 rounded shadow single-bio-personal-info">
       <h5 className="my-3 text-2xl text-center card-title">ব্যক্তিগত তথ্য</h5>
-      <table className="w-full table-auto">
-        <tbody>
-          {generalInfo?.gender === "মহিলা" ||
-          generalInfo?.bio_type === "পাত্রীর বায়োডাটা" ? (
-            <>
-              <tr className="border-t border-b">
-                <td className="w-1/2 px-4 py-2 text-left">
-                  ঘরের বাহিরে সাধারণত কি ধরণের পোষাক পরেন?
-                </td>
-                <td className="w-1/2 px-4 py-2 text-left break--all border-l">
-                  {personalInfo?.outside_clothings}
-                </td>
-              </tr>
-              <tr className="border-b">
-                <td className="w-1/2 px-4 py-2 text-left">
-                  কবে থেকে নিকাব সহ পর্দা করছেন?
-                </td>
-                <td className="w-1/2 px-4 py-2 text-left break--all border-l">
-                  {personalInfo?.porda_with_niqab_from}
-                </td>
-              </tr>
-            </>
-          ) : (
-            <>
-              <tr className="border-b">
-                <td className="w-1/2 px-4 py-2 text-left">
-                  সুন্নতি দাঁড়ি আছে (১ মুষ্টি)?
-                </td>
-                <td className="w-1/2 px-4 py-2 text-left border-l">
-                  {personalInfo?.isBeard}
-                </td>
-              </tr>
-              <tr className="border-b">
-                <td className="w-1/2 px-4 py-2 text-left">
-                  সুন্নতি দাঁড়ি কত বছর যাবত?
-                </td>
-                <td className="w-1/2 px-4 py-2 text-left border-l">
-                  {personalInfo?.from_beard}
-                </td>
-              </tr>
-              <tr className="border-b">
-                <td className="w-1/2 px-4 py-2 text-left">
-                  টাখনুর উপরে কাপড় পরেন?
-                </td>
-                <td className="w-1/2 px-4 py-2 text-left border-l">
-                  {personalInfo?.isTakhnu}
-                </td>
-              </tr>
 
-              <tr className="border-b">
-                <td className="w-1/2 px-4 py-2 text-left">
-                  প্রতিদিন পাঁচ ওয়াক্ত নামাজ জামায়াতে পড়েন কি?
-                </td>
-                <td className="w-1/2 px-4 py-2 text-left border-l">
-                  {personalInfo?.isDailyFiveJamaat}
-                </td>
-              </tr>
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-0 my-3">
+        {generalInfo?.gender === 'মহিলা' ||
+        generalInfo?.bio_type === 'পাত্রীর বায়োডাটা' ? (
+          <>
+            <GridQuestionAnswerCard
+              question="ঘরের বাহিরে সাধারণত কি ধরণের পোষাক পরেন?"
+              answer={personalInfo?.outside_clothings}
+            />
+            <GridQuestionAnswerCard
+              question="কবে থেকে নিকাব সহ পর্দা করছেন?"
+              answer={personalInfo?.porda_with_niqab_from}
+            />
+          </>
+        ) : (
+          <>
+            <GridQuestionAnswerCard
+              question="সুন্নতি দাঁড়ি আছে (১ মুষ্টি)?"
+              answer={personalInfo?.isBeard}
+            />
+            <GridQuestionAnswerCard
+              question="সুন্নতি দাঁড়ি কত বছর যাবত?"
+              answer={personalInfo?.from_beard}
+            />
+            <GridQuestionAnswerCard
+              question="টাখনুর উপরে কাপড় পরেন?"
+              answer={personalInfo?.isTakhnu}
+            />
+            <GridQuestionAnswerCard
+              question="প্রতিদিন পাঁচ ওয়াক্ত নামাজ জামায়াতে পড়েন কি?"
+              answer={personalInfo?.isDailyFiveJamaat}
+            />
+            {/* Uncomment the following if needed */}
+            {/* <GridQuestionAnswerCard
+        question="প্রতিদিন পাঁচ ওয়াক্ত কবে থেকে নিয়মিত জামায়াতে পড়ছেন?"
+        answer={personalInfo?.daily_five_jamaat_from}
+      /> */}
+          </>
+        )}
 
-              {/* <tr className="border-b">
-								<td className="w-1/2 px-4 py-2 text-left">
-									প্রতিদিন পাঁচ ওয়াক্ত কবে থেকে নিয়মিত জামায়াতে পড়ছেন?
-								</td>
-								<td className="w-1/2 px-4 py-2 text-left border-l">
-									{personalInfo?.daily_five_jamaat_from}
-								</td>
-							</tr> */}
-            </>
-          )}
-          {/* কবে থেকে পড়ছেন? */}
-          <tr className="border-b">
-            <td className="w-1/2 px-4 py-2 text-left">
-              প্রতিদিন পাঁচ ওয়াক্ত নামাজ পড়েন কি?
-            </td>
-            <td className="w-1/2 px-4 py-2 text-left border-l">
-              {personalInfo?.isDailyFive}
-            </td>
-          </tr>
+        <GridQuestionAnswerCard
+          question="প্রতিদিন পাঁচ ওয়াক্ত নামাজ পড়েন কি?"
+          answer={personalInfo?.isDailyFive}
+        />
+        <GridQuestionAnswerCard
+          question="সাধারণত সপ্তাহে কত ওয়াক্ত নামায আপনার কাযা হয়?"
+          answer={personalInfo?.qadha_weekly}
+        />
+        <GridQuestionAnswerCard
+          question="মাহরাম/নন-মাহরাম(অনলাইন-অফলাইন) মেনে চলেন কি?"
+          answer={personalInfo?.mahram_non_mahram}
+        />
+        <GridQuestionAnswerCard
+          question="শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?"
+          answer={personalInfo?.quran_tilawat}
+        />
 
-          <tr className="border-b">
-            <td className="w-1/2 px-4 py-2 text-left">
-              সাধারণত সপ্তাহে কত ওয়াক্ত নামায আপনার কাযা হয়?
-            </td>
-            <td className="w-1/2 px-4 py-2 text-left border-l">
-              {personalInfo?.qadha_weekly}
-            </td>
-          </tr>
-          <tr className="border-b">
-            <td className="w-1/2 px-4 py-2 text-left">
-              মাহরাম/নন-মাহরাম(অনলাইন-অফলাইন) মেনে চলেন কি?
-            </td>
-            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
-              {personalInfo?.mahram_non_mahram}
-            </td>
-          </tr>
-          <tr className="border-b">
-            <td className="w-1/2 px-4 py-2 text-left">
-              শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?
-            </td>
-            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
-              {personalInfo?.quran_tilawat}
-            </td>
-          </tr>
-          <tr className="border-b">
-            <td className="w-1/2 px-4 py-2 text-left">কোন ফিকহ অনুসরণ করেন?</td>
-            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
-              {personalInfo?.fiqh}
-            </td>
-          </tr>
-          {personalInfo?.aqidah && (
-            <tr className="border-b">
-              <td className="w-1/2 px-4 py-2 text-left">
-                কোন আকিদা অনুসরণ করেন?
-              </td>
-              <td className="w-1/2 px-4 py-2 text-left border-l">
-                {" "}
-                {personalInfo?.aqidah}
-              </td>
-            </tr>
-          )}
-          <tr className="border-b">
-            <td className="w-1/2 px-4 py-2 text-left">
-              নাটক / সিনেমা / সিরিয়াল / গান এসব দেখেন বা শুনেন?
-            </td>
-            <td className="w-1/2 px-4 py-2 text-left border-l">
-              {personalInfo?.natok_cinema}
-            </td>
-          </tr>
-          {personalInfo?.physical_problem && (
-            <tr className="border-b">
-              <td className="w-1/2 px-4 py-2 text-left">
-                আপনার শারীরিক কোনো রোগ আছে?
-              </td>
-              <td className="w-1/2 px-4 py-2 text-left break--all border-l">
-                {personalInfo?.physical_problem}
-              </td>
-            </tr>
-          )}
-          {personalInfo?.mental_problem && (
-            <tr className="border-b">
-              <td className="w-1/2 px-4 py-2 text-left">
-                আপনার মানসিক কোনো রোগ আছে?{" "}
-              </td>
-              <td className="w-1/2 px-4 py-2 text-left border-l">
-                {personalInfo?.mental_problem}
-              </td>
-            </tr>
-          )}
-          <tr className="border-b">
-            <td className="w-1/2 px-4 py-2 text-left">
-              দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন?
-            </td>
-            <td className="w-1/2 px-4 py-2 text-left border-l">
-              {personalInfo?.special_deeni_mehnot}
-            </td>
-          </tr>
-          <tr className="border-b">
-            <td className="w-1/2 px-4 py-2 text-left">
-              মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি?
-            </td>
-            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
-              {personalInfo?.mazar}
-            </td>
-          </tr>
-          <tr className="border-b">
-            <td className="w-1/2 px-4 py-2 text-left">
-              আপনার পছন্দের অন্তত ৩ টি ইসলামি বই এর নাম লিখুন
-            </td>
-            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
-              {personalInfo?.islamic_books}
-            </td>
-          </tr>
-          <tr className="border-b">
-            <td className="w-1/2 px-4 py-2 text-left">
-              আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন
-            </td>
-            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
-              {personalInfo?.islamic_scholars}
-            </td>
-          </tr>
-          <tr className="border-b">
-            <td className="w-1/2 px-4 py-2 text-left">
-              কোনো নেশাদ্রব্য পান করেন?
-            </td>
-            <td className="w-1/2 px-4 py-2 text-left border-l">
-              {personalInfo?.isNeshaDrobbo}
-            </td>
-          </tr>
+        <GridQuestionAnswerCard
+          question="শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?"
+          answer={personalInfo?.quran_tilawat}
+        />
+        <GridQuestionAnswerCard
+          question="শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?"
+          answer={personalInfo?.quran_tilawat}
+        />
+        <GridQuestionAnswerCard
+          question="কোন ফিকহ অনুসরণ করেন?"
+          answer={personalInfo?.fiqh}
+        />
 
-          <tr className="border-b">
-            <td className="w-1/2 px-4 py-2 text-left">
-              মিলাদ ও কিয়াম সম্পর্কে আপনার ধারনা কি?
-            </td>
-            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
-              <p>{personalInfo?.about_milad_qiyam}</p>
-            </td>
-          </tr>
-          <tr className="border-b">
-            <td className="w-1/2 px-4 py-2 text-left">
-              নিজের সম্পর্কে কিছু লিখুন
-            </td>
-            <td className="w-1/2 px-4 py-2 text-left break--all border-l">
-              <p>{personalInfo?.about_me}</p>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        {personalInfo?.aqidah && (
+          <GridQuestionAnswerCard
+            question="কোন আকিদা অনুসরণ করেন?"
+            answer={personalInfo?.aqidah}
+          />
+        )}
+        <GridQuestionAnswerCard
+          question="নাটক / সিনেমা / সিরিয়াল / গান এসব দেখেন বা শুনেন?"
+          answer={personalInfo?.natok_cinema}
+        />
+
+        {personalInfo?.physical_problem && (
+          <GridQuestionAnswerCard
+            question="আপনার শারীরিক কোনো রোগ আছে?"
+            answer={personalInfo.physical_problem}
+          />
+        )}
+        {personalInfo?.mental_problem && (
+          <GridQuestionAnswerCard
+            question=" আপনার মানসিক কোনো রোগ আছে?"
+            answer={personalInfo?.mental_problem}
+          />
+        )}
+        <GridQuestionAnswerCard
+          question="দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন?"
+          answer={personalInfo?.special_deeni_mehnot}
+        />
+        <GridQuestionAnswerCard
+          question="মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি?"
+          answer={personalInfo?.mazar}
+        />
+        <GridQuestionAnswerCard
+          question="আপনার পছন্দের অন্তত ৩ টি ইসলামি বই এর নাম লিখুন"
+          answer={personalInfo?.islamic_books}
+        />
+        <GridQuestionAnswerCard
+          question="আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন"
+          answer={personalInfo?.islamic_scholars}
+        />
+        <GridQuestionAnswerCard
+          question="কোনো নেশাদ্রব্য পান করেন?"
+          answer={personalInfo?.isNeshaDrobbo}
+        />
+        <GridQuestionAnswerCard
+          question="মিলাদ ও কিয়াম সম্পর্কে আপনার ধারনা কি?"
+          answer={personalInfo?.about_milad_qiyam}
+        />
+        <GridQuestionAnswerCard
+          question="নিজের সম্পর্কে কিছু লিখুন"
+          answer={personalInfo?.about_me}
+        />
+      </div>
     </div>
   );
 };

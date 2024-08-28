@@ -15,6 +15,7 @@ import { BioChoiceDataServices } from '../../services/bioChoiceData';
 import { ContactPurchaseDataServices } from '../../services/contactPurchaseData';
 import { Colors } from '../../constants/colors';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
+import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswerCard';
 
 const ContactInfo = ({ status }) => {
   const [displayText, setDisplayText] = useState(false);
@@ -198,48 +199,31 @@ const ContactInfo = ({ status }) => {
         <>
           <h5 className="my-3 text-2xl text-center card-title">যোগাযোগ</h5>
           <div className="paid-contact-info">
-            <table className="w-full table-auto">
-              <thead>
-                <tr className="border-t border-b">
-                  <td className="w-1/2 px-4 py-2 text-left">
-                    {' '}
-                    {generalInfo?.gender === 'মহিলা' ||
+            <div className="grid md:grid-cols-2 grid-cols-1 gap-0 my-3">
+              <>
+                <GridQuestionAnswerCard
+                  question={
+                    generalInfo?.gender === 'মহিলা' ||
                     generalInfo?.bio_type === 'পাত্রীর বায়োডাটা'
                       ? 'পাত্রীর নাম'
-                      : 'পাত্রের নাম'}{' '}
-                  </td>
-                  <td className="w-1/2 px-4 py-2 text-left border-l">
-                    {contactInfo.data?.contact_info.full_name}
-                  </td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b">
-                  <td className="w-1/2 px-4 py-2 text-left">
-                    অভিভাবকের মোবাইল নাম্বার
-                  </td>
-                  <td className="w-1/2 px-4 py-2 text-left border-l">
-                    {contactInfo.data?.contact_info.family_number}
-                  </td>
-                </tr>
-                <tr className="border-b">
-                  <td className="w-1/2 px-4 py-2 text-left">
-                    অভিভাবকের ই-মেইল
-                  </td>
-                  <td className="w-1/2 px-4 py-2 text-left border-l">
-                    {contactInfo.data?.contact_info.bio_receiving_email}
-                  </td>
-                </tr>
-                <tr className="border-b">
-                  <td className="w-1/2 px-4 py-2 text-left">
-                    অভিভাবকের সাথে সম্পর্ক
-                  </td>
-                  <td className="px-4 py-2 text-left border-l">
-                    {contactInfo.data?.contact_info.relation}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                      : 'পাত্রের নাম'
+                  }
+                  answer={contactInfo.data?.contact_info.full_name}
+                />
+                <GridQuestionAnswerCard
+                  question="অভিভাবকের মোবাইল নাম্বার"
+                  answer={contactInfo.data?.contact_info.family_number}
+                />
+                <GridQuestionAnswerCard
+                  question="অভিভাবকের ই-মেইল"
+                  answer={contactInfo.data?.contact_info.bio_receiving_email}
+                />
+                <GridQuestionAnswerCard
+                  question="অভিভাবকের সাথে সম্পর্ক"
+                  answer={contactInfo.data?.contact_info.relation}
+                />
+              </>
+            </div>
             <div className="flex justify-center mt-5">
               <button className="px-4 py-2 text-white mb-4 bg-red-800 rounded bio-report-btn w-93">
                 রিপোর্ট করুন

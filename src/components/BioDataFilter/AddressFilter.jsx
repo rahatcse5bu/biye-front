@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { useBio } from '../../contexts/useBio';
 import { useQuery } from '@tanstack/react-query';
 import Select from 'react-select';
@@ -58,7 +57,7 @@ const AddressFilter = () => {
     }
   };
 
-  const { data: divisionOptions, isLoading: divisionLoading } = useQuery({
+  const { data: divisionOptions } = useQuery({
     queryKey: ['divisions'],
     queryFn: async () => {
       const divisions = await BioDataServices.getAllDivisions();
@@ -75,7 +74,7 @@ const AddressFilter = () => {
     },
   });
 
-  const { data: districtOptions, isLoading: districtLoading } = useQuery(
+  const { data: districtOptions } = useQuery(
     ['districts', selectedDivisions],
     async () => {
       const selectedDivisionValues = selectedDivisions.map(
@@ -117,8 +116,9 @@ const AddressFilter = () => {
     }
   );
 
-  const { data: presentDistrictOptions, isLoading: presentDistrictLoading } =
-    useQuery(['presentDistricts', selectedPresentDivisions], async () => {
+  const { data: presentDistrictOptions } = useQuery(
+    ['presentDistricts', selectedPresentDivisions],
+    async () => {
       const selectedDivisionValues = selectedPresentDivisions.map(
         (division) => division.value
       );
@@ -155,10 +155,11 @@ const AddressFilter = () => {
         formattedDistrictOptions.unshift(allDistrictsOption);
         return formattedDistrictOptions;
       }
-    });
+    }
+  );
 
   const customStyles = {
-    option: (provided, state) => ({
+    option: (provided) => ({
       ...provided,
       height: 40,
       display: 'flex',

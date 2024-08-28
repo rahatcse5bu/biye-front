@@ -20,7 +20,7 @@ import { convertToQuery } from '../../utils/query';
 import PrimaryFilter from './PrimaryFilter';
 import { useQuery } from '@tanstack/react-query';
 import AddressFilter from './AddressFilter';
-import BioDataButton from './BioDataButton';
+import BioDataFilterButton from './BioDataFilterButton';
 import CustomAccordion from '../CustomAccordion/CustomAccordion';
 import EducationFilter from './EducationFilter';
 import PersonalInfoFilter from './PersonalInfoFilte';
@@ -152,7 +152,7 @@ const BioDataFilter = () => {
       <OccupationFilter />
 
       <OthersFilter />
-      <BioDataButton />
+      <BioDataFilterButton />
     </List>
   );
 };
