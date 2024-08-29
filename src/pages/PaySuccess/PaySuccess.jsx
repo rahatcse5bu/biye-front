@@ -1,18 +1,18 @@
-import { useEffect, useState, useCallback } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { Toast } from "../../utils/toast";
-import { getErrorMessage } from "../../utils/error";
-import { ContactPurchaseDataServices } from "../../services/contactPurchaseData";
-import { getToken } from "../../utils/cookies";
-import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
+import { useEffect, useState, useCallback } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Toast } from '../../utils/toast';
+import { getErrorMessage } from '../../utils/error';
+import { ContactPurchaseDataServices } from '../../services/contactPurchaseData';
+import { getToken } from '../../utils/cookies';
+import LoadingCircle from '../../components/LoadingCircle/LoadingCircle';
 
 const PaySuccess = () => {
   const [showMessage, setShowMessage] = useState(true);
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
-  const message = searchParams.get("message");
-  const bio_user = searchParams.get("bio_user");
-  const purpose = searchParams.get("purpose");
+  const message = searchParams.get('message');
+  const bio_user = searchParams.get('bio_user');
+  const purpose = searchParams.get('purpose');
 
   const navigate = useNavigate();
 
@@ -36,8 +36,8 @@ const PaySuccess = () => {
           );
 
         if (data.success) {
-          Toast.successToast("আপনার বায়োডাটা ক্রয় সম্পূর্ন  হয়েছে।");
-          navigate("/user/account/purchases");
+          Toast.successToast('আপনার বায়োডাটা ক্রয় সম্পূর্ন  হয়েছে।');
+          navigate('/user/account/purchases');
           // await bioChoiceFirstStepRefetch();
           // await bioChoiceSecondStepRefetch();
         }
@@ -53,12 +53,12 @@ const PaySuccess = () => {
 
   useEffect(() => {
     if (!showMessage) {
-      if (bio_user && purpose === "second_step") {
+      if (bio_user && purpose === 'second_step') {
         buyContact(bio_user);
       } else if (bio_user && bio_user.length > 4) {
         navigate(`/send-form/${bio_user}`);
       } else {
-        navigate("/user/account/dashboard");
+        navigate('/user/account/dashboard');
       }
     }
   }, [showMessage, bio_user, navigate, purpose, buyContact]);

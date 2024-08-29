@@ -1,7 +1,7 @@
-import React, { useContext, useEffect } from "react";
-import { Button, IconButton } from "@material-tailwind/react";
-import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
-import BioContext from "../../contexts/BioContext";
+import React, { useContext, useEffect } from 'react';
+import { Button, IconButton } from '@material-tailwind/react';
+import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+import BioContext from '../../contexts/BioContext';
 
 export function Pagination() {
   const [active, setActive] = React.useState(1);
@@ -18,9 +18,9 @@ export function Pagination() {
       return {
         ...prev,
         user_status:
-          import.meta.env.VITE_REACT_APP_NODE_ENV === "development"
-            ? "in review"
-            : "active",
+          import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+            ? 'in review'
+            : 'active',
         page: active,
         limit: limit,
       };
@@ -29,9 +29,9 @@ export function Pagination() {
       return {
         ...prev,
         user_status:
-          import.meta.env.VITE_REACT_APP_NODE_ENV === "development"
-            ? "in review"
-            : "active",
+          import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+            ? 'in review'
+            : 'active',
         page: active,
         limit: limit,
       };
@@ -39,10 +39,10 @@ export function Pagination() {
   }, [active, limit, setQuery, setFilterFields]);
 
   const getItemProps = (index) => ({
-    variant: active === index ? "filled" : "text",
-    color: "gray",
+    variant: active === index ? 'filled' : 'text',
+    color: 'gray',
     onClick: () => setActive(index),
-    className: "rounded-full",
+    className: 'rounded-full',
   });
 
   const next = () => {

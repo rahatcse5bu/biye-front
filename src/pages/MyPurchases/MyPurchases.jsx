@@ -1,30 +1,30 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
-import { Button } from "@material-tailwind/react";
-import { useQuery } from "@tanstack/react-query";
-import { FaEye, FaTrash, FaInfo } from "react-icons/fa";
-import { BioChoiceDataServices } from "../../services/bioChoiceData";
-import { getToken } from "../../utils/cookies";
-import { MdFeedback } from "react-icons/md";
-import { AiFillQuestionCircle } from "react-icons/ai";
-import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
-import { FeedbackModal } from "../../components/FeedbackModal/FeedbackModal";
-import { BioDetailsModal } from "../../components/BioDetailsModal/BioDetailsModal";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Colors } from "../../constants/colors";
-import { PayDetailsModal } from "../../components/PayDetailsModal/PayDetailsModal";
-import { useContext } from "react";
-import UserContext from "../../contexts/UserContext";
-import Swal from "sweetalert2";
-import { convertToBengaliNumerals } from "../../utils/weight";
-import BkashCreatePaymentAPICall from "../../services/bkash";
-import { Toast } from "../../utils/toast";
-import { getErrorMessage } from "../../utils/error";
-import { ContactPurchaseDataServices } from "../../services/contactPurchaseData";
-import classNames from "classnames";
-import { BioDataServices } from "../../services/bioData";
-import "./MyPurchases.css";
-import { formatDateAndCalculateAge } from "../../utils/date";
+import { useState } from 'react';
+import { Button } from '@material-tailwind/react';
+import { useQuery } from '@tanstack/react-query';
+import { FaEye, FaTrash, FaInfo } from 'react-icons/fa';
+import { BioChoiceDataServices } from '../../services/bioChoiceData';
+import { getToken } from '../../utils/cookies';
+import { MdFeedback } from 'react-icons/md';
+import { AiFillQuestionCircle } from 'react-icons/ai';
+import LoadingCircle from '../../components/LoadingCircle/LoadingCircle';
+import { FeedbackModal } from '../../components/FeedbackModal/FeedbackModal';
+import { BioDetailsModal } from '../../components/BioDetailsModal/BioDetailsModal';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Colors } from '../../constants/colors';
+import { PayDetailsModal } from '../../components/PayDetailsModal/PayDetailsModal';
+import { useContext } from 'react';
+import UserContext from '../../contexts/UserContext';
+import Swal from 'sweetalert2';
+import { convertToBengaliNumerals } from '../../utils/weight';
+import BkashCreatePaymentAPICall from '../../services/bkash';
+import { Toast } from '../../utils/toast';
+import { getErrorMessage } from '../../utils/error';
+import { ContactPurchaseDataServices } from '../../services/contactPurchaseData';
+import classNames from 'classnames';
+import { BioDataServices } from '../../services/bioData';
+import './MyPurchases.css';
+import { formatDateAndCalculateAge } from '../../utils/date';
 
 const FirstStepCard = ({
   item,
@@ -42,7 +42,7 @@ const FirstStepCard = ({
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { data } = useQuery({
-    queryKey: ["bio-data", "stat", item?.bio_user],
+    queryKey: ['bio-data', 'stat', item?.bio_user],
     queryFn: async () => {
       return await BioDataServices.getBioDataStatistics(item?.bio_user);
     },
@@ -54,7 +54,7 @@ const FirstStepCard = ({
       BkashCreatePaymentAPICall(
         +value,
         bio_user,
-        "second_step",
+        'second_step',
         location.pathname
       );
     }
@@ -83,7 +83,7 @@ const FirstStepCard = ({
       );
 
       if (data.success) {
-        Toast.successToast("আপনার বায়োডাটা ক্রয় সম্পূর্ন  হয়েছে।");
+        Toast.successToast('আপনার বায়োডাটা ক্রয় সম্পূর্ন  হয়েছে।');
         await bioChoiceFirstStepRefetch();
         await bioChoiceSecondStepRefetch();
       }
@@ -98,21 +98,21 @@ const FirstStepCard = ({
   const payButtonHandler = (bio_user) => {
     const points = userInfo?.data?.points;
     Swal.fire({
-      title: "আপনি কি তথ্য দেখতে চান?",
+      title: 'আপনি কি তথ্য দেখতে চান?',
       text: `যোগাযোগ তথ্য দেখতে আপনার আরও ৭০ পয়েন্ট খরচ হবে 
 			। ${
         points >= 70
           ? convertToBengaliNumerals((points - 70).toString()) +
-            " অবশিষ্ট থাকবে"
-          : "আপনার আরও " +
+            ' অবশিষ্ট থাকবে'
+          : 'আপনার আরও ' +
             convertToBengaliNumerals((70 - points).toString()) +
-            " পয়েন্ট লাগবে"
+            ' পয়েন্ট লাগবে'
       }`,
-      icon: "question",
+      icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Ok",
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ok',
     }).then(async (result) => {
       //! for not confirm
       if (!result.isConfirmed) {
@@ -140,31 +140,31 @@ const FirstStepCard = ({
       </td>
       <td
         className={classNames(
-          "px-4 py-2 capitalize  w-1/10 text-center font-bold text-base border-l w-1/7",
+          'px-4 py-2 capitalize  w-1/10 text-center font-bold text-base border-l w-1/7',
           {
-            "text-orange-500": item?.status === "pending",
-            "text-green-600": item?.status === "approved",
-            "text-red-600": item?.status === "rejected",
+            'text-orange-500': item?.status === 'pending',
+            'text-green-600': item?.status === 'approved',
+            'text-red-600': item?.status === 'rejected',
           }
         )}
       >
         {item?.status}
       </td>
       <td className="px-4 py-2 text-center border-l w-1/10">
-        <div
+        <button
           onClick={() => bioDetailsOpenModalHandler(item?.bio_details)}
           className="flex items-center justify-center cursor-pointer"
         >
           <FaInfo color="gray" size={22} />
-        </div>
+        </button>
       </td>
       <td className="px-4 py-2 text-center border-l w-1/10">
-        <div
+        <button
           onClick={() => feedbackDetailsModalHandler(item?.feedback)}
           className="flex items-center justify-center cursor-pointer"
         >
           <MdFeedback color="gray" size={22} />
-        </div>
+        </button>
       </td>
       <td className="px-4 py-2 text-center border-l w-1/10">
         {data?.results.approvedPercentage}%
@@ -176,7 +176,7 @@ const FirstStepCard = ({
         {data?.results.pending}
       </td>
       <td className="flex items-center px-4 py-2 text-center border-l w-1/10">
-        {item?.status === "approved" && (
+        {item?.status === 'approved' && (
           <>
             <Button
               onClick={() => payButtonHandler(item?.bio_user)}
@@ -186,7 +186,7 @@ const FirstStepCard = ({
                 background: `linear-gradient(to right,${Colors.lnRight},${Colors.lnLeft} )`,
               }}
             >
-              {loading ? <LoadingCircle /> : "Pay"}
+              {loading ? <LoadingCircle /> : 'Pay'}
             </Button>
             <AiFillQuestionCircle
               onClick={() => setPayBioDetailsModal(true)}
@@ -210,7 +210,7 @@ const FirstStepCard = ({
 const SecondCard = ({ item, index }) => {
   const navigate = useNavigate();
   const { data } = useQuery({
-    queryKey: ["bio-data", "stat", item?.bio_user],
+    queryKey: ['bio-data', 'stat', item?.bio_user],
     queryFn: async () => {
       return await BioDataServices.getBioDataStatistics(item?.bio_user);
     },
@@ -280,14 +280,14 @@ const MyPurchases = () => {
   const [bioDetailsModal, setBioDetailsModal] = useState(false);
   const [payDetailsModal, setPayBioDetailsModal] = useState(false);
   const [qA, setQa] = useState('"');
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState('');
 
   const {
     data: bioChoiceFirstStep,
     isLoading: bioChoiceFirstStepLoading,
     refetch: bioChoiceFirstStepRefetch,
   } = useQuery({
-    queryKey: ["bio-choice-data", "first-step"],
+    queryKey: ['bio-choice-data', 'first-step'],
     queryFn: async () => {
       return await BioChoiceDataServices.getBioChoiceDataFirstStep(
         getToken().token
@@ -301,7 +301,7 @@ const MyPurchases = () => {
     isLoading: bioChoiceSecondStepLoading,
     refetch: bioChoiceSecondStepRefetch,
   } = useQuery({
-    queryKey: ["bio-choice-data", "second-step"],
+    queryKey: ['bio-choice-data', 'second-step'],
     queryFn: async () => {
       return await BioChoiceDataServices.getBioChoiceDataSecondStep(
         getToken().token
@@ -416,7 +416,7 @@ const MyPurchases = () => {
                         স্থায়ী ঠিকানা
                       </th>
                       <th className="w-1/12 whitespace-nowrap  px-4 py-2 text-center">
-                        বর্তমান ঠিকানা{" "}
+                        বর্তমান ঠিকানা{' '}
                       </th>
                       <th className="w-1/12 px-4 py-2 text-center">
                         যোগাযোগের নাম্বার

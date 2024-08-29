@@ -30,12 +30,14 @@ import { userServices } from '../../services/user';
 import classNames from 'classnames';
 import { UserInfoServices } from '../../services/userInfo';
 import { Toast } from '../../utils/toast';
+import { useBio } from '../../contexts/useBio.jsx';
 
 export default function NavBar() {
   const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
   const [filteredNavData, setFilteredNavData] = useState(navData);
   const [isHovered, setIsHovered] = useState(false);
   const [openNav, setOpenNav] = useState(false);
+  const { filterFields } = useBio();
   const gender = getGender();
   const navigate = useNavigate();
 
@@ -43,7 +45,7 @@ export default function NavBar() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [pathname]);
+  }, [pathname, filterFields]);
 
   const {
     data,
