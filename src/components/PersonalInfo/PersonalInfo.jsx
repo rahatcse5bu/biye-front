@@ -63,15 +63,7 @@ const PersonalInfo = () => {
           question="মাহরাম/নন-মাহরাম(অনলাইন-অফলাইন) মেনে চলেন কি?"
           answer={personalInfo?.mahram_non_mahram}
         />
-        <GridQuestionAnswerCard
-          question="শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?"
-          answer={personalInfo?.quran_tilawat}
-        />
 
-        <GridQuestionAnswerCard
-          question="শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?"
-          answer={personalInfo?.quran_tilawat}
-        />
         <GridQuestionAnswerCard
           question="শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?"
           answer={personalInfo?.quran_tilawat}
