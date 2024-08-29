@@ -37,7 +37,7 @@ export default function NavBar() {
   const [filteredNavData, setFilteredNavData] = useState(navData);
   const [isHovered, setIsHovered] = useState(false);
   const [openNav, setOpenNav] = useState(false);
-  const { filterFields } = useBio();
+  const { filterFields, query } = useBio();
   const gender = getGender();
   const navigate = useNavigate();
 
@@ -45,7 +45,7 @@ export default function NavBar() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [pathname, filterFields]);
+  }, [pathname, filterFields, query]);
 
   const {
     data,

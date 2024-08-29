@@ -20,6 +20,28 @@ function SendForm() {
   const [loading, setLoading] = useState(false);
   const [goTo, setGoto] = useState(false);
   const [isHasBio, setIsHasBio] = useState(false);
+  // State to handle form inputs
+  const [formData, setFormData] = useState({
+    upzilla: '',
+    zilla: '',
+    maxEducation: '',
+    institution: '',
+    job: '',
+    salary: '',
+    fatherProfession: '',
+    motherProfession: '',
+    familyStatus: '',
+    siblingsDetails: '',
+    deeniCondition: '',
+    economicalCondition: '',
+    height: '',
+    color: '',
+    weight: '',
+    jobPosition: '',
+    maritalStatus: '',
+    physicalMentalConditions: '',
+    aboutMe: '',
+  });
   useEffect(() => {
     if (goTo & !loading) {
       const timeout = setTimeout(() => {
@@ -38,7 +60,31 @@ function SendForm() {
     text += `===salatInRain==${salatInRain}`;
     text += `===startingUniv==${startingUniv}`;
     text += `===studyingAtUniversity==${studyingAtUniversity}`;
-    text += `===bioInput==${bioInput}`;
+
+    if (isHasBio) {
+      text += `===bioInput==${bioInput}`;
+    } else {
+      text += `===upzilla==${formData.upzilla}`;
+      text += `===zilla==${formData.zilla}`;
+      text += `===maxEducation==${formData.maxEducation}`;
+      text += `===institution==${formData.institution}`;
+      text += `===job==${formData.job}`;
+      text += `===salary==${formData.salary}`;
+      text += `===fatherProfession==${formData.fatherProfession}`;
+      text += `===motherProfession==${formData.motherProfession}`;
+      text += `===motherProfession==${formData.motherProfession}`;
+      text += `===familyStatus==${formData.familyStatus}`;
+      text += `===siblingsDetails==${formData.siblingsDetails}`;
+      text += `===deeniCondition==${formData.deeniCondition}`;
+      text += `===economicalCondition==${formData.economicalCondition}`;
+      text += `===height==${formData.height}`;
+      text += `===color==${formData.color}`;
+      text += `===weight==${formData.weight}`;
+      text += `===jobPosition==${formData.jobPosition}`;
+      text += `===maritalStatus==${formData.maritalStatus}`;
+      text += `===physicalMentalConditions==${formData.physicalMentalConditions}`;
+      text += `===aboutMe==${formData.aboutMe}`;
+    }
 
     const bioChoiceData = {
       bio_details: text,
@@ -64,9 +110,9 @@ function SendForm() {
       setLoading(false);
     }
   };
-const handleHasBio =()=> {
-  setIsHasBio(!isHasBio);
-}
+  const handleHasBio = () => {
+    setIsHasBio(!isHasBio);
+  };
   return (
     <div className="max-w-screen-md p-6 mx-auto bg-white rounded-lg shadow-md">
       <h2
@@ -120,15 +166,26 @@ const handleHasBio =()=> {
           required={true}
           title="অমুক তার ছেলেকে ভার্সিটিতে ভর্তি হতে দিতে চায় না কারন ইসলামী পরিবেশ পাবে না। এরকম বাড়াবাড়ির ব্যাপারে আপনার মতামত কি?"
         />
-        <div   className="mb-4 text-lg font-semibold"
-        style={{ color: Colors.titleText }}> <input type='checkbox' onChange={handleHasBio}/> ইতিমধ্যে আপনার বায়োডাটা লিঙ্ক রেডি আছে? </div>
-        {!isHasBio && (<SendMyBio/>)}
-        <Textarea
-          value={bioInput}
-          setValue={setBioInput}
-          required={true}
-          title="আপনার নিজের বায়োডাটা লিখুন অথবা বায়োডাটার লিঙ্ক শেয়ার করুন"
-        />
+        <div
+          className="mb-4 text-lg font-semibold"
+          style={{ color: Colors.titleText }}
+        >
+          {' '}
+          <input type="checkbox" onChange={handleHasBio} /> ইতিমধ্যে আপনার
+          বায়োডাটা লিঙ্ক রেডি আছে?{' '}
+        </div>
+        {!isHasBio && (
+          <SendMyBio formData={formData} setFormData={setFormData} />
+        )}
+
+        {isHasBio && (
+          <Textarea
+            value={bioInput}
+            setValue={setBioInput}
+            required={true}
+            title="আপনার নিজের বায়োডাটা লিখুন অথবা বায়োডাটার লিঙ্ক শেয়ার করুন"
+          />
+        )}
 
         <div className="mb-4">
           <button
