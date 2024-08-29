@@ -6,6 +6,7 @@ import { getToken } from '../../utils/cookies';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Toast } from '../../utils/toast';
 import LoadingCircle from '../../components/LoadingCircle/LoadingCircle';
+import SendMyBio from './SendMyBio';
 function SendForm() {
   const { bio_user } = useParams();
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ function SendForm() {
   const [bioInput, setBioInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [goTo, setGoto] = useState(false);
+  const [isHasBio, setIsHasBio] = useState(false);
   useEffect(() => {
     if (goTo & !loading) {
       const timeout = setTimeout(() => {
@@ -62,7 +64,9 @@ function SendForm() {
       setLoading(false);
     }
   };
-
+const handleHasBio =()=> {
+  setIsHasBio(!isHasBio);
+}
   return (
     <div className="max-w-screen-md p-6 mx-auto bg-white rounded-lg shadow-md">
       <h2
@@ -116,6 +120,9 @@ function SendForm() {
           required={true}
           title="অমুক তার ছেলেকে ভার্সিটিতে ভর্তি হতে দিতে চায় না কারন ইসলামী পরিবেশ পাবে না। এরকম বাড়াবাড়ির ব্যাপারে আপনার মতামত কি?"
         />
+        <div   className="mb-4 text-lg font-semibold"
+        style={{ color: Colors.titleText }}> <input type='checkbox' onChange={handleHasBio}/> ইতিমধ্যে আপনার বায়োডাটা লিঙ্ক রেডি আছে? </div>
+        {!isHasBio && (<SendMyBio/>)}
         <Textarea
           value={bioInput}
           setValue={setBioInput}
