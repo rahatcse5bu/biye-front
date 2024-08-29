@@ -90,7 +90,7 @@ const router = createBrowserRouter([
         element: <TermsAndConditions />,
       },
       {
-        path: '/instructions',
+        path: '/biodata-submit',
         element: <Instructions />,
       },
       {
