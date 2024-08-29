@@ -73,6 +73,7 @@ export function BioDetailsModal({ open, setOpen, text, title, id }) {
   // console.log(`bio-details-text~${id}`, text);
   useEffect(() => {
     let temp = text?.split('===');
+    // console.log('temp~~', temp);
     setAnswers(temp);
   }, [setOpen, text]);
   return (
