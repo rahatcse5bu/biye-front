@@ -16,7 +16,7 @@ const BioDatasGrid = ({ sideBarDisplay, setSideBarDisplay }) => {
   const { setQuery, query, bios, size } = useBio();
   const navigate = useNavigate();
   // console.log('sortOrder~~', sortOrder);
-  console.log('bios~~~', bios);
+  // console.log('bios~~~', bios);
 
   return (
     <div className="w-full mx-5 mt-5">

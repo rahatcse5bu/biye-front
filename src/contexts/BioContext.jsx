@@ -11,7 +11,10 @@ const BioContext = createContext();
 export const BioProvider = ({ children }) => {
   const [bio, setBio] = useState(null);
   const [bioLoading, setBioLoading] = useState(false);
-  const [query, setQuery] = useState({});
+  const [query, setQuery] = useState({
+    page: 1,
+    limit: 5,
+  });
   const [filterFields, setFilterFields] = useState({});
 
   //! get all bio datas
