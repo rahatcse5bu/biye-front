@@ -120,7 +120,7 @@ export function Pagination() {
             className="absolute z-10 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
             onClose={() => setOpen(false)}
           >
-            {[10, 20, 30, 50, 100].map((item) => (
+            {[5, 10, 20, 30, 50, 100].map((item) => (
               <MenuItem
                 key={item}
                 className={`block px-4 py-2 text-sm cursor-pointer ${item === itemsPerPage ? 'font-bold text-blue-500' : 'text-gray-700 hover:bg-gray-100'}`}
