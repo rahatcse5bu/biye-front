@@ -36,6 +36,8 @@ export default function NavBar() {
   const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
   const [filteredNavData, setFilteredNavData] = useState(navData);
   const [isHovered, setIsHovered] = useState(false);
+  const [hoverOpenCountForSmall, setHoverOpenCountForSmall] = useState(0);
+  const [hoverOpenCountForLarge, setHoverOpenCountForLarge] = useState(0);
   const [openNav, setOpenNav] = useState(false);
   const { filterFields, query } = useBio();
   const profileCardRef = useRef(null);
@@ -117,9 +119,19 @@ export default function NavBar() {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 960) {
-        setOpenNav(true);
+        if (hoverOpenCountForLarge < 2) {
+          setOpenNav(true);
+          setHoverOpenCountForLarge(hoverOpenCountForLarge + 1);
+        } else {
+          setOpenNav(false);
+        }
       } else {
-        setIsHovered(true);
+        if (hoverOpenCountForSmall < 2) {
+          setIsHovered(true);
+          setHoverOpenCountForSmall(hoverOpenCountForSmall + 1);
+        } else {
+          setIsHovered(false);
+        }
       }
     };
 
