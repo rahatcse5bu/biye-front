@@ -35,7 +35,7 @@ const BioData = () => {
   const navigate = useNavigate();
 
   // console.log(id);
-  const { isLoading, data } = useQuery({
+  const { isLoading, data, isError } = useQuery({
     queryKey: ['bio-data', id],
     queryFn: async () => {
       return await BioDataServices.getBioData(id);
@@ -53,7 +53,7 @@ const BioData = () => {
     retry: false,
     enabled: !!id,
   });
-  const { data: contact = null, isLoading: contactLoading } = useQuery({
+  const { data: contact = null } = useQuery({
     queryKey: ['bio-data', 'contact', id, userInfo?.data?._id],
     queryFn: async () => {
       return await ContactServices.getContactForBuyer(
@@ -92,6 +92,10 @@ const BioData = () => {
       <ScrollToTop />
       {isLoading ? (
         <LoadingCircle classes="my-10 h-[500px]" />
+      ) : isError ? (
+        <div className="bg-red-50 p-10 rounded-sm border border-red-300 m-5">
+          <h4 className="text-red-900 font-semibold">Not found</h4>
+        </div>
       ) : (
         <div className="grid text-[16px] lg:grid-cols-[30%,70%] md:grid-cols-[50%,50%] grid-cols-1 ">
           <div className="col px-2 single-bio-left-sidebar">
