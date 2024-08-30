@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaCircle } from 'react-icons/fa';
 import { FcLike, FcDislike, FcSettings, FcSupport } from 'react-icons/fc';
@@ -38,6 +38,7 @@ export default function NavBar() {
   const [isHovered, setIsHovered] = useState(false);
   const [openNav, setOpenNav] = useState(false);
   const { filterFields, query } = useBio();
+  const profileCardRef = useRef(null);
   const gender = getGender();
   const navigate = useNavigate();
 
@@ -114,13 +115,33 @@ export default function NavBar() {
 
   // console.log("user-info", userInfo);
   useEffect(() => {
-    window.addEventListener('resize', () => {
+    const handleResize = () => {
       if (window.innerWidth >= 960) {
-        setOpenNav(false);
+        setOpenNav(true);
       } else {
+        setIsHovered(true);
+      }
+    };
+
+    // Add resize event listener
+    window.addEventListener('resize', handleResize);
+
+    // Handle click outside
+    const handleClickOutside = (event) => {
+      if (
+        profileCardRef.current &&
+        !profileCardRef.current.contains(event.target)
+      ) {
         setIsHovered(false);
       }
-    });
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const handleIconHover = () => {
@@ -208,6 +229,7 @@ export default function NavBar() {
             </div>
             {isHovered && (
               <div
+                ref={profileCardRef}
                 className={`absolute ${
                   !isHovered ? 'hidden' : 'block'
                 }  w-[250px] rounded-md profile-card mx-5 h-[450px] transition-all duration-300 ease-in p-4  bg-gradient-to-r from-[#071952] to-[#071952] top-12 right-[100px]  scrollbar-thumb-blue scrollbar-thumb-rounded-full scrollbar-track-blue-lighter scrollbar-w-2 translate-x-1/2 overflow-y-scroll overflow-x-hidden z-40`}

@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from 'react';
 
-import Select from "../../components/Select/Select";
-import Input from "../../components/Input/Input";
-import { Colors } from "../../constants/colors";
-import FormTitle from "../FormTitle/FormTitle";
+import Select from '../../components/Select/Select';
+import Input from '../../components/Input/Input';
+import { Colors } from '../../constants/colors';
+import FormTitle from '../FormTitle/FormTitle';
 import {
   bioDataTypes,
   bloodGroup,
@@ -14,43 +14,43 @@ import {
   maritalStatus,
   nationalities,
   screenColors,
-} from "./generalInfoForm.constant";
-import { userServices } from "../../services/user";
-import { BioDataServices } from "../../services/bioData";
-import UserContext from "../../contexts/UserContext";
-import toast from "react-hot-toast";
-import { useQuery } from "@tanstack/react-query";
-import { getDateMonthYear, getYearMonthDate } from "../../utils/date";
-import { getToken, removeToken } from "../../utils/cookies";
-import LoadingCircle from "../LoadingCircle/LoadingCircle";
-import { useNavigate } from "react-router-dom";
-import { convertToBengaliNumerals } from "../../utils/weight";
-import { convertToEnglishDigits } from "../../utils/weight";
-import { verifyToken } from "../../services/verifyToken";
-import { getErrorMessage } from "../../utils/error";
-import { Toast } from "../../utils/toast";
-import { GeneralInfoServices } from "../../services/generalInfo";
-import SingleSelect from "../SingleSelect/SingleSelect";
-import { UserInfoServices } from "../../services/userInfo";
+} from './generalInfoForm.constant';
+import { userServices } from '../../services/user';
+import { BioDataServices } from '../../services/bioData';
+import UserContext from '../../contexts/UserContext';
+import toast from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
+import { getDateMonthYear, getYearMonthDate } from '../../utils/date';
+import { getToken, removeToken } from '../../utils/cookies';
+import LoadingCircle from '../LoadingCircle/LoadingCircle';
+import { useNavigate } from 'react-router-dom';
+import { convertToBengaliNumerals } from '../../utils/weight';
+import { convertToEnglishDigits } from '../../utils/weight';
+import { verifyToken } from '../../services/verifyToken';
+import { getErrorMessage } from '../../utils/error';
+import { Toast } from '../../utils/toast';
+import { GeneralInfoServices } from '../../services/generalInfo';
+import SingleSelect from '../SingleSelect/SingleSelect';
+import { UserInfoServices } from '../../services/userInfo';
 
 const GeneralInfoForm = ({ userForm, setUserForm }) => {
   const { userInfo, logOut } = useContext(UserContext);
-  const [referId, setReferId] = useState("");
-  const [bioType, setBioType] = useState("");
-  const [maritalStatus, setMaritalStatus] = useState("");
-  const [dob, setDob] = useState("");
-  const [height, setHeight] = useState("");
-  const [color, setColor] = useState("");
-  const [weight, setWeight] = useState("৫০");
-  const [blood, setBlood] = useState("");
-  const [nationality, setNationality] = useState("বাংলাদেশী");
-  const [gender, setGender] = useState("");
+  const [referId, setReferId] = useState('');
+  const [bioType, setBioType] = useState('');
+  const [maritalStatus, setMaritalStatus] = useState('');
+  const [dob, setDob] = useState('');
+  const [height, setHeight] = useState('');
+  const [color, setColor] = useState('');
+  const [weight, setWeight] = useState('৫০');
+  const [blood, setBlood] = useState('');
+  const [nationality, setNationality] = useState('বাংলাদেশী');
+  const [gender, setGender] = useState('');
   const [filteredMaritalStatus, setFilteredMaritalStatus] =
     useState(maritalStatus);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { data: generalInfo = null, isLoading } = useQuery({
-    queryKey: ["general-info", userInfo?.data?._id, getToken()?.token],
+    queryKey: ['general-info', userInfo?.data?._id, getToken()?.token],
     queryFn: async () => {
       return await GeneralInfoServices.getGeneralInfoByUser(getToken()?.token);
     },
@@ -58,7 +58,7 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
     enabled: !!userInfo?.data?._id,
   });
   const { data: userInfoIds = null } = useQuery({
-    queryKey: ["all-users-id", getToken()?.token],
+    queryKey: ['all-users-id', getToken()?.token],
     queryFn: async () => {
       return await UserInfoServices.getAllUsersInfoId(getToken()?.token);
     },
@@ -121,25 +121,25 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
   };
 
   useEffect(() => {
-    if (bioType === "পাত্রের বায়োডাটা") {
-      setGender("পুরুষ");
-    } else if (bioType === "পাত্রীর বায়োডাটা") {
-      setGender("মহিলা");
+    if (bioType === 'পাত্রের বায়োডাটা') {
+      setGender('পুরুষ');
+    } else if (bioType === 'পাত্রীর বায়োডাটা') {
+      setGender('মহিলা');
     }
 
-    if (gender === "পুরুষ") {
+    if (gender === 'পুরুষ') {
       setFilteredMaritalStatus([
-        { value: "অবিবাহিত" },
-        { value: "বিবাহিত" },
-        { value: "ডিভোর্সড" },
-        { value: "বিপত্নীক" },
+        { value: 'অবিবাহিত' },
+        { value: 'বিবাহিত' },
+        { value: 'ডিভোর্সড' },
+        { value: 'বিপত্নীক' },
       ]);
-    } else if (gender === "মহিলা") {
+    } else if (gender === 'মহিলা') {
       setFilteredMaritalStatus([
-        { value: "অবিবাহিত" },
-        { value: "বিবাহিত" },
-        { value: "ডিভোর্সড" },
-        { value: "বিধবা" },
+        { value: 'অবিবাহিত' },
+        { value: 'বিবাহিত' },
+        { value: 'ডিভোর্সড' },
+        { value: 'বিধবা' },
       ]);
     }
   }, [bioType, gender]);
@@ -161,13 +161,13 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
       refer_user: referId?.value,
     };
 
-    console.log("general_info_data~~", formData);
+    // console.log('general_info_data~~', formData);
 
     // console.log("userInfo?.data?._id~~", userInfo?.data?._id);
     // console.log("!getToken()?.token~~", getToken()?.token);
 
     if (!getToken()?.token || !userInfo?.data?._id) {
-      alert("Please logout and try again");
+      alert('Please logout and try again');
       return;
     }
 
@@ -186,7 +186,7 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
         );
       }
       if (data.success) {
-        Toast.successToast("আপনার তথ্য আপডেট  করা হয়েছে");
+        Toast.successToast('আপনার তথ্য আপডেট  করা হয়েছে');
         setUserForm((prev) => prev + 1);
       }
     } catch (error) {
@@ -194,10 +194,10 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
       const errorMsg = getErrorMessage(error);
       Toast.errorToast(errorMsg);
       // ! for token error redirect to logout
-      if (errorMsg.includes("You are not authorized")) {
+      if (errorMsg.includes('You are not authorized')) {
         await logOut();
         removeToken();
-        navigate("/");
+        navigate('/');
       }
     } finally {
       setLoading(false);
@@ -217,6 +217,7 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
               value={referId}
               setValue={setReferId}
               required={false}
+              classes="z-10"
               options={userInfoIds?.data.map((item) => {
                 return { value: item._id, label: item.user_id };
               })}
@@ -247,7 +248,7 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
           />
 
           <Input
-            title={"জন্মসন "}
+            title={'জন্মসন '}
             value={dob}
             setValue={setDob}
             required
@@ -271,7 +272,7 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
           />
 
           <Input
-            title={"ওজন (KG) "}
+            title={'ওজন (KG) '}
             value={weight}
             setValue={setWeight}
             required
@@ -311,7 +312,7 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
                 background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
               }}
             >
-              {loading ? <LoadingCircle /> : "Save & Next"}
+              {loading ? <LoadingCircle /> : 'Save & Next'}
             </button>
           </div>
         </form>

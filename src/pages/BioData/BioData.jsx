@@ -13,7 +13,7 @@ import ExpectedPartner from '../../components/ExpectedPartner/ExpectedPartner';
 import OngikarNama from '../../components/OngikarNama/OngikarNama';
 import ContactInfo from '../../components/ContactInfo/ContactInfo';
 import './BioData.css';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { BioDataServices } from '../../services/bioData';
 import { ContactServices } from '../../services/contact';
@@ -82,12 +82,20 @@ const BioData = () => {
 
   return (
     <div className=" py-2 w-full  ">
-      <div
-        onClick={() => navigate(-1)}
-        className="py-2 flex flex-row cursor-pointer my-2"
-      >
-        <FcLeft className="w-8 h-6 text-white " />
-        <strong className="text-indigo-600">Back</strong>
+      <div className="flex md:flex-row flex-col  py-3 justify-between">
+        <div
+          onClick={() => navigate(-1)}
+          className=" flex flex-row cursor-pointer "
+        >
+          <FcLeft className="w-8 h-6 text-white " />
+          <strong className="text-indigo-600">Back</strong>
+        </div>
+        <div className="flex flex-row md:mr-10 md:ml-0 ml-3 md:pt-0 pt-3 mr-0">
+          <p className="md:mr-2  text-green-600">কীভাবে বায়োডাটা তৈরি করবেন</p>{' '}
+          <Link to="/biodata-submit" className="text-indigo-700 ml-3">
+            এখানে ক্লিক করুন{' '}
+          </Link>
+        </div>
       </div>
       <ScrollToTop />
       {isLoading ? (
