@@ -12,11 +12,11 @@ import { useNavigate } from 'react-router-dom';
 import { Toast } from '../../utils/toast';
 
 const BioDatasGrid = ({ sideBarDisplay, setSideBarDisplay }) => {
-  const { bios } = useContext(BioContext);
   const [sortOrder, setSortOrder] = useState('desc');
-  const { setQuery, query } = useBio();
+  const { setQuery, query, bios, size } = useBio();
   const navigate = useNavigate();
   // console.log('sortOrder~~', sortOrder);
+  console.log('bios~~~', bios);
 
   return (
     <div className="w-full mx-5 mt-5">
@@ -26,7 +26,7 @@ const BioDatasGrid = ({ sideBarDisplay, setSideBarDisplay }) => {
       >
         বায়োডাটা সমূহ
       </h1>
-      <p className="text-gray-500">{bios?.length} টি বায়োডাটা পাওয়া গেছে </p>
+      <p className="text-gray-500">{size} টি বায়োডাটা পাওয়া গেছে </p>
       <div className="flex items-center justify-between text-right ">
         <button
           onClick={() => setSideBarDisplay((prev) => !prev)}

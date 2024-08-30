@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import BioContext from '../../contexts/BioContext';
@@ -255,7 +257,16 @@ const ContactInfo = ({ status }) => {
           </h2>
           <div className="flex flex-col items-center justify-center ">
             {displayText ? (
-              <div className="pb-5">
+              <div
+                onClick={() =>
+                  buyWithBkashHandler(
+                    30 - points,
+                    bio?.generalInfo?.user,
+                    'first_Step'
+                  )
+                }
+                className="pb-5"
+              >
                 <p className="mb-2 text-xl">
                   আপনার একাউন্টে কোনো{' '}
                   {convertToBengaliNumerals(points.toFixed(2).toString())}{' '}
