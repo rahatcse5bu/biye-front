@@ -44,10 +44,10 @@ export default function NavBar() {
   const [filteredNavData, setFilteredNavData] = useState(navData);
   const [isHovered, setIsHovered] = useState(false);
   const [hoverOpenCountForSmall, setHoverOpenCountForSmall] = useState(
-    getUserOPenSmall?.count ?? 0
+    getUserOPenSmall()?.count ?? 0
   );
   const [hoverOpenCountForLarge, setHoverOpenCountForLarge] = useState(
-    getUserOPenLarge?.count ?? 0
+    getUserOPenLarge()?.count ?? 0
   );
 
   // console.log('hoverOpenCountForSmall~~', hoverOpenCountForSmall);
