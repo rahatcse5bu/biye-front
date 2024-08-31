@@ -50,8 +50,8 @@ export default function NavBar() {
     getUserOPenLarge()?.count ?? 0
   );
 
-  // console.log('hoverOpenCountForSmall~~', hoverOpenCountForSmall);
-  // console.log('hoverOpenCountForLarge~~', hoverOpenCountForLarge);
+  // console.log('hoverOpenCountForSmall~~', getUserOPenSmall()?.count);
+  // console.log('hoverOpenCountForLarge~~', getUserOPenSmall()?.count);
   const [openNav, setOpenNav] = useState(false);
   const { filterFields, query } = useBio();
   const profileCardRef = useRef(null);
@@ -243,7 +243,20 @@ export default function NavBar() {
             onMouseLeave={handleIconLeave}
           >
             <div className="flex flex-row-reverse">
-              <FaUserLarge className="w-6 h-8" />
+              {/* <div className="relative w-10 h-10 flex items-center justify-center">
+                <FaUserLarge className="w-5 h-5" />
+                <div className="absolute border-2 border-orange-600 p-3 rounded-full rotate-border w-full h-full"></div>
+              </div> */}
+
+              <div className="relative w-12 h-12 flex items-center justify-center">
+                <FaUserLarge className="w-4 h-4 z-10" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-full h-full border-4 border-orange-700 rounded-full rotate-border">
+                    <div className="absolute inset-0 border-2 border-purple-300 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+
               {userInfo?.data.points > 0 && (
                 <div
                   title={`${userInfo?.data.points.toFixed(2)} points`}
@@ -438,8 +451,24 @@ export default function NavBar() {
                 onMouseEnter={handleIconHover}
                 onMouseLeave={handleIconLeave}
               >
-                <div>
-                  <FaUserLarge className="w-6 h-8" />
+                <div className="flex flex-row-reverse">
+                  <div className="relative w-12 h-12 flex items-center justify-center">
+                    <FaUserLarge className="w-4 h-4 z-10" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-full h-full border-4 border-orange-700 rounded-full rotate-border">
+                        <div className="absolute inset-0 border-2 border-purple-300 rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {userInfo?.data.points > 0 && (
+                    <div
+                      title={`${userInfo?.data.points.toFixed(2)} points`}
+                      className="flex items-center text-white bg-orange-700 px-2 rounded-lg mr-2"
+                    >
+                      {userInfo?.data.points.toFixed(2)} P
+                    </div>
+                  )}
                 </div>
                 {isHovered && (
                   <div

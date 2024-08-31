@@ -5,6 +5,54 @@
   text-align: center;
 }
 
+/* .rotate-border {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} */
+
+.rotate-border {
+  border-color: transparent; /* Hide the border color of the outer layer */
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.profile-container {
+  border-radius: 50%;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 5px solid; /* Border thickness */
+  border-image: conic-gradient(
+      from 0deg,
+      #f09433,
+      #e6683c,
+      #dc2743,
+      #cc2366,
+      #bc1888,
+      #f09433
+    )
+    1;
+  width: 50px;
+  height: 50px;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
