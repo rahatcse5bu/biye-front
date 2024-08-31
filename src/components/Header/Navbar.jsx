@@ -130,47 +130,45 @@ export default function NavBar() {
   // console.log("user~~~", user);
 
   // console.log("user-info", userInfo);
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 960) {
-        if (hoverOpenCountForLarge < 2) {
-          setIsHovered(true);
-          setHoverOpenCountForLarge(hoverOpenCountForLarge + 1);
-          setUserOPenLarge({ count: hoverOpenCountForLarge + 1 });
-        } else {
-          setIsHovered(false);
-        }
-      } else {
-        if (hoverOpenCountForSmall < 2) {
-          setIsHovered(true);
-          setHoverOpenCountForSmall(hoverOpenCountForSmall + 1);
-          setUserOPenSmall({ count: hoverOpenCountForSmall + 1 });
-        } else {
-          setIsHovered(false);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     if (window.innerWidth >= 960) {
+  //       if (hoverOpenCountForLarge < 2) {
+  //         setIsHovered(true);
+  //         setHoverOpenCountForLarge(hoverOpenCountForLarge + 1);
+  //         setUserOPenLarge({ count: hoverOpenCountForLarge + 1 });
+  //       } else {
+  //         setIsHovered(false);
+  //       }
+  //     } else {
+  //       if (hoverOpenCountForSmall < 2) {
+  //         setIsHovered(true);
+  //         setHoverOpenCountForSmall(hoverOpenCountForSmall + 1);
+  //         setUserOPenSmall({ count: hoverOpenCountForSmall + 1 });
+  //       } else {
+  //         setIsHovered(false);
+  //       }
+  //     }
+  //   };
 
-    // Add resize event listener
-    window.addEventListener('resize', handleResize);
+  //   window.addEventListener('resize', handleResize);
 
-    // Handle click outside
-    const handleClickOutside = (event) => {
-      if (
-        profileCardRef.current &&
-        !profileCardRef.current.contains(event.target)
-      ) {
-        setIsHovered(false);
-      }
-    };
+  //   const handleClickOutside = (event) => {
+  //     if (
+  //       profileCardRef.current &&
+  //       !profileCardRef.current.contains(event.target)
+  //     ) {
+  //       setIsHovered(false);
+  //     }
+  //   };
 
-    document.addEventListener('mousedown', handleClickOutside);
+  //   document.addEventListener('mousedown', handleClickOutside);
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //     window.removeEventListener('resize', handleResize);
+  //   };
+  // }, []);
 
   const handleIconHover = () => {
     setIsHovered(true);
@@ -242,12 +240,7 @@ export default function NavBar() {
             onMouseEnter={handleIconHover}
             onMouseLeave={handleIconLeave}
           >
-            <div className="flex flex-row-reverse">
-              {/* <div className="relative w-10 h-10 flex items-center justify-center">
-                <FaUserLarge className="w-5 h-5" />
-                <div className="absolute border-2 border-orange-600 p-3 rounded-full rotate-border w-full h-full"></div>
-              </div> */}
-
+            <div className="flex flex-row-reverse ">
               <div className="relative w-12 h-12 flex items-center justify-center">
                 <FaUserLarge className="w-4 h-4 z-10" />
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -263,21 +256,19 @@ export default function NavBar() {
                   className="flex items-center text-white bg-orange-700 px-2 rounded-lg mr-2"
                 >
                   {userInfo?.data.points.toFixed(2)} P
-                  {/* <FaCircle className="text-orange-700 ml-2" />
-                   */}
                 </div>
               )}
             </div>
+
             {isHovered && (
               <div
                 ref={profileCardRef}
                 className={`absolute ${
                   !isHovered ? 'hidden' : 'block'
-                }  w-[250px] rounded-md profile-card mx-5 h-[450px] transition-all duration-300 ease-in p-4  bg-gradient-to-r from-[#071952] to-[#071952] top-12 right-[100px]  scrollbar-thumb-blue scrollbar-thumb-rounded-full scrollbar-track-blue-lighter scrollbar-w-2 translate-x-1/2 overflow-y-scroll overflow-x-hidden z-40`}
+                }  w-[250px] rounded-md profile-card z-[2000000] mx-5 h-[450px] transition-all duration-300 ease-in p-4 bg-gradient-to-r from-[#071952] to-[#071952] top-12 right-[100px] scrollbar-thumb-blue scrollbar-thumb-rounded-full scrollbar-track-blue-lighter scrollbar-w-2 translate-x-1/2 overflow-y-scroll overflow-x-hidden`}
                 id="profile-card"
               >
                 <div className="py-5 text-center">
-                  {/* <FaUserLarge className="w-10 h-10 p-2 mx-auto border-2 border-white rounded-full" /> */}
                   <div className="">
                     <img
                       className="w-24 h-24 py-2 mx-auto rounded-full"
@@ -285,6 +276,7 @@ export default function NavBar() {
                       alt="Person"
                     />
                   </div>
+
                   {import.meta.env.VITE_REACT_APP_NODE_ENV ===
                     'development' && <h5>ID: {userInfo?.data?.user_id}</h5>}
 
@@ -292,7 +284,7 @@ export default function NavBar() {
                     Biodata Status
                   </h4>
                   <h6
-                    className={classNames('font-bold  capitalize', {
+                    className={classNames('font-bold capitalize', {
                       'text-green-600':
                         userInfo?.data?.user_status === 'active',
                       'text-orange-600':
@@ -311,6 +303,8 @@ export default function NavBar() {
                     My Biodata
                   </Button>
                 </div>
+
+                {/* Link items */}
                 <Link
                   onClick={handleIconLeave}
                   className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
@@ -346,6 +340,7 @@ export default function NavBar() {
                   <FcDislike className="mr-2" />
                   <span>অপছন্দের তালিকা </span>
                 </Link>
+
                 <Link
                   onClick={handleIconLeave}
                   className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
@@ -354,6 +349,7 @@ export default function NavBar() {
                   <FcSettings className="mr-2" />
                   <span>সেটিংস </span>
                 </Link>
+
                 <Link
                   onClick={handleIconLeave}
                   className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
@@ -362,6 +358,7 @@ export default function NavBar() {
                   <FcSupport className="mr-2" />
                   <span>সাপোর্ট এবং রিপোর্ট </span>
                 </Link>
+
                 <Link
                   className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
                   to="#!"
@@ -453,7 +450,7 @@ export default function NavBar() {
               >
                 <div className="flex flex-row-reverse">
                   <div className="relative w-12 h-12 flex items-center justify-center">
-                    <FaUserLarge className="w-4 h-4 z-10" />
+                    <FaUserLarge className="w-4 h-4 " />
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-full h-full border-4 border-orange-700 rounded-full rotate-border">
                         <div className="absolute inset-0 border-2 border-purple-300 rounded-full"></div>
