@@ -105,11 +105,11 @@ export function Pagination() {
   }, [active, totalPage]);
 
   return (
-    <div className="flex flex-col items-center gap-4 py-5">
+    <div className="flex flex-col items-center md:gap-4 gap-1 py-5">
       <div className="relative inline-block text-left">
         <Button
           variant="text"
-          className="flex items-center gap-2"
+          className="flex items-center md:px-4 px-2 md:gap-2 gap-1"
           onClick={handleOpen}
         >
           Items per page: {itemsPerPage}
@@ -132,25 +132,26 @@ export function Pagination() {
           </Menu>
         )}
       </div>
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center justify-center gap-1 md:gap-4 flex-wrap">
         <Button
           variant="text"
-          className="flex items-center gap-2 rounded-full"
+          className="flex items-center md:gap-2 gap-1 md:px-4 px-2 rounded-full"
           onClick={goToFirst}
           disabled={active === 1}
         >
           <ChevronDoubleLeftIcon strokeWidth={2} className="w-4 h-4" />
-          First
+          <span className="hidden md:inline">First</span>
         </Button>
         <Button
           variant="text"
-          className="flex items-center gap-2 rounded-full"
+          className="flex items-center md:gap-2 md:px-4 px-2 gap-1 rounded-full"
           onClick={prev}
           disabled={active === 1}
         >
-          <ArrowLeftIcon strokeWidth={2} className="w-4 h-4" /> Previous
+          <ArrowLeftIcon strokeWidth={2} className="w-4 h-4" />
+          <span className="hidden md:inline">Previous</span>
         </Button>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center md:gap-2 gap-1 flex-wrap justify-center">
           {visiblePages.map((item, index) =>
             typeof item === 'string' ? (
               <span key={index} className="px-2">
@@ -165,20 +166,20 @@ export function Pagination() {
         </div>
         <Button
           variant="text"
-          className="flex items-center gap-2 rounded-full"
+          className="flex items-center md:px-4 px-2 md:gap-2 gap-1 rounded-full"
           onClick={next}
           disabled={active === totalPage || totalPage === 0}
         >
-          Next
+          <span className="hidden md:inline">Next</span>
           <ArrowRightIcon strokeWidth={2} className="w-4 h-4" />
         </Button>
         <Button
           variant="text"
-          className="flex items-center gap-2 rounded-full"
+          className="flex items-center md:px-4 px-2 md:gap-2 gap-1 rounded-full"
           onClick={goToLast}
           disabled={active === totalPage || totalPage === 0}
         >
-          Last
+          <span className="hidden md:inline">Last</span>
           <ChevronDoubleRightIcon strokeWidth={2} className="w-4 h-4" />
         </Button>
       </div>

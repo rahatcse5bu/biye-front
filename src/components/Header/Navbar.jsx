@@ -20,7 +20,14 @@ import { MdExitToApp } from 'react-icons/md';
 import { FaEdit } from 'react-icons/fa';
 import { BiSolidDashboard } from 'react-icons/bi';
 import navLogo from '../../assets/icons/logo.png';
-import { getToken, removeToken } from '../../utils/cookies';
+import {
+  getToken,
+  getUserOPenLarge,
+  getUserOPenSmall,
+  removeToken,
+  setUserOPenLarge,
+  setUserOPenSmall,
+} from '../../utils/cookies';
 import { Modal } from '../Modal/Modal';
 import { getGender } from '../../utils/localStorage';
 import female from '../../assets/icons/female.svg';
@@ -36,8 +43,15 @@ export default function NavBar() {
   const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
   const [filteredNavData, setFilteredNavData] = useState(navData);
   const [isHovered, setIsHovered] = useState(false);
-  const [hoverOpenCountForSmall, setHoverOpenCountForSmall] = useState(0);
-  const [hoverOpenCountForLarge, setHoverOpenCountForLarge] = useState(0);
+  const [hoverOpenCountForSmall, setHoverOpenCountForSmall] = useState(
+    getUserOPenSmall?.count ?? 0
+  );
+  const [hoverOpenCountForLarge, setHoverOpenCountForLarge] = useState(
+    getUserOPenLarge?.count ?? 0
+  );
+
+  // console.log('hoverOpenCountForSmall~~', hoverOpenCountForSmall);
+  // console.log('hoverOpenCountForLarge~~', hoverOpenCountForLarge);
   const [openNav, setOpenNav] = useState(false);
   const { filterFields, query } = useBio();
   const profileCardRef = useRef(null);
@@ -120,15 +134,17 @@ export default function NavBar() {
     const handleResize = () => {
       if (window.innerWidth >= 960) {
         if (hoverOpenCountForLarge < 2) {
-          setOpenNav(true);
+          setIsHovered(true);
           setHoverOpenCountForLarge(hoverOpenCountForLarge + 1);
+          setUserOPenLarge({ count: hoverOpenCountForLarge + 1 });
         } else {
-          setOpenNav(false);
+          setIsHovered(false);
         }
       } else {
         if (hoverOpenCountForSmall < 2) {
           setIsHovered(true);
           setHoverOpenCountForSmall(hoverOpenCountForSmall + 1);
+          setUserOPenSmall({ count: hoverOpenCountForSmall + 1 });
         } else {
           setIsHovered(false);
         }

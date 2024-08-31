@@ -91,8 +91,13 @@ const BioData = () => {
           <strong className="text-indigo-600">Back</strong>
         </div>
         <div className="flex flex-row md:mr-10 md:ml-0 ml-3 md:pt-0 pt-3 mr-0">
-          <p className="md:mr-2  text-green-600">কীভাবে বায়োডাটা তৈরি করবেন</p>{' '}
-          <Link to="/biodata-submit" className="text-indigo-700 ml-3">
+          <p className="md:mr-2  text-green-600 font-semibold">
+            কীভাবে বায়োডাটা তৈরি করবেন
+          </p>{' '}
+          <Link
+            to="/biodata-submit"
+            className="text-indigo-700 ml-3 underline font-semibold"
+          >
             এখানে ক্লিক করুন{' '}
           </Link>
         </div>
