@@ -10,6 +10,7 @@ import { useBio } from '../../contexts/useBio';
 import { convertToQuery } from '../../utils/query';
 import { useNavigate } from 'react-router-dom';
 import { Toast } from '../../utils/toast';
+import { convertToBengaliDigits } from '../../utils/language';
 
 const BioDatasGrid = ({ sideBarDisplay, setSideBarDisplay }) => {
   const [sortOrder, setSortOrder] = useState('desc');
@@ -26,7 +27,10 @@ const BioDatasGrid = ({ sideBarDisplay, setSideBarDisplay }) => {
       >
         বায়োডাটা সমূহ
       </h1>
-      <p className="text-gray-500">{size} টি বায়োডাটা পাওয়া গেছে </p>
+      <p className="text-gray-500">
+        {' '}
+        {convertToBengaliDigits({ size })} টি বায়োডাটা পাওয়া গেছে{' '}
+      </p>
       <div className="flex items-center justify-between text-right ">
         <button
           onClick={() => setSideBarDisplay((prev) => !prev)}
