@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
 
 const baseUrl =
-  import.meta.env.VITE_REACT_APP_NODE_ENV === "development"
-    ? "http://localhost:5000/api/v1"
-    : "https://server.pnc-nikah.com/api/v1";
+  import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+    ? 'http://localhost:5000/api/v1'
+    : 'https://server.pnc-nikah.com/api/v1';
 
 const getUserInfoStatus = async (bioId) => {
   if (!bioId) {
@@ -40,7 +40,19 @@ const updateUserInfo = async (data, token) => {
   }
   const response = await axios.put(baseUrl + `/user-info`, data, {
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+const updateUserStatusByUser = async (data, token) => {
+  if (!token) {
+    return null;
+  }
+  const response = await axios.put(baseUrl + `/user-info/update-status`, data, {
+    headers: {
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
@@ -52,4 +64,5 @@ export const UserInfoServices = {
   updateUserInfo,
   verifyTokenByUser,
   getAllUsersInfoId,
+  updateUserStatusByUser,
 };

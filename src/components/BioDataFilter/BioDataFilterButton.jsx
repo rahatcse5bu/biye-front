@@ -20,6 +20,7 @@ const BioDataFilterButton = () => {
         return {
           ...prev,
           ...filterFields,
+          page: 1,
         };
       });
       const temp = convertToQuery(filterFields);
