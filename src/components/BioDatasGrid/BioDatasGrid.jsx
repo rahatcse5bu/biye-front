@@ -29,7 +29,7 @@ const BioDatasGrid = ({ sideBarDisplay, setSideBarDisplay }) => {
       </h1>
       <p className="text-gray-500">
         {' '}
-        {convertToBengaliDigits({ size })} টি বায়োডাটা পাওয়া গেছে{' '}
+        {convertToBengaliDigits(size)} টি বায়োডাটা পাওয়া গেছে{' '}
       </p>
       <div className="flex items-center justify-between text-right ">
         <button
