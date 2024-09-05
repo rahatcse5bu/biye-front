@@ -77,17 +77,14 @@ export function BioDetailsModal({ open, setOpen, text, title, id }) {
     setAnswers(temp);
   }, [setOpen, text]);
   return (
-    <div className="">
+    <div className="z-[99999999]">
       <Dialog
         size="xl"
         className="overflow-auto mt-[100px]"
         open={open}
         handler={handleOpen}
-        style={{
-          zIndex: 999999,
-        }}
       >
-        <DialogBody className="h-[440px] overflow-auto">
+        <DialogBody className="h-[440px] overflow-auto z-[999999]">
           {answers.map((item, index) => (
             <BioDetailsQuestion question={item} key={index} index={index} />
           ))}

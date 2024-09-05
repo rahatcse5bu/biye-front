@@ -1,31 +1,37 @@
-import "./BioRequests.css";
-import { Button } from "@material-tailwind/react";
-import { FaEye, FaCheck, FaTimes, FaInfo } from "react-icons/fa";
-import { MdFeedback } from "react-icons/md";
-import { useQuery } from "@tanstack/react-query";
-import { BioChoiceDataServices } from "../../services/bioChoiceData";
-import { getToken } from "../../utils/cookies";
-import { Colors } from "../../constants/colors";
-import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
-import { useNavigate } from "react-router-dom";
-import { getErrorMessage } from "../../utils/error";
-import { Toast } from "../../utils/toast";
-import { useState } from "react";
-import { BioDetailsModal } from "../../components/BioDetailsModal/BioDetailsModal";
-import { FeedbackModal } from "../../components/FeedbackModal/FeedbackModal";
-import classNames from "classnames";
+import './BioRequests.css';
+import { Button } from '@material-tailwind/react';
+import { FaEye, FaCheck, FaTimes, FaInfo } from 'react-icons/fa';
+import { MdFeedback } from 'react-icons/md';
+import { useQuery } from '@tanstack/react-query';
+import { BioChoiceDataServices } from '../../services/bioChoiceData';
+import { getToken } from '../../utils/cookies';
+import { Colors } from '../../constants/colors';
+import LoadingCircle from '../../components/LoadingCircle/LoadingCircle';
+import { useNavigate } from 'react-router-dom';
+import { getErrorMessage } from '../../utils/error';
+import { FaYoutube } from 'react-icons/fa';
+import { Toast } from '../../utils/toast';
+import { useState } from 'react';
+import { BioDetailsModal } from '../../components/BioDetailsModal/BioDetailsModal';
+import { FeedbackModal } from '../../components/FeedbackModal/FeedbackModal';
+import classNames from 'classnames';
+import CustomButton from '../../components/CustomButton/CustomButton';
+import CustomModal from '../../components/CustomModal/CustomModal';
+import YouTubeEmbed from '../../components/YouTubeEmbed/YouTubeEmbed';
 const MyBioRequests = () => {
   const navigate = useNavigate();
   const [isFeedbackDialogOpen, setIsFeedbackDialogOpen] = useState(false);
-  const [userId, setUserId] = useState("");
-  const [feedback, setFeedback] = useState("");
+  const [isFirstStepModalOpen, setIsFirstStepModalOpen] = useState(false);
+
+  const [userId, setUserId] = useState('');
+  const [feedback, setFeedback] = useState('');
   const [qA, setQa] = useState('"');
   const [bioDetailsModal, setBioDetailsModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingId, setLoadingId] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState(false);
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["bio-share"],
+    queryKey: ['bio-share'],
     queryFn: async () => {
       return await BioChoiceDataServices.getBioChoiceShare(getToken().token);
     },
@@ -50,7 +56,7 @@ const MyBioRequests = () => {
         getToken().token
       );
       if (response?.success === true) {
-        Toast.successToast("আপনার রিয়াকশন সেভ করা হয়েছে।");
+        Toast.successToast('আপনার রিয়াকশন সেভ করা হয়েছে।');
         await refetch();
       }
     } catch (error) {
@@ -128,38 +134,38 @@ const MyBioRequests = () => {
                             </td>
                             <td
                               className={classNames(
-                                "px-4 py-2 capitalize text-center font-bold text-base border-l w-1/7",
+                                'px-4 py-2 capitalize text-center font-bold text-base border-l w-1/7',
                                 {
-                                  "text-orange-500": item?.status === "pending",
-                                  "text-green-600": item?.status === "approved",
-                                  "text-red-600": item?.status === "rejected",
+                                  'text-orange-500': item?.status === 'pending',
+                                  'text-green-600': item?.status === 'approved',
+                                  'text-red-600': item?.status === 'rejected',
                                 }
                               )}
                             >
                               {item?.status}
                             </td>
                             <td className="px-4 py-2 text-center border-l w-1/7">
-                              <div
+                              <button
                                 onClick={() =>
                                   bioDetailsOpenModalHandler(item?.bio_details)
                                 }
                                 className="flex items-center justify-center cursor-pointer"
                               >
                                 <FaInfo color="gray" size={22} />
-                              </div>
+                              </button>
                             </td>
                             <td className="px-4 py-2 text-center border-l w-1/7">
-                              <div
+                              <button
                                 onClick={() =>
                                   feedbackDetailsModalHandler(
                                     item?.user,
-                                    item?.feedback || ""
+                                    item?.feedback || ''
                                   )
                                 }
                                 className="flex items-center justify-center cursor-pointer"
                               >
                                 <MdFeedback color="gray" size={22} />
-                              </div>
+                              </button>
                             </td>
                             <td className="px-4 py-2 text-center border-l w-1/7">
                               <div className="flex items-center justify-center">
@@ -173,7 +179,7 @@ const MyBioRequests = () => {
                                 </Button>
                                 <Button
                                   onClick={() =>
-                                    reactionDataHandler(item?.user, "approved")
+                                    reactionDataHandler(item?.user, 'approved')
                                   }
                                   color="green"
                                   size="xs"
@@ -181,7 +187,7 @@ const MyBioRequests = () => {
                                 >
                                   {loading &&
                                   loadingId === item?.user_id &&
-                                  loadingStatus === "approved" ? (
+                                  loadingStatus === 'approved' ? (
                                     <LoadingCircle />
                                   ) : (
                                     <FaCheck size={12} />
@@ -189,14 +195,14 @@ const MyBioRequests = () => {
                                 </Button>
                                 <Button
                                   onClick={() =>
-                                    reactionDataHandler(item?.user, "rejected")
+                                    reactionDataHandler(item?.user, 'rejected')
                                   }
                                   color="red"
                                   size="xs"
                                 >
                                   {loading &&
                                   loadingId === item?.user_id &&
-                                  loadingStatus === "rejected" ? (
+                                  loadingStatus === 'rejected' ? (
                                     <LoadingCircle />
                                   ) : (
                                     <FaTimes size={12} />
@@ -212,6 +218,33 @@ const MyBioRequests = () => {
                 </table>
               </div>
             </div>
+            <CustomButton
+              onClick={() => {
+                setIsFirstStepModalOpen(true);
+              }}
+              className=" flex w-full md:w-[50%] mt-10 mx-auto items-center justify-center border hover:bg-transparent border-indigo-700 rounded-full py-2 bg-white"
+            >
+              <FaYoutube className="mb-0 pb-0 mr-2 text-red-500 w-12 h-6  rounded-full bg-white" />{' '}
+              <span
+                className="md:text-xl text-xl"
+                style={{
+                  color: Colors.titleText,
+                }}
+              >
+                প্রথম পদক্ষেপ
+              </span>
+            </CustomButton>
+
+            <CustomModal
+              onClose={() => setIsFirstStepModalOpen(false)}
+              isOpen={isFirstStepModalOpen}
+              title="বায়োডাটা ক্রয় প্রথম পদক্ষেপ "
+            >
+              <YouTubeEmbed
+                videoId="X6sjWCZjiuQ"
+                title="Bio-data purchase 1st step || বায়োডাটা ক্রয় প্রথম পদক্ষেপ || PNC NIkah"
+              />
+            </CustomModal>
           </div>
         </div>
       </div>

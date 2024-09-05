@@ -156,7 +156,7 @@ const BioData = () => {
                   Please Login to Purchase This Biodata
                 </h1>
                 <p className="text-gray-600 text-lg mb-6">
-                  Access to premium content requires a quick login. Don`&apos;`t
+                  Access to premium content requires a quick login. Don&apos;t
                   miss out!
                 </p>
                 <button

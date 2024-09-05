@@ -5,6 +5,8 @@ import { useQuery } from '@tanstack/react-query';
 import { FaEye, FaTrash, FaInfo } from 'react-icons/fa';
 import { BioChoiceDataServices } from '../../services/bioChoiceData';
 import { getToken } from '../../utils/cookies';
+import { FaYoutube } from 'react-icons/fa';
+
 import { MdFeedback } from 'react-icons/md';
 import { AiFillQuestionCircle } from 'react-icons/ai';
 import LoadingCircle from '../../components/LoadingCircle/LoadingCircle';
@@ -25,6 +27,9 @@ import classNames from 'classnames';
 import { BioDataServices } from '../../services/bioData';
 import './MyPurchases.css';
 import { formatDateAndCalculateAge } from '../../utils/date';
+import CustomButton from '../../components/CustomButton/CustomButton';
+import CustomModal from '../../components/CustomModal/CustomModal';
+import YouTubeEmbed from '../../components/YouTubeEmbed/YouTubeEmbed';
 
 const FirstStepCard = ({
   item,
@@ -207,7 +212,7 @@ const FirstStepCard = ({
   );
 };
 
-const SecondCard = ({ item, index }) => {
+const SecondStepCard = ({ item, index }) => {
   const navigate = useNavigate();
   const { data } = useQuery({
     queryKey: ['bio-data', 'stat', item?.bio_user],
@@ -281,7 +286,8 @@ const MyPurchases = () => {
   const [payDetailsModal, setPayBioDetailsModal] = useState(false);
   const [qA, setQa] = useState('"');
   const [feedback, setFeedback] = useState('');
-
+  const [isFirstStepModalOpen, setIsFirstStepModalOpen] = useState(false);
+  const [isSecondStepModalOpen, setIsSecondStepModalOpen] = useState(false);
   const {
     data: bioChoiceFirstStep,
     isLoading: bioChoiceFirstStepLoading,
@@ -388,7 +394,61 @@ const MyPurchases = () => {
               </div>
             </div>
           </div>
-          <div className="h-5 lg:h-12"></div>
+
+          <div className="flex md:flex-row flex-col gap-5 items-center my-10 ">
+            <CustomButton
+              onClick={() => {
+                setIsFirstStepModalOpen(true);
+              }}
+              className=" flex w-full md:w-[50%] items-center justify-center border hover:bg-transparent border-indigo-700 rounded-full py-2 bg-white"
+            >
+              <FaYoutube className="mb-0 pb-0 mr-2 text-red-500 w-12 h-6  rounded-full bg-white" />{' '}
+              <span
+                className="md:text-xl text-xl"
+                style={{
+                  color: Colors.titleText,
+                }}
+              >
+                প্রথম পদক্ষেপ
+              </span>
+            </CustomButton>
+            <CustomButton
+              onClick={() => {
+                setIsSecondStepModalOpen(true);
+              }}
+              className=" flex w-full md:w-[50%] items-center justify-center border hover:bg-transparent border-indigo-700 rounded-full py-2 bg-white"
+            >
+              <FaYoutube className="mb-0 pb-0 mr-2 text-red-500 w-12 h-6  rounded-full bg-white" />{' '}
+              <span
+                className="md:text-xl text-xl"
+                style={{
+                  color: Colors.titleText,
+                }}
+              >
+                দ্বিতীয় পদক্ষেপ
+              </span>
+            </CustomButton>
+          </div>
+          <CustomModal
+            onClose={() => setIsFirstStepModalOpen(false)}
+            isOpen={isFirstStepModalOpen}
+            title="বায়োডাটা ক্রয় প্রথম পদক্ষেপ "
+          >
+            <YouTubeEmbed
+              title="Bio-data purchase 1st step || বায়োডাটা ক্রয় প্রথম পদক্ষেপ || PNC NIkah"
+              videoId="X6sjWCZjiuQ"
+            />
+          </CustomModal>
+          <CustomModal
+            onClose={() => setIsSecondStepModalOpen(false)}
+            isOpen={isSecondStepModalOpen}
+            title="বায়োডাটা ক্রয় দ্বিতীয় পদক্ষেপ "
+          >
+            <YouTubeEmbed
+              videoId="x0-RXTR0DfQ"
+              title="Bio-data purchase second step || বায়োডাটা ক্রয় দ্বিতীয় পদক্ষেপ || PNC NIkah"
+            />
+          </CustomModal>
           <div className="col right-sidebar-main overflow-hidden my-favs">
             <div className="w-auto overflow-hidden border-t-2 rounded shadow my-favs-info">
               <h5 className="mt-3 text-2xl text-center card-title">
@@ -444,7 +504,11 @@ const MyPurchases = () => {
                       bioChoiceSecondStep?.data?.length > 0 &&
                       bioChoiceSecondStep?.data?.map((item, index) => {
                         return (
-                          <SecondCard key={index} index={index} item={item} />
+                          <SecondStepCard
+                            key={index}
+                            index={index}
+                            item={item}
+                          />
                         );
                       })
                     )}

@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { FaYoutube } from 'react-icons/fa';
 import UserContext from '../../contexts/UserContext';
 import { Toast } from '../../utils/toast';
 import BkashCreatePaymentAPICall from '../../services/bkash';
@@ -18,6 +19,10 @@ import { ContactPurchaseDataServices } from '../../services/contactPurchaseData'
 import { Colors } from '../../constants/colors';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswerCard';
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
+import CustomButton from '../CustomButton/CustomButton';
+import CustomModal from '../CustomModal/CustomModal';
 
 const ContactInfo = ({ status }) => {
   const [displayText, setDisplayText] = useState(false);
@@ -30,6 +35,9 @@ const ContactInfo = ({ status }) => {
   const location = useLocation();
   const [isFirstStepDone, setFirstStepDone] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isFirstStepModalOpen, setIsFirstStepModalOpen] = useState(false);
+  const [isSecondStepModalOpen, setIsSecondStepModalOpen] = useState(false);
+
   const { data: contactInfo = null } = useQuery({
     queryKey: ['contact', generalInfo?.user, getToken()?.token],
     queryFn: async () =>
@@ -233,7 +241,7 @@ const ContactInfo = ({ status }) => {
             </div>
           </div>
         </>
-      ) : status === 'hidden' ? (
+      ) : status === 'inactive' ? (
         <div className="pnc-bio-hidden">
           <h4 className="my-4 text-center">
             এই বায়োডাটাটি হাইড অবস্থায় আছে। অর্থাৎ এই মুহুর্তে তিনি কোনো
@@ -324,6 +332,67 @@ const ContactInfo = ({ status }) => {
                 যোগাযোগের তথ্য দেখুন
               </button>
             )}
+          </div>
+
+          <div className="my-5">
+            <h3 className="font-semibold text-green-700 md:text-2xl text-xl">
+              যোগাযোগ তথ্য কিভাবে দেখবেন জানতে ভিডিও দেখেন
+            </h3>
+
+            <div className="flex md:flex-row flex-col gap-5 items-center my-5 ">
+              <CustomButton
+                onClick={() => {
+                  setIsFirstStepModalOpen(true);
+                }}
+                className=" flex w-full md:w-[50%] items-center justify-center border hover:bg-transparent border-indigo-700 rounded-full py-2 bg-white"
+              >
+                <FaYoutube className="mb-0 pb-0 mr-2 text-red-500 w-12 h-6  rounded-full bg-white" />{' '}
+                <span
+                  className="md:text-xl text-xl"
+                  style={{
+                    color: Colors.titleText,
+                  }}
+                >
+                  প্রথম পদক্ষেপ
+                </span>
+              </CustomButton>
+              <CustomButton
+                onClick={() => {
+                  setIsSecondStepModalOpen(true);
+                }}
+                className=" flex w-full md:w-[50%] items-center justify-center border hover:bg-transparent border-indigo-700 rounded-full py-2 bg-white"
+              >
+                <FaYoutube className="mb-0 pb-0 mr-2 text-red-500 w-12 h-6  rounded-full bg-white" />{' '}
+                <span
+                  className="md:text-xl text-xl"
+                  style={{
+                    color: Colors.titleText,
+                  }}
+                >
+                  দ্বিতীয় পদক্ষেপ
+                </span>
+              </CustomButton>
+            </div>
+            <CustomModal
+              onClose={() => setIsFirstStepModalOpen(false)}
+              isOpen={isFirstStepModalOpen}
+              title="বায়োডাটা ক্রয় প্রথম পদক্ষেপ "
+            >
+              <LiteYouTubeEmbed
+                id="X6sjWCZjiuQ"
+                title="Bio-data purchase 1st step || বায়োডাটা ক্রয় প্রথম পদক্ষেপ || PNC NIkah"
+              />
+            </CustomModal>
+            <CustomModal
+              onClose={() => setIsSecondStepModalOpen(false)}
+              isOpen={isSecondStepModalOpen}
+              title="বায়োডাটা ক্রয় দ্বিতীয় পদক্ষেপ "
+            >
+              <LiteYouTubeEmbed
+                id="x0-RXTR0DfQ"
+                title="Bio-data purchase second step || বায়োডাটা ক্রয় দ্বিতীয় পদক্ষেপ || PNC NIkah"
+              />
+            </CustomModal>
           </div>
         </div>
       )}

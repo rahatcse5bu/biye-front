@@ -1,19 +1,19 @@
-import { useState } from "react";
-import { Colors } from "../../constants/colors";
-import { ContactServices } from "../../services/contact";
+import { useState } from 'react';
+import { Colors } from '../../constants/colors';
+import { ContactServices } from '../../services/contact';
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    bio: "",
-    message: "",
+    name: '',
+    email: '',
+    phone: '',
+    bio: '',
+    message: '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,30 +26,30 @@ const ContactUs = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setErrorMessage("");
-    setSuccessMessage("");
+    setErrorMessage('');
+    setSuccessMessage('');
 
-    console.log("formData~~", formData);
+    console.log('formData~~', formData);
 
     try {
       const response = await ContactServices.createContactUsByEmail(formData);
       if (response.success === true) {
-        setSuccessMessage("Your message has been sent successfully.");
+        setSuccessMessage('Your message has been sent successfully.');
         setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          bio: "",
-          message: "",
+          name: '',
+          email: '',
+          phone: '',
+          bio: '',
+          message: '',
         });
       } else {
         setErrorMessage(
-          "There was an issue sending your message. Please try again later."
+          'There was an issue sending your message. Please try again later.'
         );
       }
     } catch (error) {
       setErrorMessage(
-        "There was an error sending your message. Please try again later."
+        'There was an error sending your message. Please try again later.'
       );
     } finally {
       setIsSubmitting(false);
@@ -183,7 +183,7 @@ const ContactUs = () => {
                 }}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Sending..." : "মেসেজ পাঠান"}
+                {isSubmitting ? 'Sending...' : 'মেসেজ পাঠান'}
               </button>
             </div>
           </form>
