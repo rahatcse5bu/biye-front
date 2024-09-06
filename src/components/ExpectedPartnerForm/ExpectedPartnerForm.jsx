@@ -201,8 +201,17 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
           <br />
 
           <DoubleRangeSlider
-            value={height}
-            setValue={setHeight}
+            value={{
+              min: parseFloat(height.min.toFixed(1)),
+              max: parseFloat(height.max.toFixed(1)),
+            }}
+            // setValue={setHeight}
+            setValue={(val) =>
+              setHeight({
+                min: parseFloat(val.min.toFixed(1)),
+                max: parseFloat(val.max.toFixed(1)),
+              })
+            }
             maxValue={7.0}
             minValue={4.5}
             step={0.1}

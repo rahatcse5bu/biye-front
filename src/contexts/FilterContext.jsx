@@ -9,6 +9,8 @@ const FilterProvider = ({ children }) => {
   const [primaryFilterOpen, setPrimaryFilterOpen] = useState(false);
   const [selectedDivisions, setSelectedDivisions] = useState([]);
   const [selectedDistricts, setSelectedDistricts] = useState([]);
+  const [selectedPresentDivisions, setSelectedPresentDivisions] = useState([]);
+  const [selectedPresentDistricts, setSelectedPresentDistricts] = useState([]);
 
   const value = {
     openSidebar,
@@ -21,8 +23,12 @@ const FilterProvider = ({ children }) => {
     setPrimaryFilterOpen,
     selectedDivisions,
     selectedDistricts,
+    selectedPresentDivisions,
+    selectedPresentDistricts,
     setSelectedDivisions,
     setSelectedDistricts,
+    setSelectedPresentDivisions,
+    setSelectedPresentDistricts,
   };
   return (
     <FilterContext.Provider value={value}>{children}</FilterContext.Provider>

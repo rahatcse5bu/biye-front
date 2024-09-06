@@ -53,7 +53,7 @@ export default function NavBar() {
   // console.log('hoverOpenCountForSmall~~', getUserOPenSmall()?.count);
   // console.log('hoverOpenCountForLarge~~', getUserOPenSmall()?.count);
   const [openNav, setOpenNav] = useState(false);
-  const { filterFields, query } = useBio();
+  const { query } = useBio();
   const profileCardRef = useRef(null);
   const gender = getGender();
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ export default function NavBar() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [pathname, filterFields, query]);
+  }, [pathname, query]);
 
   const {
     data,

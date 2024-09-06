@@ -8,8 +8,15 @@ import { useFilter } from '../../contexts/useFilter';
 
 const BioDataFilterButton = () => {
   const { filterFields, setQuery } = useBio();
-  const { setSideBarDisplay, setAddressFilterOpen, setPrimaryFilterOpen } =
-    useFilter();
+  const {
+    setSideBarDisplay,
+    setSelectedDivisions,
+    setSelectedDistricts,
+    setSelectedPresentDivisions,
+    setSelectedPresentDistricts,
+    setAddressFilterOpen,
+    setPrimaryFilterOpen,
+  } = useFilter();
   const navigate = useNavigate();
   const buttonHandler = async (type) => {
     // console.log('type~', type);
@@ -27,6 +34,10 @@ const BioDataFilterButton = () => {
       navigate(`/biodatas?${temp}`);
     } else if (type === 'delete') {
       setQuery({});
+      setSelectedDivisions([]);
+      setSelectedDistricts([]);
+      setSelectedPresentDivisions([]);
+      setSelectedPresentDistricts([]);
       navigate('/biodatas');
     }
     setSideBarDisplay(false);

@@ -17,45 +17,11 @@ const AddressFilter = () => {
     setSelectedDivisions,
     selectedDivisions,
     selectedDistricts,
-  } = useFilter();
-
-  const [selectedPresentDivisions, setSelectedPresentDivisions] = useState([]);
-  const [selectedPresentDistricts, setSelectedPresentDistricts] = useState([]);
-
-  useEffect(() => {
-    setFilterFields((prev) => {
-      return {
-        ...prev,
-        division: selectedDivisions.map((division) => division.value),
-        district: selectedDistricts.map((district) => district.value),
-        presentDivision: selectedPresentDivisions.map(
-          (division) => division.value
-        ),
-        presentDistrict: selectedPresentDistricts.map(
-          (district) => district.value
-        ),
-      };
-    });
-  }, [
-    selectedDivisions,
-    selectedDistricts,
     selectedPresentDivisions,
+    setSelectedPresentDivisions,
     selectedPresentDistricts,
-  ]);
-
-  const handleDivisionChange = (selectedOptions, type) => {
-    if (type === 'permanent') {
-      setSelectedDivisions(selectedOptions);
-      if (selectedOptions.some((option) => option.value === 'All Divisions')) {
-        setSelectedDistricts(['all']);
-      }
-    } else if (type === 'present') {
-      setSelectedPresentDivisions(selectedOptions);
-      if (selectedOptions.some((option) => option.value === 'All Divisions')) {
-        setSelectedPresentDistricts(['all']);
-      }
-    }
-  };
+    setSelectedPresentDistricts,
+  } = useFilter();
 
   const { data: divisionOptions } = useQuery({
     queryKey: ['divisions'],
@@ -157,6 +123,70 @@ const AddressFilter = () => {
       }
     }
   );
+
+  useEffect(() => {
+    setFilterFields((prev) => {
+      // start permanent divisions and districts
+      const divisions = selectedDivisions.some(
+        (option) => option.value === 'All Divisions'
+      )
+        ? ['all']
+        : selectedDivisions.map((division) => division.value);
+      const districts = selectedDivisions.some(
+        (option) => option.value === 'All Divisions'
+      )
+        ? ['all']
+        : selectedDistricts.some((option) => option.value === 'All Districts')
+          ? districtOptions.map((district) => district.value)
+          : selectedDistricts.map((division) => division.value);
+      // end permanent divisions and districts
+
+      const presentDistrict = selectedPresentDistricts.some(
+        (option) => option.value === 'All Districts'
+      )
+        ? presentDistrictOptions.map((division) => division.value)
+        : selectedPresentDistricts.map((division) => division.value);
+
+      return {
+        ...prev,
+        division: divisions.join(','),
+        zilla: districts.join(','),
+        presentDivision: selectedPresentDivisions
+          .map((division) => division.value)
+          .join(','),
+        presentDistrict: presentDistrict.join(','),
+      };
+    });
+  }, [
+    selectedDivisions,
+    selectedDistricts,
+    selectedPresentDivisions,
+    selectedPresentDistricts,
+  ]);
+
+  const handleDivisionChange = (selectedOptions, type) => {
+    if (type === 'permanent') {
+      setSelectedDivisions(selectedOptions);
+      if (selectedOptions.some((option) => option.value === 'All Divisions')) {
+        setSelectedDistricts([
+          {
+            value: 'All Districts',
+            label: 'All Districts',
+          },
+        ]);
+      }
+    } else if (type === 'present') {
+      setSelectedPresentDivisions(selectedOptions);
+      if (selectedOptions.some((option) => option.value === 'All Divisions')) {
+        setSelectedPresentDistricts([
+          {
+            value: 'All Districts',
+            label: 'All Districts',
+          },
+        ]);
+      }
+    }
+  };
 
   const customStyles = {
     option: (provided) => ({

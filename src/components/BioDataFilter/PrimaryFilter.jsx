@@ -3,20 +3,21 @@ import DoubleRangeSlider from '../DoubleRangeSlider/DoubleRangeSlider';
 import { useBio } from '../../contexts/useBio';
 import CustomAccordion from '../CustomAccordion/CustomAccordion';
 import { useFilter } from '../../contexts/useFilter';
+import { usePrimary } from '../../contexts/userPrimary';
 
-const PrimaryFilter = ({
-  setBioType,
-  bioType,
-  maritalStatus,
-  setMaritalStatus,
-  age,
-  setAge,
-  height,
-  setHeight,
-  setOpenAccordions,
-}) => {
+const PrimaryFilter = () => {
   const { setFilterFields } = useBio();
   const { primaryFilterOpen, setPrimaryFilterOpen } = useFilter();
+  const {
+    age,
+    setAge,
+    height,
+    setHeight,
+    setBioType,
+    bioType,
+    maritalStatus,
+    setMaritalStatus,
+  } = usePrimary();
 
   return (
     <div>
@@ -47,14 +48,6 @@ const PrimaryFilter = ({
                     bio_type: value,
                   };
                 });
-
-                setOpenAccordions((prev) => {
-                  return {
-                    ...prev,
-                    3: true,
-                  };
-                });
-                // navigate(`/biodatas?${queryString}`);
               }}
               value={bioType}
               className="block w-[90%] px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
@@ -92,12 +85,6 @@ const PrimaryFilter = ({
 
                 setMaritalStatus(value);
 
-                setOpenAccordions((prev) => {
-                  return {
-                    ...prev,
-                    3: true,
-                  };
-                });
                 setFilterFields((filterFields) => {
                   return {
                     ...filterFields,
@@ -137,8 +124,18 @@ const PrimaryFilter = ({
         </div>
         <div className="lg:w-64 w-full px-2 py-2">
           <DoubleRangeSlider
-            value={height}
-            setValue={setHeight}
+            // value={height}
+            value={{
+              min: parseFloat(height.min.toFixed(1)),
+              max: parseFloat(height.max.toFixed(1)),
+            }}
+            // setValue={setHeight}
+            setValue={(val) =>
+              setHeight({
+                min: parseFloat(val.min.toFixed(1)),
+                max: parseFloat(val.max.toFixed(1)),
+              })
+            }
             maxValue={7.0}
             minValue={4.5}
             step={0.1}

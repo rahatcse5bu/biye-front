@@ -304,13 +304,6 @@ const ContactInfo = ({ status }) => {
                   </p>{' '}
                   <button
                     onClick={() => payButtonHandler(bio?.generalInfo?.user)}
-                    // onClick={() =>
-                    //   buyWithBkashHandler(
-                    //     70,
-                    //     bio?.generalInfo?.user,
-                    //     "First_Step"
-                    //   )
-                    // }
                     className="px-4 py-2 rounded-lg border  text-white"
                     style={{
                       backgroundColor: Colors.pncPrimaryColor,

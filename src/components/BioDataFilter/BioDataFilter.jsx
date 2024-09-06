@@ -44,14 +44,7 @@ const BioDataFilter = () => {
   const [maritalStatus, setMaritalStatus] = useState('');
   const [zilla, setZilla] = useState('');
   const [division, setDivision] = useState('');
-  const [height, setHeight] = useState({
-    min: 5.0,
-    max: 6.0,
-  });
-  const [age, setAge] = useState({
-    min: 20,
-    max: 30,
-  });
+
   const [value, setValue] = useState(50);
 
   // console.log("searchParams~", searchParams.get("marital_status"));
@@ -127,10 +120,6 @@ const BioDataFilter = () => {
         bioType={bioType}
         maritalStatus={maritalStatus}
         setMaritalStatus={setMaritalStatus}
-        age={age}
-        setAge={setAge}
-        height={height}
-        setHeight={setHeight}
         setSearchParams={setSearchParams}
         newQueryParameters={newQueryParameters}
         setOpenAccordions={setOpenAccordions}

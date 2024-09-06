@@ -7,10 +7,12 @@ import { useQuery } from '@tanstack/react-query';
 import { BioDataServices } from '../../../services/bioData';
 import Select from 'react-select';
 import { useFilter } from '../../../contexts/useFilter';
+import { usePrimary } from '../../../contexts/userPrimary';
 
 const HomeFilter = () => {
   const navigate = useNavigate();
   const { setQuery, query, setFilterFields } = useBio();
+  const { setBioType, setMaritalStatus } = usePrimary();
   const {
     selectedDivisions,
     setSelectedDivisions,
@@ -110,17 +112,18 @@ const HomeFilter = () => {
     }
 
     const filterQuery = {
+      ...query,
       marital_status,
       bio_type,
       zilla: districtValues.join(','),
       division: divisionValues.join(','),
-      ...query,
       user_status:
         import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
           ? 'in review'
           : 'active',
     };
-
+    setBioType(bio_type);
+    setMaritalStatus(marital_status);
     setQuery(filterQuery);
     setFilterFields(filterQuery);
     const queryString = convertToQuery(filterQuery);
