@@ -13,7 +13,7 @@ export const BioProvider = ({ children }) => {
   const [bioLoading, setBioLoading] = useState(false);
   const [query, setQuery] = useState({
     page: 1,
-    limit: 10,
+    limit: 12,
   });
   const [filterFields, setFilterFields] = useState({});
 

@@ -27,11 +27,12 @@ import PersonalInfoFilter from './PersonalInfoFilte';
 import OccupationFilter from './OccupationFilter';
 import OthersFilter from './OthersFilter';
 import { useFilter } from '../../contexts/useFilter';
+import { usePrimary } from '../../contexts/userPrimary';
 
 const BioDataFilter = () => {
   const { setQuery, setFilterFields, filterFields } = useContext(BioContext);
   const { setAddressFilterOpen, setPrimaryFilterOpen } = useFilter();
-
+  const { setBioType, bioType, maritalStatus, setMaritalStatus } = usePrimary();
   const [openAccordions, setOpenAccordions] = useState({
     3: true,
   });
@@ -40,8 +41,7 @@ const BioDataFilter = () => {
     useSearchParams();
   const newQueryParameters = new URLSearchParams();
   const [open, setOpen] = useState(3);
-  const [bioType, setBioType] = useState('');
-  const [maritalStatus, setMaritalStatus] = useState('');
+
   const [zilla, setZilla] = useState('');
   const [division, setDivision] = useState('');
 
