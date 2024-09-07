@@ -40,7 +40,7 @@ export const BioProvider = ({ children }) => {
     bio,
     setBio,
     bios: bios?.data,
-    limit: bios?.limit ?? 10,
+    limit: bios?.limit ?? 12,
     page: bios?.page ?? 1,
     size: bios?.size,
     bioLoading,
