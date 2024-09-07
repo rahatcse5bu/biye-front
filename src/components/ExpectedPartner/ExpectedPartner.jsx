@@ -30,73 +30,37 @@ const ExpectedPartner = () => {
           question="শিক্ষাগত যোগ্যতা"
           answer={expectedLifePartner?.educational_qualifications?.join(', ')}
         />
-        {/* For mobiles */}
-        <div className="md:hidden">
-          <GridQuestionAnswerCard
-            question="শিক্ষাগত যোগ্যতা"
-            answer={expectedLifePartner?.educational_qualifications?.join(', ')}
-          />
-        </div>
+
         {/* For desktops */}
         <GridQuestionAnswerCard
           question="জেলা"
           answer={expectedLifePartner?.zilla.join(', ')}
         />
-        {/* For mobiles */}
-        <div className="md:hidden">
-          <GridQuestionAnswerCard
-            question="জেলা"
-            answer={expectedLifePartner?.zilla.join(', ')}
-          />
-        </div>
+
         {/* For desktops */}
         <GridQuestionAnswerCard
           question="বৈবাহিক অবস্থা"
           answer={expectedLifePartner?.marital_status.join(', ')}
         />
-        {/* For mobiles */}
-        <div className="md:hidden">
-          <GridQuestionAnswerCard
-            question="বৈবাহিক অবস্থা"
-            answer={expectedLifePartner?.marital_status.join(', ')}
-          />
-        </div>
+
         {/* For desktops */}
         <GridQuestionAnswerCard
           question="পেশা"
           answer={expectedLifePartner?.occupation.join(', ')}
         />
-        {/* For mobiles */}
-        <div className="md:hidden">
-          <GridQuestionAnswerCard
-            question="পেশা"
-            answer={expectedLifePartner?.occupation.join(', ')}
-          />
-        </div>
+
         {/* For desktops */}
         <GridQuestionAnswerCard
           question="অর্থনৈতিক অবস্থা"
           answer={expectedLifePartner?.economical_condition.join(', ')}
         />
-        {/* For mobiles */}
-        <div className="md:hidden">
-          <GridQuestionAnswerCard
-            question="অর্থনৈতিক অবস্থা"
-            answer={expectedLifePartner?.economical_condition.join(', ')}
-          />
-        </div>
+
         {/* For desktops */}
         <GridQuestionAnswerCard
           question="জীবনসঙ্গীর যেসব বৈশিষ্ট্য বা গুণাবলী প্রত্যাশা করেন"
           answer={expectedLifePartner?.expected_characteristics}
         />
-        {/* For mobiles */}
-        <div className="md:hidden">
-          <GridQuestionAnswerCard
-            question="জীবনসঙ্গীর যেসব বৈশিষ্ট্য বা গুণাবলী প্রত্যাশা করেন"
-            answer={expectedLifePartner?.expected_characteristics}
-          />
-        </div>
+
         {generalInfo?.gender === 'মহিলা' ||
         generalInfo?.bio_type === 'পাত্রীর বায়োডাটা' ? (
           <>
