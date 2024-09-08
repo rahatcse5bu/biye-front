@@ -1530,6 +1530,8 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
             options={deenStatusOptions}
             value={status}
             setValue={setStatus}
+            classes="z-10"
+            closeMenuOnSelect={true}
           />
 
           <div className="flex items-center justify-between my-5">

@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
-import { BiSidebar } from "react-icons/bi";
+import React, { useState } from 'react';
+import { BiSidebar } from 'react-icons/bi';
 
-import Form from "../../components/Form/Form";
-import { ScrollToTop } from "../../constants/ScrolltoTop";
-import Numbering from "../../components/Numbering/Numbering";
-import { useContext } from "react";
-import UserContext from "../../contexts/UserContext";
-import { useEffect } from "react";
-import { StepperLine } from "../../components/Stepper/Stepper";
+import Form from '../../components/Form/Form';
+import { ScrollToTop } from '../../constants/ScrolltoTop';
+import Numbering from '../../components/Numbering/Numbering';
+import { useContext } from 'react';
+import UserContext from '../../contexts/UserContext';
+import { useEffect } from 'react';
+import { StepperLine } from '../../components/Stepper/Stepper';
 
 const EditBiodata = () => {
   const [userForm, setUserForm] = useState(1);

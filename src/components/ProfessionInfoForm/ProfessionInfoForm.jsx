@@ -1,26 +1,26 @@
 /* eslint-disable react/prop-types */
-import { useContext, useEffect, useState } from "react";
-import FormTitle from "../FormTitle/FormTitle";
-import Input from "../Input/Input";
-import Textarea from "../Textarea/Textarea";
-import { occupationOptions } from "./professionInfoForm.constant";
-import { Colors } from "../../constants/colors";
-import UserContext from "../../contexts/UserContext";
-import { useQuery } from "@tanstack/react-query";
-import { getToken } from "../../utils/cookies";
-import LoadingCircle from "../LoadingCircle/LoadingCircle";
-import MultipleSelect from "../MultitpleSelect/MultipleSelect";
+import { useContext, useEffect, useState } from 'react';
+import FormTitle from '../FormTitle/FormTitle';
+import Input from '../Input/Input';
+import Textarea from '../Textarea/Textarea';
+import { occupationOptions } from './professionInfoForm.constant';
+import { Colors } from '../../constants/colors';
+import UserContext from '../../contexts/UserContext';
+import { useQuery } from '@tanstack/react-query';
+import { getToken } from '../../utils/cookies';
+import LoadingCircle from '../LoadingCircle/LoadingCircle';
+import MultipleSelect from '../MultitpleSelect/MultipleSelect';
 import {
   dataToMultipleExpectedPartner,
   getDataFromMultipleInputExpectedPartner,
-} from "../../utils/form";
-import { ProfessionalInfoServices } from "../../services/professionalInfo";
-import { getErrorMessage } from "../../utils/error";
-import { Toast } from "../../utils/toast";
+} from '../../utils/form';
+import { ProfessionalInfoServices } from '../../services/professionalInfo';
+import { getErrorMessage } from '../../utils/error';
+import { Toast } from '../../utils/toast';
 
 const ProfessionInfoForm = ({ userForm, setUserForm }) => {
   const [occupation, setOccupation] = useState();
-  const [income, setIncome] = useState("");
+  const [income, setIncome] = useState('');
   const [occupationInfo, setOccupationInfo] = useState();
   const { userInfo } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
@@ -31,7 +31,7 @@ const ProfessionInfoForm = ({ userForm, setUserForm }) => {
     }
   };
   const { data: professionalInfo = null, isLoading } = useQuery({
-    queryKey: ["professional-info", userInfo?.data?._id, getToken()?.token],
+    queryKey: ['professional-info', userInfo?.data?._id, getToken()?.token],
     queryFn: async () => {
       return await ProfessionalInfoServices.getProfessionalInfoByUser(
         getToken()?.token
@@ -69,7 +69,7 @@ const ProfessionInfoForm = ({ userForm, setUserForm }) => {
     };
 
     if (!getToken()?.token || !userInfo?.data?._id) {
-      alert("Please logout and try again");
+      alert('Please logout and try again');
       return;
     }
 
@@ -89,7 +89,7 @@ const ProfessionInfoForm = ({ userForm, setUserForm }) => {
         );
       }
       if (data.success) {
-        Toast.successToast("আপনার তথ্য সেভ করা হয়েছে ");
+        Toast.successToast('আপনার তথ্য সেভ করা হয়েছে ');
         setUserForm((prev) => prev + 1);
       }
     } catch (error) {
@@ -126,6 +126,8 @@ const ProfessionInfoForm = ({ userForm, setUserForm }) => {
             options={occupationOptions}
             value={occupation}
             setValue={setOccupation}
+            closeMenuOnSelect={true}
+            classes="z-10"
             required
           />
           <Textarea
@@ -158,7 +160,7 @@ const ProfessionInfoForm = ({ userForm, setUserForm }) => {
                 background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
               }}
             >
-              {loading ? <LoadingCircle /> : "Save & Next"}
+              {loading ? <LoadingCircle /> : 'Save & Next'}
             </button>
           </div>
         </form>

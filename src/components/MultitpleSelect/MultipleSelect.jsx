@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
-import { Colors } from "../../constants/colors";
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+import { Colors } from '../../constants/colors';
 
 const animatedComponents = makeAnimated();
 
@@ -11,8 +11,9 @@ export default function MultipleSelect({
   subtitle,
   value,
   setValue,
-  classes = "z-40",
+  classes = 'z-40',
   required = false,
+  closeMenuOnSelect = false,
 }) {
   // console.log(value);
   return (
@@ -23,7 +24,7 @@ export default function MultipleSelect({
         </label>
       )}
       <Select
-        closeMenuOnSelect={false}
+        closeMenuOnSelect={closeMenuOnSelect}
         onChange={(val) => setValue(val)}
         value={value}
         components={animatedComponents}

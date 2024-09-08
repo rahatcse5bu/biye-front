@@ -197,6 +197,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
             options={screenColorOptionsMultiple}
             value={screenColor}
             setValue={setScreenColor}
+            classes="z-[1]"
           />
           <br />
 
@@ -225,7 +226,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
             options={educationOptionsMultiple}
             value={educationExpected}
             setValue={setEducationExpected}
-            classes="z-[99999]"
+            classes="z-[10]"
           />
           <br />
           <MultipleSelect
@@ -234,7 +235,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
             options={districtsOptions}
             value={zilla}
             setValue={setZilla}
-            classes="z-[9999]"
+            classes="z-[9]"
           />
           <br />
           <MultipleSelect
@@ -243,7 +244,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
             options={maritalStatusMultiple}
             value={maritalStatus}
             setValue={setMaritalStatus}
-            classes="z-[999]"
+            classes="z-[8]"
           />
           <br />
           <MultipleSelect
@@ -252,7 +253,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
             options={professionMultiple}
             value={profession}
             setValue={setProfession}
-            classes="z-[99]"
+            classes="z-[7]"
           />
           <br />
           <MultipleSelect
@@ -261,6 +262,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
             options={financialOptionsMultiple}
             value={financial}
             setValue={setFinancial}
+            classes="z-[6]"
           />
           <br />
           <Textarea
