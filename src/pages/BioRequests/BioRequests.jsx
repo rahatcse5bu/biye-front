@@ -31,7 +31,7 @@ const MyBioRequests = () => {
   const [loadingId, setLoadingId] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState(false);
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['bio-share'],
+    queryKey: ['bio-share-all'],
     queryFn: async () => {
       return await BioChoiceDataServices.getBioChoiceShare(getToken().token);
     },
@@ -53,7 +53,8 @@ const MyBioRequests = () => {
           user,
           status: status,
         },
-        getToken().token
+        getToken().token,
+        'status'
       );
       if (response?.success === true) {
         Toast.successToast('আপনার রিয়াকশন সেভ করা হয়েছে।');
@@ -78,6 +79,14 @@ const MyBioRequests = () => {
     setUserId(user);
     setFeedback(item);
   };
+
+  // if (loading) {
+  //   return (
+  //     <div>
+  //       <LoadingCircle />
+  //     </div>
+  //   );
+  // }
 
   // console.log("bio-share-data~", data);
 
@@ -130,7 +139,7 @@ const MyBioRequests = () => {
                               {item?.user_id}
                             </td>
                             <td className="px-4 py-2 text-center border-l w-1/7">
-                              {item?.present_address}
+                              {item?.present_address || 'এড্রেস উল্লেখ করে নাই'}
                             </td>
                             <td
                               className={classNames(
@@ -186,7 +195,7 @@ const MyBioRequests = () => {
                                   className="mr-2"
                                 >
                                   {loading &&
-                                  loadingId === item?.user_id &&
+                                  loadingId === item?.user &&
                                   loadingStatus === 'approved' ? (
                                     <LoadingCircle />
                                   ) : (
@@ -201,7 +210,7 @@ const MyBioRequests = () => {
                                   size="xs"
                                 >
                                   {loading &&
-                                  loadingId === item?.user_id &&
+                                  loadingId === item?.user &&
                                   loadingStatus === 'rejected' ? (
                                     <LoadingCircle />
                                   ) : (

@@ -17,16 +17,21 @@ const createBioChoiceData = async (data, token) => {
   });
   return response.data;
 };
-const updateBioChoiceData = async (data, token) => {
+const updateBioChoiceData = async (data, token, type = '') => {
   if (!token) {
     return null;
   }
-  const response = await axios.put(baseUrl + `/bio-choice-data`, data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  const response = await axios.put(
+    baseUrl + `/bio-choice-data?type=${type}`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
   return response.data;
 };
 const getBioChoiceDataFirstStep = async (token) => {

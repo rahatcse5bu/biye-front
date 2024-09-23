@@ -1,15 +1,14 @@
 /* eslint-disable react/prop-types */
-import { Dialog, DialogBody } from "@material-tailwind/react";
-import Textarea from "../Textarea/Textarea";
-import { useState } from "react";
-import { BioChoiceDataServices } from "../../services/bioChoiceData";
-import { getToken } from "../../utils/cookies";
-import { Toast } from "../../utils/toast";
-import { getErrorMessage } from "../../utils/error";
-import LoadingCircle from "../LoadingCircle/LoadingCircle";
-import { Colors } from "../../constants/colors";
-import { useContext } from "react";
-import UserContext from "../../contexts/UserContext";
+import { Dialog, DialogBody } from '@material-tailwind/react';
+import Textarea from '../Textarea/Textarea';
+import { useState } from 'react';
+import { BioChoiceDataServices } from '../../services/bioChoiceData';
+import { getToken } from '../../utils/cookies';
+import { Toast } from '../../utils/toast';
+import { getErrorMessage } from '../../utils/error';
+import LoadingCircle from '../LoadingCircle/LoadingCircle';
+import { Colors } from '../../constants/colors';
+
 export function FeedbackModal({
   title,
   open,
@@ -21,7 +20,7 @@ export function FeedbackModal({
 }) {
   const [loading, setLoading] = useState(false);
   const handleOpen = () => setOpen(!open);
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState('');
   const [edit, setEdit] = useState(false);
   // const { userInfo } = useContext(UserContext);
   // console.log("user", user);
@@ -35,10 +34,11 @@ export function FeedbackModal({
       setLoading(true);
       const response = await BioChoiceDataServices.updateBioChoiceData(
         { user, feedback },
-        getToken().token
+        getToken().token,
+        'feedback'
       );
       if (response?.success === true) {
-        Toast.successToast("আপনার ফিডব্যাক সেভ করা হয়েছে।");
+        Toast.successToast('আপনার ফিডব্যাক সেভ করা হয়েছে।');
         await refetch();
       }
     } catch (error) {
@@ -107,7 +107,7 @@ export function FeedbackModal({
                   Cancel
                 </button>
                 <button className="px-4 py-1 text-white bg-green-800 rounded-md hover:bg-green-600">
-                  {loading ? <LoadingCircle /> : "Add Feedback"}
+                  {loading ? <LoadingCircle /> : 'Add Feedback'}
                 </button>
               </div>
             </form>
