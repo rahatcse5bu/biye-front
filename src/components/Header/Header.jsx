@@ -33,12 +33,15 @@ const Header = () => {
   });
 
   useEffect(() => {
-    AnalyticsService.logEvent('page_view', {
-      page_path: location.pathname,
-      page_title: document.title,
-      user_email: user?.email,
-      user_name: user?.displayName,
-    });
+    AnalyticsService.logEvent(
+      `page_view-${location.pathname}-${document.title}`,
+      {
+        page_path: location.pathname,
+        page_title: document.title,
+        user_email: user?.email,
+        user_name: user?.displayName,
+      }
+    );
   }, [location]);
 
   // console.log('firebase~~', {
