@@ -4,28 +4,28 @@ import {
   Checkbox,
   Button,
   Typography,
-} from "@material-tailwind/react";
-import { FaGoogle } from "react-icons/fa";
-import "./signup.css";
-import { Colors } from "../../constants/colors";
-import { Link, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
-import UserContext from "../../contexts/UserContext";
-import { userServices } from "../../services/user";
-import { setToken } from "../../utils/cookies";
-import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
-import { sendFirebaseError } from "../../utils/fiirebaseError";
-import toast from "react-hot-toast";
-import { Toast } from "../../utils/toast";
-import AnalyticsService from "../../firebase/analyticsService";
+} from '@material-tailwind/react';
+import { FaGoogle } from 'react-icons/fa';
+import './signup.css';
+import { Colors } from '../../constants/colors';
+import { Link, useNavigate } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import UserContext from '../../contexts/UserContext';
+import { userServices } from '../../services/user';
+import { setToken } from '../../utils/cookies';
+import LoadingCircle from '../../components/LoadingCircle/LoadingCircle';
+import { sendFirebaseError } from '../../utils/fiirebaseError';
+import toast from 'react-hot-toast';
+import { Toast } from '../../utils/toast';
+import AnalyticsService from '../../firebase/analyticsService';
 export function Signup() {
   const { handleGoogleSignIn, createUser } = useContext(UserContext);
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
-  const [gender, setGender] = useState("");
-  const [loading, setLoading] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [gender, setGender] = useState('');
+  const [loading, setLoading] = useState('');
 
   const validateEmail = (email) => {
     return String(email)
@@ -40,7 +40,7 @@ export function Signup() {
       //! google signIn
       const response1 = await handleGoogleSignIn();
       if (!response1?.user?.uid) {
-        alert("Something went wrong,try again later");
+        alert('Something went wrong,try again later');
         return;
       }
       // console.log(response1?.user);
@@ -55,6 +55,15 @@ export function Signup() {
         gender,
       };
 
+      // for google analytics
+      AnalyticsService.logEvent('sign_up_button_click', {
+        page_path: location.pathname,
+        page_title: document.title,
+        user_email: user.email,
+        user_name: username,
+        user_gender: gender,
+      });
+
       //!store user info into db
       const { data } = await userServices.createUserInfoForGoogleSignIn(
         userInfo,
@@ -65,7 +74,7 @@ export function Signup() {
         setToken({
           token: data?.data.token,
         });
-        navigate("/user/account/dashboard");
+        navigate('/user/account/dashboard');
       }
     } catch (error) {
       console.log(error);
@@ -76,34 +85,42 @@ export function Signup() {
   //! signUp with email and password
   const signInWithEmailAndPassword = async (event) => {
     event.preventDefault();
+
     if (!validateEmail(email)) {
-      //	alert("Invalid Email");
-      toast.error("Invalid Email", {
+      toast.error('Invalid Email', {
         duration: 5000,
-        position: "bottom-right",
-        style: { backgroundColor: "red", color: "#fff" },
+        position: 'bottom-right',
+        style: { backgroundColor: 'red', color: '#fff' },
       });
       return;
     }
+
     if (!email || !password || !username || !gender) {
-      //alert("Fill all the input fields");
-      toast.error("Fill all the input fields", {
+      toast.error('Fill all the input fields', {
         duration: 5000,
-        position: "bottom-right",
-        style: { backgroundColor: "red", color: "#fff" },
+        position: 'bottom-right',
+        style: { backgroundColor: 'red', color: '#fff' },
       });
       return;
     }
 
     if (password.length < 5) {
-      //	alert("Password should be at least six characters");
-      toast.error("Password should be at least six characters", {
+      toast.error('Password should be at least six characters', {
         duration: 5000,
-        position: "bottom-right",
-        style: { backgroundColor: "red", color: "#fff" },
+        position: 'bottom-right',
+        style: { backgroundColor: 'red', color: '#fff' },
       });
       return;
     }
+
+    // for google analytics
+    AnalyticsService.logEvent('sign_up_button_click', {
+      page_path: location.pathname,
+      page_title: document.title,
+      user_email: email,
+      user_name: username,
+      user_gender: gender,
+    });
 
     try {
       //! create user in firebase
@@ -118,7 +135,7 @@ export function Signup() {
       AnalyticsService.setUserProperties({ email: user.email });
 
       if (!response1?.user?.uid) {
-        Toast.errorToast("Something went wrong,please try again");
+        Toast.errorToast('Something went wrong,please try again');
         return;
       }
 
@@ -128,22 +145,20 @@ export function Signup() {
         gender,
       };
 
-      // console.log(response1);
-      //store user info into db
       const { data } = await userServices.createUserInfoForGoogleSignIn(
         userInfo,
         response1?._tokenResponse.idToken
       );
       // console.log(data);
       if (data?.success === true) {
-        setEmail("");
-        setPassword("");
-        setUsername("");
-        setGender("");
+        setEmail('');
+        setPassword('');
+        setUsername('');
+        setGender('');
         setToken({
           token: data?.data.token,
         });
-        navigate("/user/account/dashboard");
+        navigate('/user/account/dashboard');
       }
     } catch (error) {
       //alert(error?.response?.data?.message || error.message);
@@ -151,8 +166,8 @@ export function Signup() {
         sendFirebaseError(error?.response?.data?.message || error.message),
         {
           duration: 5000,
-          position: "bottom-right",
-          style: { backgroundColor: "red", color: "#fff" },
+          position: 'bottom-right',
+          style: { backgroundColor: 'red', color: '#fff' },
         }
       );
     } finally {
@@ -214,15 +229,15 @@ export function Signup() {
                 className="flex items-center font-normal"
               >
                 I agree the
-                <a
+                <button
                   href="#"
                   className="font-medium transition-colors hover:text-gray-900"
                 >
                   &nbsp;Terms and Conditions
-                </a>
+                </button>
               </Typography>
             }
-            containerProps={{ className: "-ml-2.5" }}
+            containerProps={{ className: '-ml-2.5' }}
           />
           <Button
             type="submit"
@@ -234,12 +249,12 @@ export function Signup() {
             fullWidth
             disabled={loading}
           >
-            {loading ? <LoadingCircle /> : "Register"}
+            {loading ? <LoadingCircle /> : 'Register'}
           </Button>
 
           <div className="flex items-center my-4">
             <p className="h-[1px] bg-gray-600 w-full"></p>
-            <span className="mx-2">OR</span>{" "}
+            <span className="mx-2">OR</span>{' '}
             <p className="h-[1px] bg-gray-600 w-full"></p>
           </div>
           <Button
@@ -247,17 +262,15 @@ export function Signup() {
               background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
             }}
             className="w-full "
+            onClick={googleSignup}
           >
-            <div
-              onClick={googleSignup}
-              className="flex items-center justify-center"
-            >
+            <div className="flex items-center justify-center">
               <FaGoogle className="w-5 h-5 mb-1 mr-2" />
               Sign Up with Google
             </div>
           </Button>
           <Typography color="gray" className="mt-4 font-normal text-center">
-            Already have an account?{" "}
+            Already have an account?{' '}
             <Link to="/login" className="font-medium text-gray-900">
               Log In
             </Link>

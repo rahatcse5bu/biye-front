@@ -37,6 +37,14 @@ export function Login() {
       AnalyticsService.setUserId(user.uid);
       AnalyticsService.setUserProperties({ email: user.email });
 
+      // for google analytics
+      AnalyticsService.logEvent('login_button_click', {
+        page_path: location.pathname,
+        page_title: document.title,
+        user_email: user?.email,
+        user_name: user?.displayName,
+      });
+
       //store user info into db
       const { data } = await userServices.createUserInfoForGoogleSignIn(
         userInfo,
@@ -61,10 +69,20 @@ export function Login() {
   //! signin with email and password
   const handleSignIn = async (event) => {
     event.preventDefault();
+
     if (!email && !password) {
       Toast.errorToast('Fill all the blank fields');
       return;
     }
+
+    // for google analytics
+    AnalyticsService.logEvent('login_button_click', {
+      page_path: location.pathname,
+      page_title: document.title,
+      user_email: email,
+      user_name: '',
+    });
+
     try {
       setLoading(true);
       const response = await signIn(email, password);
