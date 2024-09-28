@@ -32,6 +32,10 @@ import { Toast } from '../../utils/toast';
 import { GeneralInfoServices } from '../../services/generalInfo';
 import SingleSelect from '../SingleSelect/SingleSelect';
 import { UserInfoServices } from '../../services/userInfo';
+import CustomButton from '../CustomButton/CustomButton';
+import { FaYoutube } from 'react-icons/fa';
+import CustomModal from '../CustomModal/CustomModal';
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 
 const GeneralInfoForm = ({ userForm, setUserForm }) => {
   const { userInfo, logOut } = useContext(UserContext);
@@ -48,6 +52,7 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
   const [filteredMaritalStatus, setFilteredMaritalStatus] =
     useState(maritalStatus);
   const [loading, setLoading] = useState(false);
+  const [isModelForBioDate, setIsModalForBioDate] = useState(false);
   const navigate = useNavigate();
   const { data: generalInfo = null, isLoading } = useQuery({
     queryKey: ['general-info', userInfo?.data?._id, getToken()?.token],
@@ -65,11 +70,6 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
     retry: false,
     enabled: !!getToken()?.token,
   });
-  // useEffect(() => {
-  // 	verifyToken(userInfo?.data?._id, logOut, "general-info-verify-token");
-  // }, [logOut, userInfo?.data]);
-
-  // console.log("general-info~~", generalInfo);
 
   //! set init data
   useEffect(() => {
@@ -254,6 +254,36 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
             required
             type="date"
           />
+
+          <div className="text-center w-full sm:hidden block">
+            <CustomButton
+              onClick={() => {
+                setIsModalForBioDate(true);
+              }}
+              type="button"
+              className=" flex w-full mx-auto md:w-[50%] mt-3 items-center justify-center border hover:bg-transparent border-indigo-700 rounded-full py-2 bg-white"
+            >
+              <FaYoutube className="mb-0 pb-0 mr-2  text-red-500 w-12 h-6  rounded-full bg-white" />{' '}
+              <span
+                className="md:text-xl text-xl"
+                style={{
+                  color: Colors.titleText,
+                }}
+              >
+                যেভাবে জন্ম তারিখ সিলেক্ট করবেন
+              </span>
+            </CustomButton>
+            <CustomModal
+              onClose={() => setIsModalForBioDate(false)}
+              isOpen={isModelForBioDate}
+              title="যেভাবে জন্ম তারিখ সিলেক্ট করবেন"
+            >
+              <LiteYouTubeEmbed
+                id="Gc5WmS1K9D8"
+                title="কীভাবে PNC নিকাহতে জন্ম তারিখ সেট করতে হয় - PNC Nikah"
+              />
+            </CustomModal>
+          </div>
 
           <Select
             title="উচ্চতা "

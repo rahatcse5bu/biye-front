@@ -1,7 +1,5 @@
 /* eslint-disable react/prop-types */
 import { Button } from '@material-tailwind/react';
-import female from '../../assets/icons/female.svg';
-import male from '../../assets/icons/male.svg';
 import { Colors } from '../../constants/colors';
 import {
   formatDate,
@@ -188,7 +186,11 @@ const BioData = ({ biodata }) => {
       >
         <img
           className="w-16 h-16 mx-auto rounded-full "
-          src={biodata?.gender === 'মহিলা' ? female : male}
+          src={
+            biodata?.gender === 'মহিলা'
+              ? '/assets/icons/female.svg'
+              : '/assets/icons/male.svg'
+          }
           alt=""
         />
         <h4 className="my-2"> বায়োডাটা নং </h4>

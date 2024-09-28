@@ -10,13 +10,14 @@ jobs:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     env:
-      VITE_REACT_APP_authDomain: "pnc-nikah.firebaseapp.com"
-      VITE_REACT_APP_apiKey: "AIzaSyCGMfMlLJk65tcQi1_IocJKI-KD11mfGpE"
-      VITE_REACT_APP_projectId: "pnc-nikah"
-      VITE_REACT_APP_storageBucket: "pnc-nikah.appspot.com"
-      VITE_REACT_APP_messagingSenderId: "893917202752"
-      VITE_REACT_APP_appId: "1:893917202752:web:37d31a29adbf37bcd712a5"
-      VITE_REACT_APP_NODE_ENV: "producttion"
+      VITE_REACT_APP_authDomain: 'pnc-nikah.firebaseapp.com'
+      VITE_REACT_APP_apiKey: 'AIzaSyCGMfMlLJk65tcQi1_IocJKI-KD11mfGpE'
+      VITE_REACT_APP_projectId: 'pnc-nikah'
+      VITE_REACT_APP_storageBucket: 'pnc-nikah.appspot.com'
+      VITE_REACT_APP_messagingSenderId: '893917202752'
+      VITE_REACT_APP_appId: '1:893917202752:web:37d31a29adbf37bcd712a5'
+      VITE_REACT_APP_NODE_ENV: 'producttion'
+      VITE_REACT_APP_vapidKey: 'BPFs6JWBmfzCdWbHW7TfxrTAa5ZWcXs1WvTFyd7ErF1f0TzObZySfvg6OzRJatI_pzYVEd-phO1cZdh8ZQ9G_o8'
     steps:
       - name: environment variable
         run: echo Hello world $REACT_APP_IMGBB_KEY
@@ -27,7 +28,7 @@ jobs:
       - name: Use Node.js 16
         uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: '16'
 
       - name: 🔨 Build Project
         run: |
@@ -37,9 +38,9 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: "ftp.pncsoft.tech"
-          username: "pnc-nikah@pnc-nikah.com"
+          server: 'ftp.pncsoft.tech'
+          username: 'pnc-nikah@pnc-nikah.com'
           # dangerous-clean-slate: true
-          password: "{J?.H_fLC*JD"
+          password: '{J?.H_fLC*JD'
           port: 21
           local-dir: ./dist/

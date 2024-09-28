@@ -76,6 +76,7 @@ export default function NavBar() {
     retry: false,
     enabled: !!user?.email,
   });
+
   const {
     data: tokenData,
     isError,
@@ -90,6 +91,7 @@ export default function NavBar() {
     refetchInterval: 3600000, // every hour
     // refetchInterval: 300000, // 10s
   });
+
   const logoutHandler = async () => {
     await logOut();
     setIsHovered(false);
@@ -126,49 +128,6 @@ export default function NavBar() {
       return false;
     }
   });
-
-  // console.log("user~~~", user);
-
-  // console.log("user-info", userInfo);
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     if (window.innerWidth >= 960) {
-  //       if (hoverOpenCountForLarge < 2) {
-  //         setIsHovered(true);
-  //         setHoverOpenCountForLarge(hoverOpenCountForLarge + 1);
-  //         setUserOPenLarge({ count: hoverOpenCountForLarge + 1 });
-  //       } else {
-  //         setIsHovered(false);
-  //       }
-  //     } else {
-  //       if (hoverOpenCountForSmall < 2) {
-  //         setIsHovered(true);
-  //         setHoverOpenCountForSmall(hoverOpenCountForSmall + 1);
-  //         setUserOPenSmall({ count: hoverOpenCountForSmall + 1 });
-  //       } else {
-  //         setIsHovered(false);
-  //       }
-  //     }
-  //   };
-
-  //   window.addEventListener('resize', handleResize);
-
-  //   const handleClickOutside = (event) => {
-  //     if (
-  //       profileCardRef.current &&
-  //       !profileCardRef.current.contains(event.target)
-  //     ) {
-  //       setIsHovered(false);
-  //     }
-  //   };
-
-  //   document.addEventListener('mousedown', handleClickOutside);
-
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClickOutside);
-  //     window.removeEventListener('resize', handleResize);
-  //   };
-  // }, []);
 
   const handleIconHover = () => {
     setIsHovered(true);

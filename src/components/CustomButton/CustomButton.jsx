@@ -9,6 +9,7 @@ const CustomButton = ({
   size = 'medium',
   style,
   className,
+  type = 'button',
 }) => {
   // Tailwind classNames for different variants and sizes
   const baseClasses = `rounded focus:outline-none transition duration-300 ease-in-out`;
@@ -31,6 +32,7 @@ const CustomButton = ({
       style={style}
       onClick={onClick}
       disabled={disabled}
+      type={type}
       className={`${baseClasses} ${variantClasses} ${sizeClasses} ${disabledClasses} ${className}`}
     >
       {children}
