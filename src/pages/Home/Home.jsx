@@ -12,6 +12,7 @@ import Advertisement from '../../components/Home/Advertisement/Advertisement';
 import IslamicQuote from '../../components/Home/IslamicQuote/IslamicQuote';
 import HomeBanner from '../../components/Home/HomeBanner/HomeBanner';
 import HomeFilter from '../../components/Home/HomeFilter/HomeFilter';
+import AboutFeature from '../../components/Home/AboutFeature/AboutFeature';
 
 const Home = () => {
   const { data, isLoading } = useQuery({
@@ -29,6 +30,7 @@ const Home = () => {
     <div className="px-2 lg:px-10">
       <HomeBanner />
       <IslamicQuote />
+      <AboutFeature />
       <Advertisement colors={colors} />
 
       <HomeFilter />

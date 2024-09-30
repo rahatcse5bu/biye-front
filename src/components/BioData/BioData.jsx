@@ -79,10 +79,6 @@ const BioData = ({ biodata }) => {
     }
   }, [biodata]);
 
-  // console.log("likes", likes);
-  // console.log(checkLikes);
-  // console.log(biodata);
-
   const bioDataHandler = async () => {
     // update watch count
     if (biodata?._id) {

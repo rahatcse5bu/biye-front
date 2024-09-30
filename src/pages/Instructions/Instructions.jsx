@@ -7,26 +7,31 @@ import YouTubeEmbed from '../../components/YouTubeEmbed/YouTubeEmbed';
 const Instructions = () => {
   const instructions = [
     {
+      id: 'czYI7NaHymg',
+      title: 'PNC নিকাহ এর ব্যতিক্রমী ফিচারসমূহ',
+      step: 'PNC নিকাহ এর ব্যতিক্রমী ফিচারসমূহ',
+    },
+    {
       id: 'NXNa1NAvMbI',
       title: 'PNC নিকাহতে মোবাইল দিয়ে কিভাবে পাত্রীর বায়োডাটা ফ্রীতে দিতে হয়?',
-      step: '1. PNC নিকাহতে মোবাইল দিয়ে কিভাবে পাত্রীর বায়োডাটা ফ্রীতে দিতে হয়?',
+      step: 'PNC নিকাহতে মোবাইল দিয়ে কিভাবে পাত্রীর বায়োডাটা ফ্রীতে দিতে হয়?',
     },
     {
       id: '26Kj5LuD2DY',
       title: 'PNC নিকাহ তে কিভাবে পাত্রের বায়োডাটা দিতে হয়?',
-      step: '2. PNC নিকাহতে ল্যাপটপ দিয়ে কিভাবে পাত্রীর বায়োডাটা ফ্রীতে দিতে হয়?',
+      step: 'PNC নিকাহতে ল্যাপটপ দিয়ে কিভাবে পাত্রীর বায়োডাটা ফ্রীতে দিতে হয়?',
     },
     {
       id: 'X6sjWCZjiuQ',
       title:
         'Bio-data purchase 1st step || বায়োডাটা ক্রয় প্রথম পদক্ষেপ || PNC NIkah',
-      step: '3. বায়োডাটা ক্রয় প্রথম পদক্ষেপ ',
+      step: 'বায়োডাটা ক্রয় প্রথম পদক্ষেপ ',
     },
     {
       id: 'x0-RXTR0DfQ',
       title:
         'Bio-data purchase second step || বায়োডাটা ক্রয় দ্বিতীয় পদক্ষেপ || PNC NIkah',
-      step: '4. বায়োডাটা ক্রয় দ্বিতীয় পদক্ষেপ ',
+      step: 'বায়োডাটা ক্রয় দ্বিতীয় পদক্ষেপ ',
     },
   ];
 
@@ -63,7 +68,7 @@ const Instructions = () => {
             className="text-xl font-semibold text-left mb-4 ml-2"
             style={{ color: Colors.titleText }}
           >
-            {item.step}
+            {index + 1}. {item.step}
           </h6>
           <YouTubeEmbed videoId={item.id} title={item.title} />
         </div>
