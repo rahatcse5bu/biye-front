@@ -12,7 +12,7 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth';
 import { createContext, useEffect, useState } from 'react';
-import { auth } from '../firebase/app.jsx';
+import { auth } from '../firebase/app.js';
 
 // Create a new context instance
 const UserContext = createContext();

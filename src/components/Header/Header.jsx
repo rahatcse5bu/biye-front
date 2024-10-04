@@ -11,6 +11,12 @@ import { Toast } from '../../utils/toast';
 import { UserInfoServices } from '../../services/userInfo';
 import { useQuery } from '@tanstack/react-query';
 import AnalyticsService from '../../firebase/analyticsService';
+import useVisibilityChange from '../../hooks/useVisibilityChange';
+import { setupNotifications } from '../../firebase/app';
+import {
+  sendNativeNotification,
+  toastNotification,
+} from '../../utils/notificationHelpers';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -43,6 +49,25 @@ const Header = () => {
       }
     );
   }, [location]);
+  const isForeground = useVisibilityChange();
+  useEffect(() => {
+    setupNotifications((message) => {
+      if (isForeground) {
+        // App is in the foreground, show toast notification
+        toastNotification({
+          title: 'anis molla',
+          description: 'ania saklsldas kjksdads',
+          status: 'info',
+        });
+      } else {
+        // App is in the background, show native notification
+        sendNativeNotification({
+          title: 'anis2',
+          body: 'anis anis anis',
+        });
+      }
+    });
+  }, []);
 
   // console.log('firebase~~', {
   //   page_path: location.pathname,
