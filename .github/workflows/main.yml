@@ -41,6 +41,6 @@ jobs:
           server: 'ftp.pncsoft.tech'
           username: 'pncnikah@pncnikah.com'
           # dangerous-clean-slate: true
-          password: '_BSxKp2!;Qt+'
+          password: 'Gv%ys2JjVc(O'
           port: 21
           local-dir: ./dist/
