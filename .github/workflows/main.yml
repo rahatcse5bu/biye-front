@@ -25,10 +25,10 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v2
 
-      - name: Use Node.js 16
+      - name: Use Node.js 18
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: 🔨 Build Project
         run: |
@@ -39,8 +39,8 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: 'ftp.pncsoft.tech'
-          username: 'pnc-nikah@pnc-nikah.com'
+          username: 'pncnikah@pncnikah.com'
           # dangerous-clean-slate: true
-          password: '{J?.H_fLC*JD'
+          password: '_BSxKp2!;Qt+'
           port: 21
           local-dir: ./dist/
