@@ -1,14 +1,14 @@
-import axios from "axios";
+import axios from 'axios';
 const baseUrl =
-  import.meta.env.VITE_REACT_APP_NODE_ENV === "development"
-    ? "http://localhost:5000/api/v1"
-    : "https://server.pnc-nikah.com/api/v1";
+  import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+    ? 'http://localhost:5000/api/v1'
+    : 'https://server.pncnikah.com/api/v1';
 
 const createPayments = async (data, token) => {
-  const response = await axios.post(baseUrl + "/payments", data, {
+  const response = await axios.post(baseUrl + '/payments', data, {
     headers: {
       Authorization: token,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
   return response.data;
@@ -18,7 +18,7 @@ const getPaymentsByUser = async (token) => {
   if (!token) {
     return;
   }
-  const response = await axios.get(baseUrl + "/payments/token", {
+  const response = await axios.get(baseUrl + '/payments/token', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -32,7 +32,7 @@ const updatePaymentInfo = async (updatedData, token) => {
   const { data } = await axios.put(baseUrl + `/payments`, updatedData, {
     headers: {
       Authorization: token,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
   return data;

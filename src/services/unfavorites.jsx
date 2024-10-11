@@ -1,15 +1,15 @@
-import axios from "axios";
+import axios from 'axios';
 
 const baseUrl =
-  import.meta.env.VITE_REACT_APP_NODE_ENV === "development"
-    ? "http://localhost:5000/api/v1"
-    : "https://server.pnc-nikah.com/api/v1";
+  import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+    ? 'http://localhost:5000/api/v1'
+    : 'https://server.pncnikah.com/api/v1';
 
 const createDisLikes = async (data, token) => {
-  const response = await axios.post(baseUrl + "/un-favorites", data, {
+  const response = await axios.post(baseUrl + '/un-favorites', data, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
   return response.data;
