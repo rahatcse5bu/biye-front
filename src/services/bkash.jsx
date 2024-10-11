@@ -11,7 +11,7 @@ export default function BkashCreatePaymentAPICall(
   pathname = '/'
 ) {
   console.log('Button Clicked !!');
-  let url = `https://pnc-nikah.com/pay${
+  let url = `https://pncnikah.com/pay${
     bio_user
       ? `?bio_user=${bio_user}&purpose=${purpose}&pathname=${pathname}`
       : `?purpose=${purpose}&pathname=${pathname}`

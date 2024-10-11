@@ -1,28 +1,28 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
-import FormTitle from "../FormTitle/FormTitle";
-import Select from "../Select/Select";
-import { Colors } from "../../constants/colors";
-import { useQuery } from "@tanstack/react-query";
-import { userServices } from "../../services/user";
-import { useContext } from "react";
-import UserContext from "../../contexts/UserContext";
-import { useEffect } from "react";
-import { getToken } from "../../utils/cookies";
-import LoadingCircle from "../LoadingCircle/LoadingCircle";
-import { OngikarNamaServices } from "../../services/ongikarNama";
-import { getErrorMessage } from "../../utils/error";
-import { Toast } from "../../utils/toast";
+import { useState } from 'react';
+import FormTitle from '../FormTitle/FormTitle';
+import Select from '../Select/Select';
+import { Colors } from '../../constants/colors';
+import { useQuery } from '@tanstack/react-query';
+import { userServices } from '../../services/user';
+import { useContext } from 'react';
+import UserContext from '../../contexts/UserContext';
+import { useEffect } from 'react';
+import { getToken } from '../../utils/cookies';
+import LoadingCircle from '../LoadingCircle/LoadingCircle';
+import { OngikarNamaServices } from '../../services/ongikarNama';
+import { getErrorMessage } from '../../utils/error';
+import { Toast } from '../../utils/toast';
 
 const OngikarNamaForm = ({ userForm, setUserForm }) => {
-  const [isAgree, setIsAgree] = useState("");
-  const [isTrue, setIsTrue] = useState("");
-  const [isFamilyKnow, setIsFamilyKnow] = useState("");
+  const [isAgree, setIsAgree] = useState('');
+  const [isTrue, setIsTrue] = useState('');
+  const [isFamilyKnow, setIsFamilyKnow] = useState('');
   const { userInfo } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
 
   const { data: ongikarNamaInfo = null, isLoading } = useQuery({
-    queryKey: ["ongikar-nama", userInfo?.data?._id, getToken()?.token],
+    queryKey: ['ongikar-nama', userInfo?.data?._id, getToken()?.token],
     queryFn: async () => {
       return await OngikarNamaServices.getOngikarNamaByUser(getToken()?.token);
     },
@@ -49,7 +49,7 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
     };
 
     if (!getToken()?.token || !userInfo?.data._id) {
-      alert("Please logout and try again");
+      alert('Please logout and try again');
       return;
     }
 
@@ -70,7 +70,7 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
         );
       }
       if (data.success) {
-        Toast.successToast("আপনার তথ্য সেভ করা হয়েছে ");
+        Toast.successToast('আপনার তথ্য সেভ করা হয়েছে ');
         setUserForm((prev) => prev + 1);
       }
     } catch (error) {
@@ -99,10 +99,10 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
 
   const conditionOptions = [
     {
-      value: "হ্যা",
+      value: 'হ্যা',
     },
     {
-      value: "না",
+      value: 'না',
     },
   ];
   const backButtonHandler = () => {
@@ -122,7 +122,7 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
             value={isFamilyKnow}
             setValue={setIsFamilyKnow}
             options={conditionOptions}
-            title="pnc-nikah.com ওয়েবসাইটে বায়োডাটা জমা দিচ্ছেন, তা আপনার অভিভাবক জানেন?"
+            title="pncnikah.com ওয়েবসাইটে বায়োডাটা জমা দিচ্ছেন, তা আপনার অভিভাবক জানেন?"
           />
 
           <Select
@@ -138,7 +138,7 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
             value={isAgree}
             setValue={setIsAgree}
             options={conditionOptions}
-            title="কোনো মিথ্যা তথ্য প্রদান করলে দুনিয়াবী আইনগত এবং আখিরাতের দায়ভার pnc-nikah.com কর্তৃপক্ষ নিবে না। আপনি কি সম্মত?"
+            title="কোনো মিথ্যা তথ্য প্রদান করলে দুনিয়াবী আইনগত এবং আখিরাতের দায়ভার pncnikah.com কর্তৃপক্ষ নিবে না। আপনি কি সম্মত?"
           />
 
           <div className="flex items-center justify-between my-5">
@@ -156,7 +156,7 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
                 background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
               }}
             >
-              {loading ? <LoadingCircle /> : "Save & Next"}
+              {loading ? <LoadingCircle /> : 'Save & Next'}
             </button>
           </div>
         </form>

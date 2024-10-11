@@ -1,1 +1,1 @@
-# https://pnc-nikah.com/
+# https://pncnikah.com/
