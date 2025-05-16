@@ -38,9 +38,9 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: 'ftp.pncsoft.tech'
-          username: 'pncnikah@pncnikah.com'
+          server: 'ftp.pncnikah.com'
+          username: 'pncnikah.com@pncnikah.com'
           # dangerous-clean-slate: true
-          password: 'Gv%ys2JjVc(O'
+          password: 'GGj,5-nQ#$%4'
           port: 21
           local-dir: ./dist/
