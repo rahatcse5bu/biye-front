@@ -231,7 +231,7 @@ const BioData = ({ biodata }) => {
               <td className="px-6 py-4 text-sm whitespace-nowrap border-b border-t">
                 {formatDate(getDateMonthYear(biodata?.date_of_birth))}
                 <b className="text-indigo-900">
-                  {` [${formatDateAndCalculateAge(biodata?.date_of_birth)?.age}Y]`}
+                  {` [${formatDateAndCalculateAge(biodata?.date_of_birth)?.age} বছর]`}
                 </b>
               </td>
             </tr>
