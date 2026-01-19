@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Colors } from '../../constants/colors';
 import Textarea from '../../components/Textarea/Textarea';
 import { BioChoiceDataServices } from '../../services/bioChoiceData';
+import { BioQuestionServices } from '../../services/bioQuestions';
 import { getToken } from '../../utils/cookies';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Toast } from '../../utils/toast';
@@ -10,14 +11,11 @@ import SendMyBio from './SendMyBio';
 function SendForm() {
   const { bio_user } = useParams();
   const navigate = useNavigate();
-  const [opinionOnNikhab, setOpinionOnNikhab] = useState('');
-  const [salatInRain, setSalatInRain] = useState('');
-  const [studyingAtUniversity, setStudyingAtUniversity] = useState('');
-  const [startingUniv, setStartingUniv] = useState('');
-  const [onlineModeling, setOnlineModeling] = useState('');
-  const [malePhotoCapture, setMalePhotoCapture] = useState('');
+  const [questions, setQuestions] = useState([]);
+  const [answers, setAnswers] = useState({});
   const [bioInput, setBioInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [fetchingQuestions, setFetchingQuestions] = useState(true);
   const [goTo, setGoto] = useState(false);
   const [isHasBio, setIsHasBio] = useState(false);
   // State to handle form inputs
@@ -42,24 +40,61 @@ function SendForm() {
     physicalMentalConditions: '',
     aboutMe: '',
   });
+
+  useEffect(() => {
+    // Fetch questions for this biodata owner
+    const fetchQuestions = async () => {
+      try {
+        setFetchingQuestions(true);
+        const data = await BioQuestionServices.getQuestionsByUser(bio_user);
+        if (data?.data?.questions) {
+          setQuestions(data.data.questions);
+          // Initialize answers object
+          const initialAnswers = {};
+          data.data.questions.forEach((_, index) => {
+            initialAnswers[`question_${index}`] = '';
+          });
+          setAnswers(initialAnswers);
+        }
+      } catch (error) {
+        console.error('Error fetching questions:', error);
+        Toast.errorToast('প্রশ্ন লোড করতে সমস্যা হয়েছে');
+      } finally {
+        setFetchingQuestions(false);
+      }
+    };
+
+    if (bio_user) {
+      fetchQuestions();
+    }
+  }, [bio_user]);
+
   useEffect(() => {
     if (goTo & !loading) {
       const timeout = setTimeout(() => {
         setGoto(false);
-        navigate('/user/account/dashboard');
-      }, 3000); // 10 seconds timeout
+        navigate('/user/account/purchases');
+      }, 3000); // 3 seconds timeout
       return () => clearTimeout(timeout);
     }
   }, [goTo, loading, navigate]);
 
+  const handleAnswerChange = (index, value) => {
+    setAnswers({
+      ...answers,
+      [`question_${index}`]: value,
+    });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let text = `malePhotoCapture == ${malePhotoCapture} `;
-    text += `===onlineModeling==${onlineModeling}`;
-    text += `===opinionOnNikhab==${opinionOnNikhab}`;
-    text += `===salatInRain==${salatInRain}`;
-    text += `===startingUniv==${startingUniv}`;
-    text += `===studyingAtUniversity==${studyingAtUniversity}`;
+    
+    // Build bio_details string with question-answer pairs
+    let text = '';
+    questions.forEach((question, index) => {
+      const answer = answers[`question_${index}`] || '';
+      text += `===question_${index}==${question}===answer_${index}==${answer}`;
+    });
 
     if (isHasBio) {
       text += `===bioInput==${bioInput}`;
@@ -71,7 +106,6 @@ function SendForm() {
       text += `===job==${formData.job}`;
       text += `===salary==${formData.salary}`;
       text += `===fatherProfession==${formData.fatherProfession}`;
-      text += `===motherProfession==${formData.motherProfession}`;
       text += `===motherProfession==${formData.motherProfession}`;
       text += `===familyStatus==${formData.familyStatus}`;
       text += `===siblingsDetails==${formData.siblingsDetails}`;
@@ -99,7 +133,7 @@ function SendForm() {
         getToken()?.token
       );
       if (response?.success) {
-        Toast.successToast('আপনার বায়োডাটা পাঠানো হয়েছে');
+        Toast.successToast('আপনার বায়োডাটা পাঠানো হয়েছে');
         navigate('/user/account/purchases');
       }
       setGoto(true);
@@ -110,69 +144,59 @@ function SendForm() {
       setLoading(false);
     }
   };
+
   const handleHasBio = () => {
     setIsHasBio(!isHasBio);
   };
+
+  if (fetchingQuestions) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingCircle />
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-screen-md p-6 mx-auto bg-white rounded-lg shadow-md">
       <h2
         className="mb-4 text-2xl font-semibold"
         style={{ color: Colors.titleText }}
       >
-        নিচের ফর্ম পুরন করে আপনার বায়োডাটা শেয়ার করুন
+        নিচের ফর্ম পুরন করে আপনার বায়োডাটা শেয়ার করুন
       </h2>
       <h4 className="mb-4 text-sm font-semibold text-red-800">
-        আপনি নিচে যে তথ্য দিবেন তা পাত্র/পাত্রীর সাথে শেয়ার করা হবে ইন শা
-        আল্লাহ| আপনার বায়োডাটার ব্যাপারে সে ফিডব্যাক দিলে আপনাকে মোবাইলে এস এম
-        এস করে জানিয়ে দেওয়া হবে এবং আপনি তা আপনার ড্যাশবোর্ড থেকে দেখতে পারবেন |
+        আপনি নিচে যে তথ্য দিবেন তা পাত্র/পাত্রীর সাথে শেয়ার করা হবে ইন শা
+        আল্লাহ| আপনার বায়োডাটার ব্যাপারে সে ফিডব্যাক দিলে আপনাকে মোবাইলে এস এম
+        এস করে জানিয়ে দেওয়া হবে এবং আপনি তা আপনার ড্যাশবোর্ড থেকে দেখতে পারবেন |
         সে পজেটিভ ফিডব্যাক দিলে বা পারমিশন দিলে আপনি ড্যাশবোর্ড থেকে বাকি
-        পেমেন্ট করে অভিভাবক এর সাথে যোগাযোগ এর তথ্য চূড়ান্তভাবে পাবেন, ইন শা
+        পেমেন্ট করে অভিভাবক এর সাথে যোগাযোগ এর তথ্য চূড়ান্তভাবে পাবেন, ইন শা
         আল্লাহ্‌
       </h4>
       <form onSubmit={handleSubmit}>
-        <Textarea
-          value={opinionOnNikhab}
-          setValue={setOpinionOnNikhab}
-          required={true}
-          title="মেয়েদের চোখ ঢাকা নিকাব পড়াকে অনেকে বাড়াবাড়ি মনে করে। ইসলাম তো সহজ, আপনি এব্যাপারে কি মনে করেন?"
-        />
-        <Textarea
-          value={salatInRain}
-          setValue={setSalatInRain}
-          required={true}
-          title="প্রচন্ড বৃষ্টি হচ্ছে, মসজিদ যদিও কাছে মোটামুটি। হয়ত ছাতাও আছে যাওয়ার। কিন্তু ইসলাম তো সহজ, এখানে তো রুখসত আছে। কিন্তু অনেক অতি উৎসাহী আছে যারা এসব ঝড়-বৃষ্টি উপেক্ষা করেও যায় মসজিদে। এরকম বাড়াবাড়ি যারা করে তাদের ব্যাপারে আপনার মন্তব্য কি??"
-        />
-        <Textarea
-          value={studyingAtUniversity}
-          setValue={setStudyingAtUniversity}
-          required={true}
-          title="ছেলেদের ইউনিভার্সিটিতে পড়াশুনা করার ব্যাপারে আপনার মতামত কি?"
-        />
-        <Textarea
-          value={malePhotoCapture}
-          setValue={setMalePhotoCapture}
-          required={true}
-          title="অনেক দ্বীনদার মেয়ে ভার্সিটিতে পড়াশুনা করতে চায় এজন্য তাদের দ্বিনি পরিবেশ খুঁজে|শুরুতে জেনেশুনে মেয়েদের জন্য ভার্সিটিতে পড়তে চাওয়ার বিষয়ে আপনি কি মনে করেন??"
-        />
-        <Textarea
-          value={onlineModeling}
-          setValue={setOnlineModeling}
-          required={true}
-          title="পর্দা করে অনলাইনে হিজাব নিকাবের ব্যাবসা তো হালাল।ভিডিও(মডেলিং) বানিয়ে তা দিয়ে একটা আউটসোর্সিং বা ব্যবসা করতে চাইলে আপনার থেকে কোনো হেল্প পেতে পারি? বা পারমিশন পেতে পারি?"
-        />
-        <Textarea
-          value={startingUniv}
-          setValue={setStartingUniv}
-          required={true}
-          title="অমুক তার ছেলেকে ভার্সিটিতে ভর্তি হতে দিতে চায় না কারন ইসলামী পরিবেশ পাবে না। এরকম বাড়াবাড়ির ব্যাপারে আপনার মতামত কি?"
-        />
+        {questions.length > 0 ? (
+          questions.map((question, index) => (
+            <Textarea
+              key={index}
+              value={answers[`question_${index}`] || ''}
+              setValue={(value) => handleAnswerChange(index, value)}
+              required={true}
+              title={`প্রশ্ন ${index + 1}: ${question}`}
+            />
+          ))
+        ) : (
+          <div className="text-center text-gray-500 mb-4">
+            <p>এই বায়োডাটার জন্য কোন প্রশ্ন সেট করা হয়নি।</p>
+          </div>
+        )}
+        
         <div
           className="mb-4 text-lg font-semibold"
           style={{ color: Colors.titleText }}
         >
           {' '}
           <input type="checkbox" onChange={handleHasBio} /> ইতিমধ্যে আপনার
-          বায়োডাটা লিঙ্ক রেডি আছে?{' '}
+          বায়োডাটা লিঙ্ক রেডি আছে?{' '}
         </div>
         {!isHasBio && (
           <SendMyBio formData={formData} setFormData={setFormData} />
@@ -183,7 +207,7 @@ function SendForm() {
             value={bioInput}
             setValue={setBioInput}
             required={true}
-            title="আপনার নিজের বায়োডাটা লিখুন অথবা বায়োডাটার লিঙ্ক শেয়ার করুন"
+            title="আপনার নিজের বায়োডাটা লিখুন অথবা বায়োডাটার লিঙ্ক শেয়ার করুন"
           />
         )}
 
@@ -195,7 +219,7 @@ function SendForm() {
               background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
             }}
           >
-            {loading ? <LoadingCircle /> : 'আমার বায়োডাটা শেয়ার করুন'}
+            {loading ? <LoadingCircle /> : 'আমার বায়োডাটা শেয়ার করুন'}
           </button>
         </div>
       </form>
