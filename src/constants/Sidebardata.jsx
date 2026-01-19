@@ -8,6 +8,7 @@ import {
 } from "react-icons/bi";
 
 import { BsFlag } from "react-icons/bs";
+import { FaQuestionCircle } from "react-icons/fa";
 
 import { FiSettings, FiLogOut } from "react-icons/fi";
 
@@ -27,8 +28,13 @@ const sidebarDetails = [
 		path: "/user/account/edit-biodata",
 	},
 	{
-		icon: (
-			<BiListCheck className="h-8 w-8 text-[12px] p-1 bg-gray-100 rounded-md " />
+		icon: (			<FaQuestionCircle className="h-8 w-8 text-[12px] p-1 bg-gray-100 rounded-md " />
+		),
+		title: "আমার প্রশ্ন সেট করুন",
+		path: "/user/account/bio-questions",
+	},
+	{
+		icon: (			<BiListCheck className="h-8 w-8 text-[12px] p-1 bg-gray-100 rounded-md " />
 		),
 		title: "পছন্দের তালিকা ",
 		path: "/user/account/likes",

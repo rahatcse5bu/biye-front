@@ -20,6 +20,7 @@ import Settings from '../pages/Settings/Settings';
 import PrivacyPolicy from '../pages/PrivacyPolicy/PrivacyPolicy';
 import TermsAndConditions from '../pages/TermsAndConditions/TermsAndConditions';
 import Instructions from '../pages/Instructions/Instructions';
+import BioQuestions from '../components/BioQuestions/BioQuestions';
 import Payments from '../pages/Payments/Payments';
 import RefundPolicy from '../pages/RefundPolicy/RefundPolicy';
 import Faq from '../pages/Faq/Faq';
@@ -194,6 +195,14 @@ const router = createBrowserRouter([
             element: (
               <PrivateRoute>
                 <DashBoard />
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: '/user/account/bio-questions',
+            element: (
+              <PrivateRoute>
+                <BioQuestions />
               </PrivateRoute>
             ),
           },
