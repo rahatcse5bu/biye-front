@@ -103,7 +103,32 @@ const PersonalInfoFilter = () => {
             id="lightMedium"
             label="উজ্জ্বল শ্যামলা"
             checked={complexion.includes('উজ্জ্বল শ্যামলা')}
-            onChange={(e)
+            onChange={(e) => handleComplexionChange('উজ্জ্বল শ্যামলা', e.target.checked)}
+          />
+          <CheckboxOption
+            id="fair"
+            label="ফর্সা"
+            checked={complexion.includes('ফর্সা')}
+            onChange={(e) => handleComplexionChange('ফর্সা', e.target.checked)}
+          />
+          <CheckboxOption
+            id="veryFair"
+            label="উজ্জ্বল ফর্সা"
+            checked={complexion.includes('উজ্জ্বল ফর্সা')}
+            onChange={(e) => handleComplexionChange('উজ্জ্বল ফর্সা', e.target.checked)}
+          />
+        </div>
+      </div>
+
+      <div>
+        <h3
+          style={{ color: Colors.primary800 }}
+          className="mt-4 mb-2 font-semibold text-center"
+        >
+          ফিকহ অনুসরন
+        </h3>
+        <div className="grid grid-cols-2">
+          <CheckboxOption
             id="hanafi"
             label="হানাফি"
             checked={fiqh.includes('হানাফি')}

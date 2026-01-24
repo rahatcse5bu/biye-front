@@ -147,14 +147,20 @@ const AddressFilter = () => {
         ? presentDistrictOptions.map((division) => division.value)
         : selectedPresentDistricts.map((division) => division.value);
 
+      // Combine division and district into permanent_address
+      const permanentAddressParts = [];
+      if (districts.length > 0 && !districts.includes('all')) {
+        permanentAddressParts.push(...districts);
+      } else if (divisions.length > 0 && !divisions.includes('all')) {
+        permanentAddressParts.push(...divisions);
+      }
+
       return {
         ...prev,
-        division: divisions.join(','),
-        zilla: districts.join(','),
-        presentDivision: selectedPresentDivisions
-          .map((division) => division.value)
-          .join(','),
-        presentDistrict: presentDistrict.join(','),
+        permanent_address: permanentAddressParts.length > 0 ? permanentAddressParts.join(',') : undefined,
+        current_upzilla: presentDistrict.length > 0 && !presentDistrict.includes('All Districts') 
+          ? presentDistrict.join(',') 
+          : undefined,
       };
     });
   }, [
