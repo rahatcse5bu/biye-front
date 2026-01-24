@@ -1,26 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import CustomAccordion from '../CustomAccordion/CustomAccordion';
 import { Colors } from '../../constants/colors';
 import CustomCheckboxOption from '../CustomCheckBoxOption/CustomCheckBoxOption';
+import BioContext from '../../contexts/BioContext';
 
 const EducationFilter = () => {
+  const { setFilterFields } = useContext(BioContext);
   const [openEducationFilter, setOpenEducationFilter] = useState(false);
-  const [checkboxState, setCheckboxState] = useState({
-    general: false,
-    qaumi: false,
-    alia: false,
-    hafez: false,
-    maulana: false,
-    mufti: false,
-    mufassir: false,
-    adib: false,
-  });
+  const [educationMedium, setEducationMedium] = useState([]);
+  const [deeniEdu, setDeeniEdu] = useState([]);
 
-  const handleCheckboxChange = (e) => {
-    const { id, checked } = e.target;
-    setCheckboxState((prevState) => ({
-      ...prevState,
-      [id]: checked,
+  const handleEducationMediumChange = (value, checked) => {
+    const updated = checked
+      ? [...educationMedium, value]
+      : educationMedium.filter((v) => v !== value);
+    
+    setEducationMedium(updated);
+    setFilterFields((prev) => ({
+      ...prev,
+      education_medium: updated.length > 0 ? updated.join(',') : undefined,
+    }));
+  };
+
+  const handleDeeniEduChange = (value, checked) => {
+    const updated = checked
+      ? [...deeniEdu, value]
+      : deeniEdu.filter((v) => v !== value);
+    
+    setDeeniEdu(updated);
+    setFilterFields((prev) => ({
+      ...prev,
+      deeni_edu: updated.length > 0 ? updated.join(',') : undefined,
     }));
   };
 
@@ -42,20 +52,20 @@ const EducationFilter = () => {
           <CustomCheckboxOption
             id="general"
             label="জেনারেল"
-            checked={checkboxState.general}
-            onChange={handleCheckboxChange}
+            checked={educationMedium.includes('জেনারেল')}
+            onChange={(e) => handleEducationMediumChange('জেনারেল', e.target.checked)}
           />
           <CustomCheckboxOption
             id="qaumi"
             label="কওমী"
-            checked={checkboxState.qaumi}
-            onChange={handleCheckboxChange}
+            checked={educationMedium.includes('কওমী')}
+            onChange={(e) => handleEducationMediumChange('কওমী', e.target.checked)}
           />
           <CustomCheckboxOption
             id="alia"
-            label="আলিয়া"
-            checked={checkboxState.alia}
-            onChange={handleCheckboxChange}
+            label="আলিয়া"
+            checked={educationMedium.includes('আলিয়া')}
+            onChange={(e) => handleEducationMediumChange('আলিয়া', e.target.checked)}
           />
         </div>
 
@@ -70,32 +80,38 @@ const EducationFilter = () => {
           <CustomCheckboxOption
             id="hafez"
             label="হাফেজ"
-            checked={checkboxState.hafez}
-            onChange={handleCheckboxChange}
+            checked={deeniEdu.includes('হাফেজ')}
+            onChange={(e) => handleDeeniEduChange('হাফেজ', e.target.checked)}
           />
           <CustomCheckboxOption
             id="maulana"
             label="মাওলানা"
-            checked={checkboxState.maulana}
-            onChange={handleCheckboxChange}
+            checked={deeniEdu.includes('মাওলানা')}
+            onChange={(e) => handleDeeniEduChange('মাওলানা', e.target.checked)}
           />
           <CustomCheckboxOption
             id="mufti"
             label="মুফতি"
-            checked={checkboxState.mufti}
-            onChange={handleCheckboxChange}
+            checked={deeniEdu.includes('মুফতি')}
+            onChange={(e) => handleDeeniEduChange('মুফতি', e.target.checked)}
           />
           <CustomCheckboxOption
             id="mufassir"
             label="মুফাসসির"
-            checked={checkboxState.mufassir}
-            onChange={handleCheckboxChange}
+            checked={deeniEdu.includes('মুফাসসির')}
+            onChange={(e) => handleDeeniEduChange('মুফাসসির', e.target.checked)}
           />
           <CustomCheckboxOption
-            id="adib"
-            label="আদিব"
-            checked={checkboxState.adib}
-            onChange={handleCheckboxChange}
+            id="alim"
+            label="আলিম"
+            checked={deeniEdu.includes('আলিম')}
+            onChange={(e) => handleDeeniEduChange('আলিম', e.target.checked)}
+          />
+          <CustomCheckboxOption
+            id="fazil"
+            label="ফাজিল"
+            checked={deeniEdu.includes('ফাজিল')}
+            onChange={(e) => handleDeeniEduChange('ফাজিল', e.target.checked)}
           />
         </div>
       </div>

@@ -1,31 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import CustomAccordion from '../CustomAccordion/CustomAccordion';
 import { Colors } from '../../constants/colors';
 import CustomCheckboxOption from '../CustomCheckBoxOption/CustomCheckBoxOption';
+import BioContext from '../../contexts/BioContext';
 
 const OccupationFilter = () => {
+  const { setFilterFields } = useContext(BioContext);
   const [occupationFilterOpen, setOccupationFilterOPen] = useState(false);
-  const [checkboxState, setCheckboxState] = useState({
-    imam: false,
-    madrashaTeacher: false,
-    teacher: false,
-    doctor: false,
-    engineer: false,
-    business: false,
-    govtJob: false,
-    privateJob: false,
-    freelancer: false,
-    student: false,
-    expatriate: false,
-    others: false,
-    noProfession: false,
-  });
+  const [occupation, setOccupation] = useState([]);
 
-  const handleCheckboxChange = (e) => {
-    const { id, checked } = e.target;
-    setCheckboxState((prevState) => ({
-      ...prevState,
-      [id]: checked,
+  const handleOccupationChange = (value, checked) => {
+    const updated = checked
+      ? [...occupation, value]
+      : occupation.filter((v) => v !== value);
+    
+    setOccupation(updated);
+    setFilterFields((prev) => ({
+      ...prev,
+      occupation: updated.length > 0 ? updated.join(',') : undefined,
     }));
   };
 
@@ -48,87 +40,81 @@ const OccupationFilter = () => {
           <CustomCheckboxOption
             id="imam"
             label="ইমাম"
-            checked={checkboxState.imam}
-            onChange={handleCheckboxChange}
+            checked={occupation.includes('ইমাম')}
+            onChange={(e) => handleOccupationChange('ইমাম', e.target.checked)}
           />
           <CustomCheckboxOption
             id="madrashaTeacher"
             label=" মাদ্রাসা শিক্ষক"
-            checked={checkboxState.madrashaTeacher}
-            onChange={handleCheckboxChange}
-          />
-          <CustomCheckboxOption
-            id="madrashaTeacher"
-            label=" মাদ্রাসা শিক্ষক"
-            checked={checkboxState.madrashaTeacher}
-            onChange={handleCheckboxChange}
+            checked={occupation.includes('মাদ্রাসা শিক্ষক')}
+            onChange={(e) => handleOccupationChange('মাদ্রাসা শিক্ষক', e.target.checked)}
           />
           <CustomCheckboxOption
             id="teacher"
             label="শিক্ষক"
-            checked={checkboxState.teacher}
-            onChange={handleCheckboxChange}
+            checked={occupation.includes('শিক্ষক')}
+            onChange={(e) => handleOccupationChange('শিক্ষক', e.target.checked)}
           />
           <CustomCheckboxOption
             id="doctor"
             label="ডাক্তার"
-            checked={checkboxState.doctor}
-            onChange={handleCheckboxChange}
+            checked={occupation.includes('ডাক্তার')}
+            onChange={(e) => handleOccupationChange('ডাক্তার', e.target.checked)}
           />
           <CustomCheckboxOption
             id="engineer"
             label="ইঞ্জিনিয়ার"
-            checked={checkboxState.engineer}
-            onChange={handleCheckboxChange}
+            checked={occupation.includes('ইঞ্জিনিয়ার')}
+            onChange={(e) => handleOccupationChange('ইঞ্জিনিয়ার', e.target.checked)}
           />
           <CustomCheckboxOption
             id="business"
             label="ব্যবসায়ী"
-            checked={checkboxState.business}
-            onChange={handleCheckboxChange}
+            checked={occupation.includes('ব্যবসায়ী')}
+            onChange={(e) => handleOccupationChange('ব্যবসায়ী', e.target.checked)}
           />
           <CustomCheckboxOption
             id="govtJob"
             label="সরকারি চাকুরি"
-            checked={checkboxState.govtJob}
-            onChange={handleCheckboxChange}
+            checked={occupation.includes('সরকারি চাকুরি')}
+            onChange={(e) => handleOccupationChange('সরকারি চাকুরি', e.target.checked)}
           />
           <CustomCheckboxOption
             id="privateJob"
             label="বেসরকারি চাকুরি"
-            checked={checkboxState.privateJob}
-            onChange={handleCheckboxChange}
+            checked={occupation.includes('বেসরকারি চাকুরি')}
+            onChange={(e) => handleOccupationChange('বেসরকারি চাকুরি', e.target.checked)}
           />
           <CustomCheckboxOption
             id="freelancer"
             label="ফ্রিল্যাস্নায়ার"
-            checked={checkboxState.freelancer}
-            onChange={handleCheckboxChange}
+            checked={occupation.includes('ফ্রিল্যাস্নায়ার')}
+            onChange={(e) => handleOccupationChange('ফ্রিল্যাস্নায়ার', e.target.checked)}
           />
           {/* student, expatriate ,others ,noProfession*/}
           <CustomCheckboxOption
             id="student"
             label="শিক্ষার্থী"
-            checked={checkboxState.student}
-            onChange={handleCheckboxChange}
+            checked={occupation.includes('শিক্ষার্থী')}
+            onChange={(e) => handleOccupationChange('শিক্ষার্থী', e.target.checked)}
           />
           <CustomCheckboxOption
             id="expatriate"
             label="প্রবাসী"
-            checked={checkboxState.expatriate}
-            onChange={handleCheckboxChange}
+            checked={occupation.includes('প্রবাসী')}
+            onChange={(e) => handleOccupationChange('প্রবাসী', e.target.checked)}
           />
           <CustomCheckboxOption
             id="others"
             label="অন্যান্য"
-            checked={checkboxState.others}
-            onChange={handleCheckboxChange}
+            checked={occupation.includes('অন্যান্য')}
+            onChange={(e) => handleOccupationChange('অন্যান্য', e.target.checked)}
           />
           <CustomCheckboxOption
             id="noProfession"
             label="পেশা নেই"
-            checked={checkboxState.noProfession}
-            onChange={handleCheckboxChange}
+            checked={occupation.includes('পেশা নেই')}
+            onChange={(e) => handleOccupationChange('পেশা নেই', e.target.checked)}
           />
         </div>
       </div>
