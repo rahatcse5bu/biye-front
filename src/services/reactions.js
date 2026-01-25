@@ -1,4 +1,4 @@
-import axios from "../utils/axios.config";
+import axios from "../utils/axios";
 
 export const ReactionsServices = {
   // Toggle reaction
