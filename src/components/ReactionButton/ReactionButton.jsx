@@ -1,20 +1,17 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useContext } from 'react';
-import { FaHeart, FaRegHeart, FaSadTear, FaAngry, FaGrinStars } from 'react-icons/fa';
-import { RiProhibitedFill, RiProhibitedLine } from 'react-icons/ri';
-import { MdOutlineThumbUp } from 'react-icons/md';
 import { ReactionsServices } from '../../services/reactions';
 import { getToken } from '../../utils/cookies';
 import { Toast } from '../../utils/toast';
 import UserContext from '../../contexts/UserContext';
 
-const reactionIcons = {
-  like: { filled: MdOutlineThumbUp, outlined: MdOutlineThumbUp, color: '#0D7377', label: 'Like' },
-  dislike: { filled: RiProhibitedFill, outlined: RiProhibitedLine, color: '#6B7280', label: 'Dislike' },
-  love: { filled: FaHeart, outlined: FaRegHeart, color: '#E85D75', label: 'Love' },
-  sad: { filled: FaSadTear, outlined: FaSadTear, color: '#3B82F6', label: 'Sad' },
-  angry: { filled: FaAngry, outlined: FaAngry, color: '#EF4444', label: 'Angry' },
-  wow: { filled: FaGrinStars, outlined: FaGrinStars, color: '#F59E0B', label: 'Wow' },
+const reactionEmojis = {
+  like: { emoji: '👍', color: '#0D7377', label: 'Like' },
+  dislike: { emoji: '👎', color: '#6B7280', label: 'Dislike' },
+  love: { emoji: '❤️', color: '#E85D75', label: 'Love' },
+  sad: { emoji: '😢', color: '#F3A712', label: 'Sad' },
+  angry: { emoji: '😠', color: '#F4803C', label: 'Angry' },
+  wow: { emoji: '😮', color: '#F3C907', label: 'Wow' },
 };
 
 const ReactionButton = ({ bioUserId, initialCounts = {} }) => {
@@ -141,15 +138,14 @@ const ReactionButton = ({ bioUserId, initialCounts = {} }) => {
         >
           {currentReaction ? (
             <>
-              {(() => {
-                const Icon = reactionIcons[currentReaction].filled;
-                return <Icon className="w-5 h-5" style={{ color: reactionIcons[currentReaction].color }} />;
-              })()}
-              <span className="text-sm font-medium">{reactionIcons[currentReaction].label}</span>
+              <span style={{ fontSize: '20px' }}>{reactionEmojis[currentReaction].emoji}</span>
+              <span className="text-sm font-medium" style={{ color: reactionEmojis[currentReaction].color }}>
+                {reactionEmojis[currentReaction].label}
+              </span>
             </>
           ) : (
             <>
-              <MdOutlineThumbUp className="w-5 h-5 text-gray-600" />
+              <span style={{ fontSize: '20px' }}>👍</span>
               <span className="text-sm text-gray-600">React</span>
             </>
           )}
@@ -159,10 +155,9 @@ const ReactionButton = ({ bioUserId, initialCounts = {} }) => {
         {getTotalReactions() > 0 && (
           <div className="flex items-center gap-1">
             {topReactions.map(([type, count]) => {
-              const Icon = reactionIcons[type].filled;
               return (
                 <div key={type} className="flex items-center gap-0.5">
-                  <Icon className="w-4 h-4" style={{ color: reactionIcons[type].color }} />
+                  <span style={{ fontSize: '16px' }}>{reactionEmojis[type].emoji}</span>
                   <span className="text-xs text-gray-600">{count}</span>
                 </div>
               );
@@ -184,18 +179,18 @@ const ReactionButton = ({ bioUserId, initialCounts = {} }) => {
             onClick={() => setShowReactions(false)}
           />
           <div className="absolute bottom-full left-0 mb-2 z-20 bg-white rounded-full shadow-lg border border-gray-200 p-2 flex gap-2">
-            {Object.entries(reactionIcons).map(([type, { filled: Icon, color, label }]) => (
+            {Object.entries(reactionEmojis).map(([type, { emoji, color, label }]) => (
               <button
                 key={type}
                 onClick={() => handleReactionClick(type)}
                 className={`
-                  p-2 rounded-full transition-all duration-200 hover:scale-125 hover:bg-gray-100
+                  relative p-2 rounded-full transition-all duration-200 hover:scale-125 hover:bg-gray-100
                   ${currentReaction === type ? 'bg-gray-100 ring-2' : ''}
                 `}
                 style={currentReaction === type ? { ringColor: color } : {}}
                 title={label}
               >
-                <Icon className="w-6 h-6" style={{ color }} />
+                <span style={{ fontSize: '24px' }}>{emoji}</span>
                 {reactionCounts[type] > 0 && (
                   <span
                     className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center"
