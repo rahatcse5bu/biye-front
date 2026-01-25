@@ -70,12 +70,12 @@ const ReactionButton = ({ bioUserId, initialCounts = {} }) => {
       return;
     }
 
-    try {
-      // Optimistically update UI
-      const previousReaction = currentReaction;
-      const previousCounts = { ...reactionCounts };
+    // Store previous state for rollback on error
+    const previousReaction = currentReaction;
+    const previousCounts = { ...reactionCounts };
 
-      // Update counts immediately
+    try {
+      // Update counts immediately (optimistic update)
       if (previousReaction === reactionType) {
         // Removing reaction
         setCurrentReaction(null);
@@ -88,7 +88,9 @@ const ReactionButton = ({ bioUserId, initialCounts = {} }) => {
         setCurrentReaction(reactionType);
         setReactionCounts((prev) => ({
           ...prev,
-          ...(previousReaction && { [previousReaction]: Math.max(0, prev[previousReaction] - 1) }),
+          ...(previousReaction && {
+            [previousReaction]: Math.max(0, prev[previousReaction] - 1),
+          }),
           [reactionType]: prev[reactionType] + 1,
         }));
       }
@@ -103,9 +105,12 @@ const ReactionButton = ({ bioUserId, initialCounts = {} }) => {
       );
 
       if (response?.success) {
-        Toast.successToast(response.message || 'আপনার রিয়াকশন যুক্ত করা হয়েছে');
+        Toast.successToast(
+          response.message || 'আপনার রিয়াকশন যুক্ত করা হয়েছে'
+        );
         // Refresh counts from server
-        const countsResponse = await ReactionsServices.getReactionCounts(bioUserId);
+        const countsResponse =
+          await ReactionsServices.getReactionCounts(bioUserId);
         if (countsResponse?.data) {
           setReactionCounts(countsResponse.data);
         }
@@ -124,7 +129,7 @@ const ReactionButton = ({ bioUserId, initialCounts = {} }) => {
   };
 
   const topReactions = Object.entries(reactionCounts)
-    .filter(([_, count]) => count > 0)
+    .filter(([, count]) => count > 0)
     .sort(([, a], [, b]) => b - a)
     .slice(0, 3);
 
@@ -138,8 +143,13 @@ const ReactionButton = ({ bioUserId, initialCounts = {} }) => {
         >
           {currentReaction ? (
             <>
-              <span style={{ fontSize: '20px' }}>{reactionEmojis[currentReaction].emoji}</span>
-              <span className="text-sm font-medium" style={{ color: reactionEmojis[currentReaction].color }}>
+              <span style={{ fontSize: '20px' }}>
+                {reactionEmojis[currentReaction].emoji}
+              </span>
+              <span
+                className="text-sm font-medium"
+                style={{ color: reactionEmojis[currentReaction].color }}
+              >
                 {reactionEmojis[currentReaction].label}
               </span>
             </>
@@ -157,7 +167,9 @@ const ReactionButton = ({ bioUserId, initialCounts = {} }) => {
             {topReactions.map(([type, count]) => {
               return (
                 <div key={type} className="flex items-center gap-0.5">
-                  <span style={{ fontSize: '16px' }}>{reactionEmojis[type].emoji}</span>
+                  <span style={{ fontSize: '16px' }}>
+                    {reactionEmojis[type].emoji}
+                  </span>
                   <span className="text-xs text-gray-600">{count}</span>
                 </div>
               );
@@ -175,31 +187,35 @@ const ReactionButton = ({ bioUserId, initialCounts = {} }) => {
       {showReactions && (
         <>
           <div
+            role="button"
+            tabIndex={0}
             className="fixed inset-0 z-10"
             onClick={() => setShowReactions(false)}
+            onKeyDown={(e) => e.key === 'Escape' && setShowReactions(false)}
+            aria-label="Close reactions"
           />
           <div className="absolute bottom-full left-0 mb-2 z-20 bg-white rounded-full shadow-lg border border-gray-200 p-2 flex gap-2">
-            {Object.entries(reactionEmojis).map(([type, { emoji, color, label }]) => (
-              <button
-                key={type}
-                onClick={() => handleReactionClick(type)}
-                className={`
+            {Object.entries(reactionEmojis).map(
+              ([type, { emoji, color, label }]) => (
+                <button
+                  key={type}
+                  onClick={() => handleReactionClick(type)}
+                  className={`
                   relative p-2 rounded-full transition-all duration-200 hover:scale-125 hover:bg-gray-100
                   ${currentReaction === type ? 'bg-gray-100 ring-2' : ''}
                 `}
-                style={currentReaction === type ? { ringColor: color } : {}}
-                title={label}
-              >
-                <span style={{ fontSize: '24px' }}>{emoji}</span>
-                {reactionCounts[type] > 0 && (
-                  <span
-                    className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center"
-                  >
-                    {reactionCounts[type]}
-                  </span>
-                )}
-              </button>
-            ))}
+                  style={currentReaction === type ? { ringColor: color } : {}}
+                  title={label}
+                >
+                  <span style={{ fontSize: '24px' }}>{emoji}</span>
+                  {reactionCounts[type] > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                      {reactionCounts[type]}
+                    </span>
+                  )}
+                </button>
+              )
+            )}
           </div>
         </>
       )}

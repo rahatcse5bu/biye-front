@@ -1,10 +1,10 @@
-import axios from "../utils/axios";
+import axios from '../utils/axios';
 
 export const ReactionsServices = {
   // Toggle reaction
   toggleReaction: async (token, bioUser, reactionType) => {
     const { data } = await axios.post(
-      "/reactions/toggle",
+      '/reactions/toggle',
       {
         bio_user: bioUser,
         reaction_type: reactionType,
@@ -32,7 +32,7 @@ export const ReactionsServices = {
   getMyReactionsList: async (token, reactionType = null) => {
     const url = reactionType
       ? `/reactions/my-reactions?reaction_type=${reactionType}`
-      : "/reactions/my-reactions";
+      : '/reactions/my-reactions';
     const { data } = await axios.get(url, {
       headers: {
         authorization: token,
@@ -45,7 +45,7 @@ export const ReactionsServices = {
   getReactionsToMe: async (token, reactionType = null) => {
     const url = reactionType
       ? `/reactions/reactions-to-me?reaction_type=${reactionType}`
-      : "/reactions/reactions-to-me";
+      : '/reactions/reactions-to-me';
     const { data } = await axios.get(url, {
       headers: {
         authorization: token,
@@ -62,7 +62,7 @@ export const ReactionsServices = {
 
   // Get all reactions (admin)
   getAllReactions: async (token) => {
-    const { data } = await axios.get("/reactions/all", {
+    const { data } = await axios.get('/reactions/all', {
       headers: {
         authorization: token,
       },
