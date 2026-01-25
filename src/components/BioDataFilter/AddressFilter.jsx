@@ -240,11 +240,33 @@ const AddressFilter = () => {
       const currentAddressParts = [];
       if (presentUpazilas.length > 0) {
         currentAddressParts.push(...presentUpazilas);
-      } else if (presentDistrict.length > 0 && !presentDistrict.includes('All Districts')) {
+      } else if (
+        presentDistrict.length > 0 &&
+        !presentDistrict.includes('All Districts')
+      ) {
         currentAddressParts.push(...presentDistrict);
       }
 
       return {
+        ...prev,
+        permanent_address:
+          permanentAddressParts.length > 0 ? permanentAddressParts : undefined,
+        current_address:
+          currentAddressParts.length > 0 ? currentAddressParts : undefined,
+      };
+    });
+  }, [
+    selectedDivisions,
+    selectedDistricts,
+    selectedUpazilas,
+    selectedPresentDivisions,
+    selectedPresentDistricts,
+    selectedPresentUpazilas,
+  ]);
+
+  const handleDivisionChange = (selectedOptions, type) => {
+    if (type === 'permanent') {
+      setSelectedDivisions(selectedOptions);
       setSelectedDistricts([]);
       setSelectedUpazilas([]);
       if (selectedOptions.some((option) => option.value === 'All Divisions')) {
@@ -276,24 +298,7 @@ const AddressFilter = () => {
       setSelectedUpazilas([]);
     } else if (type === 'present') {
       setSelectedPresentDistricts(selectedOptions);
-      setSelectedPresentUpazilas([]);f (selectedOptions.some((option) => option.value === 'All Divisions')) {
-        setSelectedDistricts([
-          {
-            value: 'All Districts',
-            label: 'All Districts',
-          },
-        ]);
-      }
-    } else if (type === 'present') {
-      setSelectedPresentDivisions(selectedOptions);
-      if (selectedOptions.some((option) => option.value === 'All Divisions')) {
-        setSelectedPresentDistricts([
-          {
-            value: 'All Districts',
-            label: 'All Districts',
-          },
-        ]);
-      }
+      setSelectedPresentUpazilas([]);
     }
   };
 
@@ -329,7 +334,21 @@ const AddressFilter = () => {
         <div>
           <p className="my-2 font-semibold text-left">স্থায়ী ঠিকানা</p>
           <div className="mx-auto pb-3">
-            <Select(selectedOptions) =>
+            <Select
+              options={divisionOptions}
+              onChange={(selectedOptions) =>
+                handleDivisionChange(selectedOptions, 'permanent')
+              }
+              value={selectedDivisions}
+              placeholder="Select Division(s)"
+              isMulti
+              styles={customStyles}
+              isSearchable
+            />
+            <br />
+            <Select
+              options={districtOptions}
+              onChange={(selectedOptions) =>
                 handleDistrictChange(selectedOptions, 'permanent')
               }
               value={selectedDistricts}
@@ -347,34 +366,7 @@ const AddressFilter = () => {
               isMulti
               styles={customStyles}
               isSearchable
-              isDisabled={selectedDistricts.length === 0}tedDivisions}
-              placeholder="Select Division(s)"
-              isMulti
-              styles={customStyles}
-              isSearchable
-            />
-            <br />
-            <Select
-              options={districtOptions}
-              onChange={(selectedOptions) =>
-                handleDistrictChange(selectedOptions, 'present')
-              }
-              value={selectedPresentDistricts}
-              placeholder="Select District(s)"
-              isMulti
-              styles={customStyles}
-              isSearchable
-            />
-            <br />
-            <Select
-              options={presentUpazilaOptions}
-              onChange={setSelectedPresentUpazilas}
-              value={selectedPresentUpazilas}
-              placeholder="Select Upazila(s)"
-              isMulti
-              styles={customStyles}
-              isSearchable
-              isDisabled={selectedPresentDistricts.length === 0}
+              isDisabled={selectedDistricts.length === 0}
             />
           </div>
         </div>
@@ -396,12 +388,25 @@ const AddressFilter = () => {
             <br />
             <Select
               options={presentDistrictOptions}
-              onChange={setSelectedPresentDistricts}
+              onChange={(selectedOptions) =>
+                handleDistrictChange(selectedOptions, 'present')
+              }
               value={selectedPresentDistricts}
               placeholder="Select District(s)"
               isMulti
               styles={customStyles}
               isSearchable
+            />
+            <br />
+            <Select
+              options={presentUpazilaOptions}
+              onChange={setSelectedPresentUpazilas}
+              value={selectedPresentUpazilas}
+              placeholder="Select Upazila(s)"
+              isMulti
+              styles={customStyles}
+              isSearchable
+              isDisabled={selectedPresentDistricts.length === 0}
             />
           </div>
         </div>
