@@ -26,6 +26,7 @@ import RefundPolicy from '../pages/RefundPolicy/RefundPolicy';
 import Faq from '../pages/Faq/Faq';
 import ContactUs from '../pages/ContactUs/ContactUs';
 import BioDisLikes from '../pages/BioDisLIkes/BioDisLikes';
+import MyReactions from '../pages/MyReactions/MyReactions';
 import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
 import AfterPay from '../pages/AfterPay/AfterPay';
 import PayFail from '../pages/PayFail/PayFail';
@@ -219,6 +220,14 @@ const router = createBrowserRouter([
             element: (
               <PrivateRoute>
                 <BioLikes />
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: '/user/account/reactions',
+            element: (
+              <PrivateRoute>
+                <MyReactions />
               </PrivateRoute>
             ),
           },

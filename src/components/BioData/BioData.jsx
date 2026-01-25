@@ -8,168 +8,24 @@ import {
 } from '../../utils/date';
 import { useNavigate } from 'react-router-dom';
 import { ScrollToTop } from '../../constants/ScrolltoTop';
-import { FaEye, FaHeart, FaRegHeart } from 'react-icons/fa';
-import { LikesServices } from '../../services/favorites';
-import { getToken } from '../../utils/cookies';
-import { Toast } from '../../utils/toast';
-import { useQuery } from '@tanstack/react-query';
-import { useContext } from 'react';
-import UserContext from '../../contexts/UserContext';
-import { DisLikesServices } from '../../services/unfavorites';
-import { RiProhibitedFill, RiProhibitedLine } from 'react-icons/ri';
+import { FaEye } from 'react-icons/fa';
 import { convertHeightToBengali } from '../../utils/height';
 import { GeneralInfoServices } from '../../services/generalInfo';
-import { useState, useEffect } from 'react';
+import ReactionButton from '../ReactionButton/ReactionButton';
 
 const BioData = ({ biodata }) => {
-  const [likes, setLikes] = useState(false);
-  const [count, setCount] = useState(false);
-  const [disLikes, setDisLikes] = useState(false);
-  const [countDisLike, setDisLikesCount] = useState(false);
   const navigate = useNavigate();
-  const { userInfo } = useContext(UserContext);
-
-  const { data: checkLikes } = useQuery({
-    queryKey: [
-      'check-likes',
-      biodata?.user,
-      userInfo?.data?._id,
-      getToken()?.token,
-    ],
-    queryFn: async () => {
-      return await LikesServices.checkLikes(biodata?.user, getToken()?.token);
-    },
-    retry: false,
-  });
-  const { data: checkDisLikes } = useQuery({
-    queryKey: [
-      'check-dislikes',
-      biodata?.user,
-      userInfo?.data?._id,
-      getToken()?.token,
-    ],
-    queryFn: async () => {
-      return await DisLikesServices.checkDisLikes(
-        biodata?.user,
-        getToken()?.token
-      );
-    },
-    retry: false,
-  });
-
-  useEffect(() => {
-    if (checkLikes) {
-      setLikes(checkLikes?.data);
-    }
-  }, [checkLikes]);
-  useEffect(() => {
-    if (checkDisLikes) {
-      setDisLikes(checkDisLikes?.data);
-    }
-  }, [checkDisLikes]);
-
-  useEffect(() => {
-    if (biodata) {
-      setCount(biodata?.likes_count);
-    }
-  }, [biodata]);
-  useEffect(() => {
-    if (biodata) {
-      setDisLikesCount(biodata?.dislikes_count);
-    }
-  }, [biodata]);
 
   const bioDataHandler = async () => {
-    // update watch count
     if (biodata?._id) {
       try {
         await GeneralInfoServices.updateWatchOfBioData(biodata?._id);
-        // console.log("watch-response", response);
       } catch (error) {
         console.error('Error incrementing view count', error);
       }
     }
-    // navigate to biodata page
     navigate(`/biodata/${biodata?.user_id}`);
   };
-
-  // ? FOR GIVING like REACTION
-  const likeButtonHandler = async () => {
-    if (!userInfo?.data?._id || !getToken()?.token) {
-      Toast.errorToast('Please,Login First');
-      return;
-    }
-
-    if (!biodata?.user) {
-      return;
-    }
-
-    if (likes) {
-      setCount((prev) => prev - 1);
-    }
-
-    if (!likes) {
-      setCount((prev) => prev + 1);
-    }
-
-    try {
-      setLikes((prev) => !prev);
-      const data = await LikesServices.createLikes(
-        { bio_user: biodata?.user },
-        getToken().token
-      );
-      if (data?.success) {
-        Toast.successToast('আপনার রিয়াকশন যুক্ত করা হয়েছে');
-      }
-      // console.log("likes~~", data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  // ? FOR GIVING dis-like REACTION
-  const DisLikeButtonHandler = async () => {
-    if (!userInfo?.data?._id || !getToken().token) {
-      Toast.errorToast('Please,Login First');
-      return;
-    }
-
-    if (!biodata?.user) {
-      return;
-    }
-
-    if (disLikes) {
-      setDisLikesCount((prev) => prev - 1);
-    }
-
-    if (!disLikes) {
-      setDisLikesCount((prev) => prev + 1);
-    }
-
-    try {
-      setDisLikes((prev) => !prev);
-
-      const data = await DisLikesServices.createDisLikes(
-        { bio_user: biodata?.user },
-        getToken().token
-      );
-      console.log('dislikes~~', data);
-      if (data?.success) {
-        Toast.successToast('আপনার রিয়াকশন যুক্ত করা হয়েছে');
-      }
-      // console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // console.log("like count~", data);
-  // console.log("dislikes~", userDisLikesData);
-
-  // console.log(
-  //   'biodata?.date_of_birth',
-  //   biodata?.date_of_birth,
-  //   formatDateAndCalculateAge(biodata?.date_of_birth)?.age
-  // );
 
   return (
     <div className="my-5 min-w-[280px] relative hover:shadow-2xl transition-all  duration-300 ease-in rounded-md border-2">
@@ -189,7 +45,7 @@ const BioData = ({ biodata }) => {
           }
           alt=""
         />
-        <h4 className="my-2"> বায়োডাটা নং </h4>
+        <h4 className="my-2"> বায়োডাটা নং </h4>
         <h3>
           {biodata?.gender === 'মহিলা' ? 'PNCF-' : 'PNCM-'}
           {biodata?.user_id}
@@ -199,27 +55,6 @@ const BioData = ({ biodata }) => {
           <FaEye className="w-6 h-6 mr-2" />
           {biodata?.views_count}
         </div>
-        {/*dislikes icons */}
-        <button
-          onClick={DisLikeButtonHandler}
-          disabled={likes}
-          className="flex absolute disabled:cursor-not-allowed cursor-pointer top-2  right-2"
-        >
-          {disLikes ? <RiProhibitedFill /> : <RiProhibitedLine />}
-        </button>
-        {/* like icons */}
-        <button
-          disabled={disLikes}
-          onClick={likeButtonHandler}
-          className=" absolute flex items-center disabled:cursor-not-allowed bottom-2 left-2 cursor-pointer"
-        >
-          {likes ? (
-            <FaHeart className="w-6 h-6 " />
-          ) : (
-            <FaRegHeart className="w-6 h-6 text-white" />
-          )}
-          {count > 0 && <span className="ml-1 ">{count}</span>}
-        </button>
       </div>
       <div className="mx-2 mt-4">
         <table className="min-w-full divide-y divide-gray-200 border-0 border-gray-300">
@@ -262,6 +97,18 @@ const BioData = ({ biodata }) => {
           </tbody>
         </table>
       </div>
+      
+      {/* Reaction Buttons */}
+      <div className="mx-2 mb-4 flex justify-center">
+        <ReactionButton 
+          bioUserId={biodata?.user} 
+          initialCounts={{
+            like: biodata?.likes_count || 0,
+            dislike: biodata?.dislikes_count || 0,
+          }}
+        />
+      </div>
+
       <div className="my-4">
         <Button
           onClick={bioDataHandler}
@@ -270,7 +117,7 @@ const BioData = ({ biodata }) => {
             background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
           }}
         >
-          সম্পূর্ন বায়োডাটা
+          সম্পূর্ন বায়োডাটা
         </Button>
       </div>
     </div>

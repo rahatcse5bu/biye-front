@@ -7,7 +7,7 @@ import {
 	BiSolidAddToQueue,
 } from "react-icons/bi";
 
-import { BsFlag } from "react-icons/bs";
+import { BsFlag, BsEmojiSmile } from "react-icons/bs";
 import { FaQuestionCircle } from "react-icons/fa";
 
 import { FiSettings, FiLogOut } from "react-icons/fi";
@@ -32,6 +32,13 @@ const sidebarDetails = [
 		),
 		title: "আমার প্রশ্ন সেট করুন",
 		path: "/user/account/bio-questions",
+	},
+	{
+		icon: (
+			<BsEmojiSmile className="h-8 w-8 text-[12px] p-1 bg-gray-100 rounded-md " />
+		),
+		title: "আমার রিঅ্যাকশনসমূহ",
+		path: "/user/account/reactions",
 	},
 	{
 		icon: (			<BiListCheck className="h-8 w-8 text-[12px] p-1 bg-gray-100 rounded-md " />

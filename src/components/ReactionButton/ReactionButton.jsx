@@ -1,0 +1,215 @@
+/* eslint-disable react/prop-types */
+import { useState, useEffect, useContext } from 'react';
+import { FaHeart, FaRegHeart, FaSadTear, FaAngry, FaGrinStars } from 'react-icons/fa';
+import { RiProhibitedFill, RiProhibitedLine } from 'react-icons/ri';
+import { MdOutlineThumbUp } from 'react-icons/md';
+import { ReactionsServices } from '../../services/reactions';
+import { getToken } from '../../utils/cookies';
+import { Toast } from '../../utils/toast';
+import UserContext from '../../contexts/UserContext';
+
+const reactionIcons = {
+  like: { filled: MdOutlineThumbUp, outlined: MdOutlineThumbUp, color: '#0D7377', label: 'Like' },
+  dislike: { filled: RiProhibitedFill, outlined: RiProhibitedLine, color: '#6B7280', label: 'Dislike' },
+  love: { filled: FaHeart, outlined: FaRegHeart, color: '#E85D75', label: 'Love' },
+  sad: { filled: FaSadTear, outlined: FaSadTear, color: '#3B82F6', label: 'Sad' },
+  angry: { filled: FaAngry, outlined: FaAngry, color: '#EF4444', label: 'Angry' },
+  wow: { filled: FaGrinStars, outlined: FaGrinStars, color: '#F59E0B', label: 'Wow' },
+};
+
+const ReactionButton = ({ bioUserId, initialCounts = {} }) => {
+  const { userInfo } = useContext(UserContext);
+  const [currentReaction, setCurrentReaction] = useState(null);
+  const [showReactions, setShowReactions] = useState(false);
+  const [reactionCounts, setReactionCounts] = useState({
+    like: 0,
+    dislike: 0,
+    love: 0,
+    sad: 0,
+    angry: 0,
+    wow: 0,
+    ...initialCounts,
+  });
+
+  // Fetch user's current reaction
+  useEffect(() => {
+    const fetchUserReaction = async () => {
+      if (userInfo?.data?._id && getToken()?.token) {
+        try {
+          const response = await ReactionsServices.getUserReaction(
+            getToken().token,
+            bioUserId
+          );
+          if (response?.data?.reaction_type) {
+            setCurrentReaction(response.data.reaction_type);
+          }
+        } catch (error) {
+          // User hasn't reacted yet
+          console.log('No reaction found');
+        }
+      }
+    };
+    fetchUserReaction();
+  }, [bioUserId, userInfo]);
+
+  // Fetch reaction counts
+  useEffect(() => {
+    const fetchReactionCounts = async () => {
+      try {
+        const response = await ReactionsServices.getReactionCounts(bioUserId);
+        if (response?.data) {
+          setReactionCounts(response.data);
+        }
+      } catch (error) {
+        console.log('Error fetching reaction counts', error);
+      }
+    };
+    fetchReactionCounts();
+  }, [bioUserId]);
+
+  const handleReactionClick = async (reactionType) => {
+    if (!userInfo?.data?._id || !getToken()?.token) {
+      Toast.errorToast('Please, Login First');
+      return;
+    }
+
+    try {
+      // Optimistically update UI
+      const previousReaction = currentReaction;
+      const previousCounts = { ...reactionCounts };
+
+      // Update counts immediately
+      if (previousReaction === reactionType) {
+        // Removing reaction
+        setCurrentReaction(null);
+        setReactionCounts((prev) => ({
+          ...prev,
+          [reactionType]: Math.max(0, prev[reactionType] - 1),
+        }));
+      } else {
+        // Adding or changing reaction
+        setCurrentReaction(reactionType);
+        setReactionCounts((prev) => ({
+          ...prev,
+          ...(previousReaction && { [previousReaction]: Math.max(0, prev[previousReaction] - 1) }),
+          [reactionType]: prev[reactionType] + 1,
+        }));
+      }
+
+      setShowReactions(false);
+
+      // Make API call
+      const response = await ReactionsServices.toggleReaction(
+        getToken().token,
+        bioUserId,
+        reactionType
+      );
+
+      if (response?.success) {
+        Toast.successToast(response.message || 'আপনার রিয়াকশন যুক্ত করা হয়েছে');
+        // Refresh counts from server
+        const countsResponse = await ReactionsServices.getReactionCounts(bioUserId);
+        if (countsResponse?.data) {
+          setReactionCounts(countsResponse.data);
+        }
+      }
+    } catch (error) {
+      console.log('Error toggling reaction', error);
+      Toast.errorToast('রিয়াকশন যুক্ত করতে সমস্যা হয়েছে');
+      // Revert on error
+      setCurrentReaction(previousReaction);
+      setReactionCounts(previousCounts);
+    }
+  };
+
+  const getTotalReactions = () => {
+    return Object.values(reactionCounts).reduce((sum, count) => sum + count, 0);
+  };
+
+  const topReactions = Object.entries(reactionCounts)
+    .filter(([_, count]) => count > 0)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 3);
+
+  return (
+    <div className="relative">
+      {/* Main Reaction Button */}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => setShowReactions(!showReactions)}
+          className="flex items-center gap-1 px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors duration-200"
+        >
+          {currentReaction ? (
+            <>
+              {(() => {
+                const Icon = reactionIcons[currentReaction].filled;
+                return <Icon className="w-5 h-5" style={{ color: reactionIcons[currentReaction].color }} />;
+              })()}
+              <span className="text-sm font-medium">{reactionIcons[currentReaction].label}</span>
+            </>
+          ) : (
+            <>
+              <MdOutlineThumbUp className="w-5 h-5 text-gray-600" />
+              <span className="text-sm text-gray-600">React</span>
+            </>
+          )}
+        </button>
+
+        {/* Reaction Counts Display */}
+        {getTotalReactions() > 0 && (
+          <div className="flex items-center gap-1">
+            {topReactions.map(([type, count]) => {
+              const Icon = reactionIcons[type].filled;
+              return (
+                <div key={type} className="flex items-center gap-0.5">
+                  <Icon className="w-4 h-4" style={{ color: reactionIcons[type].color }} />
+                  <span className="text-xs text-gray-600">{count}</span>
+                </div>
+              );
+            })}
+            {topReactions.length > 0 && (
+              <span className="text-xs text-gray-500 ml-1">
+                ({getTotalReactions()})
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Reaction Picker Popup */}
+      {showReactions && (
+        <>
+          <div
+            className="fixed inset-0 z-10"
+            onClick={() => setShowReactions(false)}
+          />
+          <div className="absolute bottom-full left-0 mb-2 z-20 bg-white rounded-full shadow-lg border border-gray-200 p-2 flex gap-2">
+            {Object.entries(reactionIcons).map(([type, { filled: Icon, color, label }]) => (
+              <button
+                key={type}
+                onClick={() => handleReactionClick(type)}
+                className={`
+                  p-2 rounded-full transition-all duration-200 hover:scale-125 hover:bg-gray-100
+                  ${currentReaction === type ? 'bg-gray-100 ring-2' : ''}
+                `}
+                style={currentReaction === type ? { ringColor: color } : {}}
+                title={label}
+              >
+                <Icon className="w-6 h-6" style={{ color }} />
+                {reactionCounts[type] > 0 && (
+                  <span
+                    className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center"
+                  >
+                    {reactionCounts[type]}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default ReactionButton;
