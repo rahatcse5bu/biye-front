@@ -38,6 +38,7 @@ import classNames from 'classnames';
 import { UserInfoServices } from '../../services/userInfo';
 import { Toast } from '../../utils/toast';
 import { useBio } from '../../contexts/useBio.jsx';
+import { Colors } from '../../constants/colors';
 
 export default function NavBar() {
   const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
@@ -224,7 +225,8 @@ export default function NavBar() {
                 ref={profileCardRef}
                 className={`absolute ${
                   !isHovered ? 'hidden' : 'block'
-                }  w-[250px] rounded-md profile-card z-[2000000] mx-5 h-[450px] transition-all duration-300 ease-in p-4 bg-gradient-to-r from-[#071952] to-[#071952] top-12 right-[100px] scrollbar-thumb-blue scrollbar-thumb-rounded-full scrollbar-track-blue-lighter scrollbar-w-2 translate-x-1/2 overflow-y-scroll overflow-x-hidden`}
+                }  w-[250px] rounded-md profile-card z-[2000000] mx-5 h-[450px] transition-all duration-300 ease-in p-4 top-12 right-[100px] scrollbar-thumb-blue scrollbar-thumb-rounded-full scrollbar-track-blue-lighter scrollbar-w-2 translate-x-1/2 overflow-y-scroll overflow-x-hidden`}
+                style={{ background: `linear-gradient(to right, ${Colors.primary900}, ${Colors.primary700})` }}
                 id="profile-card"
               >
                 <div className="py-5 text-center">
@@ -337,7 +339,8 @@ export default function NavBar() {
   return (
     <>
       {!getGender() && <Modal />}
-      <Navbar className="w-full z-[999999] bg-gradient-to-r from-[#071952] to-[#071952]  rounded-none justify-between box-border styles.headerColor navigation-bar-custom sticky top-0 ">
+      <Navbar className="w-full z-[999999] rounded-none justify-between box-border styles.headerColor navigation-bar-custom sticky top-0 "
+        style={{ background: `linear-gradient(to right, ${Colors.primary900}, ${Colors.primary700})` }}>
         <div className="hidden lg:block">
           <NavList />
         </div>
@@ -430,7 +433,8 @@ export default function NavBar() {
                   <div
                     className={`absolute ${
                       !isHovered ? 'hidden' : 'block'
-                    }  w-[250px] rounded-md profile-card mx-5 h-[450px] transition-all duration-300 ease-in p-4  bg-gradient-to-r from-[#071952] to-[#071952] top-12 right-[100px]  scrollbar-thumb-blue scrollbar-thumb-rounded-full scrollbar-track-blue-lighter scrollbar-w-2 translate-x-1/2 overflow-y-scroll overflow-x-hidden z-40`}
+                    }  w-[250px] rounded-md profile-card mx-5 h-[450px] transition-all duration-300 ease-in p-4 top-12 right-[100px]  scrollbar-thumb-blue scrollbar-thumb-rounded-full scrollbar-track-blue-lighter scrollbar-w-2 translate-x-1/2 overflow-y-scroll overflow-x-hidden z-40`}
+                    style={{ background: `linear-gradient(to right, ${Colors.primary900}, ${Colors.primary700})` }}
                     id="profile-card"
                   >
                     <div className="py-5 text-center">

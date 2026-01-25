@@ -9,13 +9,15 @@ import {
 	BiLogoWhatsapp,
 } from "react-icons/bi";
 import { BsTelephoneInbound } from "react-icons/bs";
+import { Colors } from "../../constants/colors";
 
 const Footer = () => {
 	const [impLinks, setImpLinks] = useState([]);
 	const [contactInfo, setContactInfo] = useState({});
 
 	return (
-		<div className="   bg-gradient-to-r from-[#0b1d58] to-[#071952] mt-[20px] text-white font-serif text-sm leading-4 sm:p-[0] sm:m-[0] relative ">
+		<div className="mt-[20px] text-white font-serif text-sm leading-4 sm:p-[0] sm:m-[0] relative"
+			style={{ background: `linear-gradient(to right, ${Colors.primary900}, ${Colors.primary700})` }}>
 			<div className="flex flex-col justify-between gap-8 px-10 py-10 lg:flex-row md:px-20 md:gap-12">
 				<div className=" w-[100%] lg:w-[25%] flex flex-col gap-4 ">
 					<h1 className="text-[25px] mb-4 text-[#ffff] font-semibold tracking-widest">
@@ -147,7 +149,8 @@ const Footer = () => {
 				</div>
 			</div>
 
-			<div className="bg-[#081643] p-[20px]  text-[15px] text-[#f2f2f2] ">
+			<div className="p-[20px] text-[15px] text-[#f2f2f2]"
+				style={{ backgroundColor: Colors.primary800 }}>
 				<p className="text-center text-[#fff] text-[17px] leading-[30px] tracking-widest ">
 					{" "}
 					Copyright © 2023 by PNC Nikah | PNC Soft Tech{" "}
