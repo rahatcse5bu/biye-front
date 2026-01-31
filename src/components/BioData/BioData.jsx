@@ -98,14 +98,19 @@ const BioData = ({ biodata }) => {
         </table>
       </div>
       
-      {/* Reaction Buttons */}
-      <div className="mx-2 mb-4 flex justify-center">
+      {/* Enhanced Reaction Section - Facebook Style */}
+      <div className="bg-white border-t border-gray-100">
         <ReactionButton 
           bioUserId={biodata?.user} 
           initialCounts={{
             like: biodata?.likes_count || 0,
             dislike: biodata?.dislikes_count || 0,
+            love: biodata?.love_count || 0,
+            wow: biodata?.wow_count || 0,
+            sad: biodata?.sad_count || 0,
+            angry: biodata?.angry_count || 0,
           }}
+          showCommentButton={false}
         />
       </div>
 

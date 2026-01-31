@@ -7,6 +7,7 @@ import { BioDataServices } from "../../services/bioData";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import clipboardCopy from "clipboard-copy";
 import { Toast } from "../../utils/toast";
+import ReactionButton from "../ReactionButton/ReactionButton";
 
 const BioDataStat = ({ id }) => {
   const { bio } = useContext(BioContext);
@@ -102,6 +103,28 @@ const BioDataStat = ({ id }) => {
           </tbody>
         </table>
         <div className="h-5"></div>
+      </div>
+
+      {/* Enhanced Reaction Section - Facebook Style */}
+      <div className="h-4"></div>
+      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="px-4 py-3 border-b border-gray-100">
+          <h5 className="text-lg font-semibold text-gray-800 text-center">
+            এই বায়োডাটায় রিয়্যাক্ট করুন
+          </h5>
+        </div>
+        <ReactionButton 
+          bioUserId={generalInfo?.user}
+          initialCounts={{
+            like: generalInfo?.likes_count || 0,
+            dislike: generalInfo?.dislikes_count || 0,
+            love: generalInfo?.love_count || 0,
+            wow: generalInfo?.wow_count || 0,
+            sad: generalInfo?.sad_count || 0,
+            angry: generalInfo?.angry_count || 0,
+          }}
+          showCommentButton={true}
+        />
       </div>
 
       <div className="h-4"></div>
