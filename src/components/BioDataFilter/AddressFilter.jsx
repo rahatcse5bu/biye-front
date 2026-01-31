@@ -198,61 +198,86 @@ const AddressFilter = () => {
 
   useEffect(() => {
     setFilterFields((prev) => {
-      // start permanent divisions and districts
-      const divisions = selectedDivisions.some(
-        (option) => option.value === 'All Divisions'
-      )
-        ? ['all']
-        : selectedDivisions.map((division) => division.value);
-      const districts = selectedDivisions.some(
-        (option) => option.value === 'All Divisions'
-      )
-        ? ['all']
-        : selectedDistricts.some((option) => option.value === 'All Districts')
-          ? districtOptions.map((district) => district.value)
-          : selectedDistricts.map((division) => division.value);
-      // end permanent divisions and districts
+      // Build division filter
+      let divisionFilter = undefined;
+      if (selectedDivisions.length > 0) {
+        if (
+          selectedDivisions.some((option) => option.value === 'All Divisions')
+        ) {
+          divisionFilter = 'all';
+        } else {
+          divisionFilter = selectedDivisions.map((d) => d.value).join(',');
+        }
+      }
 
-      const presentDistrict = selectedPresentDistricts.some(
-        (option) => option.value === 'All Districts'
-      )
-        ? presentDistrictOptions.map((division) => division.value)
-        : selectedPresentDistricts.map((division) => division.value);
+      // Build zilla (district) filter
+      let zillaFilter = undefined;
+      if (selectedDistricts.length > 0) {
+        if (
+          selectedDistricts.some((option) => option.value === 'All Districts')
+        ) {
+          // If "All Districts" is selected but we have specific divisions, don't set zilla
+          // This means we want all districts within the selected divisions
+          zillaFilter = undefined;
+        } else {
+          zillaFilter = selectedDistricts.map((d) => d.value).join(',');
+        }
+      }
 
+      // Build upazila filter
+      let upazilaFilter = undefined;
       const upazilas = selectedUpazilas
         .map((upazila) => upazila.value)
         .filter((value) => value !== 'All Upazilas');
+      if (upazilas.length > 0) {
+        upazilaFilter = upazilas.join(',');
+      }
 
+      // Build present/current address filters
+      let currentDivisionFilter = undefined;
+      if (selectedPresentDivisions.length > 0) {
+        if (
+          selectedPresentDivisions.some(
+            (option) => option.value === 'All Divisions'
+          )
+        ) {
+          currentDivisionFilter = 'all';
+        } else {
+          currentDivisionFilter = selectedPresentDivisions
+            .map((d) => d.value)
+            .join(',');
+        }
+      }
+
+      let currentZillaFilter = undefined;
+      if (selectedPresentDistricts.length > 0) {
+        if (
+          !selectedPresentDistricts.some(
+            (option) => option.value === 'All Districts'
+          )
+        ) {
+          currentZillaFilter = selectedPresentDistricts
+            .map((d) => d.value)
+            .join(',');
+        }
+      }
+
+      let currentUpazilaFilter = undefined;
       const presentUpazilas = selectedPresentUpazilas
         .map((upazila) => upazila.value)
         .filter((value) => value !== 'All Upazilas');
-
-      // Combine division, district, and upazila into permanent_address
-      const permanentAddressParts = [];
-      if (upazilas.length > 0) {
-        permanentAddressParts.push(...upazilas);
-      } else if (districts.length > 0 && !districts.includes('all')) {
-        permanentAddressParts.push(...districts);
-      } else if (divisions.length > 0 && !divisions.includes('all')) {
-        permanentAddressParts.push(...divisions);
-      }
-
-      const currentAddressParts = [];
       if (presentUpazilas.length > 0) {
-        currentAddressParts.push(...presentUpazilas);
-      } else if (
-        presentDistrict.length > 0 &&
-        !presentDistrict.includes('All Districts')
-      ) {
-        currentAddressParts.push(...presentDistrict);
+        currentUpazilaFilter = presentUpazilas.join(',');
       }
 
       return {
         ...prev,
-        permanent_address:
-          permanentAddressParts.length > 0 ? permanentAddressParts : undefined,
-        current_address:
-          currentAddressParts.length > 0 ? currentAddressParts : undefined,
+        division: divisionFilter,
+        zilla: zillaFilter,
+        upazila: upazilaFilter,
+        current_division: currentDivisionFilter,
+        current_zilla: currentZillaFilter,
+        current_upzilla: currentUpazilaFilter,
       };
     });
   }, [
@@ -262,6 +287,7 @@ const AddressFilter = () => {
     selectedPresentDivisions,
     selectedPresentDistricts,
     selectedPresentUpazilas,
+    setFilterFields,
   ]);
 
   const handleDivisionChange = (selectedOptions, type) => {

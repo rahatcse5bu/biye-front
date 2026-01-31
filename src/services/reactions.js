@@ -54,6 +54,19 @@ export const ReactionsServices = {
     return data;
   },
 
+  // Alias for getReactionsToMe
+  getReactionsReceived: async (reactionType = null, token) => {
+    const url = reactionType
+      ? `/reactions/reactions-to-me?reaction_type=${reactionType}`
+      : '/reactions/reactions-to-me';
+    const { data } = await axios.get(url, {
+      headers: {
+        authorization: token,
+      },
+    });
+    return data;
+  },
+
   // Get reaction counts for a biodata
   getReactionCounts: async (bioUser) => {
     const { data } = await axios.get(`/reactions/counts/${bioUser}`);

@@ -7,7 +7,7 @@ import { convertToQuery } from '../../utils/query';
 import { useFilter } from '../../contexts/useFilter';
 
 const BioDataFilterButton = () => {
-  const { filterFields, setQuery } = useBio();
+  const { filterFields, setQuery, setFilterFields } = useBio();
   const {
     setSideBarDisplay,
     setSelectedDivisions,
@@ -34,6 +34,7 @@ const BioDataFilterButton = () => {
       navigate(`/biodatas?${temp}`);
     } else if (type === 'delete') {
       setQuery({});
+      setFilterFields({});
       setSelectedDivisions([]);
       setSelectedDistricts([]);
       setSelectedPresentDivisions([]);

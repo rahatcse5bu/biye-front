@@ -154,11 +154,12 @@ const MyReactions = () => {
     queryFn: async () => {
       const reactionType = activeTab === 'all' ? null : activeTab;
       return await ReactionsServices.getMyReactionsList(
-        reactionType,
-        getToken()?.token
+        getToken()?.token,
+        reactionType
       );
     },
     retry: false,
+    enabled: !!getToken()?.token,
   });
 
   const { data: reactionsReceived, isLoading: reactionsReceivedLoading } =
@@ -172,6 +173,7 @@ const MyReactions = () => {
         );
       },
       retry: false,
+      enabled: !!getToken()?.token && !!userInfo?.data?._id,
     });
 
   if (isLoading) {

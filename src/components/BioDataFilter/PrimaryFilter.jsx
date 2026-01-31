@@ -88,7 +88,7 @@ const PrimaryFilter = () => {
                 setFilterFields((filterFields) => {
                   return {
                     ...filterFields,
-                    bio_type: value,
+                    marital_status: value,
                   };
                 });
                 // navigate(`/biodatas?${queryString}`);
@@ -120,7 +120,18 @@ const PrimaryFilter = () => {
           >
             বয়স
           </label>
-          <DoubleRangeSlider id="age" value={age} setValue={setAge} />
+          <DoubleRangeSlider
+            id="age"
+            value={age}
+            setValue={(val) => {
+              setAge(val);
+              setFilterFields((filterFields) => ({
+                ...filterFields,
+                minAge: val.min,
+                maxAge: val.max,
+              }));
+            }}
+          />
         </div>
         <div className="lg:w-64 w-full px-2 py-2">
           <DoubleRangeSlider
@@ -130,12 +141,16 @@ const PrimaryFilter = () => {
               max: parseFloat(height.max.toFixed(1)),
             }}
             // setValue={setHeight}
-            setValue={(val) =>
-              setHeight({
-                min: parseFloat(val.min.toFixed(1)),
-                max: parseFloat(val.max.toFixed(1)),
-              })
-            }
+            setValue={(val) => {
+              const minHeight = parseFloat(val.min.toFixed(1));
+              const maxHeight = parseFloat(val.max.toFixed(1));
+              setHeight({ min: minHeight, max: maxHeight });
+              setFilterFields((filterFields) => ({
+                ...filterFields,
+                minHeight: minHeight,
+                maxHeight: maxHeight,
+              }));
+            }}
             maxValue={7.0}
             minValue={4.5}
             step={0.1}
