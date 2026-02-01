@@ -70,3 +70,36 @@ export const genderOptions = [
     value: 'মহিলা',
   },
 ];
+
+// Religion options
+export const religions = [
+  { value: 'islam', label: 'ইসলাম' },
+  { value: 'hinduism', label: 'হিন্দু' },
+  { value: 'christianity', label: 'খ্রিস্টান' },
+];
+
+// Religious type options grouped by religion
+export const religiousTypesByReligion = {
+  islam: [
+    { value: 'practicing_muslim', label: 'প্র্যাকটিসিং মুসলিম' },
+    { value: 'general_muslim', label: 'সাধারণ মুসলিম' },
+  ],
+  hinduism: [
+    { value: 'practicing_hindu', label: 'প্র্যাকটিসিং হিন্দু' },
+    { value: 'general_hindu', label: 'সাধারণ হিন্দু' },
+  ],
+  christianity: [
+    { value: 'practicing_christian', label: 'প্র্যাকটিসিং খ্রিস্টান' },
+    { value: 'general_christian', label: 'সাধারণ খ্রিস্টান' },
+  ],
+};
+
+// Flat list of all religious types
+export const allReligiousTypes = [
+  { value: 'practicing_muslim', label: 'প্র্যাকটিসিং মুসলিম' },
+  { value: 'general_muslim', label: 'সাধারণ মুসলিম' },
+  { value: 'practicing_hindu', label: 'প্র্যাকটিসিং হিন্দু' },
+  { value: 'general_hindu', label: 'সাধারণ হিন্দু' },
+  { value: 'practicing_christian', label: 'প্র্যাকটিসিং খ্রিস্টান' },
+  { value: 'general_christian', label: 'সাধারণ খ্রিস্টান' },
+];

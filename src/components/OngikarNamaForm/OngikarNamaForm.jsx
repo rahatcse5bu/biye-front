@@ -18,6 +18,7 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
   const [isAgree, setIsAgree] = useState('');
   const [isTrue, setIsTrue] = useState('');
   const [isFamilyKnow, setIsFamilyKnow] = useState('');
+  const [requestPracticingStatus, setRequestPracticingStatus] = useState('');
   const { userInfo } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
 
@@ -32,10 +33,11 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
 
   useEffect(() => {
     if (ongikarNamaInfo?.data) {
-      const { is_family_know, isTrueData, isAgree } = ongikarNamaInfo.data;
+      const { is_family_know, isTrueData, isAgree, request_practicing_status } = ongikarNamaInfo.data;
       setIsAgree(isAgree);
       setIsTrue(isTrueData);
       setIsFamilyKnow(is_family_know);
+      setRequestPracticingStatus(request_practicing_status || '');
     }
   }, [ongikarNamaInfo]);
 
@@ -46,6 +48,7 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
       isAgree: isAgree,
       isTrueData: isTrue,
       is_family_know: isFamilyKnow,
+      request_practicing_status: requestPracticingStatus,
     };
 
     if (!getToken()?.token || !userInfo?.data._id) {
@@ -140,7 +143,13 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
             options={conditionOptions}
             title="কোনো মিথ্যা তথ্য প্রদান করলে দুনিয়াবী আইনগত এবং আখিরাতের দায়ভার pncnikah.com কর্তৃপক্ষ নিবে না। আপনি কি সম্মত?"
           />
-
+          <Select
+            required
+            value={requestPracticingStatus}
+            setValue={setRequestPracticingStatus}
+            options={conditionOptions}
+            title="আপনি কি প্র্যাকটিসিং পাত্র/পাত্রী খুঁজছেন?"
+          />
           <div className="flex items-center justify-between my-5">
             <button
               type="button"

@@ -78,6 +78,31 @@ function BioInfo({ id }) {
                 {generalInfo?.nationality}
               </td>
             </tr>
+            {generalInfo?.religion && (
+              <tr>
+                <td className="px-4 text-left py-2">ধর্ম</td>
+                <td className="px-4 text-left py-2">
+                  {generalInfo?.religion === 'islam' ? 'ইসলাম' : 
+                   generalInfo?.religion === 'hinduism' ? 'হিন্দু' : 
+                   generalInfo?.religion === 'christianity' ? 'খ্রিস্টান' : 
+                   generalInfo?.religion}
+                </td>
+              </tr>
+            )}
+            {generalInfo?.religious_type && (
+              <tr>
+                <td className="px-4 text-left py-2">ধর্মীয় ধরণ</td>
+                <td className="px-4 text-left py-2">
+                  {generalInfo?.religious_type === 'practicing_muslim' ? 'প্র্যাকটিসিং মুসলিম' :
+                   generalInfo?.religious_type === 'general_muslim' ? 'সাধারণ মুসলিম' :
+                   generalInfo?.religious_type === 'practicing_hindu' ? 'প্র্যাকটিসিং হিন্দু' :
+                   generalInfo?.religious_type === 'general_hindu' ? 'সাধারণ হিন্দু' :
+                   generalInfo?.religious_type === 'practicing_christian' ? 'প্র্যাকটিসিং খ্রিস্টান' :
+                   generalInfo?.religious_type === 'general_christian' ? 'সাধারণ খ্রিস্টান' :
+                   generalInfo?.religious_type}
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

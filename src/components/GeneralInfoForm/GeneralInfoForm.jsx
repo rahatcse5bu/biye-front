@@ -14,6 +14,8 @@ import {
   maritalStatus,
   nationalities,
   screenColors,
+  religions,
+  religiousTypesByReligion,
 } from './generalInfoForm.constant';
 import { userServices } from '../../services/user';
 import { BioDataServices } from '../../services/bioData';
@@ -49,6 +51,11 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
   const [blood, setBlood] = useState('');
   const [nationality, setNationality] = useState('বাংলাদেশী');
   const [gender, setGender] = useState('');
+  const [religion, setReligion] = useState('islam');
+  const [religiousType, setReligiousType] = useState('practicing_muslim');
+  const [religiousTypeOptions, setReligiousTypeOptions] = useState(
+    religiousTypesByReligion['islam'] || []
+  );
   const [filteredMaritalStatus, setFilteredMaritalStatus] =
     useState(maritalStatus);
   const [loading, setLoading] = useState(false);
@@ -86,6 +93,8 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
         weight,
         blood_group,
         refer_user,
+        religion: savedReligion,
+        religious_type,
       } = generalInfo.data;
 
       setGender(gender);
@@ -97,6 +106,15 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
       setHeight(height);
       setWeight(convertToBengaliNumerals(weight.toString()));
       setColor(screen_color);
+      
+      // Set religion and religious type
+      if (savedReligion) {
+        setReligion(savedReligion);
+        setReligiousTypeOptions(religiousTypesByReligion[savedReligion] || []);
+      }
+      if (religious_type) {
+        setReligiousType(religious_type);
+      }
       // console.log("refer_user", refer_user);
       // console.log("userInfoIds", userInfoIds);
       if (refer_user && userInfoIds) {
@@ -111,6 +129,16 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
       }
     }
   }, [generalInfo, userInfoIds]);
+
+  // Update religious type options when religion changes
+  useEffect(() => {
+    const options = religiousTypesByReligion[religion] || [];
+    setReligiousTypeOptions(options);
+    // Set default religiousType when religion changes
+    if (options.length > 0 && !options.some((opt) => opt.value === religiousType)) {
+      setReligiousType(options[0].value);
+    }
+  }, [religion]);
 
   // console.log(userInfo?.data?._id);
 
@@ -159,6 +187,8 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
       gender: gender,
       user_id: userInfo?.data?._id,
       refer_user: referId?.value,
+      religion: religion,
+      religious_type: religiousType,
     };
 
     // console.log('general_info_data~~', formData);
@@ -326,7 +356,21 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
             setValue={setNationality}
             options={nationalities}
           />
+          <Select
+            title="ধর্ম"
+            required
+            value={religion}
+            setValue={setReligion}
+            options={religions}
+          />
 
+          <Select
+            title="ধর্মীয় ধরণ"
+            required
+            value={religiousType}
+            setValue={setReligiousType}
+            options={religiousTypeOptions}
+          />
           <div className="flex items-center justify-between my-5">
             <button
               type="button"
