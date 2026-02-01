@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { getToken } from '../../utils/cookies';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import { OngikarNamaServices } from '../../services/ongikarNama';
+import { GeneralInfoServices } from '../../services/generalInfo';
 import { getErrorMessage } from '../../utils/error';
 import { Toast } from '../../utils/toast';
 
@@ -21,6 +22,17 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
   const [requestPracticingStatus, setRequestPracticingStatus] = useState('');
   const { userInfo } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
+
+  const { data: generalInfo = null } = useQuery({
+    queryKey: ['general-info', userInfo?.data?._id, getToken()?.token],
+    queryFn: async () => {
+      return await GeneralInfoServices.getGeneralInfoByUser(getToken()?.token);
+    },
+    retry: false,
+    enabled: !!userInfo?.data?._id,
+  });
+
+  const religion = generalInfo?.data?.religion || 'islam';
 
   const { data: ongikarNamaInfo = null, isLoading } = useQuery({
     queryKey: ['ongikar-nama', userInfo?.data?._id, getToken()?.token],
@@ -133,7 +145,9 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
             value={isTrue}
             setValue={setIsTrue}
             options={conditionOptions}
-            title="আল্লাহ &#039;র শপথ করে সাক্ষ্য দিন, যে তথ্যগুলো দিয়েছেন সব সত্য?"
+            title={religion === 'islam' 
+              ? "আল্লাহ'র শপথ করে সাক্ষ্য দিন, যে তথ্যগুলো দিয়েছেন সব সত্য?"
+              : "আপনি কি সাক্ষ্য দিচ্ছেন যে তথ্যগুলো দিয়েছেন সব সত্য?"}
           />
 
           <Select
@@ -141,7 +155,9 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
             value={isAgree}
             setValue={setIsAgree}
             options={conditionOptions}
-            title="কোনো মিথ্যা তথ্য প্রদান করলে দুনিয়াবী আইনগত এবং আখিরাতের দায়ভার pncnikah.com কর্তৃপক্ষ নিবে না। আপনি কি সম্মত?"
+            title={religion === 'islam'
+              ? "কোনো মিথ্যা তথ্য প্রদান করলে দুনিয়াবী আইনগত এবং আখিরাতের দায়ভার pncnikah.com কর্তৃপক্ষ নিবে না। আপনি কি সম্মত?"
+              : "কোনো মিথ্যা তথ্য প্রদান করলে আইনগত দায়ভার pncnikah.com কর্তৃপক্ষ নিবে না। আপনি কি সম্মত?"}
           />
           <Select
             required

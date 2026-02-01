@@ -426,9 +426,9 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
               )}
             </>
           )}
-          {gender && gender === 'পুরুষ' && (
+          {religion === 'islam' && gender && gender === 'পুরুষ' && (
             <Select
-              title="টাখনুর উপরে কাপড় পরেন? "
+              title="টাখনুর উপরে কাপড় পরেন? "
               options={[
                 {
                   value: 'জ্বী ,আলহামদুলিল্লাহ',
@@ -443,6 +443,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
             />
           )}
 
+          {religion === 'islam' && (
           <Select
             title="প্রতিদিন পাঁচ ওয়াক্ত নামাজ পড়েন কি? "
             options={[
@@ -465,7 +466,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
               required
             />
           )}
-          {gender && gender === 'পুরুষ' && (
+          {religion === 'islam' && gender && gender === 'পুরুষ' && (
             <>
               <Select
                 title="প্রতিদিন পাঁচ ওয়াক্ত নামাজ জামায়াতে পড়েন কি? "
@@ -493,13 +494,16 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
             </>
           )}
 
+          {religion === 'islam' && (
           <Textarea
-            title="সাধারণত সপ্তাহে কত ওয়াক্ত নামায আপনার কাযা হয়?"
+            title="সাধারণত সপ্তাহে কত ওয়াক্ত নামায আপনার কাযা হয়?"
             value={salatKaza}
             setValue={setSalatKaza}
             required
             rows={2}
           />
+          )}
+          {religion === 'islam' && (
           <Textarea
             title=" মাহরাম/নন-মাহরাম মেনে চলেন কি?"
             value={isMahram}
@@ -507,27 +511,34 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
             setValue={setIsMahram}
             required
           />
+          )}
+          {religion === 'islam' && (
           <Textarea
             rows={2}
-            title="শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?"
+            title="শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?"
             value={isPureRecite}
             setValue={setIsPureRecite}
             required
           />
+          )}
+          {religion === 'islam' && (
           <Select
             title="কোন ফিকহ অনুসরণ করেন?"
             options={fiqhOptions}
             value={fiqh}
             setValue={setFiqh}
           />
+          )}
 
+          {religion === 'islam' && (
           <Textarea
-            title="নাটক / সিনেমা / সিরিয়াল / গান এসব দেখেন বা শুনেন?"
+            title="নাটক / সিনেমা / সিরিয়াল / গান এসব দেখেন বা শুনেন?"
             value={isNatok}
             setValue={setIsNatok}
             required
             rows={2}
           />
+          )}
 
           <Textarea
             title="আপনার মানসিক বা শারীরিক কোনো রোগ আছে?"
@@ -536,6 +547,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
             rows={2}
             required
           />
+          {religion === 'islam' && (
           <Textarea
             title="দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন? "
             value={isDeenContribution}
@@ -543,6 +555,8 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
             rows={2}
             required
           />
+          )}
+          {religion === 'islam' && (
           <Textarea
             title="মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি? "
             value={mazar}
@@ -550,14 +564,18 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
             rows={3}
             required
           />
+          )}
+          {religion === 'islam' && (
           <Textarea
-            title="আপনার পড়া হয়েছে এমন অন্তত ৩ টি ইসলামি বই এর নাম লিখুন "
+            title="আপনার পড়া হয়েছে এমন অন্তত ৩ টি ইসলামি বই এর নাম লিখুন "
             value={books}
             setValue={setBooks}
             rows={2}
             required
           />
+          )}
 
+          {religion === 'islam' && (
           <Textarea
             title="আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন"
             value={scholars}
@@ -565,6 +583,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
             required
             rows={2}
           />
+          )}
 
           {/* <Select
 				title="আপনার ক্ষেত্রে প্রযোজ্য হয় এমন ক্যাটাগরি সিলেক্ট করুন। (অন্যথায় ঘরটি ফাঁকা রাখুন) "
@@ -573,27 +592,31 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
 				setValue={setPersonalCategory}
 			/> */}
 
+          {religion === 'islam' && (
           <MultipleSelect
-            title="আপনার ক্ষেত্রে প্রযোজ্য হয় এমন ক্যাটাগরি সিলেক্ট করুন। (অন্যথায় ঘরটি ফাঁকা রাখুন) "
+            title="আপনার ক্ষেত্রে প্রযোজ্য হয় এমন ক্যাটাগরি সিলেক্ট করুন। (অন্যথায় ঘরটি ফাঁকা রাখুন) "
             options={personalCategoryOptions}
             value={personalCategory}
             setValue={setPersonalCategory}
           />
+          )}
 
-          {personalCategory?.length > 0 &&
+          {religion === 'islam' && personalCategory?.length > 0 &&
             personalCategory.some((item) => item.value === 'নওমুসলিম') && (
               <Textarea
-                title="আপনার ইসলাম গ্রহণের সময় ও ঘটনা উল্লেখ করুন"
+                title="আপনার ইসলাম গ্রহণের সময় ও ঘটনা উল্লেখ করুন"
                 value={acceptIslam}
                 setValue={setAcceptIslam}
                 required
               />
             )}
+          {religion === 'islam' && (
           <Textarea
-            title="মিলাদ ও কিয়াম সম্পর্কে আপনার ধারনা কি?"
+            title="মিলাদ ও কিয়াম সম্পর্কে আপনার ধারনা কি?"
             value={aboutMiladQiyam}
             setValue={setAboutMiladQiyam}
           />
+          )}
 
           {/* ============ HINDU FORM ============ */}
           {religion === 'hinduism' && (

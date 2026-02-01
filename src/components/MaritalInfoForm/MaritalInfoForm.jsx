@@ -64,6 +64,8 @@ const MaritalInfoForm = ({ userForm, setUserForm }) => {
     setGender(gender);
     setMaritalStatus(maritalStatus);
   }, [generalInfo]);
+
+  const religion = generalInfo?.data?.religion || 'islam';
   // useEffect(() => {
   // 	verifyToken(userInfo?.data[0]?.id, logOut, "marital-info-verify-token");
   // }, [logOut, userInfo?.data]);
@@ -247,12 +249,14 @@ const MaritalInfoForm = ({ userForm, setUserForm }) => {
           />
           {gender === "পুরুষ" && (
             <>
+              {religion === 'islam' && (
               <Input
-                title="বিয়ের পর স্ত্রীকে পর্দায় রাখতে পারবেন?"
+                title="বিয়ের পর স্ত্রীকে পর্দায় রাখতে পারবেন?"
                 required
                 value={isWifePorda}
                 setValue={setIsWifePorda}
               />
+              )}
 
               <Input
                 title="বিয়ের পর স্ত্রীকে পড়াশোনা করতে দিতে চান? "
