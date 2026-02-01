@@ -15,7 +15,6 @@ import {
   hinduScriptureOptions,
   hinduFastingOptions,
   hinduDietOptions,
-  hinduFestivalOptions,
   hinduDressCodeMaleOptions,
   hinduDressCodeFemaleOptions,
   yesNoOptions,
@@ -24,7 +23,6 @@ import {
   christianChurchAttendanceOptions,
   christianBibleReadingOptions,
   christianPrayerOptions,
-  christianFestivalOptions,
   christianDressCodeMaleOptions,
   christianDressCodeFemaleOptions,
   christianDietOptions,
@@ -94,7 +92,8 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
 
   // Christian states
   const [christianDenomination, setChristianDenomination] = useState('');
-  const [christianChurchAttendance, setChristianChurchAttendance] = useState('');
+  const [christianChurchAttendance, setChristianChurchAttendance] =
+    useState('');
   const [christianBibleReading, setChristianBibleReading] = useState('');
   const [christianPrayer, setChristianPrayer] = useState('');
   const [christianFestivals, setChristianFestivals] = useState('');
@@ -139,7 +138,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
   // }, [logOut, userInfo?.data]);
   const gender = generalInfo?.data?.gender || '';
   const religion = generalInfo?.data?.religion || 'islam';
-  
+
   useEffect(() => {
     if (personalInfo?.data) {
       const {
@@ -197,7 +196,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
         christian_ministry,
         christian_about_faith,
       } = personalInfo.data;
-      
+
       // Common fields
       setCloth(outside_clothings);
       setPersonalCategory(dataToMultipleExpectedPartner(my_categories));
@@ -205,7 +204,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
       setPhone(my_phone);
       setIsDisease(physical_problem);
       setIsNeshaDrobbo(isNeshaDrobbo);
-      
+
       // Islamic fields
       setIsBeard(isBeard);
       setFromWhenBeard(from_beard);
@@ -226,7 +225,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
       setFromWhenNikhab(from_when_nikhab);
       setAcceptIslam(about_reverted_islam);
       setAboutMiladQiyam(about_milad_qiyam);
-      
+
       // Hindu fields
       setHinduSampraday(hindu_sampraday || '');
       setHinduCaste(hindu_caste || '');
@@ -241,7 +240,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
       setHinduVegetarian(hindu_vegetarian || '');
       setHinduFamilyDeity(hindu_family_deity || '');
       setHinduAboutReligion(hindu_about_religion || '');
-      
+
       // Christian fields
       setChristianDenomination(christian_denomination || '');
       setChristianChurchAttendance(christian_church_attendance || '');
@@ -444,20 +443,20 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
           )}
 
           {religion === 'islam' && (
-          <Select
-            title="প্রতিদিন পাঁচ ওয়াক্ত নামাজ পড়েন কি? "
-            options={[
-              {
-                value: 'জ্বী ,আলহামদুলিল্লাহ',
-              },
-              {
-                value: 'না',
-              },
-            ]}
-            value={isDailyFive}
-            setValue={setIsDailyFive}
-            required
-          />
+            <Select
+              title="প্রতিদিন পাঁচ ওয়াক্ত নামাজ পড়েন কি? "
+              options={[
+                {
+                  value: 'জ্বী ,আলহামদুলিল্লাহ',
+                },
+                {
+                  value: 'না',
+                },
+              ]}
+              value={isDailyFive}
+              setValue={setIsDailyFive}
+              required
+            />
           )}
           {religion === 'islam' && isDailyFive === 'জ্বী ,আলহামদুলিল্লাহ' && (
             <Input
@@ -496,49 +495,49 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
           )}
 
           {religion === 'islam' && (
-          <Textarea
-            title="সাধারণত সপ্তাহে কত ওয়াক্ত নামায আপনার কাযা হয়?"
-            value={salatKaza}
-            setValue={setSalatKaza}
-            required
-            rows={2}
-          />
+            <Textarea
+              title="সাধারণত সপ্তাহে কত ওয়াক্ত নামায আপনার কাযা হয়?"
+              value={salatKaza}
+              setValue={setSalatKaza}
+              required
+              rows={2}
+            />
           )}
           {religion === 'islam' && (
-          <Textarea
-            title=" মাহরাম/নন-মাহরাম মেনে চলেন কি?"
-            value={isMahram}
-            rows={2}
-            setValue={setIsMahram}
-            required
-          />
+            <Textarea
+              title=" মাহরাম/নন-মাহরাম মেনে চলেন কি?"
+              value={isMahram}
+              rows={2}
+              setValue={setIsMahram}
+              required
+            />
           )}
           {religion === 'islam' && (
-          <Textarea
-            rows={2}
-            title="শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?"
-            value={isPureRecite}
-            setValue={setIsPureRecite}
-            required
-          />
+            <Textarea
+              rows={2}
+              title="শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?"
+              value={isPureRecite}
+              setValue={setIsPureRecite}
+              required
+            />
           )}
           {religion === 'islam' && (
-          <Select
-            title="কোন ফিকহ অনুসরণ করেন?"
-            options={fiqhOptions}
-            value={fiqh}
-            setValue={setFiqh}
-          />
+            <Select
+              title="কোন ফিকহ অনুসরণ করেন?"
+              options={fiqhOptions}
+              value={fiqh}
+              setValue={setFiqh}
+            />
           )}
 
           {religion === 'islam' && (
-          <Textarea
-            title="নাটক / সিনেমা / সিরিয়াল / গান এসব দেখেন বা শুনেন?"
-            value={isNatok}
-            setValue={setIsNatok}
-            required
-            rows={2}
-          />
+            <Textarea
+              title="নাটক / সিনেমা / সিরিয়াল / গান এসব দেখেন বা শুনেন?"
+              value={isNatok}
+              setValue={setIsNatok}
+              required
+              rows={2}
+            />
           )}
 
           <Textarea
@@ -549,41 +548,41 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
             required
           />
           {religion === 'islam' && (
-          <Textarea
-            title="দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন? "
-            value={isDeenContribution}
-            setValue={setIsDeenContribution}
-            rows={2}
-            required
-          />
+            <Textarea
+              title="দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন? "
+              value={isDeenContribution}
+              setValue={setIsDeenContribution}
+              rows={2}
+              required
+            />
           )}
           {religion === 'islam' && (
-          <Textarea
-            title="মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি? "
-            value={mazar}
-            setValue={setMazar}
-            rows={3}
-            required
-          />
+            <Textarea
+              title="মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি? "
+              value={mazar}
+              setValue={setMazar}
+              rows={3}
+              required
+            />
           )}
           {religion === 'islam' && (
-          <Textarea
-            title="আপনার পড়া হয়েছে এমন অন্তত ৩ টি ইসলামি বই এর নাম লিখুন "
-            value={books}
-            setValue={setBooks}
-            rows={2}
-            required
-          />
+            <Textarea
+              title="আপনার পড়া হয়েছে এমন অন্তত ৩ টি ইসলামি বই এর নাম লিখুন "
+              value={books}
+              setValue={setBooks}
+              rows={2}
+              required
+            />
           )}
 
           {religion === 'islam' && (
-          <Textarea
-            title="আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন"
-            value={scholars}
-            setValue={setScholars}
-            required
-            rows={2}
-          />
+            <Textarea
+              title="আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন"
+              value={scholars}
+              setValue={setScholars}
+              required
+              rows={2}
+            />
           )}
 
           {/* <Select
@@ -594,15 +593,16 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
 			/> */}
 
           {religion === 'islam' && (
-          <MultipleSelect
-            title="আপনার ক্ষেত্রে প্রযোজ্য হয় এমন ক্যাটাগরি সিলেক্ট করুন। (অন্যথায় ঘরটি ফাঁকা রাখুন) "
-            options={personalCategoryOptions}
-            value={personalCategory}
-            setValue={setPersonalCategory}
-          />
+            <MultipleSelect
+              title="আপনার ক্ষেত্রে প্রযোজ্য হয় এমন ক্যাটাগরি সিলেক্ট করুন। (অন্যথায় ঘরটি ফাঁকা রাখুন) "
+              options={personalCategoryOptions}
+              value={personalCategory}
+              setValue={setPersonalCategory}
+            />
           )}
 
-          {religion === 'islam' && personalCategory?.length > 0 &&
+          {religion === 'islam' &&
+            personalCategory?.length > 0 &&
             personalCategory.some((item) => item.value === 'নওমুসলিম') && (
               <Textarea
                 title="আপনার ইসলাম গ্রহণের সময় ও ঘটনা উল্লেখ করুন"
@@ -612,11 +612,11 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
               />
             )}
           {religion === 'islam' && (
-          <Textarea
-            title="মিলাদ ও কিয়াম সম্পর্কে আপনার ধারনা কি?"
-            value={aboutMiladQiyam}
-            setValue={setAboutMiladQiyam}
-          />
+            <Textarea
+              title="মিলাদ ও কিয়াম সম্পর্কে আপনার ধারনা কি?"
+              value={aboutMiladQiyam}
+              setValue={setAboutMiladQiyam}
+            />
           )}
 
           {/* ============ HINDU FORM ============ */}
@@ -693,7 +693,11 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
               />
               <Select
                 title="পোশাক"
-                options={gender === 'পুরুষ' ? hinduDressCodeMaleOptions : hinduDressCodeFemaleOptions}
+                options={
+                  gender === 'পুরুষ'
+                    ? hinduDressCodeMaleOptions
+                    : hinduDressCodeFemaleOptions
+                }
                 value={hinduDressCode}
                 setValue={setHinduDressCode}
               />
@@ -756,7 +760,11 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
               />
               <Select
                 title="পোশাক"
-                options={gender === 'পুরুষ' ? christianDressCodeMaleOptions : christianDressCodeFemaleOptions}
+                options={
+                  gender === 'পুরুষ'
+                    ? christianDressCodeMaleOptions
+                    : christianDressCodeFemaleOptions
+                }
                 value={christianDressCode}
                 setValue={setChristianDressCode}
               />
