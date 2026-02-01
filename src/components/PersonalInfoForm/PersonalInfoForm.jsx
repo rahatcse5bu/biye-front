@@ -458,7 +458,8 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
             setValue={setIsDailyFive}
             required
           />
-          {isDailyFive === 'জ্বী ,আলহামদুলিল্লাহ' && (
+          )}
+          {religion === 'islam' && isDailyFive === 'জ্বী ,আলহামদুলিল্লাহ' && (
             <Input
               title="কবে থেকে পড়ছেন?"
               value={fromWhenFiveSalat}
