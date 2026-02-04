@@ -13,37 +13,17 @@ import { convertHeightToBengali } from '../../utils/height';
 import { GeneralInfoServices } from '../../services/generalInfo';
 import ReactionButton from '../ReactionButton/ReactionButton';
 
-// Helper function to get religion display name
-const getReligionDisplay = (religion) => {
+// Helper function to get combined religion + type display name
+const getReligionBadgeLabel = (religion, religiousType) => {
   switch (religion) {
     case 'islam':
-      return 'ইসলাম';
+      return religiousType === 'practicing_muslim' ? 'প্র্যাক্টিসিং মুসলিম' : 'মুসলিম';
     case 'hinduism':
-      return 'হিন্দু';
+      return religiousType === 'practicing_hindu' ? 'প্র্যাক্টিসিং হিন্দু' : 'হিন্দু';
     case 'christianity':
-      return 'খ্রিস্টান';
+      return religiousType === 'practicing_christian' ? 'প্র্যাক্টিসিং খ্রিস্টান' : 'খ্রিস্টান';
     default:
-      return 'ইসলাম';
-  }
-};
-
-// Helper function to get religious type display name
-const getReligiousTypeDisplay = (religiousType) => {
-  switch (religiousType) {
-    case 'practicing_muslim':
-      return 'প্র্যাকটিসিং';
-    case 'general_muslim':
-      return 'সাধারণ';
-    case 'practicing_hindu':
-      return 'প্র্যাকটিসিং';
-    case 'general_hindu':
-      return 'সাধারণ';
-    case 'practicing_christian':
-      return 'প্র্যাকটিসিং';
-    case 'general_christian':
-      return 'সাধারণ';
-    default:
-      return '';
+      return 'মুসলিম';
   }
 };
 
@@ -106,8 +86,7 @@ const BioData = ({ biodata }) => {
         
         {/* Religion Badge */}
         <div className={`absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-semibold text-white ${getBadgeColor(biodata?.religion)}`}>
-          {getReligionDisplay(biodata?.religion)}
-          {biodata?.religious_type && ` • ${getReligiousTypeDisplay(biodata?.religious_type)}`}
+          {getReligionBadgeLabel(biodata?.religion, biodata?.religious_type)}
         </div>
       </div>
       <div className="mx-2 mt-4">

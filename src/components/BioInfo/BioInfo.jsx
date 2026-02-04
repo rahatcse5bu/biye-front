@@ -82,24 +82,19 @@ function BioInfo({ id }) {
               <tr>
                 <td className="px-4 text-left py-2">ধর্ম</td>
                 <td className="px-4 text-left py-2">
-                  {generalInfo?.religion === 'islam' ? 'ইসলাম' : 
-                   generalInfo?.religion === 'hinduism' ? 'হিন্দু' : 
-                   generalInfo?.religion === 'christianity' ? 'খ্রিস্টান' : 
-                   generalInfo?.religion}
-                </td>
-              </tr>
-            )}
-            {generalInfo?.religious_type && (
-              <tr>
-                <td className="px-4 text-left py-2">ধর্মীয় ধরণ</td>
-                <td className="px-4 text-left py-2">
-                  {generalInfo?.religious_type === 'practicing_muslim' ? 'প্র্যাকটিসিং মুসলিম' :
-                   generalInfo?.religious_type === 'general_muslim' ? 'সাধারণ মুসলিম' :
-                   generalInfo?.religious_type === 'practicing_hindu' ? 'প্র্যাকটিসিং হিন্দু' :
-                   generalInfo?.religious_type === 'general_hindu' ? 'সাধারণ হিন্দু' :
-                   generalInfo?.religious_type === 'practicing_christian' ? 'প্র্যাকটিসিং খ্রিস্টান' :
-                   generalInfo?.religious_type === 'general_christian' ? 'সাধারণ খ্রিস্টান' :
-                   generalInfo?.religious_type}
+                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                    generalInfo?.religion === 'islam' ? 'bg-green-600' :
+                    generalInfo?.religion === 'hinduism' ? 'bg-orange-500' :
+                    generalInfo?.religion === 'christianity' ? 'bg-blue-600' : 'bg-gray-500'
+                  }`}>
+                    {generalInfo?.religion === 'islam' 
+                      ? (generalInfo?.religious_type === 'practicing_muslim' ? 'প্র্যাক্টিসিং মুসলিম' : 'মুসলিম')
+                      : generalInfo?.religion === 'hinduism'
+                      ? (generalInfo?.religious_type === 'practicing_hindu' ? 'প্র্যাক্টিসিং হিন্দু' : 'হিন্দু')
+                      : generalInfo?.religion === 'christianity'
+                      ? (generalInfo?.religious_type === 'practicing_christian' ? 'প্র্যাক্টিসিং খ্রিস্টান' : 'খ্রিস্টান')
+                      : generalInfo?.religion}
+                  </span>
                 </td>
               </tr>
             )}
