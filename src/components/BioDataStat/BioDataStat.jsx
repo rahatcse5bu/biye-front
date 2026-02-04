@@ -123,7 +123,7 @@ const BioDataStat = ({ id }) => {
             sad: generalInfo?.sad_count || 0,
             angry: generalInfo?.angry_count || 0,
           }}
-          showCommentButton={true}
+          showCommentButton={false}
         />
       </div>
 
