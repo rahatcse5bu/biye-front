@@ -5,6 +5,9 @@ import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswer
 const FamilyInfo = () => {
   const { bio } = useContext(BioContext);
   const familyStatus = bio?.familyStatus || null;
+  const generalInfo = bio?.generalInfo || null;
+  const religion = generalInfo?.religion || 'islam';
+  
   console.log('family-info~', familyStatus);
   return (
     <div className="w-auto border-t-2 rounded shadow single-bio-family-info">
@@ -65,10 +68,12 @@ const FamilyInfo = () => {
             answer={familyStatus?.family_eco_condition}
           />
 
-          <GridQuestionAnswerCard
-            question="পারিবারিক দ্বীনি পরিবেশ কেমন?"
-            answer={familyStatus?.family_deeni_info}
-          />
+          {religion === 'islam' && (
+            <GridQuestionAnswerCard
+              question="পারিবারিক দ্বীনি পরিবেশ কেমন?"
+              answer={familyStatus?.family_deeni_info}
+            />
+          )}
         </div>
       </table>
     </div>
