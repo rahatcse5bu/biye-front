@@ -12,20 +12,13 @@ import {
   hinduGotraOptions,
   hinduTempleVisitOptions,
   hinduPujaOptions,
-  hinduScriptureOptions,
   hinduFastingOptions,
   hinduDietOptions,
-  hinduDressCodeMaleOptions,
-  hinduDressCodeFemaleOptions,
   yesNoOptions,
   // Christian constants
   christianDenominationOptions,
   christianChurchAttendanceOptions,
   christianBibleReadingOptions,
-  christianPrayerOptions,
-  christianDressCodeMaleOptions,
-  christianDressCodeFemaleOptions,
-  christianDietOptions,
   christianMinistryOptions,
 } from './personalInfoForm.constant';
 import Textarea from '../Textarea/Textarea';
@@ -75,30 +68,20 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
   const [isBeard, setIsBeard] = useState('');
   const [aboutMiladQiyam, setAboutMiladQiyam] = useState('');
 
-  // Hindu states
+  // Hindu states (matching backend field names)
   const [hinduSampraday, setHinduSampraday] = useState('');
   const [hinduCaste, setHinduCaste] = useState('');
   const [hinduGotra, setHinduGotra] = useState('');
   const [hinduTempleVisit, setHinduTempleVisit] = useState('');
   const [hinduPujaFrequency, setHinduPujaFrequency] = useState('');
-  const [hinduScriptureReading, setHinduScriptureReading] = useState('');
   const [hinduFasting, setHinduFasting] = useState('');
   const [hinduDiet, setHinduDiet] = useState('');
-  const [hinduFestivals, setHinduFestivals] = useState('');
-  const [hinduDressCode, setHinduDressCode] = useState('');
-  const [hinduVegetarian, setHinduVegetarian] = useState('');
   const [hinduFamilyDeity, setHinduFamilyDeity] = useState('');
-  const [hinduAboutReligion, setHinduAboutReligion] = useState('');
 
-  // Christian states
+  // Christian states (matching backend field names)
   const [christianDenomination, setChristianDenomination] = useState('');
-  const [christianChurchAttendance, setChristianChurchAttendance] =
-    useState('');
+  const [christianChurchAttendance, setChristianChurchAttendance] = useState('');
   const [christianBibleReading, setChristianBibleReading] = useState('');
-  const [christianPrayer, setChristianPrayer] = useState('');
-  const [christianFestivals, setChristianFestivals] = useState('');
-  const [christianDressCode, setChristianDressCode] = useState('');
-  const [christianDiet, setChristianDiet] = useState('');
   const [christianBaptized, setChristianBaptized] = useState('');
   const [christianChurchName, setChristianChurchName] = useState('');
   const [christianMinistry, setChristianMinistry] = useState('');
@@ -169,32 +152,23 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
         from_when_nikhab,
         about_reverted_islam,
         about_milad_qiyam,
-        // Hindu fields
-        hindu_sampraday,
-        hindu_caste,
-        hindu_gotra,
-        hindu_temple_visit,
-        hindu_puja_frequency,
-        hindu_scripture_reading,
-        hindu_fasting,
-        hindu_diet,
-        hindu_festivals,
-        hindu_dress_code,
-        hindu_vegetarian,
-        hindu_family_deity,
-        hindu_about_religion,
-        // Christian fields
-        christian_denomination,
-        christian_church_attendance,
-        christian_bible_reading,
-        christian_prayer,
-        christian_festivals,
-        christian_dress_code,
-        christian_diet,
-        christian_baptized,
-        christian_church_name,
-        christian_ministry,
-        christian_about_faith,
+        // Hindu fields (backend uses short names)
+        sampraday,
+        caste,
+        gotra,
+        temple_visit_frequency,
+        regular_pooja,
+        vrat_observance,
+        food_habit,
+        kul_devata,
+        // Christian fields (backend uses short names)
+        denomination,
+        church_attendance,
+        bible_reading_frequency,
+        baptism_status,
+        church_name,
+        church_activity_participation,
+        religious_value_importance,
       } = personalInfo.data;
 
       // Common fields
@@ -226,33 +200,24 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
       setAcceptIslam(about_reverted_islam);
       setAboutMiladQiyam(about_milad_qiyam);
 
-      // Hindu fields
-      setHinduSampraday(hindu_sampraday || '');
-      setHinduCaste(hindu_caste || '');
-      setHinduGotra(hindu_gotra || '');
-      setHinduTempleVisit(hindu_temple_visit || '');
-      setHinduPujaFrequency(hindu_puja_frequency || '');
-      setHinduScriptureReading(hindu_scripture_reading || '');
-      setHinduFasting(hindu_fasting || '');
-      setHinduDiet(hindu_diet || '');
-      setHinduFestivals(hindu_festivals || '');
-      setHinduDressCode(hindu_dress_code || '');
-      setHinduVegetarian(hindu_vegetarian || '');
-      setHinduFamilyDeity(hindu_family_deity || '');
-      setHinduAboutReligion(hindu_about_religion || '');
+      // Hindu fields (backend uses short names)
+      setHinduSampraday(sampraday || '');
+      setHinduCaste(caste || '');
+      setHinduGotra(gotra || '');
+      setHinduTempleVisit(temple_visit_frequency || '');
+      setHinduPujaFrequency(regular_pooja || '');
+      setHinduFasting(vrat_observance || '');
+      setHinduDiet(food_habit || '');
+      setHinduFamilyDeity(kul_devata || '');
 
-      // Christian fields
-      setChristianDenomination(christian_denomination || '');
-      setChristianChurchAttendance(christian_church_attendance || '');
-      setChristianBibleReading(christian_bible_reading || '');
-      setChristianPrayer(christian_prayer || '');
-      setChristianFestivals(christian_festivals || '');
-      setChristianDressCode(christian_dress_code || '');
-      setChristianDiet(christian_diet || '');
-      setChristianBaptized(christian_baptized || '');
-      setChristianChurchName(christian_church_name || '');
-      setChristianMinistry(christian_ministry || '');
-      setChristianAboutFaith(christian_about_faith || '');
+      // Christian fields (backend uses short names)
+      setChristianDenomination(denomination || '');
+      setChristianChurchAttendance(church_attendance || '');
+      setChristianBibleReading(bible_reading_frequency || '');
+      setChristianBaptized(baptism_status || '');
+      setChristianChurchName(church_name || '');
+      setChristianMinistry(church_activity_participation || '');
+      setChristianAboutFaith(religious_value_importance || '');
     }
   }, [personalInfo]);
   const submitHandler = async (e) => {
@@ -295,34 +260,25 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
     } else if (religion === 'hinduism') {
       personalInfoData = {
         ...personalInfoData,
-        hindu_sampraday: hinduSampraday,
-        hindu_caste: hinduCaste,
-        hindu_gotra: hinduGotra,
-        hindu_temple_visit: hinduTempleVisit,
-        hindu_puja_frequency: hinduPujaFrequency,
-        hindu_scripture_reading: hinduScriptureReading,
-        hindu_fasting: hinduFasting,
-        hindu_diet: hinduDiet,
-        hindu_festivals: hinduFestivals,
-        hindu_dress_code: hinduDressCode,
-        hindu_vegetarian: hinduVegetarian,
-        hindu_family_deity: hinduFamilyDeity,
-        hindu_about_religion: hinduAboutReligion,
+        sampraday: hinduSampraday,
+        caste: hinduCaste,
+        gotra: hinduGotra,
+        temple_visit_frequency: hinduTempleVisit,
+        regular_pooja: hinduPujaFrequency,
+        vrat_observance: hinduFasting,
+        food_habit: hinduDiet,
+        kul_devata: hinduFamilyDeity,
       };
     } else if (religion === 'christianity') {
       personalInfoData = {
         ...personalInfoData,
-        christian_denomination: christianDenomination,
-        christian_church_attendance: christianChurchAttendance,
-        christian_bible_reading: christianBibleReading,
-        christian_prayer: christianPrayer,
-        christian_festivals: christianFestivals,
-        christian_dress_code: christianDressCode,
-        christian_diet: christianDiet,
-        christian_baptized: christianBaptized,
-        christian_church_name: christianChurchName,
-        christian_ministry: christianMinistry,
-        christian_about_faith: christianAboutFaith,
+        denomination: christianDenomination,
+        church_attendance: christianChurchAttendance,
+        bible_reading_frequency: christianBibleReading,
+        baptism_status: christianBaptized,
+        church_name: christianChurchName,
+        church_activity_participation: christianMinistry,
+        religious_value_importance: christianAboutFaith,
       };
     }
 
@@ -540,13 +496,6 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
             />
           )}
 
-          <Textarea
-            title="আপনার মানসিক বা শারীরিক কোনো রোগ আছে?"
-            value={isDisease}
-            setValue={setIsDisease}
-            rows={2}
-            required
-          />
           {religion === 'islam' && (
             <Textarea
               title="দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন? "
@@ -662,12 +611,6 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
                 required
               />
               <Select
-                title="ধর্মগ্রন্থ পড়েন?"
-                options={hinduScriptureOptions}
-                value={hinduScriptureReading}
-                setValue={setHinduScriptureReading}
-              />
-              <Select
                 title="ব্রত/উপবাস"
                 options={hinduFastingOptions}
                 value={hinduFasting}
@@ -679,33 +622,6 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
                 value={hinduDiet}
                 setValue={setHinduDiet}
                 required
-              />
-              <Select
-                title="সম্পূর্ণ নিরামিষ?"
-                options={yesNoOptions}
-                value={hinduVegetarian}
-                setValue={setHinduVegetarian}
-              />
-              <Input
-                title="প্রধান উৎসব (কমা দিয়ে আলাদা করুন)"
-                value={hinduFestivals}
-                setValue={setHinduFestivals}
-              />
-              <Select
-                title="পোশাক"
-                options={
-                  gender === 'পুরুষ'
-                    ? hinduDressCodeMaleOptions
-                    : hinduDressCodeFemaleOptions
-                }
-                value={hinduDressCode}
-                setValue={setHinduDressCode}
-              />
-              <Textarea
-                title="ধর্ম সম্পর্কে আপনার মতামত"
-                value={hinduAboutReligion}
-                setValue={setHinduAboutReligion}
-                rows={3}
               />
             </>
           )}
@@ -740,48 +656,20 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
                 required
               />
               <Select
-                title="প্রার্থনা করেন?"
-                options={christianPrayerOptions}
-                value={christianPrayer}
-                setValue={setChristianPrayer}
-                required
-              />
-              <Select
                 title="বাপ্তিস্ম নিয়েছেন?"
                 options={yesNoOptions}
                 value={christianBaptized}
                 setValue={setChristianBaptized}
                 required
               />
-              <Input
-                title="প্রধান উৎসব (কমা দিয়ে আলাদা করুন)"
-                value={christianFestivals}
-                setValue={setChristianFestivals}
-              />
               <Select
-                title="পোশাক"
-                options={
-                  gender === 'পুরুষ'
-                    ? christianDressCodeMaleOptions
-                    : christianDressCodeFemaleOptions
-                }
-                value={christianDressCode}
-                setValue={setChristianDressCode}
-              />
-              <Select
-                title="খাদ্যাভ্যাস"
-                options={christianDietOptions}
-                value={christianDiet}
-                setValue={setChristianDiet}
-              />
-              <Select
-                title="মিনিস্ট্রি/সেবা কাজে যুক্ত?"
+                title="গির্জার কার্যক্রমে অংশগ্রহণ"
                 options={christianMinistryOptions}
                 value={christianMinistry}
                 setValue={setChristianMinistry}
               />
               <Textarea
-                title="আপনার বিশ্বাস সম্পর্কে লিখুন"
+                title="ধর্মীয় মূল্যবোধ সম্পর্কে লিখুন"
                 value={christianAboutFaith}
                 setValue={setChristianAboutFaith}
                 rows={3}

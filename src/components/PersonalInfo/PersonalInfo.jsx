@@ -104,82 +104,49 @@ const PersonalInfo = () => {
         question="ঘরের বাহিরে সাধারণত কি ধরণের পোষাক পরেন?"
         answer={personalInfo?.outside_clothings}
       />
-      {personalInfo?.hindu_sampraday && (
+      {personalInfo?.sampraday && (
         <GridQuestionAnswerCard
           question="সম্প্রদায়"
-          answer={personalInfo?.hindu_sampraday}
+          answer={personalInfo?.sampraday}
         />
       )}
-      {personalInfo?.hindu_caste && (
+      {personalInfo?.caste && (
         <GridQuestionAnswerCard
           question="জাতি/বর্ণ"
-          answer={personalInfo?.hindu_caste}
+          answer={personalInfo?.caste}
         />
       )}
-      {personalInfo?.hindu_gotra && (
-        <GridQuestionAnswerCard
-          question="গোত্র"
-          answer={personalInfo?.hindu_gotra}
-        />
+      {personalInfo?.gotra && (
+        <GridQuestionAnswerCard question="গোত্র" answer={personalInfo?.gotra} />
       )}
-      {personalInfo?.hindu_family_deity && (
+      {personalInfo?.kul_devata && (
         <GridQuestionAnswerCard
           question="কুলদেবতা/পারিবারিক দেবতা"
-          answer={personalInfo?.hindu_family_deity}
+          answer={personalInfo?.kul_devata}
         />
       )}
-      {personalInfo?.hindu_temple_visit && (
+      {personalInfo?.temple_visit_frequency && (
         <GridQuestionAnswerCard
           question="মন্দিরে যাওয়া"
-          answer={personalInfo?.hindu_temple_visit}
+          answer={personalInfo?.temple_visit_frequency}
         />
       )}
-      {personalInfo?.hindu_puja_frequency && (
+      {personalInfo?.regular_pooja && (
         <GridQuestionAnswerCard
           question="পূজা করেন?"
-          answer={personalInfo?.hindu_puja_frequency}
+          answer={personalInfo?.regular_pooja}
         />
       )}
-      {personalInfo?.hindu_scripture_reading && (
-        <GridQuestionAnswerCard
-          question="ধর্মগ্রন্থ পড়েন?"
-          answer={personalInfo?.hindu_scripture_reading}
-        />
-      )}
-      {personalInfo?.hindu_fasting && (
+      {personalInfo?.vrat_observance && (
         <GridQuestionAnswerCard
           question="ব্রত/উপবাস"
-          answer={personalInfo?.hindu_fasting}
+          answer={personalInfo?.vrat_observance}
         />
       )}
-      {personalInfo?.hindu_diet && (
+      {personalInfo?.food_habit && (
         <GridQuestionAnswerCard
           question="খাদ্যাভ্যাস"
-          answer={personalInfo?.hindu_diet}
-        />
-      )}
-      {personalInfo?.hindu_vegetarian && (
-        <GridQuestionAnswerCard
-          question="সম্পূর্ণ নিরামিষ?"
-          answer={personalInfo?.hindu_vegetarian}
-        />
-      )}
-      {personalInfo?.hindu_festivals && (
-        <GridQuestionAnswerCard
-          question="প্রধান উৎসব"
-          answer={personalInfo?.hindu_festivals}
-        />
-      )}
-      {personalInfo?.hindu_dress_code && (
-        <GridQuestionAnswerCard
-          question="পোশাক"
-          answer={personalInfo?.hindu_dress_code}
-        />
-      )}
-      {personalInfo?.hindu_about_religion && (
-        <GridQuestionAnswerCard
-          question="ধর্ম সম্পর্কে আপনার মতামত"
-          answer={personalInfo?.hindu_about_religion}
+          answer={personalInfo?.food_habit}
         />
       )}
     </>
@@ -192,70 +159,46 @@ const PersonalInfo = () => {
         question="ঘরের বাহিরে সাধারণত কি ধরণের পোষাক পরেন?"
         answer={personalInfo?.outside_clothings}
       />
-      {personalInfo?.christian_denomination && (
+      {personalInfo?.denomination && (
         <GridQuestionAnswerCard
           question="ডিনমিনেশন/সম্প্রদায়"
-          answer={personalInfo?.christian_denomination}
+          answer={personalInfo?.denomination}
         />
       )}
-      {personalInfo?.christian_church_name && (
+      {personalInfo?.church_name && (
         <GridQuestionAnswerCard
           question="গির্জার নাম"
-          answer={personalInfo?.christian_church_name}
+          answer={personalInfo?.church_name}
         />
       )}
-      {personalInfo?.christian_church_attendance && (
+      {personalInfo?.church_attendance && (
         <GridQuestionAnswerCard
           question="গির্জায় যাওয়া"
-          answer={personalInfo?.christian_church_attendance}
+          answer={personalInfo?.church_attendance}
         />
       )}
-      {personalInfo?.christian_bible_reading && (
+      {personalInfo?.bible_reading_frequency && (
         <GridQuestionAnswerCard
           question="বাইবেল পড়েন?"
-          answer={personalInfo?.christian_bible_reading}
+          answer={personalInfo?.bible_reading_frequency}
         />
       )}
-      {personalInfo?.christian_prayer && (
-        <GridQuestionAnswerCard
-          question="প্রার্থনা করেন?"
-          answer={personalInfo?.christian_prayer}
-        />
-      )}
-      {personalInfo?.christian_baptized && (
+      {personalInfo?.baptism_status && (
         <GridQuestionAnswerCard
           question="বাপ্তিস্ম নিয়েছেন?"
-          answer={personalInfo?.christian_baptized}
+          answer={personalInfo?.baptism_status}
         />
       )}
-      {personalInfo?.christian_festivals && (
-        <GridQuestionAnswerCard
-          question="প্রধান উৎসব"
-          answer={personalInfo?.christian_festivals}
-        />
-      )}
-      {personalInfo?.christian_dress_code && (
-        <GridQuestionAnswerCard
-          question="পোশাক"
-          answer={personalInfo?.christian_dress_code}
-        />
-      )}
-      {personalInfo?.christian_diet && (
-        <GridQuestionAnswerCard
-          question="খাদ্যাভ্যাস"
-          answer={personalInfo?.christian_diet}
-        />
-      )}
-      {personalInfo?.christian_ministry && (
+      {personalInfo?.church_activity_participation && (
         <GridQuestionAnswerCard
           question="মিনিস্ট্রি/সেবা কাজে যুক্ত?"
-          answer={personalInfo?.christian_ministry}
+          answer={personalInfo?.church_activity_participation}
         />
       )}
-      {personalInfo?.christian_about_faith && (
+      {personalInfo?.religious_value_importance && (
         <GridQuestionAnswerCard
           question="আপনার বিশ্বাস সম্পর্কে"
-          answer={personalInfo?.christian_about_faith}
+          answer={personalInfo?.religious_value_importance}
         />
       )}
     </>

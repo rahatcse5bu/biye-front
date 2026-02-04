@@ -67,15 +67,6 @@ export const hinduPujaOptions = [
 	{ value: 'নিয়মিত পূজা করি না', label: 'নিয়মিত পূজা করি না' },
 ];
 
-export const hinduScriptureOptions = [
-	{ value: 'গীতা পড়ি', label: 'গীতা পড়ি' },
-	{ value: 'রামায়ণ পড়ি', label: 'রামায়ণ পড়ি' },
-	{ value: 'মহাভারত পড়ি', label: 'মহাভারত পড়ি' },
-	{ value: 'পুরাণ পড়ি', label: 'পুরাণ পড়ি' },
-	{ value: 'বেদ পড়ি', label: 'বেদ পড়ি' },
-	{ value: 'নিয়মিত পড়া হয় না', label: 'নিয়মিত পড়া হয় না' },
-];
-
 export const hinduFastingOptions = [
 	{ value: 'একাদশী', label: 'একাদশী' },
 	{ value: 'প্রতি সোমবার', label: 'প্রতি সোমবার' },
@@ -90,30 +81,6 @@ export const hinduDietOptions = [
 	{ value: 'মাছ-ডিম খাই', label: 'মাছ-ডিম খাই' },
 	{ value: 'মাংস খাই', label: 'মাংস খাই' },
 	{ value: 'গোমাংস ছাড়া সব খাই', label: 'গোমাংস ছাড়া সব খাই' },
-];
-
-export const hinduFestivalOptions = [
-	{ value: 'দুর্গাপূজা', label: 'দুর্গাপূজা' },
-	{ value: 'কালীপূজা', label: 'কালীপূজা' },
-	{ value: 'সরস্বতী পূজা', label: 'সরস্বতী পূজা' },
-	{ value: 'লক্ষ্মী পূজা', label: 'লক্ষ্মী পূজা' },
-	{ value: 'গণেশ পূজা', label: 'গণেশ পূজা' },
-	{ value: 'জন্মাষ্টমী', label: 'জন্মাষ্টমী' },
-	{ value: 'হোলি', label: 'হোলি' },
-	{ value: 'দীপাবলি', label: 'দীপাবলি' },
-];
-
-export const hinduDressCodeMaleOptions = [
-	{ value: 'ধুতি-পাঞ্জাবি পরি', label: 'ধুতি-পাঞ্জাবি পরি' },
-	{ value: 'সাধারণ পোশাক পরি', label: 'সাধারণ পোশাক পরি' },
-	{ value: 'পূজার সময় ধুতি পরি', label: 'পূজার সময় ধুতি পরি' },
-];
-
-export const hinduDressCodeFemaleOptions = [
-	{ value: 'শাড়ি পরি', label: 'শাড়ি পরি' },
-	{ value: 'সালোয়ার-কামিজ পরি', label: 'সালোয়ার-কামিজ পরি' },
-	{ value: 'পূজার সময় শাড়ি পরি', label: 'পূজার সময় শাড়ি পরি' },
-	{ value: 'যেকোনো পোশাক পরি', label: 'যেকোনো পোশাক পরি' },
 ];
 
 export const yesNoOptions = [
@@ -147,41 +114,6 @@ export const christianBibleReadingOptions = [
 	{ value: 'সাপ্তাহিক', label: 'সাপ্তাহিক' },
 	{ value: 'মাঝে মাঝে', label: 'মাঝে মাঝে' },
 	{ value: 'কদাচিৎ', label: 'কদাচিৎ' },
-];
-
-export const christianPrayerOptions = [
-	{ value: 'প্রতিদিন একাধিকবার', label: 'প্রতিদিন একাধিকবার' },
-	{ value: 'প্রতিদিন সকাল-সন্ধ্যা', label: 'প্রতিদিন সকাল-সন্ধ্যা' },
-	{ value: 'প্রতিদিন একবার', label: 'প্রতিদিন একবার' },
-	{ value: 'মাঝে মাঝে', label: 'মাঝে মাঝে' },
-];
-
-export const christianFestivalOptions = [
-	{ value: 'বড়দিন', label: 'বড়দিন' },
-	{ value: 'ইস্টার', label: 'ইস্টার' },
-	{ value: 'গুড ফ্রাইডে', label: 'গুড ফ্রাইডে' },
-	{ value: 'পেন্টেকস্ট', label: 'পেন্টেকস্ট' },
-	{ value: 'সব প্রধান উৎসব', label: 'সব প্রধান উৎসব' },
-];
-
-export const christianDressCodeMaleOptions = [
-	{ value: 'ফর্মাল পোশাক', label: 'ফর্মাল পোশাক' },
-	{ value: 'সাধারণ পোশাক', label: 'সাধারণ পোশাক' },
-	{ value: 'চার্চে ফর্মাল', label: 'চার্চে ফর্মাল' },
-];
-
-export const christianDressCodeFemaleOptions = [
-	{ value: 'মডেস্ট পোশাক', label: 'মডেস্ট পোশাক' },
-	{ value: 'সাধারণ পোশাক', label: 'সাধারণ পোশাক' },
-	{ value: 'চার্চে মডেস্ট', label: 'চার্চে মডেস্ট' },
-	{ value: 'যেকোনো পোশাক', label: 'যেকোনো পোশাক' },
-];
-
-export const christianDietOptions = [
-	{ value: 'কোনো বিধিনিষেধ নেই', label: 'কোনো বিধিনিষেধ নেই' },
-	{ value: 'লেন্টে মাছ-মাংস বর্জন', label: 'লেন্টে মাছ-মাংস বর্জন' },
-	{ value: 'শুধু মাছ খাই', label: 'শুধু মাছ খাই' },
-	{ value: 'নিরামিষ', label: 'নিরামিষ' },
 ];
 
 export const christianMinistryOptions = [
