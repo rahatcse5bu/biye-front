@@ -13,6 +13,54 @@ import { convertHeightToBengali } from '../../utils/height';
 import { GeneralInfoServices } from '../../services/generalInfo';
 import ReactionButton from '../ReactionButton/ReactionButton';
 
+// Helper function to get religion display name
+const getReligionDisplay = (religion) => {
+  switch (religion) {
+    case 'islam':
+      return 'ইসলাম';
+    case 'hinduism':
+      return 'হিন্দু';
+    case 'christianity':
+      return 'খ্রিস্টান';
+    default:
+      return 'ইসলাম';
+  }
+};
+
+// Helper function to get religious type display name
+const getReligiousTypeDisplay = (religiousType) => {
+  switch (religiousType) {
+    case 'practicing_muslim':
+      return 'প্র্যাকটিসিং';
+    case 'general_muslim':
+      return 'সাধারণ';
+    case 'practicing_hindu':
+      return 'প্র্যাকটিসিং';
+    case 'general_hindu':
+      return 'সাধারণ';
+    case 'practicing_christian':
+      return 'প্র্যাকটিসিং';
+    case 'general_christian':
+      return 'সাধারণ';
+    default:
+      return '';
+  }
+};
+
+// Helper function to get badge color based on religion
+const getBadgeColor = (religion) => {
+  switch (religion) {
+    case 'islam':
+      return 'bg-green-600';
+    case 'hinduism':
+      return 'bg-orange-500';
+    case 'christianity':
+      return 'bg-blue-600';
+    default:
+      return 'bg-green-600';
+  }
+};
+
 const BioData = ({ biodata }) => {
   const navigate = useNavigate();
 
@@ -54,6 +102,12 @@ const BioData = ({ biodata }) => {
         <div className="flex absolute top-2 left-2">
           <FaEye className="w-6 h-6 mr-2" />
           {biodata?.views_count}
+        </div>
+        
+        {/* Religion Badge */}
+        <div className={`absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-semibold text-white ${getBadgeColor(biodata?.religion)}`}>
+          {getReligionDisplay(biodata?.religion)}
+          {biodata?.religious_type && ` • ${getReligiousTypeDisplay(biodata?.religious_type)}`}
         </div>
       </div>
       <div className="mx-2 mt-4">
