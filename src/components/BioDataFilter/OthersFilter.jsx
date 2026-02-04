@@ -3,12 +3,18 @@ import CustomAccordion from '../CustomAccordion/CustomAccordion';
 import { Colors } from '../../constants/colors';
 import CustomCheckboxOption from '../CustomCheckBoxOption/CustomCheckBoxOption';
 import BioContext from '../../contexts/BioContext';
+import { usePrimary } from '../../contexts/userPrimary';
 
 const OthersFilter = () => {
   const { setFilterFields } = useContext(BioContext);
+  const { religion } = usePrimary();
   const [othersFilterOpen, setOthersFilterOpen] = useState(false);
   const [economicStatus, setEconomicStatus] = useState([]);
   const [categories, setCategories] = useState([]);
+
+  // Check if Islam-specific options should be shown
+  // Show if no religion selected OR if Islam is selected
+  const showIslamicOptions = !religion || religion === 'islam';
 
   const handleEconomicStatusChange = (value, checked) => {
     const updated = checked
@@ -105,31 +111,36 @@ const OthersFilter = () => {
             checked={categories.includes('বন্ধ্যা')}
             onChange={(e) => handleCategoriesChange('বন্ধ্যা', e.target.checked)}
           />
-          <CustomCheckboxOption
-            id="newMuslim"
-            label="নওমুসলিম"
-            checked={categories.includes('নওমুসলিম')}
-            onChange={(e) => handleCategoriesChange('নওমুসলিম', e.target.checked)}
-          />
+          {showIslamicOptions && (
+            <CustomCheckboxOption
+              id="newMuslim"
+              label="নওমুসলিম"
+              checked={categories.includes('নওমুসলিম')}
+              onChange={(e) => handleCategoriesChange('নওমুসলিম', e.target.checked)}
+            />
+          )}
           <CustomCheckboxOption
             id="orphan"
             label="এতিম"
             checked={categories.includes('এতিম')}
             onChange={(e) => handleCategoriesChange('এতিম', e.target.checked)}
           />
-          <CustomCheckboxOption
-            id="interestInMasna"
-            label="মাসনা হতে আগ্রহী"
-            checked={categories.includes('মাসনা হতে আগ্রহী')}
-            onChange={(e) => handleCategoriesChange('মাসনা হতে আগ্রহী', e.target.checked)}
-          />
-
-          <CustomCheckboxOption
-            id="tabligh"
-            label="তাবলীগ"
-            checked={categories.includes('তাবলীগ')}
-            onChange={(e) => handleCategoriesChange('তাবলীগ', e.target.checked)}
-          />
+          {showIslamicOptions && (
+            <>
+              <CustomCheckboxOption
+                id="interestInMasna"
+                label="মাসনা হতে আগ্রহী"
+                checked={categories.includes('মাসনা হতে আগ্রহী')}
+                onChange={(e) => handleCategoriesChange('মাসনা হতে আগ্রহী', e.target.checked)}
+              />
+              <CustomCheckboxOption
+                id="tabligh"
+                label="তাবলীগ"
+                checked={categories.includes('তাবলীগ')}
+                onChange={(e) => handleCategoriesChange('তাবলীগ', e.target.checked)}
+              />
+            </>
+          )}
         </div>
       </div>
     </CustomAccordion>

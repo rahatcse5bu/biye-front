@@ -14,6 +14,9 @@ const PrimaryFilterProvider = ({ children }) => {
   });
   const [bioType, setBioType] = useState('');
   const [maritalStatus, setMaritalStatus] = useState('');
+  const [religion, setReligion] = useState('');
+  const [religiousType, setReligiousType] = useState('');
+  
   const value = {
     height,
     setHeight,
@@ -23,6 +26,10 @@ const PrimaryFilterProvider = ({ children }) => {
     bioType,
     maritalStatus,
     setMaritalStatus,
+    religion,
+    setReligion,
+    religiousType,
+    setReligiousType,
   };
   return (
     <PrimaryFilterContext.Provider value={value}>

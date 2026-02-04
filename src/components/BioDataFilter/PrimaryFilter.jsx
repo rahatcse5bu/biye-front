@@ -5,6 +5,22 @@ import CustomAccordion from '../CustomAccordion/CustomAccordion';
 import { useFilter } from '../../contexts/useFilter';
 import { usePrimary } from '../../contexts/userPrimary';
 
+// Religious type options based on religion
+const religiousTypesByReligion = {
+  islam: [
+    { value: 'practicing_muslim', label: 'প্র্যাকটিসিং মুসলিম' },
+    { value: 'general_muslim', label: 'সাধারণ মুসলিম' },
+  ],
+  hinduism: [
+    { value: 'practicing_hindu', label: 'প্র্যাকটিসিং হিন্দু' },
+    { value: 'general_hindu', label: 'সাধারণ হিন্দু' },
+  ],
+  christianity: [
+    { value: 'practicing_christian', label: 'প্র্যাকটিসিং খ্রিস্টান' },
+    { value: 'general_christian', label: 'সাধারণ খ্রিস্টান' },
+  ],
+};
+
 const PrimaryFilter = () => {
   const { setFilterFields } = useBio();
   const { primaryFilterOpen, setPrimaryFilterOpen } = useFilter();
@@ -17,7 +33,14 @@ const PrimaryFilter = () => {
     bioType,
     maritalStatus,
     setMaritalStatus,
+    religion,
+    setReligion,
+    religiousType,
+    setReligiousType,
   } = usePrimary();
+
+  // Get religious type options based on selected religion
+  const religiousTypeOptions = religion ? religiousTypesByReligion[religion] || [] : [];
 
   return (
     <div>
@@ -113,6 +136,98 @@ const PrimaryFilter = () => {
             </div>
           </div>
         </div>
+
+        {/* Religion Filter */}
+        <div className="lg:w-64 w-full">
+          <label
+            htmlFor="religion"
+            className="block my-2 text-sm font-bold text-left text-gray-700"
+          >
+            ধর্ম
+          </label>
+          <div className="relative">
+            <select
+              id="religion"
+              name="religion"
+              value={religion}
+              onChange={(e) => {
+                const value = e.target.value;
+                setReligion(value);
+                // Reset religious type when religion changes
+                setReligiousType('');
+                setFilterFields((filterFields) => {
+                  const newFields = {
+                    ...filterFields,
+                    religion: value,
+                  };
+                  // Remove religious_type when religion changes
+                  delete newFields.religious_type;
+                  return newFields;
+                });
+              }}
+              className="block w-[90%] px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
+            >
+              <option value="">সকল ধর্ম</option>
+              <option value="islam">ইসলাম</option>
+              <option value="hinduism">হিন্দু</option>
+              <option value="christianity">খ্রিস্টান</option>
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+              <svg
+                className="w-4 h-4 fill-current"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M6.293 9.293a1 1 0 011.414 0L10 11.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Religious Type Filter - Only show when religion is selected */}
+        {religion && religiousTypeOptions.length > 0 && (
+          <div className="lg:w-64 w-full">
+            <label
+              htmlFor="religiousType"
+              className="block my-2 text-sm font-bold text-left text-gray-700"
+            >
+              ধর্মীয় ধরন
+            </label>
+            <div className="relative">
+              <select
+                id="religiousType"
+                name="religiousType"
+                value={religiousType}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setReligiousType(value);
+                  setFilterFields((filterFields) => ({
+                    ...filterFields,
+                    religious_type: value,
+                  }));
+                }}
+                className="block w-[90%] px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
+              >
+                <option value="">সকল ধরন</option>
+                {religiousTypeOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+                <svg
+                  className="w-4 h-4 fill-current"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M6.293 9.293a1 1 0 011.414 0L10 11.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="px-2">
           <label
             htmlFor="age"

@@ -3,11 +3,17 @@ import CustomAccordion from '../CustomAccordion/CustomAccordion';
 import { Colors } from '../../constants/colors';
 import CustomCheckboxOption from '../CustomCheckBoxOption/CustomCheckBoxOption';
 import BioContext from '../../contexts/BioContext';
+import { usePrimary } from '../../contexts/userPrimary';
 
 const OccupationFilter = () => {
   const { setFilterFields } = useContext(BioContext);
+  const { religion } = usePrimary();
   const [occupationFilterOpen, setOccupationFilterOPen] = useState(false);
   const [occupation, setOccupation] = useState([]);
+
+  // Check if Islam-specific options should be shown
+  // Show if no religion selected OR if Islam is selected
+  const showIslamicOptions = !religion || religion === 'islam';
 
   const handleOccupationChange = (value, checked) => {
     const updated = checked
@@ -37,18 +43,23 @@ const OccupationFilter = () => {
         </h3>
 
         <div className="grid grid-cols-2">
-          <CustomCheckboxOption
-            id="imam"
-            label="ইমাম"
-            checked={occupation.includes('ইমাম')}
-            onChange={(e) => handleOccupationChange('ইমাম', e.target.checked)}
-          />
-          <CustomCheckboxOption
-            id="madrashaTeacher"
-            label=" মাদ্রাসা শিক্ষক"
-            checked={occupation.includes('মাদ্রাসা শিক্ষক')}
-            onChange={(e) => handleOccupationChange('মাদ্রাসা শিক্ষক', e.target.checked)}
-          />
+          {/* Islamic occupations - only show for Islam or no religion selected */}
+          {showIslamicOptions && (
+            <>
+              <CustomCheckboxOption
+                id="imam"
+                label="ইমাম"
+                checked={occupation.includes('ইমাম')}
+                onChange={(e) => handleOccupationChange('ইমাম', e.target.checked)}
+              />
+              <CustomCheckboxOption
+                id="madrashaTeacher"
+                label=" মাদ্রাসা শিক্ষক"
+                checked={occupation.includes('মাদ্রাসা শিক্ষক')}
+                onChange={(e) => handleOccupationChange('মাদ্রাসা শিক্ষক', e.target.checked)}
+              />
+            </>
+          )}
           <CustomCheckboxOption
             id="teacher"
             label="শিক্ষক"
