@@ -17,8 +17,14 @@ function BioInfo({ id }) {
       className=" text-white p-4 rounded-lg shadow-lg w-full "
     >
       <img
-        className="rounded-full py-2 h-24  w-24 mx-auto"
-        src={generalInfo?.gender === "মহিলা" ? female : male}
+        className="rounded-full py-2 h-24  w-24 mx-auto object-cover"
+        src={
+          generalInfo?.gender === "মহিলা"
+            ? female
+            : generalInfo?.photos && generalInfo.photos.length > 0
+            ? generalInfo.photos[0]
+            : male
+        }
         alt="Person"
       />
 
@@ -101,6 +107,26 @@ function BioInfo({ id }) {
           </tbody>
         </table>
       </div>
+
+      {/* Photo gallery for male profiles */}
+      {generalInfo?.gender !== "মহিলা" &&
+        generalInfo?.photos &&
+        generalInfo.photos.length > 1 && (
+          <div className="mt-4">
+            <p className="text-sm font-semibold mb-2 text-center">ছবি সমূহ</p>
+            <div className="grid grid-cols-3 gap-2">
+              {generalInfo.photos.map((url, index) => (
+                <img
+                  key={index}
+                  src={url}
+                  alt={`ছবি ${index + 1}`}
+                  className="w-full h-20 object-cover rounded-md border border-white/30 cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={() => window.open(url, '_blank')}
+                />
+              ))}
+            </div>
+          </div>
+        )}
     </div>
   );
 }

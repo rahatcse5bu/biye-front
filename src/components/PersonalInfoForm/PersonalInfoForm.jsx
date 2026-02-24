@@ -32,12 +32,11 @@ import {
   dataToMultipleExpectedPartner,
   getDataFromMultipleInputExpectedPartner,
 } from '../../utils/form';
-import { GeneralInfoServices } from '../../services/generalInfo';
 import { PersonalInfoInfoServices } from '../../services/personalInfo';
 import { getErrorMessage } from '../../utils/error';
 import { Toast } from '../../utils/toast';
 
-const PersonalInfoForm = ({ setUserForm, userForm }) => {
+const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', gender: genderProp = '' }) => {
   // Common states
   const [cloth, setCloth] = useState('');
   const [personalCategory, setPersonalCategory] = useState([]);
@@ -93,14 +92,6 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
     }
   };
   const { userInfo } = useContext(UserContext);
-  const { data: generalInfo = null } = useQuery({
-    queryKey: ['general-info', userInfo?.data?._id, getToken()?.token],
-    queryFn: async () => {
-      return await GeneralInfoServices.getGeneralInfoByUser(getToken()?.token);
-    },
-    retry: false,
-    enabled: !!userInfo?.data?._id,
-  });
 
   const { data: personalInfo = null, isLoading } = useQuery({
     queryKey: ['personal-info', userInfo?.data?._id],
@@ -119,8 +110,7 @@ const PersonalInfoForm = ({ setUserForm, userForm }) => {
   // 		"personal-info-form-verify-token"
   // 	);
   // }, [logOut, userInfo?.data]);
-  const gender = generalInfo?.data?.gender || '';
-  const religion = generalInfo?.data?.religion || 'islam';
+  const gender = genderProp;
 
   useEffect(() => {
     if (personalInfo?.data) {

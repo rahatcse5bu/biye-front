@@ -4,14 +4,14 @@ import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswer
 const OngikarNama = () => {
   const { bio } = useContext(BioContext);
   const ongikarNama = bio?.ongikarNama || null;
+  const siteUrl = import.meta.env.VITE_SITE_URL || 'pncnikah.com';
   return (
     <div className="single-bio-ongikar-info rounded shadow">
       <h5 className="card-title text-center text-2xl my-3">অঙ্গীকারনামা</h5>
 
       <div className="grid md:grid-cols-2 grid-cols-1 gap-0 my-3">
         <GridQuestionAnswerCard
-          question=" PNC-Nikah.com ওয়েবসাইটে বায়োডাটা জমা দিচ্ছেন, তা আপনার অভিভাবক
-              জানেন?"
+          question={`${siteUrl} ওয়েবসাইটে বায়োডাটা জমা দিচ্ছেন, তা আপনার অভিভাবক জানেন?`}
           answer={ongikarNama?.is_family_know}
         />
         <GridQuestionAnswerCard
@@ -19,7 +19,7 @@ const OngikarNama = () => {
           answer={ongikarNama?.isTrueData}
         />
         <GridQuestionAnswerCard
-          question="কোনো মিথ্যা তথ্য প্রদান করলে দুনিয়াবী আইনগত এবং আখিরাতের দায়ভার PNC-Nikah.com কর্তৃপক্ষ নিবে না। আপনি কি সম্মত?"
+          question={`কোনো মিথ্যা তথ্য প্রদান করলে দুনিয়াবী আইনগত এবং আখিরাতের দায়ভার ${siteUrl} কর্তৃপক্ষ নিবে না। আপনি কি সম্মত?`}
           answer={ongikarNama?.isAgree}
         />
       </div>

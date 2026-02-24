@@ -32,7 +32,7 @@ import { Toast } from '../../utils/toast';
 import { EducationalQualificationInfoServices } from '../../services/educationalQualification';
 import { getToken } from '../../utils/cookies';
 
-const EducationalQualificationForm = ({ setUserForm, userForm }) => {
+const EducationalQualificationForm = ({ setUserForm, userForm, religion = 'islam' }) => {
   const [eduType, setEduType] = useState('');
   const [status, setStatus] = useState([]);
   const [maxEdu, setMaxEdu] = useState('');
@@ -83,6 +83,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
   // const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
+
   const { data: educationalQualification = null, isLoading } = useQuery({
     queryKey: [
       'educational-qualification',
@@ -1525,14 +1526,16 @@ const EducationalQualificationForm = ({ setUserForm, userForm }) => {
 				setValue={setStatus}
 				options={deenStatusOptions}
 			/> */}
-          <MultipleSelect
-            title="দ্বীনি শিক্ষাগত পদ্ববীসমূহ"
-            options={deenStatusOptions}
-            value={status}
-            setValue={setStatus}
-            classes="z-10"
-            closeMenuOnSelect={true}
-          />
+          {religion === 'islam' && (
+            <MultipleSelect
+              title="দ্বীনি শিক্ষাগত পদ্ববীসমূহ"
+              options={deenStatusOptions}
+              value={status}
+              setValue={setStatus}
+              classes="z-10"
+              closeMenuOnSelect={true}
+            />
+          )}
 
           <div className="flex items-center justify-between my-5">
             <button

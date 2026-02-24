@@ -9,13 +9,12 @@ import { useQuery } from "@tanstack/react-query";
 import { getToken } from "../../utils/cookies";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
 // import { useNavigate } from "react-router-dom";
-import { GeneralInfoServices } from "../../services/generalInfo";
 import { MaritalInfoInfoServices } from "../../services/maritalInfo";
 import { getErrorMessage } from "../../utils/error";
 import { Toast } from "../../utils/toast";
 // import { verifyToken } from "../../services/verifyToken";
 
-const MaritalInfoForm = ({ userForm, setUserForm }) => {
+const MaritalInfoForm = ({ userForm, setUserForm, religion = 'islam', gender: genderProp = '', maritalStatus: maritalStatusProp = '' }) => {
   const [wifeDeadInfo, setWifeDeadInfo] = useState("");
   const [whenHusbandDead, setWhenHusbandDead] = useState("");
   const [divorcedReason, setDivorcedReason] = useState("");
@@ -39,14 +38,6 @@ const MaritalInfoForm = ({ userForm, setUserForm }) => {
   const { userInfo } = useContext(UserContext);
   // const navigate = useNavigate();
 
-  const { data: generalInfo = null } = useQuery({
-    queryKey: ["general-info", userInfo?.data?._id, getToken()?.token],
-    queryFn: async () => {
-      return await GeneralInfoServices.getGeneralInfoByUser(getToken()?.token);
-    },
-    retry: false,
-    enabled: !!userInfo?.data?._id,
-  });
   const { data: maritalInfo = null, isLoading } = useQuery({
     queryKey: ["marital-info", userInfo?.data?._id, getToken()?.token],
     queryFn: async () => {
@@ -58,14 +49,11 @@ const MaritalInfoForm = ({ userForm, setUserForm }) => {
     enabled: !!userInfo?.data?._id,
   });
 
+  // maritalStatus and gender are set from maritalInfo or from the prop
   useEffect(() => {
-    const maritalStatus = generalInfo?.data?.marital_status || "";
-    const gender = generalInfo?.data?.gender || "";
-    setGender(gender);
-    setMaritalStatus(maritalStatus);
-  }, [generalInfo]);
-
-  const religion = generalInfo?.data?.religion || 'islam';
+    if (genderProp) setGender(genderProp);
+    if (maritalStatusProp) setMaritalStatus(maritalStatusProp);
+  }, [genderProp, maritalStatusProp]);
   // useEffect(() => {
   // 	verifyToken(userInfo?.data[0]?.id, logOut, "marital-info-verify-token");
   // }, [logOut, userInfo?.data]);

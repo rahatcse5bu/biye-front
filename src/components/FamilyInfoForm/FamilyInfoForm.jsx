@@ -16,11 +16,10 @@ import { Colors } from "../../constants/colors";
 import { useQuery } from "@tanstack/react-query";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import { FamilyStatusInfoServices } from "../../services/familyStatus";
-import { GeneralInfoServices } from "../../services/generalInfo";
 import { getErrorMessage } from "../../utils/error";
 import { Toast } from "../../utils/toast";
 
-const FamilyInfoForm = ({ setUserForm, userForm }) => {
+const FamilyInfoForm = ({ setUserForm, userForm, religion = 'islam' }) => {
   const [fatherName, setFatherName] = useState("");
   const [motherName, setMotherName] = useState("");
   const [isFatherAlive, setIsFatherAlive] = useState("");
@@ -38,19 +37,7 @@ const FamilyInfoForm = ({ setUserForm, userForm }) => {
   const [loading, setLoading] = useState(false);
 
   const { userInfo } = useContext(UserContext);
-  
-  // Fetch general info to get religion
-  const { data: generalInfo = null } = useQuery({
-    queryKey: ["general-info", userInfo?.data?._id, getToken()?.token],
-    queryFn: async () => {
-      return await GeneralInfoServices.getGeneralInfoByUser(getToken()?.token);
-    },
-    retry: false,
-    enabled: !!userInfo?.data?._id,
-  });
-  
-  const religion = generalInfo?.data?.religion || 'islam';
-  
+
   const { data: familyInfo = null, isLoading } = useQuery({
     queryKey: ["family-info", userInfo?.data?._id, getToken()?.token],
     queryFn: async () => {

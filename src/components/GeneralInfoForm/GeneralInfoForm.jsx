@@ -38,8 +38,9 @@ import CustomButton from '../CustomButton/CustomButton';
 import { FaYoutube } from 'react-icons/fa';
 import CustomModal from '../CustomModal/CustomModal';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import PhotoUpload from '../PhotoUpload/PhotoUpload';
 
-const GeneralInfoForm = ({ userForm, setUserForm }) => {
+const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved }) => {
   const { userInfo, logOut } = useContext(UserContext);
   const [referId, setReferId] = useState('');
   const [bioType, setBioType] = useState('');
@@ -60,6 +61,7 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
     useState(maritalStatus);
   const [loading, setLoading] = useState(false);
   const [isModelForBioDate, setIsModalForBioDate] = useState(false);
+  const [photos, setPhotos] = useState([]);
   const navigate = useNavigate();
   const { data: generalInfo = null, isLoading } = useQuery({
     queryKey: ['general-info', userInfo?.data?._id, getToken()?.token],
@@ -68,6 +70,10 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
     },
     retry: false,
     enabled: !!userInfo?.data?._id,
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
   const { data: userInfoIds = null } = useQuery({
     queryKey: ['all-users-id', getToken()?.token],
@@ -114,6 +120,10 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
       }
       if (religious_type) {
         setReligiousType(religious_type);
+      }
+      // Load saved photos
+      if (generalInfo.data.photos && Array.isArray(generalInfo.data.photos)) {
+        setPhotos(generalInfo.data.photos);
       }
       // console.log("refer_user", refer_user);
       // console.log("userInfoIds", userInfoIds);
@@ -189,6 +199,7 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
       refer_user: referId?.value,
       religion: religion,
       religious_type: religiousType,
+      photos: gender === 'পুরুষ' ? photos : [],
     };
 
     // console.log('general_info_data~~', formData);
@@ -216,7 +227,11 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
         );
       }
       if (data.success) {
-        Toast.successToast('আপনার তথ্য আপডেট  করা হয়েছে');
+        Toast.successToast('আপনার তথ্য আপডেট  করা হয়েছে');
+        // Notify parent Form.jsx with the saved data so sibling steps get fresh religion/gender
+        if (onGeneralInfoSaved) {
+          onGeneralInfoSaved(formData);
+        }
         setUserForm((prev) => prev + 1);
       }
     } catch (error) {
@@ -371,6 +386,12 @@ const GeneralInfoForm = ({ userForm, setUserForm }) => {
             setValue={setReligiousType}
             options={religiousTypeOptions}
           />
+
+          {/* Photo upload - only for bridegroom (male) */}
+          {gender === 'পুরুষ' && (
+            <PhotoUpload photos={photos} setPhotos={setPhotos} />
+          )}
+
           <div className="flex items-center justify-between my-5">
             <button
               type="button"

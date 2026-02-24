@@ -11,11 +11,10 @@ import { useEffect } from 'react';
 import { getToken } from '../../utils/cookies';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import { OngikarNamaServices } from '../../services/ongikarNama';
-import { GeneralInfoServices } from '../../services/generalInfo';
 import { getErrorMessage } from '../../utils/error';
 import { Toast } from '../../utils/toast';
 
-const OngikarNamaForm = ({ userForm, setUserForm }) => {
+const OngikarNamaForm = ({ userForm, setUserForm, religion = 'islam' }) => {
   const [isAgree, setIsAgree] = useState('');
   const [isTrue, setIsTrue] = useState('');
   const [isFamilyKnow, setIsFamilyKnow] = useState('');
@@ -23,16 +22,8 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
   const { userInfo } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
 
-  const { data: generalInfo = null } = useQuery({
-    queryKey: ['general-info', userInfo?.data?._id, getToken()?.token],
-    queryFn: async () => {
-      return await GeneralInfoServices.getGeneralInfoByUser(getToken()?.token);
-    },
-    retry: false,
-    enabled: !!userInfo?.data?._id,
-  });
 
-  const religion = generalInfo?.data?.religion || 'islam';
+  const siteUrl = import.meta.env.VITE_SITE_URL || 'pncnikah.com';
 
   const { data: ongikarNamaInfo = null, isLoading } = useQuery({
     queryKey: ['ongikar-nama', userInfo?.data?._id, getToken()?.token],
@@ -137,7 +128,7 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
             value={isFamilyKnow}
             setValue={setIsFamilyKnow}
             options={conditionOptions}
-            title="pncnikah.com ওয়েবসাইটে বায়োডাটা জমা দিচ্ছেন, তা আপনার অভিভাবক জানেন?"
+            title={`${siteUrl} ওয়েবসাইটে বায়োডাটা জমা দিচ্ছেন, তা আপনার অভিভাবক জানেন?`}
           />
 
           <Select
@@ -156,8 +147,8 @@ const OngikarNamaForm = ({ userForm, setUserForm }) => {
             setValue={setIsAgree}
             options={conditionOptions}
             title={religion === 'islam'
-              ? "কোনো মিথ্যা তথ্য প্রদান করলে দুনিয়াবী আইনগত এবং আখিরাতের দায়ভার pncnikah.com কর্তৃপক্ষ নিবে না। আপনি কি সম্মত?"
-              : "কোনো মিথ্যা তথ্য প্রদান করলে আইনগত দায়ভার pncnikah.com কর্তৃপক্ষ নিবে না। আপনি কি সম্মত?"}
+              ? `কোনো মিথ্যা তথ্য প্রদান করলে দুনিয়াবী আইনগত এবং আখিরাতের দায়ভার ${siteUrl} কর্তৃপক্ষ নিবে না। আপনি কি সম্মত?`
+              : `কোনো মিথ্যা তথ্য প্রদান করলে আইনগত দায়ভার ${siteUrl} কর্তৃপক্ষ নিবে না। আপনি কি সম্মত?`}
           />
           <Select
             required

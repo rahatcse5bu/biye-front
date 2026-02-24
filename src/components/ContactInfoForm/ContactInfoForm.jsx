@@ -9,12 +9,11 @@ import UserContext from "../../contexts/UserContext";
 import { useEffect } from "react";
 import { getToken } from "../../utils/cookies";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
-import { GeneralInfoServices } from "../../services/generalInfo";
 import { ContactServices } from "../../services/contact";
 import { getErrorMessage } from "../../utils/error";
 import { Toast } from "../../utils/toast";
 
-const ContactInfoForm = ({ userForm, setUserForm }) => {
+const ContactInfoForm = ({ userForm, setUserForm, gender = '' }) => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -22,15 +21,7 @@ const ContactInfoForm = ({ userForm, setUserForm }) => {
   const { userInfo } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
 
-  const { data: generalInfo = null } = useQuery({
-    queryKey: ["general-info", userInfo?.data?._id, getToken()?.token],
-    queryFn: async () => {
-      return await GeneralInfoServices.getGeneralInfoByUser(getToken()?.token);
-    },
-    retry: false,
-    enabled: !!userInfo?.data?._id,
-  });
-  const gender = generalInfo?.data?.gender || "";
+
 
   // console.log("gender~~", gender);
 

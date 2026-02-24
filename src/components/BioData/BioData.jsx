@@ -65,10 +65,12 @@ const BioData = ({ biodata }) => {
         className="h-[200px] min flex relative  flex-col justify-center rounded-t-md text-white"
       >
         <img
-          className="w-16 h-16 mx-auto rounded-full "
+          className="w-16 h-16 mx-auto rounded-full object-cover"
           src={
             biodata?.gender === 'মহিলা'
               ? '/assets/icons/female.svg'
+              : biodata?.photos && biodata.photos.length > 0
+              ? biodata.photos[0]
               : '/assets/icons/male.svg'
           }
           alt=""
