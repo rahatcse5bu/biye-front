@@ -6,11 +6,12 @@ import { FcLike, FcDislike, FcSettings, FcSupport } from 'react-icons/fc';
 import { Button } from '@material-tailwind/react';
 import { useState, useRef } from 'react';
 import classNames from 'classnames';
-import { getGender } from '../../utils/localStorage';
+import { getGender, getProfilePhoto } from '../../utils/localStorage';
 
 const ProfileDropdown = ({ userInfo, myBioDataHandler }) => {
   const [isHovered, setIsHovered] = useState(false);
   const gender = getGender();
+  const profilePhoto = getProfilePhoto();
   const profileCardRef = useRef(null);
 
   return (
@@ -45,11 +46,11 @@ const ProfileDropdown = ({ userInfo, myBioDataHandler }) => {
         >
           <div className="py-5 text-center">
             <img
-              className="w-24 h-24 py-2 mx-auto rounded-full"
+              className="w-24 h-24 py-2 mx-auto rounded-full object-cover"
               src={
                 gender === 'মহিলা'
                   ? '/assets/icons/female.svg'
-                  : '/assets/icons/male.svg'
+                  : (profilePhoto || '/assets/icons/male.svg')
               }
               alt="Person"
             />

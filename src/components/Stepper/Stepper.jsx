@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Stepper, Step } from '@material-tailwind/react';
 import { FaCheck } from 'react-icons/fa6';
 import { useContext } from 'react';
@@ -8,12 +8,7 @@ import UserContext from '../../contexts/UserContext';
 export function StepperLine({ userForm, setUserForm }) {
   const { userInfo } = useContext(UserContext);
 
-  const lastEditedIndex = userInfo?.data?.last_edited_timeline_index || 1;
   const editedTimelineIndex = userInfo?.data?.edited_timeline_index || 1;
-
-  useEffect(() => {
-    setUserForm(lastEditedIndex);
-  }, [lastEditedIndex, setUserForm]);
   const stepperSize = Array.from({ length: 10 }, (_, index) => index);
   const clickStep = (index) => {
     setUserForm(index + 1);

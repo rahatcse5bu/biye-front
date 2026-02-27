@@ -29,7 +29,7 @@ import {
   setUserOPenSmall,
 } from '../../utils/cookies';
 import { Modal } from '../Modal/Modal';
-import { getGender } from '../../utils/localStorage';
+import { getGender, getProfilePhoto } from '../../utils/localStorage';
 import female from '../../assets/icons/female.svg';
 import male from '../../assets/icons/male.svg';
 import { useQuery } from '@tanstack/react-query';
@@ -57,6 +57,7 @@ export default function NavBar() {
   const { query } = useBio();
   const profileCardRef = useRef(null);
   const gender = getGender();
+  const profilePhoto = getProfilePhoto();
   const navigate = useNavigate();
 
   const { pathname } = useLocation();
@@ -232,8 +233,8 @@ export default function NavBar() {
                 <div className="py-5 text-center">
                   <div className="">
                     <img
-                      className="w-24 h-24 py-2 mx-auto rounded-full"
-                      src={gender === 'মহিলা' ? female : male}
+                      className="w-24 h-24 py-2 mx-auto rounded-full object-cover"
+                      src={gender === 'মহিলা' ? female : (profilePhoto || male)}
                       alt="Person"
                     />
                   </div>

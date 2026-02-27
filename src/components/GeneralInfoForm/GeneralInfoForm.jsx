@@ -22,7 +22,7 @@ import { BioDataServices } from '../../services/bioData';
 import UserContext from '../../contexts/UserContext';
 import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
-import { getDateMonthYear, getYearMonthDate } from '../../utils/date';
+import { getYearMonthDate } from '../../utils/date';
 import { getToken, removeToken } from '../../utils/cookies';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import { useNavigate } from 'react-router-dom';
@@ -40,7 +40,7 @@ import CustomModal from '../CustomModal/CustomModal';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import PhotoUpload from '../PhotoUpload/PhotoUpload';
 
-const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved }) => {
+const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved, generalInfoData, generalInfoLoading }) => {
   const { userInfo, logOut } = useContext(UserContext);
   const [referId, setReferId] = useState('');
   const [bioType, setBioType] = useState('');
@@ -63,18 +63,10 @@ const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved }) => {
   const [isModelForBioDate, setIsModalForBioDate] = useState(false);
   const [photos, setPhotos] = useState([]);
   const navigate = useNavigate();
-  const { data: generalInfo = null, isLoading } = useQuery({
-    queryKey: ['general-info', userInfo?.data?._id, getToken()?.token],
-    queryFn: async () => {
-      return await GeneralInfoServices.getGeneralInfoByUser(getToken()?.token);
-    },
-    retry: false,
-    enabled: !!userInfo?.data?._id,
-    staleTime: Infinity,
-    cacheTime: Infinity,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  });
+
+  // Use data passed from parent Form.jsx — no React Query, no cache
+  const generalInfo = generalInfoData || null;
+  const isLoading = generalInfoLoading;
   const { data: userInfoIds = null } = useQuery({
     queryKey: ['all-users-id', getToken()?.token],
     queryFn: async () => {
@@ -138,7 +130,7 @@ const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved }) => {
         }
       }
     }
-  }, [generalInfo, userInfoIds]);
+  }, [generalInfoData, userInfoIds]);
 
   // Update religious type options when religion changes
   useEffect(() => {
@@ -252,6 +244,23 @@ const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved }) => {
   return (
     <div className="container mx-auto mt-5">
       <FormTitle title="সাধারন তথ্য" />
+
+      {/* Pending changes status banner */}
+      {generalInfo?.data?.biodata_status === 'pending' && (
+        <div className="bg-amber-50 border-l-4 border-amber-400 p-4 mb-4 rounded">
+          <p className="text-amber-800 font-semibold">
+            ⏳ আপনার পরিবর্তনগুলো রিভিউয়ের জন্য অপেক্ষমান। অনুমোদনের পর পরিবর্তনগুলো প্রকাশিত হবে।
+          </p>
+        </div>
+      )}
+      {generalInfo?.data?.biodata_status === 'rejected' && generalInfo?.data?.admin_note && (
+        <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-4 rounded">
+          <p className="text-red-800 font-semibold">
+            ❌ আপনার পরিবর্তন প্রত্যাখ্যান করা হয়েছে: {generalInfo.data.admin_note}
+          </p>
+        </div>
+      )}
+
       {isLoading ? (
         <LoadingCircle />
       ) : (

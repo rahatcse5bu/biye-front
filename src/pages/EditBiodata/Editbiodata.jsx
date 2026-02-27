@@ -7,17 +7,11 @@ import { ScrollToTop } from '../../constants/ScrolltoTop';
 import Numbering from '../../components/Numbering/Numbering';
 import { useContext } from 'react';
 import UserContext from '../../contexts/UserContext';
-import { useEffect } from 'react';
 import { StepperLine } from '../../components/Stepper/Stepper';
 
 const EditBiodata = () => {
   const [userForm, setUserForm] = useState(1);
   const { userInfo } = useContext(UserContext);
-  useEffect(() => {
-    if (userInfo?.data?.last_edited_timeline_index) {
-      setUserForm(userInfo?.data?.last_edited_timeline_index);
-    }
-  }, [userInfo?.data]);
 
   return (
     <div className="flex flex-col lg:flex-row">

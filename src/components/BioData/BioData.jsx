@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { useState } from 'react';
 import { Button } from '@material-tailwind/react';
 import { Colors } from '../../constants/colors';
 import {
@@ -12,6 +13,7 @@ import { FaEye } from 'react-icons/fa';
 import { convertHeightToBengali } from '../../utils/height';
 import { GeneralInfoServices } from '../../services/generalInfo';
 import ReactionButton from '../ReactionButton/ReactionButton';
+import PhotoViewer from '../PhotoViewer/PhotoViewer';
 
 // Helper function to get combined religion + type display name
 const getReligionBadgeLabel = (religion, religiousType) => {
@@ -43,6 +45,12 @@ const getBadgeColor = (religion) => {
 
 const BioData = ({ biodata }) => {
   const navigate = useNavigate();
+  const [showViewer, setShowViewer] = useState(false);
+
+  const hasMalePhotos =
+    biodata?.gender !== 'মহিলা' &&
+    biodata?.photos &&
+    biodata.photos.length > 0;
 
   const bioDataHandler = async () => {
     if (biodata?._id) {
@@ -64,17 +72,32 @@ const BioData = ({ biodata }) => {
         }}
         className="h-[200px] min flex relative  flex-col justify-center rounded-t-md text-white"
       >
-        <img
-          className="w-16 h-16 mx-auto rounded-full object-cover"
-          src={
-            biodata?.gender === 'মহিলা'
-              ? '/assets/icons/female.svg'
-              : biodata?.photos && biodata.photos.length > 0
-              ? biodata.photos[0]
-              : '/assets/icons/male.svg'
-          }
-          alt=""
-        />
+        <div
+          className={`relative w-16 mx-auto ${hasMalePhotos ? 'cursor-pointer group' : ''}`}
+          onClick={(e) => {
+            if (hasMalePhotos) {
+              e.stopPropagation();
+              setShowViewer(true);
+            }
+          }}
+        >
+          <img
+            className="w-16 h-16 mx-auto rounded-full object-cover"
+            src={
+              biodata?.gender === 'মহিলা'
+                ? '/assets/icons/female.svg'
+                : hasMalePhotos
+                ? biodata.photos[0]
+                : '/assets/icons/male.svg'
+            }
+            alt=""
+          />
+          {hasMalePhotos && (
+            <span className="absolute bottom-0 left-1/2 -translate-x-1/2 bg-black/60 text-white text-[10px] px-2 py-[2px] rounded-full transition-opacity whitespace-nowrap">
+              দেখুন
+            </span>
+          )}
+        </div>
         <h4 className="my-2"> বায়োডাটা নং </h4>
         <h3>
           {biodata?.gender === 'মহিলা' ? 'PNCF-' : 'PNCM-'}
@@ -160,6 +183,16 @@ const BioData = ({ biodata }) => {
           সম্পূর্ন বায়োডাটা
         </Button>
       </div>
+
+      {/* Photo Viewer Modal */}
+      {hasMalePhotos && (
+        <PhotoViewer
+          photos={biodata.photos}
+          initialIndex={0}
+          isOpen={showViewer}
+          onClose={() => setShowViewer(false)}
+        />
+      )}
     </div>
   );
 };

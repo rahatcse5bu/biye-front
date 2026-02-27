@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useContext, useState, useEffect, useCallback } from "react";
 import AddressInfoForm from "../AddressInfoForm/AddressInfoForm";
 import ContactInfoForm from "../ContactInfoForm/ContactInfoForm";
 import EducationalQualificationForm from "../EducationalQualificationForm/EducationalQualificationForm";
@@ -14,51 +13,68 @@ import ReviewForm from "../ReviewForm/ReviewForm";
 import UserContext from "../../contexts/UserContext";
 import { getToken } from "../../utils/cookies";
 import { GeneralInfoServices } from "../../services/generalInfo";
+import { setProfilePhotoToLocal } from "../../utils/localStorage";
 
 // eslint-disable-next-line react/prop-types
 const Form = ({ userForm, setUserForm }) => {
 	const { userInfo } = useContext(UserContext);
-	const queryClient = useQueryClient();
 
-	const userId = userInfo?.data?._id;
-	const token = getToken()?.token;
-	const generalInfoQueryKey = ["general-info", userId, token];
+	// Plain React state — NO React Query, NO cache
+	const [generalInfoData, setGeneralInfoData] = useState(null);
+	const [generalInfoLoading, setGeneralInfoLoading] = useState(true);
+	const [religion, setReligion] = useState("islam");
+	const [gender, setGender] = useState("");
+	const [maritalStatus, setMaritalStatus] = useState("");
 
-	// Fetch generalInfo once at parent level — never auto-refetch
-	const { data: parentGeneralInfo = null } = useQuery({
-		queryKey: generalInfoQueryKey,
-		queryFn: async () => {
-			return await GeneralInfoServices.getGeneralInfoByUser(token);
-		},
-		retry: false,
-		enabled: !!userId,
-		staleTime: Infinity,
-		cacheTime: Infinity,
-		refetchOnWindowFocus: false,
-		refetchOnMount: false,
-	});
+	// Fetch generalInfo once on mount — plain fetch, zero caching
+	useEffect(() => {
+		const token = getToken()?.token;
+		const userId = userInfo?.data?._id;
+		if (!userId || !token) {
+			setGeneralInfoLoading(false);
+			return;
+		}
 
-	// Derived values from the single cache source
-	const religion = parentGeneralInfo?.data?.religion || "islam";
-	const gender = parentGeneralInfo?.data?.gender || "";
-	const maritalStatus = parentGeneralInfo?.data?.marital_status || "";
+		setGeneralInfoLoading(true);
+		GeneralInfoServices.getGeneralInfoByUser(token)
+			.then((res) => {
+				setGeneralInfoData(res || null);
+				if (res?.data) {
+					setReligion(res.data.religion || "islam");
+					setGender(res.data.gender || "");
+					setMaritalStatus(res.data.marital_status || "");
+					// Store profile photo for use in navbar/sidebar/cards
+					if (res.data.gender === 'পুরুষ' && res.data.photos && res.data.photos.length > 0) {
+						setProfilePhotoToLocal(res.data.photos[0]);
+					} else {
+						setProfilePhotoToLocal(null);
+					}
+				}
+			})
+			.catch(() => {
+				setGeneralInfoData(null);
+			})
+			.finally(() => setGeneralInfoLoading(false));
+	}, [userInfo?.data?._id]);
 
-	// When GeneralInfoForm saves, directly update the React Query cache
-	// so that when the next step renders, it reads fresh religion/gender/maritalStatus
-	const handleGeneralInfoSaved = (savedFormData) => {
-		queryClient.setQueryData(generalInfoQueryKey, (oldData) => {
-			if (!oldData) {
-				return { success: true, data: savedFormData };
-			}
-			return {
-				...oldData,
-				data: {
-					...oldData.data,
-					...savedFormData,
-				},
-			};
-		});
-	};
+	// When GeneralInfoForm saves, directly update local state — no cache involved
+	const handleGeneralInfoSaved = useCallback((savedFormData) => {
+		setReligion(savedFormData.religion || "islam");
+		setGender(savedFormData.gender || "");
+		setMaritalStatus(savedFormData.marital_status || "");
+		// Store profile photo
+		if (savedFormData.gender === 'পুরুষ' && savedFormData.photos && savedFormData.photos.length > 0) {
+			setProfilePhotoToLocal(savedFormData.photos[0]);
+		} else {
+			setProfilePhotoToLocal(null);
+		}
+		// Also update the full generalInfoData so step 1 knows it exists (for create vs update)
+		setGeneralInfoData((prev) => ({
+			...prev,
+			success: true,
+			data: { ...(prev?.data || {}), ...savedFormData },
+		}));
+	}, []);
 
 	return (
 		<>
@@ -67,6 +83,8 @@ const Form = ({ userForm, setUserForm }) => {
 					setUserForm={setUserForm}
 					userForm={userForm}
 					onGeneralInfoSaved={handleGeneralInfoSaved}
+					generalInfoData={generalInfoData}
+					generalInfoLoading={generalInfoLoading}
 				/>
 			) : userForm === 2 ? (
 				<div>

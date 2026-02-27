@@ -7,13 +7,14 @@ import { Colors } from '../../constants/colors';
 import OptionCart from '../OptionCart/OptionCart';
 import female from '../../assets/icons/female.svg';
 import male from '../../assets/icons/male.svg';
-import { getGender } from '../../utils/localStorage';
+import { getGender, getProfilePhoto } from '../../utils/localStorage';
 import { FiLogOut } from 'react-icons/fi';
 import { removeToken } from '../../utils/cookies';
 
 const UserSidebar = ({ openSidebar, setOpenSidebar }) => {
   const navigate = useNavigate();
   const gender = getGender();
+  const profilePhoto = getProfilePhoto();
   const { userInfo, logOut } = useContext(UserContext);
   const myBioDataHandler = () => {
     setOpenSidebar(false);
@@ -36,8 +37,8 @@ const UserSidebar = ({ openSidebar, setOpenSidebar }) => {
       <div className="flex flex-col ">
         <div className="h-[80px] w-[80px] pt-2  self-center mb-3 ">
           <img
-            className="w-24 h-24 py-2 mx-auto rounded-full"
-            src={gender === 'মহিলা' ? female : male}
+            className="w-24 h-24 py-2 mx-auto rounded-full object-cover"
+            src={gender === 'মহিলা' ? female : (profilePhoto || male)}
             alt="Person"
           />
         </div>

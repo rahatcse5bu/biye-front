@@ -1,32 +1,56 @@
 /* eslint-disable react/prop-types */
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import female from "../../assets/icons/female.svg";
 import male from "../../assets/icons/male.svg";
 import { Colors } from "../../constants/colors";
 import BioContext from "../../contexts/BioContext";
 import { getDateMonthYear } from "../../utils/date";
 import { convertHeightToBengali } from "../../utils/height";
+import PhotoViewer from "../PhotoViewer/PhotoViewer";
 
 function BioInfo({ id }) {
   const { bio } = useContext(BioContext);
   const generalInfo = bio?.generalInfo || null;
+  const [showViewer, setShowViewer] = useState(false);
+  const [viewerIndex, setViewerIndex] = useState(0);
+
+  const hasMalePhotos =
+    generalInfo?.gender !== "মহিলা" &&
+    generalInfo?.photos &&
+    generalInfo.photos.length > 0;
+
+  const openViewer = (index = 0) => {
+    if (!hasMalePhotos) return;
+    setViewerIndex(index);
+    setShowViewer(true);
+  };
 
   return (
     <div
       style={{ backgroundColor: Colors.pncPrimaryColor }}
       className=" text-white p-4 rounded-lg shadow-lg w-full "
     >
-      <img
-        className="rounded-full py-2 h-24  w-24 mx-auto object-cover"
-        src={
-          generalInfo?.gender === "মহিলা"
-            ? female
-            : generalInfo?.photos && generalInfo.photos.length > 0
-            ? generalInfo.photos[0]
-            : male
-        }
-        alt="Person"
-      />
+      <div
+        className={`relative w-24 mx-auto ${hasMalePhotos ? 'cursor-pointer group' : ''}`}
+        onClick={() => openViewer(0)}
+      >
+        <img
+          className="rounded-full py-2 h-24 w-24 mx-auto object-cover"
+          src={
+            generalInfo?.gender === "মহিলা"
+              ? female
+              : hasMalePhotos
+              ? generalInfo.photos[0]
+              : male
+          }
+          alt="Person"
+        />
+        {hasMalePhotos && (
+          <span className="absolute bottom-0 left-1/2 -translate-x-1/2 bg-black/60 text-white text-[10px] px-2 py-[2px] rounded-full transition-opacity">
+            দেখুন
+          </span>
+        )}
+      </div>
 
       <div className="text-center">
         <h5 className="text-lg font-semibold my-2">
@@ -109,24 +133,39 @@ function BioInfo({ id }) {
       </div>
 
       {/* Photo gallery for male profiles */}
-      {generalInfo?.gender !== "মহিলা" &&
-        generalInfo?.photos &&
-        generalInfo.photos.length > 1 && (
+      {hasMalePhotos && generalInfo.photos.length > 1 && (
           <div className="mt-4">
             <p className="text-sm font-semibold mb-2 text-center">ছবি সমূহ</p>
             <div className="grid grid-cols-3 gap-2">
               {generalInfo.photos.map((url, index) => (
-                <img
+                <div
                   key={index}
-                  src={url}
-                  alt={`ছবি ${index + 1}`}
-                  className="w-full h-20 object-cover rounded-md border border-white/30 cursor-pointer hover:opacity-80 transition-opacity"
-                  onClick={() => window.open(url, '_blank')}
-                />
+                  className="relative cursor-pointer group"
+                  onClick={() => openViewer(index)}
+                >
+                  <img
+                    src={url}
+                    alt={`ছবি ${index + 1}`}
+                    className="w-full h-20 object-cover rounded-md border border-white/30 group-hover:opacity-70 transition-opacity"
+                  />
+                  <span className="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-xs font-semibold transition-opacity rounded-md">
+                    দেখুন
+                  </span>
+                </div>
               ))}
             </div>
           </div>
         )}
+
+      {/* Photo Viewer Modal */}
+      {hasMalePhotos && (
+        <PhotoViewer
+          photos={generalInfo.photos}
+          initialIndex={viewerIndex}
+          isOpen={showViewer}
+          onClose={() => setShowViewer(false)}
+        />
+      )}
     </div>
   );
 }
