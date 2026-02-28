@@ -18,3 +18,23 @@ export const setProfilePhotoToLocal = (photoUrl) => {
 export const getProfilePhoto = () => {
   return localStorage.getItem('pnc-nikah-profile-photo');
 };
+
+export const setReligionToLocal = (religion, religiousType) => {
+  if (religion) {
+    localStorage.setItem('pnc-nikah-religion', religion);
+  } else {
+    localStorage.removeItem('pnc-nikah-religion');
+  }
+  if (religiousType) {
+    localStorage.setItem('pnc-nikah-religious-type', religiousType);
+  } else {
+    localStorage.removeItem('pnc-nikah-religious-type');
+  }
+};
+
+export const getReligionInfo = () => {
+  return {
+    religion: localStorage.getItem('pnc-nikah-religion') || null,
+    religiousType: localStorage.getItem('pnc-nikah-religious-type') || null,
+  };
+};

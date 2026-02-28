@@ -8,30 +8,30 @@ const Instructions = () => {
   const instructions = [
     {
       id: 'czYI7NaHymg',
-      title: 'PNC নিকাহ এর ব্যতিক্রমী ফিচারসমূহ',
-      step: 'PNC নিকাহ এর ব্যতিক্রমী ফিচারসমূহ',
+      title: 'বিয়ে এর ব্যতিক্রমী ফিচারসমূহ',
+      step: 'বিয়ে এর ব্যতিক্রমী ফিচারসমূহ',
     },
     {
       id: 'NXNa1NAvMbI',
-      title: 'PNC নিকাহতে মোবাইল দিয়ে কিভাবে পাত্রীর বায়োডাটা ফ্রীতে দিতে হয়?',
-      step: 'PNC নিকাহতে মোবাইল দিয়ে কিভাবে পাত্রীর বায়োডাটা ফ্রীতে দিতে হয়?',
+      title: 'বিয়েতে মোবাইল দিয়ে কিভাবে পাত্রীর বায়োডাটা ফ্রীতে দিতে হয়?',
+      step: 'বিয়েতে মোবাইল দিয়ে কিভাবে পাত্রীর বায়োডাটা ফ্রীতে দিতে হয়?',
     },
     {
       id: '26Kj5LuD2DY',
-      title: 'PNC নিকাহ তে কিভাবে পাত্রের বায়োডাটা দিতে হয়?',
-      step: 'PNC নিকাহতে ল্যাপটপ দিয়ে কিভাবে পাত্রীর বায়োডাটা ফ্রীতে দিতে হয়?',
+      title: 'বিয়ে তে কিভাবে পাত্রের বায়োডাটা দিতে হয়?',
+      step: 'বিয়েতে ল্যাপটপ দিয়ে কিভাবে পাত্রীর বায়োডাটা ফ্রীতে দিতে হয়?',
     },
     {
       id: 'X6sjWCZjiuQ',
       title:
-        'Bio-data purchase 1st step || বায়োডাটা ক্রয় প্রথম পদক্ষেপ || PNC NIkah',
-      step: 'বায়োডাটা ক্রয় প্রথম পদক্ষেপ ',
+        'Send Request || অনুরোধ পাঠান || PNC NIkah',
+      step: 'অনুরোধ পাঠানোর নিয়ম ',
     },
     {
       id: 'x0-RXTR0DfQ',
       title:
-        'Bio-data purchase second step || বায়োডাটা ক্রয় দ্বিতীয় পদক্ষেপ || PNC NIkah',
-      step: 'বায়োডাটা ক্রয় দ্বিতীয় পদক্ষেপ ',
+        'Contact Info Request || যোগাযোগ তথ্য অনুরোধ || PNC NIkah',
+      step: 'যোগাযোগ তথ্য অনুরোধের নিয়ম ',
     },
   ];
 
@@ -56,7 +56,7 @@ const Instructions = () => {
         className="text-xl font-semibold mb-4 ml-2"
         style={{ color: Colors.titleText }}
       >
-        PNC নিকাহ তে কিভাবে পাত্রের বায়োডাটা দিতে হয়? How to create
+        বিয়ে তে কিভাবে পাত্রের বায়োডাটা দিতে হয়? How to create
         bridegroom&apos;s biodata on PNC Nikah for free || PNC Nikah
       </h4>
       <hr />

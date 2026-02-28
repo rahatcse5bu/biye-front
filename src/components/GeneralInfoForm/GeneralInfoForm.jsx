@@ -334,7 +334,7 @@ const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved, generalInf
             >
               <LiteYouTubeEmbed
                 id="Gc5WmS1K9D8"
-                title="কীভাবে PNC নিকাহতে জন্ম তারিখ সেট করতে হয় - PNC Nikah"
+                title="কীভাবে বিয়েতে জন্ম তারিখ সেট করতে হয় - PNC Nikah"
               />
             </CustomModal>
           </div>

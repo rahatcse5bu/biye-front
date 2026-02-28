@@ -59,9 +59,8 @@ const ContactInfo = ({ status }) => {
   const payButtonHandler = (bio_user) => {
     const points = userInfo?.data?.points;
     Swal.fire({
-      title: 'আপনি কি তথ্য দেখতে চান?',
-      text: `যোগাযোগ তথ্য দেখতে আপনার আরও ৭০ পয়েন্ট খরচ হবে 
-			। ${
+      title: 'যোগাযোগ তথ্য অনুরোধ করতে চান?',
+      text: `যোগাযোগ তথ্য অনুরোধ করতে আপনার ৭০ পয়েন্ট খরচ হবে | ${
         points >= 70
           ? convertToBengaliNumerals((points - 70).toString()) +
             ' অবশিষ্ট থাকবে'
@@ -134,7 +133,7 @@ const ContactInfo = ({ status }) => {
       if (status) {
         // console.log({ status });
         if (status === 'approved' || status === 'accepted') {
-          msg = 'আপনার প্রথম পদক্ষেপ সম্পূর্ন হয়েছে।';
+          msg = 'আপনার অনুরোধ পাঠানো সম্পূর্ন হয়েছে।';
           setFirstStepDone(true);
           // Toast.successToast(msg);
           setCheckMsg(msg);
@@ -166,9 +165,8 @@ const ContactInfo = ({ status }) => {
     }
 
     Swal.fire({
-      title: 'আপনি কি তথ্য দেখতে চান?',
-      text: `যোগাযোগ তথ্য দেখতে আপনার ৩০ পয়েন্ট খরচ হবে 
-			। ${
+      title: 'অনুরোধ পাঠাতে চান?',
+      text: `অনুরোধ পাঠাতে আপনার ৩০ পয়েন্ট খরচ হবে | ${
         points >= 30
           ? convertToBengaliNumerals((points - 30).toFixed(2).toString()) +
             ' অবশিষ্ট থাকবে'
@@ -256,7 +254,9 @@ const ContactInfo = ({ status }) => {
             বায়োডাটার সমস্ত তথ্য যাচাই করবেন।
           </h4>
           <h2 className="my-5 text-2xl text-center">
-            এই বায়োডাটার অভিভাবকের যোগাযোগের তথ্য দেখতে আপনার{' '}
+            {isFirstStepDone
+              ? 'যোগাযোগ তথ্য অনুরোধ করতে আপনার '
+              : 'অনুরোধ পাঠাতে আপনার '}
             {isFirstStepDone
               ? convertToBengaliNumerals('70')
               : convertToBengaliNumerals('30')}
@@ -322,7 +322,7 @@ const ContactInfo = ({ status }) => {
                 onClick={comHandler}
                 className="px-4 py-2 mb-5 text-white bg-blue-500 rounded contact-bio-btn w-93"
               >
-                যোগাযোগের তথ্য দেখুন
+                Send Request
               </button>
             )}
           </div>
@@ -346,7 +346,7 @@ const ContactInfo = ({ status }) => {
                     color: Colors.titleText,
                   }}
                 >
-                  প্রথম পদক্ষেপ
+                  অনুরোধ পাঠান টিউটোরিয়াল
                 </span>
               </CustomButton>
               <CustomButton
@@ -362,28 +362,28 @@ const ContactInfo = ({ status }) => {
                     color: Colors.titleText,
                   }}
                 >
-                  দ্বিতীয় পদক্ষেপ
+                  যোগাযোগ তথ্য অনুরোধ টিউটোরিয়াল
                 </span>
               </CustomButton>
             </div>
             <CustomModal
               onClose={() => setIsFirstStepModalOpen(false)}
               isOpen={isFirstStepModalOpen}
-              title="বায়োডাটা ক্রয় প্রথম পদক্ষেপ "
+              title="অনুরোধ পাঠানোর নিয়ম"
             >
               <LiteYouTubeEmbed
                 id="X6sjWCZjiuQ"
-                title="Bio-data purchase 1st step || বায়োডাটা ক্রয় প্রথম পদক্ষেপ || PNC NIkah"
+                title="Send Request || অনুরোধ পাঠান || PNC NIkah"
               />
             </CustomModal>
             <CustomModal
               onClose={() => setIsSecondStepModalOpen(false)}
               isOpen={isSecondStepModalOpen}
-              title="বায়োডাটা ক্রয় দ্বিতীয় পদক্ষেপ "
+              title="যোগাযোগ তথ্য অনুরোধের নিয়ম"
             >
               <LiteYouTubeEmbed
                 id="x0-RXTR0DfQ"
-                title="Bio-data purchase second step || বায়োডাটা ক্রয় দ্বিতীয় পদক্ষেপ || PNC NIkah"
+                title="Contact Info Request || যোগাযোগ তথ্য অনুরোধ || PNC NIkah"
               />
             </CustomModal>
           </div>

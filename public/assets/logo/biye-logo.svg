@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 70" width="220" height="70">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@700&amp;display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- ===== RINGS ICON ===== -->
+  <circle cx="38" cy="32" r="16" fill="none" stroke="#ffffff" stroke-width="4"/>
+  <circle cx="56" cy="32" r="16" fill="none" stroke="#ffffff" stroke-width="4"/>
+  <!-- Interlocking illusion -->
+  <path d="M56,16 A16,16 0 0,1 56,48" fill="none" stroke="#0F8084" stroke-width="5.5"/>
+  <path d="M56,16 A16,16 0 0,1 56,48" fill="none" stroke="#ffffff" stroke-width="4"/>
+
+  <!-- ===== বিয়ে TEXT ===== -->
+  <text
+    x="80" y="40"
+    font-family="'Noto Serif Bengali', serif"
+    font-weight="700"
+    font-size="30"
+    fill="#ffffff"
+    letter-spacing="1">বিয়ে</text>
+
+  <!-- ===== MATRIMONY TAGLINE ===== -->
+  <text
+    x="81" y="56"
+    font-family="'Montserrat', sans-serif"
+    font-weight="600"
+    font-size="8.5"
+    fill="#ffffff"
+    letter-spacing="3.5"
+    opacity="0.85">MATRIMONY</text>
+
+  <!-- Subtle divider -->
+  <line x1="75" y1="18" x2="75" y2="52" stroke="#ffffff" stroke-width="0.8" opacity="0.35"/>
+</svg>

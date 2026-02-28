@@ -23,17 +23,17 @@ const AboutFeature = () => {
             color: Colors.titleText,
           }}
         >
-          PNC নিকাহ এর ব্যতিক্রমী ফিচারসমূহ
+          বিয়ে এর ব্যতিক্রমী ফিচারসমূহ
         </span>
       </CustomButton>
       <CustomModal
         onClose={() => setOpenModal(false)}
         isOpen={openModal}
-        title="PNC নিকাহ এর ব্যতিক্রমী ফিচারসমূহ"
+        title="বিয়ে এর ব্যতিক্রমী ফিচারসমূহ"
       >
         <LiteYouTubeEmbed
           id="czYI7NaHymg"
-          title="PNC নিকাহ এর ব্যতিক্রমী ফিচারসমূহ"
+          title="বিয়ে এর ব্যতিক্রমী ফিচারসমূহ"
         />
       </CustomModal>
     </div>

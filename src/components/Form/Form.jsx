@@ -13,7 +13,7 @@ import ReviewForm from "../ReviewForm/ReviewForm";
 import UserContext from "../../contexts/UserContext";
 import { getToken } from "../../utils/cookies";
 import { GeneralInfoServices } from "../../services/generalInfo";
-import { setProfilePhotoToLocal } from "../../utils/localStorage";
+import { setProfilePhotoToLocal, setReligionToLocal } from "../../utils/localStorage";
 
 // eslint-disable-next-line react/prop-types
 const Form = ({ userForm, setUserForm }) => {
@@ -43,6 +43,8 @@ const Form = ({ userForm, setUserForm }) => {
 					setReligion(res.data.religion || "islam");
 					setGender(res.data.gender || "");
 					setMaritalStatus(res.data.marital_status || "");
+					// Store religion for homepage content
+					setReligionToLocal(res.data.religion, res.data.religious_type);
 					// Store profile photo for use in navbar/sidebar/cards
 					if (res.data.gender === 'পুরুষ' && res.data.photos && res.data.photos.length > 0) {
 						setProfilePhotoToLocal(res.data.photos[0]);
@@ -62,6 +64,8 @@ const Form = ({ userForm, setUserForm }) => {
 		setReligion(savedFormData.religion || "islam");
 		setGender(savedFormData.gender || "");
 		setMaritalStatus(savedFormData.marital_status || "");
+		// Store religion for homepage content
+		setReligionToLocal(savedFormData.religion, savedFormData.religious_type);
 		// Store profile photo
 		if (savedFormData.gender === 'পুরুষ' && savedFormData.photos && savedFormData.photos.length > 0) {
 			setProfilePhotoToLocal(savedFormData.photos[0]);

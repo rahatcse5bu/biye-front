@@ -13,8 +13,13 @@ import IslamicQuote from '../../components/Home/IslamicQuote/IslamicQuote';
 import HomeBanner from '../../components/Home/HomeBanner/HomeBanner';
 import HomeFilter from '../../components/Home/HomeFilter/HomeFilter';
 import AboutFeature from '../../components/Home/AboutFeature/AboutFeature';
+import { getReligionInfo } from '../../utils/localStorage';
+import { getContentForReligion } from '../../constants/religionContent';
 
 const Home = () => {
+  const { religion } = getReligionInfo();
+  const content = getContentForReligion(religion);
+
   const { data, isLoading } = useQuery({
     queryKey: ['general-info', 'featured'],
     queryFn: async () =>
@@ -28,8 +33,8 @@ const Home = () => {
 
   return (
     <div className="px-2 lg:px-10">
-      <HomeBanner />
-      <IslamicQuote />
+      <HomeBanner content={content.banner} />
+      <IslamicQuote content={content.quote} />
       <AboutFeature />
       <Advertisement colors={colors} />
 
@@ -44,10 +49,10 @@ const Home = () => {
       </div>
 
       <h2 className="my-4 text-xl text-center text-blue-700 md:text-2xl lg:text-4xl">
-        বিয়ে সম্পর্কিত কুরআনের কিছু আয়াত ও কিছু হাদিসঃ
+        {content.heading}
       </h2>
 
-      <HadithSlider />
+      <HadithSlider slides={content.slides} />
       <BioStats />
     </div>
   );

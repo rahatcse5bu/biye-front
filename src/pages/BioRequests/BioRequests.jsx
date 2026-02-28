@@ -101,8 +101,8 @@ const MyBioRequests = () => {
                 আমার কাছে শেয়ার করা বায়োডাটার অনুরোধসমূহ
               </h5>
               <h6 className="py-4 text-xs" style={{ color: Colors.siteGlobal }}>
-                প্রথম ধাপে আপনার নিকট যেসকল পাত্র/পাত্রী তাদের নিজেদের বায়োডাটা
-                শেয়ার করেছেন, তাদের তালিকা,ফিডব্যাক ও অবস্থা
+                আপনার নিকট যেসকল পাত্র/পাত্রী তাদের নিজেদের বায়োডাটা
+                শেয়ার করেছেন, তাদের তালিকা, ফিডব্যাক ও অবস্থা
               </h6>
               <div className="overflow-x-auto">
                 <table className="w-full table-auto">
@@ -240,18 +240,18 @@ const MyBioRequests = () => {
                   color: Colors.titleText,
                 }}
               >
-                প্রথম পদক্ষেপ
+                অনুরোধ পাঠান টিউটোরিয়াল
               </span>
             </CustomButton>
 
             <CustomModal
               onClose={() => setIsFirstStepModalOpen(false)}
               isOpen={isFirstStepModalOpen}
-              title="বায়োডাটা ক্রয় প্রথম পদক্ষেপ "
+              title="অনুরোধ পাঠানোর নিয়ম"
             >
               <YouTubeEmbed
                 videoId="X6sjWCZjiuQ"
-                title="Bio-data purchase 1st step || বায়োডাটা ক্রয় প্রথম পদক্ষেপ || PNC NIkah"
+                title="Send Request || অনুরোধ পাঠান || PNC NIkah"
               />
             </CustomModal>
           </div>

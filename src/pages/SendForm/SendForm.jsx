@@ -13,6 +13,7 @@ function SendForm() {
   const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
+  const [isCustomQuestions, setIsCustomQuestions] = useState(false);
   const [bioInput, setBioInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [fetchingQuestions, setFetchingQuestions] = useState(true);
@@ -49,6 +50,7 @@ function SendForm() {
         const data = await BioQuestionServices.getQuestionsByUser(bio_user);
         if (data?.data?.questions) {
           setQuestions(data.data.questions);
+          setIsCustomQuestions(data.data.isCustom === true);
           // Initialize answers object
           const initialAnswers = {};
           data.data.questions.forEach((_, index) => {
@@ -96,28 +98,31 @@ function SendForm() {
       text += `===question_${index}==${question}===answer_${index}==${answer}`;
     });
 
-    if (isHasBio) {
-      text += `===bioInput==${bioInput}`;
-    } else {
-      text += `===upzilla==${formData.upzilla}`;
-      text += `===zilla==${formData.zilla}`;
-      text += `===maxEducation==${formData.maxEducation}`;
-      text += `===institution==${formData.institution}`;
-      text += `===job==${formData.job}`;
-      text += `===salary==${formData.salary}`;
-      text += `===fatherProfession==${formData.fatherProfession}`;
-      text += `===motherProfession==${formData.motherProfession}`;
-      text += `===familyStatus==${formData.familyStatus}`;
-      text += `===siblingsDetails==${formData.siblingsDetails}`;
-      text += `===deeniCondition==${formData.deeniCondition}`;
-      text += `===economicalCondition==${formData.economicalCondition}`;
-      text += `===height==${formData.height}`;
-      text += `===color==${formData.color}`;
-      text += `===weight==${formData.weight}`;
-      text += `===jobPosition==${formData.jobPosition}`;
-      text += `===maritalStatus==${formData.maritalStatus}`;
-      text += `===physicalMentalConditions==${formData.physicalMentalConditions}`;
-      text += `===aboutMe==${formData.aboutMe}`;
+    // Only include SendMyBio / bio link data when using default questions
+    if (!isCustomQuestions) {
+      if (isHasBio) {
+        text += `===bioInput==${bioInput}`;
+      } else {
+        text += `===upzilla==${formData.upzilla}`;
+        text += `===zilla==${formData.zilla}`;
+        text += `===maxEducation==${formData.maxEducation}`;
+        text += `===institution==${formData.institution}`;
+        text += `===job==${formData.job}`;
+        text += `===salary==${formData.salary}`;
+        text += `===fatherProfession==${formData.fatherProfession}`;
+        text += `===motherProfession==${formData.motherProfession}`;
+        text += `===familyStatus==${formData.familyStatus}`;
+        text += `===siblingsDetails==${formData.siblingsDetails}`;
+        text += `===deeniCondition==${formData.deeniCondition}`;
+        text += `===economicalCondition==${formData.economicalCondition}`;
+        text += `===height==${formData.height}`;
+        text += `===color==${formData.color}`;
+        text += `===weight==${formData.weight}`;
+        text += `===jobPosition==${formData.jobPosition}`;
+        text += `===maritalStatus==${formData.maritalStatus}`;
+        text += `===physicalMentalConditions==${formData.physicalMentalConditions}`;
+        text += `===aboutMe==${formData.aboutMe}`;
+      }
     }
 
     const bioChoiceData = {
@@ -163,7 +168,7 @@ function SendForm() {
         className="mb-4 text-2xl font-semibold"
         style={{ color: Colors.titleText }}
       >
-        নিচের ফর্ম পুরন করে আপনার বায়োডাটা শেয়ার করুন
+        নিচের ফর্ম পুরন করে আপনার অনুরোধ পাঠান
       </h2>
       <h4 className="mb-4 text-sm font-semibold text-red-800">
         আপনি নিচে যে তথ্য দিবেন তা পাত্র/পাত্রীর সাথে শেয়ার করা হবে ইন শা
@@ -190,25 +195,29 @@ function SendForm() {
           </div>
         )}
         
-        <div
-          className="mb-4 text-lg font-semibold"
-          style={{ color: Colors.titleText }}
-        >
-          {' '}
-          <input type="checkbox" onChange={handleHasBio} /> ইতিমধ্যে আপনার
-          বায়োডাটা লিঙ্ক রেডি আছে?{' '}
-        </div>
-        {!isHasBio && (
-          <SendMyBio formData={formData} setFormData={setFormData} />
-        )}
+        {!isCustomQuestions && (
+          <>
+            <div
+              className="mb-4 text-lg font-semibold"
+              style={{ color: Colors.titleText }}
+            >
+              {' '}
+              <input type="checkbox" onChange={handleHasBio} /> ইতিমধ্যে আপনার
+              বায়োডাটা লিঙ্ক রেডি আছে?{' '}
+            </div>
+            {!isHasBio && (
+              <SendMyBio formData={formData} setFormData={setFormData} />
+            )}
 
-        {isHasBio && (
-          <Textarea
-            value={bioInput}
-            setValue={setBioInput}
-            required={true}
-            title="আপনার নিজের বায়োডাটা লিখুন অথবা বায়োডাটার লিঙ্ক শেয়ার করুন"
-          />
+            {isHasBio && (
+              <Textarea
+                value={bioInput}
+                setValue={setBioInput}
+                required={true}
+                title="আপনার নিজের বায়োডাটা লিখুন অথবা বায়োডাটার লিঙ্ক শেয়ার করুন"
+              />
+            )}
+          </>
         )}
 
         <div className="mb-4">
@@ -219,7 +228,7 @@ function SendForm() {
               background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
             }}
           >
-            {loading ? <LoadingCircle /> : 'আমার বায়োডাটা শেয়ার করুন'}
+            {loading ? <LoadingCircle /> : 'আমার অনুরোধ পাঠান'}
           </button>
         </div>
       </form>

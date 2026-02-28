@@ -15,7 +15,7 @@ export function PayDetailsModal({ open, setOpen }) {
 			<Dialog open={open} handler={handleOpen}>
 				<DialogHeader className="text-red-800">Its Important</DialogHeader>
 				<DialogBody>
-					আপনার বায়োডাটা দেখার প্রথম পদক্ষেপ সম্পূর্ন হয়েছে। পরবর্তী পদক্ষেপ এর
+					আপনার অনুরোধ পাঠানো সম্পূর্ন হয়েছে। যোগাযোগ তথ্য অনুরোধের
 					জন্য আরো ৭০ টাকা পরিশোধ করতে হবে । তাহলে আপনাকে যোগাযোগের তথ্য দেয়া
 					হবে ।
 				</DialogBody>

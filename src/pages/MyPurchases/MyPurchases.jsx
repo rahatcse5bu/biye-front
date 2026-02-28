@@ -103,9 +103,8 @@ const FirstStepCard = ({
   const payButtonHandler = (bio_user) => {
     const points = userInfo?.data?.points;
     Swal.fire({
-      title: 'আপনি কি তথ্য দেখতে চান?',
-      text: `যোগাযোগ তথ্য দেখতে আপনার আরও ৭০ পয়েন্ট খরচ হবে 
-			। ${
+      title: 'যোগাযোগ তথ্য অনুরোধ করতে চান?',
+      text: `যোগাযোগ তথ্য অনুরোধ করতে আপনার ৭০ পয়েন্ট খরচ হবে | ${
         points >= 70
           ? convertToBengaliNumerals((points - 70).toString()) +
             ' অবশিষ্ট থাকবে'
@@ -327,11 +326,11 @@ const MyPurchases = () => {
           <div className="col right-sidebar-main my-favs">
             <div className="w-auto border-t-2 rounded shadow my-favs-info">
               <h5 className="mt-3 text-2xl text-center card-title">
-                আমার শেয়ার করা বায়োডাটার অবস্থা (১ম স্টেপ)
+                আমার শেয়ার করা বায়োডাটার অবস্থা (অনুরোধ পাঠান)
               </h5>
               <h6 className="py-4 text-xs">
-                প্রথম ধাপে আপনার নিজের বায়োডাটা যেসকল পাত্র/পাত্রীর সাথে শেয়ার
-                করেছেন তাদের তালিকা,ফিডব্যাক ও অবস্থা
+                আপনার নিজের বায়োডাটা যেসকল পাত্র/পাত্রীর সাথে শেয়ার
+                করেছেন তাদের তালিকা, ফিডব্যাক ও অবস্থা
               </h6>
               <div className="overflow-x-auto">
                 <table className="w-full table-auto">
@@ -409,7 +408,7 @@ const MyPurchases = () => {
                   color: Colors.titleText,
                 }}
               >
-                প্রথম পদক্ষেপ
+                অনুরোধ পাঠান টিউটোরিয়াল
               </span>
             </CustomButton>
             <CustomButton
@@ -425,39 +424,38 @@ const MyPurchases = () => {
                   color: Colors.titleText,
                 }}
               >
-                দ্বিতীয় পদক্ষেপ
+                যোগাযোগ তথ্য অনুরোধ টিউটোরিয়াল
               </span>
             </CustomButton>
           </div>
           <CustomModal
             onClose={() => setIsFirstStepModalOpen(false)}
             isOpen={isFirstStepModalOpen}
-            title="বায়োডাটা ক্রয় প্রথম পদক্ষেপ "
+            title="অনুরোধ পাঠানোর নিয়ম"
           >
             <YouTubeEmbed
-              title="Bio-data purchase 1st step || বায়োডাটা ক্রয় প্রথম পদক্ষেপ || PNC NIkah"
+              title="Send Request || অনুরোধ পাঠান || PNC NIkah"
               videoId="X6sjWCZjiuQ"
             />
           </CustomModal>
           <CustomModal
             onClose={() => setIsSecondStepModalOpen(false)}
             isOpen={isSecondStepModalOpen}
-            title="বায়োডাটা ক্রয় দ্বিতীয় পদক্ষেপ "
+            title="যোগাযোগ তথ্য অনুরোধের নিয়ম"
           >
             <YouTubeEmbed
               videoId="x0-RXTR0DfQ"
-              title="Bio-data purchase second step || বায়োডাটা ক্রয় দ্বিতীয় পদক্ষেপ || PNC NIkah"
+              title="Contact Info Request || যোগাযোগ তথ্য অনুরোধ || PNC NIkah"
             />
           </CustomModal>
           <div className="col right-sidebar-main overflow-hidden my-favs">
             <div className="w-auto overflow-hidden border-t-2 rounded shadow my-favs-info">
               <h5 className="mt-3 text-2xl text-center card-title">
-                আমার ফাইনাল বায়োডাটা ক্রয়সমূহ (২য় স্টেপ)
+                আমার ফাইনাল বায়োডাটা ক্রয়সমূহ (যোগাযোগ তথ্য অনুরোধ)
               </h5>
               <h6 className="py-4 text-xs">
-                প্রথম ধাপে আপনার নিজের বায়োডাটা পাত্র/পাত্রীর সাথে শেয়ার করার পর
-                আপ্রুভাল পেয়ে ২য় ধাপে অভিভাবকের কনটাক্ট নাম্বার যাদের
-                পেয়েছেন,তাদের তালিকা
+                আপনার অনুরোধ পাঠিয়ে আপ্রুভাল পাওয়ার পর যেসকল
+                অভিভাবকের কনটাক্ট নাম্বার পেয়েছেন, তাদের তালিকা
               </h6>
               <div className="overflow-x-auto">
                 <table className="w-full table-auto">

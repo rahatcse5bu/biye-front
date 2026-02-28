@@ -19,7 +19,7 @@ import { FaUserLarge } from 'react-icons/fa6';
 import { MdExitToApp } from 'react-icons/md';
 import { FaEdit } from 'react-icons/fa';
 import { BiSolidDashboard } from 'react-icons/bi';
-import navLogo from '../../assets/icons/logo.png';
+const navLogo = '/assets/logo/biye-logo.svg';
 import {
   getToken,
   getUserOPenLarge,
@@ -29,7 +29,11 @@ import {
   setUserOPenSmall,
 } from '../../utils/cookies';
 import { Modal } from '../Modal/Modal';
-import { getGender, getProfilePhoto } from '../../utils/localStorage';
+import {
+  getGender,
+  getProfilePhoto,
+  setReligionToLocal,
+} from '../../utils/localStorage';
 import female from '../../assets/icons/female.svg';
 import male from '../../assets/icons/male.svg';
 import { useQuery } from '@tanstack/react-query';
@@ -39,6 +43,7 @@ import { UserInfoServices } from '../../services/userInfo';
 import { Toast } from '../../utils/toast';
 import { useBio } from '../../contexts/useBio.jsx';
 import { Colors } from '../../constants/colors';
+import { GeneralInfoServices } from '../../services/generalInfo';
 
 export default function NavBar() {
   const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
@@ -107,6 +112,19 @@ export default function NavBar() {
       setUserInfo(data);
     }
   }, [data, setUserInfo]);
+
+  // Fetch religion for homepage content personalization
+  useEffect(() => {
+    const token = getToken()?.token;
+    if (!token) return;
+    GeneralInfoServices.getGeneralInfoByUser(token)
+      .then((res) => {
+        if (res?.data) {
+          setReligionToLocal(res.data.religion, res.data.religious_type);
+        }
+      })
+      .catch(() => {});
+  }, [data]);
   useEffect(() => {
     if (
       isError &&
@@ -148,7 +166,7 @@ export default function NavBar() {
     <ul className="box-border z-50 border-none nav-list-ul py-3 pt-6 pl-[10px] flex flex-col lg:flex-row  justify-between ">
       <div className="hidden lg:block">
         <Link to="/">
-          <img src={navLogo} alt="" />
+          <img width={180} src={navLogo} alt="" />
         </Link>
       </div>
       <div>
@@ -227,14 +245,16 @@ export default function NavBar() {
                 className={`absolute ${
                   !isHovered ? 'hidden' : 'block'
                 }  w-[250px] rounded-md profile-card z-[2000000] mx-5 h-[450px] transition-all duration-300 ease-in p-4 top-12 right-[100px] scrollbar-thumb-blue scrollbar-thumb-rounded-full scrollbar-track-blue-lighter scrollbar-w-2 translate-x-1/2 overflow-y-scroll overflow-x-hidden`}
-                style={{ background: `linear-gradient(to right, ${Colors.primary900}, ${Colors.primary700})` }}
+                style={{
+                  background: `linear-gradient(to right, ${Colors.primary900}, ${Colors.primary700})`,
+                }}
                 id="profile-card"
               >
                 <div className="py-5 text-center">
                   <div className="">
                     <img
                       className="w-24 h-24 py-2 mx-auto rounded-full object-cover"
-                      src={gender === 'মহিলা' ? female : (profilePhoto || male)}
+                      src={gender === 'মহিলা' ? female : profilePhoto || male}
                       alt="Person"
                     />
                   </div>
@@ -340,8 +360,12 @@ export default function NavBar() {
   return (
     <>
       {!getGender() && <Modal />}
-      <Navbar className="w-full z-[999999] rounded-none justify-between box-border styles.headerColor navigation-bar-custom sticky top-0 "
-        style={{ background: `linear-gradient(to right, ${Colors.primary900}, ${Colors.primary700})` }}>
+      <Navbar
+        className="w-full z-[999999] rounded-none justify-between box-border styles.headerColor navigation-bar-custom sticky top-0 "
+        style={{
+          background: `linear-gradient(to right, ${Colors.primary900}, ${Colors.primary700})`,
+        }}
+      >
         <div className="hidden lg:block">
           <NavList />
         </div>
@@ -435,7 +459,9 @@ export default function NavBar() {
                     className={`absolute ${
                       !isHovered ? 'hidden' : 'block'
                     }  w-[250px] rounded-md profile-card mx-5 h-[450px] transition-all duration-300 ease-in p-4 top-12 right-[100px]  scrollbar-thumb-blue scrollbar-thumb-rounded-full scrollbar-track-blue-lighter scrollbar-w-2 translate-x-1/2 overflow-y-scroll overflow-x-hidden z-40`}
-                    style={{ background: `linear-gradient(to right, ${Colors.primary900}, ${Colors.primary700})` }}
+                    style={{
+                      background: `linear-gradient(to right, ${Colors.primary900}, ${Colors.primary700})`,
+                    }}
                     id="profile-card"
                   >
                     <div className="py-5 text-center">
