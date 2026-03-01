@@ -37,6 +37,7 @@ import RefundSuccess from '../pages/RefundSuccess/RefundSuccess';
 import RefundFail from '../pages/RefundFail/RefundFail';
 import PrivateRoute from './PrivateRoute';
 import ErrorPage from '../components/ErrorBoundary/ErrorPage';
+import Shortlist from '../pages/Shortlist/Shortlist';
 
 const router = createBrowserRouter([
   {
@@ -220,6 +221,14 @@ const router = createBrowserRouter([
             element: (
               <PrivateRoute>
                 <BioLikes />
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: '/user/account/shortlist',
+            element: (
+              <PrivateRoute>
+                <Shortlist />
               </PrivateRoute>
             ),
           },

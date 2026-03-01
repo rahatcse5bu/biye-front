@@ -33,6 +33,7 @@ import {
   getGender,
   getProfilePhoto,
   setReligionToLocal,
+  getReligionInfo,
 } from '../../utils/localStorage';
 import female from '../../assets/icons/female.svg';
 import male from '../../assets/icons/male.svg';
@@ -64,6 +65,16 @@ export default function NavBar() {
   const gender = getGender();
   const profilePhoto = getProfilePhoto();
   const navigate = useNavigate();
+  const [selectedReligion, setSelectedReligion] = useState(
+    getReligionInfo()?.religion || ''
+  );
+
+  const handleReligionChange = (e) => {
+    const value = e.target.value;
+    setSelectedReligion(value);
+    setReligionToLocal(value || null, null);
+    window.location.reload();
+  };
 
   const { pathname } = useLocation();
 
@@ -113,10 +124,13 @@ export default function NavBar() {
     }
   }, [data, setUserInfo]);
 
-  // Fetch religion for homepage content personalization
+  // Fetch religion for homepage content personalization (only if user hasn't manually selected one)
   useEffect(() => {
     const token = getToken()?.token;
     if (!token) return;
+    // Don't overwrite if user already chose a religion from the dropdown
+    const currentReligion = getReligionInfo()?.religion;
+    if (currentReligion) return;
     GeneralInfoServices.getGeneralInfoByUser(token)
       .then((res) => {
         if (res?.data) {
@@ -200,7 +214,26 @@ export default function NavBar() {
           )
         )}
       </div>
-      <div className="hidden lg:block">
+      <div className="hidden lg:flex lg:items-center lg:gap-3">
+        <select
+          value={selectedReligion}
+          onChange={handleReligionChange}
+          className="bg-white/20 text-white text-sm font-semibold rounded-md px-2 py-1 border border-white/30 outline-none cursor-pointer"
+          style={{ minWidth: '100px' }}
+        >
+          <option value="" className="text-black">
+            সকল ধর্ম
+          </option>
+          <option value="ইসলাম" className="text-black">
+            ইসলাম
+          </option>
+          <option value="হিন্দু" className="text-black">
+            হিন্দু
+          </option>
+          <option value="খ্রিষ্টান" className="text-black">
+            খ্রিষ্টান
+          </option>
+        </select>
         {!user ? (
           <Typography
             as="li"
@@ -410,10 +443,29 @@ export default function NavBar() {
               )}
             </IconButton>
           </div>
-          <div className="block text-center lg:hidden">
+          <div className="flex items-center gap-2 text-center lg:hidden">
             <Link className="" to="/">
               <img className="" src={navLogo} alt="" />
             </Link>
+            <select
+              value={selectedReligion}
+              onChange={handleReligionChange}
+              className="bg-white/20 text-white text-xs font-semibold rounded-md px-1 py-1 border border-white/30 outline-none cursor-pointer"
+              style={{ minWidth: '70px' }}
+            >
+              <option value="" className="text-black">
+                সকল
+              </option>
+              <option value="ইসলাম" className="text-black">
+                ইসলাম
+              </option>
+              <option value="হিন্দু" className="text-black">
+                হিন্দু
+              </option>
+              <option value="খ্রিষ্টান" className="text-black">
+                খ্রিষ্টান
+              </option>
+            </select>
           </div>
 
           <div className="block lg:hidden">

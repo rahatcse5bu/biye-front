@@ -5,6 +5,7 @@ import { useBio } from '../../contexts/useBio';
 import { useNavigate } from 'react-router-dom';
 import { convertToQuery } from '../../utils/query';
 import { useFilter } from '../../contexts/useFilter';
+import { usePrimary } from '../../contexts/userPrimary';
 
 const BioDataFilterButton = () => {
   const { filterFields, setQuery, setFilterFields } = useBio();
@@ -17,6 +18,14 @@ const BioDataFilterButton = () => {
     setAddressFilterOpen,
     setPrimaryFilterOpen,
   } = useFilter();
+  const {
+    setAge,
+    setHeight,
+    setBioType,
+    setMaritalStatus,
+    setReligion,
+    setReligiousType,
+  } = usePrimary();
   const navigate = useNavigate();
   const buttonHandler = async (type) => {
     // console.log('type~', type);
@@ -39,6 +48,13 @@ const BioDataFilterButton = () => {
       setSelectedDistricts([]);
       setSelectedPresentDivisions([]);
       setSelectedPresentDistricts([]);
+      // Reset PrimaryFilterContext state
+      setAge({ min: 20, max: 30 });
+      setHeight({ min: 5.0, max: 6.0 });
+      setBioType('');
+      setMaritalStatus('');
+      setReligion('');
+      setReligiousType('');
       navigate('/biodatas');
     }
     setSideBarDisplay(false);

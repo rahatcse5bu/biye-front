@@ -20,16 +20,11 @@ export const navData = [
     path: '/refund-policy',
   },
   {
-    title: 'সচরাচর জিজ্ঞাসা',
-    path: '/faq',
-  },
-
-  {
-    title: 'আমাদের সম্পর্কে',
-    path: '/about-us',
-  },
-  {
-    title: 'যোগাযোগ করুন',
-    path: '/contact-us',
+    title: 'বিয়ে',
+    subLinks: [
+      { title: 'সচরাচর জিজ্ঞাসা', path: '/faq' },
+      { title: 'আমাদের সম্পর্কে', path: '/about-us' },
+      { title: 'যোগাযোগ করুন', path: '/contact-us' },
+    ],
   },
 ];

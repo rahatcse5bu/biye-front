@@ -3,6 +3,8 @@
 import { useState, useEffect, createContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { BioDataServices } from '../services/bioData';
+import { getReligionInfo } from '../utils/localStorage';
+import { religionToApiKey } from '../constants/religionContent';
 
 // Create a new context instance
 const BioContext = createContext();
@@ -11,10 +13,15 @@ const BioContext = createContext();
 export const BioProvider = ({ children }) => {
   const [bio, setBio] = useState(null);
   const [bioLoading, setBioLoading] = useState(false);
-  const [query, setQuery] = useState({
-    page: 1,
-    limit: 12,
-  });
+
+  // Auto-include religion filter from localStorage
+  const { religion } = getReligionInfo();
+  const apiReligion = religionToApiKey[religion] || null;
+  const initialQuery = { page: 1, limit: 12 };
+  if (apiReligion) {
+    initialQuery.religion = apiReligion;
+  }
+  const [query, setQuery] = useState(initialQuery);
   const [filterFields, setFilterFields] = useState({});
 
   //! get all bio datas

@@ -240,11 +240,18 @@ const PrimaryFilter = () => {
             value={age}
             setValue={(val) => {
               setAge(val);
-              setFilterFields((filterFields) => ({
-                ...filterFields,
-                minAge: val.min,
-                maxAge: val.max,
-              }));
+              setFilterFields((filterFields) => {
+                const newFields = { ...filterFields };
+                // Only send age filter when not at full range defaults
+                if (val.min !== 18 || val.max !== 60) {
+                  newFields.minAge = val.min;
+                  newFields.maxAge = val.max;
+                } else {
+                  delete newFields.minAge;
+                  delete newFields.maxAge;
+                }
+                return newFields;
+              });
             }}
           />
         </div>
@@ -260,11 +267,18 @@ const PrimaryFilter = () => {
               const minHeight = parseFloat(val.min.toFixed(1));
               const maxHeight = parseFloat(val.max.toFixed(1));
               setHeight({ min: minHeight, max: maxHeight });
-              setFilterFields((filterFields) => ({
-                ...filterFields,
-                minHeight: minHeight,
-                maxHeight: maxHeight,
-              }));
+              setFilterFields((filterFields) => {
+                const newFields = { ...filterFields };
+                // Only send height filter when not at full range defaults
+                if (minHeight !== 4.5 || maxHeight !== 7.0) {
+                  newFields.minHeight = minHeight;
+                  newFields.maxHeight = maxHeight;
+                } else {
+                  delete newFields.minHeight;
+                  delete newFields.maxHeight;
+                }
+                return newFields;
+              });
             }}
             maxValue={7.0}
             minValue={4.5}

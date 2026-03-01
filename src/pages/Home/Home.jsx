@@ -14,16 +14,23 @@ import HomeBanner from '../../components/Home/HomeBanner/HomeBanner';
 import HomeFilter from '../../components/Home/HomeFilter/HomeFilter';
 import AboutFeature from '../../components/Home/AboutFeature/AboutFeature';
 import { getReligionInfo } from '../../utils/localStorage';
-import { getContentForReligion } from '../../constants/religionContent';
+import {
+  getContentForReligion,
+  religionToApiKey,
+} from '../../constants/religionContent';
 
 const Home = () => {
   const { religion } = getReligionInfo();
   const content = getContentForReligion(religion);
+  const apiReligion = religionToApiKey[religion] || null;
 
+  const featuredQuery = { isFeatured: true };
+  if (apiReligion) {
+    featuredQuery.religion = apiReligion;
+  }
   const { data, isLoading } = useQuery({
-    queryKey: ['general-info', 'featured'],
-    queryFn: async () =>
-      GeneralInfoServices.getALLGeneralInfo({ isFeatured: true }),
+    queryKey: ['general-info', 'featured', religion],
+    queryFn: async () => GeneralInfoServices.getALLGeneralInfo(featuredQuery),
   });
 
   const colors = {
