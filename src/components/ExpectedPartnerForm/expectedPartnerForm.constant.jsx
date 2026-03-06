@@ -164,3 +164,46 @@ export const christianChurchAttendanceOptionsMultiple = [
   { value: 'বিশেষ অনুষ্ঠানে', label: 'বিশেষ অনুষ্ঠানে' },
   { value: 'যেকোনো চলবে', label: 'যেকোনো চলবে' },
 ];
+
+// ============ COMMON FIELDS FOR ALL RELIGIONS ============
+
+export const homeTypeOptions = [
+  { value: 'বিল্ডিং', label: 'বিল্ডিং' },
+  { value: 'সেমি-বিল্ডিং', label: 'সেমি-বিল্ডিং' },
+  { value: 'টিনশেড', label: 'টিনশেড' },
+  { value: 'মাটির ঘর', label: 'মাটির ঘর' },
+  { value: 'যেকোনো চলবে', label: 'যেকোনো চলবে' },
+];
+
+export const fatherProfessionPreferenceOptions = [
+  { value: 'সরকারি চাকুরিজীবী', label: 'সরকারি চাকুরিজীবী' },
+  { value: 'বেসরকারি চাকুরিজীবী', label: 'বেসরকারি চাকুরিজীবী' },
+  { value: 'ব্যবসায়ী', label: 'ব্যবসায়ী' },
+  { value: 'কৃষক', label: 'কৃষক' },
+  { value: 'শিক্ষক', label: 'শিক্ষক' },
+  { value: 'ডাক্তার/ইঞ্জিনিয়ার', label: 'ডাক্তার/ইঞ্জিনিয়ার' },
+  { value: 'প্রবাসী', label: 'প্রবাসী' },
+  { value: 'অবসরপ্রাপ্ত', label: 'অবসরপ্রাপ্ত' },
+  { value: 'যেকোনো চলবে', label: 'যেকোনো চলবে' },
+];
+
+export const flexibilityAreasOptionsMultiple = [
+  { value: 'বয়স', label: 'বয়স' },
+  { value: 'উচ্চতা', label: 'উচ্চতা' },
+  { value: 'শিক্ষা', label: 'শিক্ষা' },
+  { value: 'পেশা', label: 'পেশা' },
+  { value: 'অর্থনৈতিক অবস্থা', label: 'অর্থনৈতিক অবস্থা' },
+  { value: 'জেলা/এলাকা', label: 'জেলা/এলাকা' },
+  { value: 'পারিবারিক অবস্থান', label: 'পারিবারিক অবস্থান' },
+  { value: 'গাত্রবর্ণ', label: 'গাত্রবর্ণ' },
+  { value: 'বৈবাহিক অবস্থা', label: 'বৈবাহিক অবস্থা' },
+];
+
+export const minResultOptions = [
+  { value: 'GPA-5', label: 'GPA-5' },
+  { value: 'GPA-4 এর উপরে', label: 'GPA-4 এর উপরে' },
+  { value: 'GPA-3.5 এর উপরে', label: 'GPA-3.5 এর উপরে' },
+  { value: 'GPA-3 এর উপরে', label: 'GPA-3 এর উপরে' },
+  { value: 'পাস', label: 'পাস' },
+  { value: 'যেকোনো চলবে', label: 'যেকোনো চলবে' },
+];

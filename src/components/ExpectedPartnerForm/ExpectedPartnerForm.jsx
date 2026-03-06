@@ -15,6 +15,10 @@ import {
   hinduMangalikOptionsMultiple,
   christianDenominationOptionsMultiple,
   christianChurchAttendanceOptionsMultiple,
+  homeTypeOptions,
+  fatherProfessionPreferenceOptions,
+  flexibilityAreasOptionsMultiple,
+  minResultOptions,
 } from './expectedPartnerForm.constant';
 
 import './expectedPartner.css';
@@ -82,6 +86,14 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
     setPartnerChurchAttendancePreference,
   ] = useState('');
 
+  // Common fields for all religions (all multi-select)
+  const [partnerOwnHomeType, setPartnerOwnHomeType] = useState([]);
+  const [flexibilityAreas, setFlexibilityAreas] = useState([]);
+  const [partnerFatherProfession, setPartnerFatherProfession] = useState([]);
+  const [partnerHomeType, setPartnerHomeType] = useState([]);
+  const [minSscResult, setMinSscResult] = useState([]);
+  const [minHscResult, setMinHscResult] = useState([]);
+
   // console.log(dataToRange(getDataFromRange(height)), getDataFromRange(height));
   // console.log(
   //   getDataFromMultipleInput(screenColor),
@@ -136,6 +148,13 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
         // Christian-specific fields
         partner_denomination_preference,
         partner_church_attendance_preference,
+        // Common fields for all religions
+        partner_own_home_type,
+        flexibility_areas,
+        partner_father_profession,
+        partner_home_type,
+        min_ssc_result,
+        min_hsc_result,
       } = expectedPartnerInfo.data;
       setAge(age);
       setHeight(height);
@@ -185,6 +204,30 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
           partner_church_attendance_preference
         );
       }
+
+      // Common fields for all religions (all multi-select)
+      if (partner_own_home_type) {
+        setPartnerOwnHomeType(
+          dataToMultipleExpectedPartner(partner_own_home_type)
+        );
+      }
+      if (flexibility_areas) {
+        setFlexibilityAreas(dataToMultipleExpectedPartner(flexibility_areas));
+      }
+      if (partner_father_profession) {
+        setPartnerFatherProfession(
+          dataToMultipleExpectedPartner(partner_father_profession)
+        );
+      }
+      if (partner_home_type) {
+        setPartnerHomeType(dataToMultipleExpectedPartner(partner_home_type));
+      }
+      if (min_ssc_result) {
+        setMinSscResult(dataToMultipleExpectedPartner(min_ssc_result));
+      }
+      if (min_hsc_result) {
+        setMinHscResult(dataToMultipleExpectedPartner(min_hsc_result));
+      }
     }
   }, [expectedPartnerInfo]);
 
@@ -226,6 +269,20 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
       expectedPartnerInfoData.partner_church_attendance_preference =
         partnerChurchAttendancePreference;
     }
+
+    // Add common fields for all religions (all multi-select)
+    expectedPartnerInfoData.partner_own_home_type =
+      getDataFromMultipleInputExpectedPartner(partnerOwnHomeType);
+    expectedPartnerInfoData.flexibility_areas =
+      getDataFromMultipleInputExpectedPartner(flexibilityAreas);
+    expectedPartnerInfoData.partner_father_profession =
+      getDataFromMultipleInputExpectedPartner(partnerFatherProfession);
+    expectedPartnerInfoData.partner_home_type =
+      getDataFromMultipleInputExpectedPartner(partnerHomeType);
+    expectedPartnerInfoData.min_ssc_result =
+      getDataFromMultipleInputExpectedPartner(minSscResult);
+    expectedPartnerInfoData.min_hsc_result =
+      getDataFromMultipleInputExpectedPartner(minHscResult);
 
     if (!getToken()?.token || !userInfo?.data?._id) {
       alert('Please logout and try again');
@@ -456,6 +513,77 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
               </div>
             </>
           )}
+
+          {/* Common fields for all religions */}
+          <div className="p-4 mb-4 border-l-4 border-green-500 bg-green-50 rounded-r-lg">
+            <h3 className="text-lg font-semibold text-green-800 mb-3">
+              সাধারণ প্রত্যাশা (সকল ধর্মের জন্য)
+            </h3>
+
+            <MultipleSelect
+              title="জীবনসঙ্গীর নিজস্ব বাড়ির ধরণ কেমন চান?"
+              subtitle="গ্রামে/শহরে নিজেদের বাড়ির ধরণ - একাধিক নির্বাচন করতে পারবেন"
+              value={partnerOwnHomeType}
+              setValue={setPartnerOwnHomeType}
+              options={homeTypeOptions}
+              placeholder="বাড়ির ধরণ নির্বাচন করুন"
+              classes="z-[5]"
+            />
+            <br />
+
+            <MultipleSelect
+              title="জীবনসঙ্গীর বাবার পেশা কিরকম চান?"
+              subtitle="পাত্র/পাত্রীর বাবার পেশা সম্পর্কে প্রত্যাশা - একাধিক নির্বাচন করতে পারবেন"
+              value={partnerFatherProfession}
+              setValue={setPartnerFatherProfession}
+              options={fatherProfessionPreferenceOptions}
+              placeholder="পেশা নির্বাচন করুন"
+              classes="z-[4]"
+            />
+            <br />
+
+            <MultipleSelect
+              title="জীবনসঙ্গীর বাড়ির ধরণ কেমন চান?"
+              subtitle="বিল্ডিং/সেমি-বিল্ডিং/টিনশেড/যেকোনো - একাধিক নির্বাচন করতে পারবেন"
+              value={partnerHomeType}
+              setValue={setPartnerHomeType}
+              options={homeTypeOptions}
+              placeholder="বাড়ির ধরণ নির্বাচন করুন"
+              classes="z-[3]"
+            />
+            <br />
+
+            <MultipleSelect
+              title="কোন বিষয়ে ছাড় দিতে চান?"
+              subtitle="যেসব বিষয়ে আপনি নমনীয় থাকতে পারবেন - একাধিক নির্বাচন করতে পারবেন"
+              placeholder="বিষয় নির্বাচন করুন"
+              options={flexibilityAreasOptionsMultiple}
+              value={flexibilityAreas}
+              setValue={setFlexibilityAreas}
+              classes="z-[2]"
+            />
+            <br />
+
+            <MultipleSelect
+              title="SSC/সমমান এ সর্বনিম্ন ফলাফল কেমন চান?"
+              subtitle="জীবনসঙ্গীর SSC/দাখিল/সমমান পরীক্ষার ফলাফল - একাধিক নির্বাচন করতে পারবেন"
+              value={minSscResult}
+              setValue={setMinSscResult}
+              options={minResultOptions}
+              placeholder="ফলাফল নির্বাচন করুন"
+              classes="z-[1]"
+            />
+            <br />
+
+            <MultipleSelect
+              title="HSC/সমমান এ সর্বনিম্ন ফলাফল কেমন চান?"
+              subtitle="জীবনসঙ্গীর HSC/আলিম/সমমান পরীক্ষার ফলাফল - একাধিক নির্বাচন করতে পারবেন"
+              value={minHscResult}
+              setValue={setMinHscResult}
+              options={minResultOptions}
+              placeholder="ফলাফল নির্বাচন করুন"
+            />
+          </div>
 
           <Textarea
             value={expected}

@@ -54,6 +54,44 @@ const ExpectedPartner = () => {
           answer={expectedLifePartner?.expected_characteristics}
         />
 
+        {/* Common fields for all religions */}
+        {expectedLifePartner?.partner_own_home_type?.length > 0 && (
+          <GridQuestionAnswerCard
+            question="জীবনসঙ্গীর নিজস্ব বাড়ির ধরণ"
+            answer={expectedLifePartner?.partner_own_home_type?.join(', ')}
+          />
+        )}
+        {expectedLifePartner?.partner_father_profession?.length > 0 && (
+          <GridQuestionAnswerCard
+            question="জীবনসঙ্গীর বাবার পেশা"
+            answer={expectedLifePartner?.partner_father_profession?.join(', ')}
+          />
+        )}
+        {expectedLifePartner?.partner_home_type?.length > 0 && (
+          <GridQuestionAnswerCard
+            question="জীবনসঙ্গীর বাড়ির ধরণ"
+            answer={expectedLifePartner?.partner_home_type?.join(', ')}
+          />
+        )}
+        {expectedLifePartner?.flexibility_areas?.length > 0 && (
+          <GridQuestionAnswerCard
+            question="কোন বিষয়ে ছাড় দিতে চান"
+            answer={expectedLifePartner?.flexibility_areas?.join(', ')}
+          />
+        )}
+        {expectedLifePartner?.min_ssc_result?.length > 0 && (
+          <GridQuestionAnswerCard
+            question="SSC/সমমান এ সর্বনিম্ন ফলাফল"
+            answer={expectedLifePartner?.min_ssc_result?.join(', ')}
+          />
+        )}
+        {expectedLifePartner?.min_hsc_result?.length > 0 && (
+          <GridQuestionAnswerCard
+            question="HSC/সমমান এ সর্বনিম্ন ফলাফল"
+            answer={expectedLifePartner?.min_hsc_result?.join(', ')}
+          />
+        )}
+
         {/* Hindu-specific partner expectations */}
         {religion === 'hinduism' && (
           <>
@@ -141,7 +179,9 @@ const ExpectedPartner = () => {
             {expectedLifePartner?.partner_church_attendance_preference && (
               <GridQuestionAnswerCard
                 question="গির্জায় যাওয়ার প্রত্যাশা"
-                answer={expectedLifePartner?.partner_church_attendance_preference}
+                answer={
+                  expectedLifePartner?.partner_church_attendance_preference
+                }
               />
             )}
             {personalInfo?.christian_partner_preference && (
