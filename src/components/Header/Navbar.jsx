@@ -114,6 +114,8 @@ export default function NavBar() {
     await logOut();
     setIsHovered(false);
     removeToken();
+    // Clear religion from localStorage on logout
+    setReligionToLocal(null, null);
     // navigate("/");
     window.location.href = '/';
   };
@@ -124,17 +126,15 @@ export default function NavBar() {
     }
   }, [data, setUserInfo]);
 
-  // Fetch religion for homepage content personalization (only if user hasn't manually selected one)
+  // Fetch religion for homepage content personalization - always sync with user's actual religion
   useEffect(() => {
     const token = getToken()?.token;
     if (!token) return;
-    // Don't overwrite if user already chose a religion from the dropdown
-    const currentReligion = getReligionInfo()?.religion;
-    if (currentReligion) return;
     GeneralInfoServices.getGeneralInfoByUser(token)
       .then((res) => {
-        if (res?.data) {
+        if (res?.data?.religion) {
           setReligionToLocal(res.data.religion, res.data.religious_type);
+          setSelectedReligion(res.data.religion);
         }
       })
       .catch(() => {});

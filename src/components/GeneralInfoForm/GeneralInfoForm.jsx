@@ -52,11 +52,9 @@ const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved, generalInf
   const [blood, setBlood] = useState('');
   const [nationality, setNationality] = useState('বাংলাদেশী');
   const [gender, setGender] = useState('');
-  const [religion, setReligion] = useState('islam');
-  const [religiousType, setReligiousType] = useState('practicing_muslim');
-  const [religiousTypeOptions, setReligiousTypeOptions] = useState(
-    religiousTypesByReligion['islam'] || []
-  );
+  const [religion, setReligion] = useState('');
+  const [religiousType, setReligiousType] = useState('');
+  const [religiousTypeOptions, setReligiousTypeOptions] = useState([]);
   const [filteredMaritalStatus, setFilteredMaritalStatus] =
     useState(maritalStatus);
   const [loading, setLoading] = useState(false);
@@ -105,13 +103,19 @@ const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved, generalInf
       setWeight(convertToBengaliNumerals(weight.toString()));
       setColor(screen_color);
       
-      // Set religion and religious type
+      // Set religion and religious type from saved data
       if (savedReligion) {
         setReligion(savedReligion);
         setReligiousTypeOptions(religiousTypesByReligion[savedReligion] || []);
-      }
-      if (religious_type) {
-        setReligiousType(religious_type);
+        if (religious_type) {
+          setReligiousType(religious_type);
+        } else {
+          // Set default religious type for the saved religion
+          const options = religiousTypesByReligion[savedReligion] || [];
+          if (options.length > 0) {
+            setReligiousType(options[0].value);
+          }
+        }
       }
       // Load saved photos
       if (generalInfo.data.photos && Array.isArray(generalInfo.data.photos)) {
@@ -129,6 +133,11 @@ const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved, generalInf
           });
         }
       }
+    } else if (generalInfo === null) {
+      // New biodata - set defaults for Islam
+      setReligion('islam');
+      setReligiousType('practicing_muslim');
+      setReligiousTypeOptions(religiousTypesByReligion['islam'] || []);
     }
   }, [generalInfoData, userInfoIds]);
 
