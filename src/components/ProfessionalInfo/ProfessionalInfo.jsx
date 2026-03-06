@@ -3,6 +3,37 @@ import BioContext from '../../contexts/BioContext';
 import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswerCard';
 import { Colors } from '../../constants/colors';
 
+// Bengali month names
+const bengaliMonths = {
+  '01': 'জানুয়ারি',
+  '02': 'ফেব্রুয়ারি',
+  '03': 'মার্চ',
+  '04': 'এপ্রিল',
+  '05': 'মে',
+  '06': 'জুন',
+  '07': 'জুলাই',
+  '08': 'আগস্ট',
+  '09': 'সেপ্টেম্বর',
+  '10': 'অক্টোবর',
+  '11': 'নভেম্বর',
+  '12': 'ডিসেম্বর',
+};
+
+// Convert to Bengali digits
+const toBengaliDigits = (num) => {
+  const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+  return String(num).replace(/[0-9]/g, (d) => bengaliDigits[parseInt(d)]);
+};
+
+// Format date like "2025-11" to "নভেম্বর ২০২৫"
+const formatDateBengali = (dateStr) => {
+  if (!dateStr) return null;
+  const [year, month] = dateStr.split('-');
+  const monthName = bengaliMonths[month] || month;
+  const bengaliYear = toBengaliDigits(year);
+  return `${monthName} ${bengaliYear}`;
+};
+
 const ProfessionalInfo = () => {
   const { bio } = useContext(BioContext);
   const occupation = bio?.occupation || null;
@@ -65,7 +96,7 @@ const ProfessionalInfo = () => {
               />
               <GridQuestionAnswerCard
                 question="সময়কাল"
-                answer={`${history.start_date || 'N/A'} - ${history.is_current ? 'বর্তমান' : (history.end_date || 'N/A')}`}
+                answer={`${formatDateBengali(history.start_date) || 'N/A'} - ${history.is_current ? 'বর্তমান' : (formatDateBengali(history.end_date) || 'N/A')}`}
               />
               {history.job_description && (
                 <GridQuestionAnswerCard
