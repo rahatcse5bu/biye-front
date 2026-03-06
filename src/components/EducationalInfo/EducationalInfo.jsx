@@ -5,6 +5,8 @@ import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswer
 function EducationInfo() {
   const { bio } = useContext(BioContext);
   const educationInfo = bio?.educationQualification || null;
+  const generalInfo = bio?.generalInfo || null;
+  const religion = generalInfo?.religion || 'islam';
 
   return (
     <div className="w-auto border-t-2 rounded shadow single-bio-educational-qualification">
@@ -309,7 +311,8 @@ function EducationInfo() {
           />
         )}
 
-        {educationInfo?.deeni_edu && (
+        {/* Islamic-specific question - only for Muslims */}
+        {religion === 'islam' && educationInfo?.deeni_edu && (
           <GridQuestionAnswerCard
             question="কোনো দ্বীনি শিক্ষাগত যোগ্যতা"
             answer={

@@ -683,16 +683,8 @@ const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', gender: g
             setValue={setAboutMe}
           />
 
-          <Select
+          <Input
             title="কোনো নেশাদ্রব্য পান করেন?"
-            options={[
-              {
-                value: 'জ্বী',
-              },
-              {
-                value: 'না,আলহামদুলিল্লাহ',
-              },
-            ]}
             value={isNeshaDrobbo}
             setValue={setIsNeshaDrobbo}
             required

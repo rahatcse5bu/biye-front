@@ -6,6 +6,9 @@ const MaritalInfo = () => {
   const { bio } = useContext(BioContext);
   const maritalInfo = bio?.maritalInfo || null;
   const generalInfo = bio?.generalInfo || null;
+  const religion = generalInfo?.religion || 'islam';
+  const isFemale = generalInfo?.gender === 'মহিলা' || generalInfo?.bio_type === 'পাত্রীর বায়োডাটা';
+
   return (
     <div className="single-bio-marital-info border-t-2 w-auto rounded shadow">
       <h5 className="card-title text-center text-2xl my-3">
@@ -45,16 +48,19 @@ const MaritalInfo = () => {
             </>
           ) : (
             <>
+              {/* Islamic-specific question - only for Muslim males */}
+              {religion === 'islam' && (
+                <GridQuestionAnswerCard
+                  question="বিয়ের পর স্ত্রীকে পর্দায় রাখতে পারবেন?"
+                  answer={maritalInfo?.isPordaToWife}
+                />
+              )}
               <GridQuestionAnswerCard
-                question="বিয়ের পর স্ত্রীকে পর্দায় রাখতে পারবেন?"
-                answer={maritalInfo?.isPordaToWife}
-              />
-              <GridQuestionAnswerCard
-                question="আপনি কি বিয়ের পর বউকে চাকরি করতে দিতে ইচ্ছুক?"
+                question="আপনি কি বিয়ের পর বউকে চাকরি করতে দিতে ইচ্ছুক?"
                 answer={maritalInfo?.permission_for_job}
               />
               <GridQuestionAnswerCard
-                question="বিয়ের পর আহলিয়াকে পড়াশোনা চালিয়ে যেতে দিতে চান?"
+                question="বিয়ের পর স্ত্রীকে পড়াশোনা চালিয়ে যেতে দিতে চান?"
                 answer={maritalInfo?.permission_for_study}
               />
               <GridQuestionAnswerCard
