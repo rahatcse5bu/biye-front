@@ -8,6 +8,13 @@ import {
   maritalStatusMultiple,
   professionMultiple,
   screenColorOptionsMultiple,
+  hinduCasteOptionsMultiple,
+  hinduSubCasteOptionsMultiple,
+  hinduGotraOptionsMultiple,
+  hinduSampradayOptionsMultiple,
+  hinduMangalikOptionsMultiple,
+  christianDenominationOptionsMultiple,
+  christianChurchAttendanceOptionsMultiple,
 } from './expectedPartnerForm.constant';
 
 import './expectedPartner.css';
@@ -29,6 +36,8 @@ import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import { getErrorMessage } from '../../utils/error';
 import { Toast } from '../../utils/toast';
 import { ExpectedPartnerServices } from '../../services/expectedPartner';
+import { getReligionInfo } from '../../utils/localStorage';
+import Select from '../Select/Select';
 
 const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
   const [zilla, setZilla] = useState([]);
@@ -49,6 +58,29 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
   const [expected, setExpected] = useState('');
   const { userInfo } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
+
+  // Get religion from localStorage
+  const { religion } = getReligionInfo();
+
+  // Hindu-specific partner preferences
+  const [partnerCastePreference, setPartnerCastePreference] = useState([]);
+  const [partnerSubCastePreference, setPartnerSubCastePreference] = useState(
+    []
+  );
+  const [partnerGotraPreference, setPartnerGotraPreference] = useState('');
+  const [partnerSampradayPreference, setPartnerSampradayPreference] = useState(
+    []
+  );
+  const [partnerMangalikPreference, setPartnerMangalikPreference] =
+    useState('');
+
+  // Christian-specific partner preferences
+  const [partnerDenominationPreference, setPartnerDenominationPreference] =
+    useState([]);
+  const [
+    partnerChurchAttendancePreference,
+    setPartnerChurchAttendancePreference,
+  ] = useState('');
 
   // console.log(dataToRange(getDataFromRange(height)), getDataFromRange(height));
   // console.log(
@@ -95,6 +127,15 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
         educational_qualifications,
         occupation,
         economical_condition,
+        // Hindu-specific fields
+        partner_caste_preference,
+        partner_sub_caste_preference,
+        partner_gotra_preference,
+        partner_sampraday_preference,
+        partner_mangalik_preference,
+        // Christian-specific fields
+        partner_denomination_preference,
+        partner_church_attendance_preference,
       } = expectedPartnerInfo.data;
       setAge(age);
       setHeight(height);
@@ -109,6 +150,41 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
       setEducationExpected(
         dataToMultipleExpectedPartner(educational_qualifications)
       );
+
+      // Hindu-specific fields
+      if (partner_caste_preference) {
+        setPartnerCastePreference(
+          dataToMultipleExpectedPartner(partner_caste_preference)
+        );
+      }
+      if (partner_sub_caste_preference) {
+        setPartnerSubCastePreference(
+          dataToMultipleExpectedPartner(partner_sub_caste_preference)
+        );
+      }
+      if (partner_gotra_preference) {
+        setPartnerGotraPreference(partner_gotra_preference);
+      }
+      if (partner_sampraday_preference) {
+        setPartnerSampradayPreference(
+          dataToMultipleExpectedPartner(partner_sampraday_preference)
+        );
+      }
+      if (partner_mangalik_preference) {
+        setPartnerMangalikPreference(partner_mangalik_preference);
+      }
+
+      // Christian-specific fields
+      if (partner_denomination_preference) {
+        setPartnerDenominationPreference(
+          dataToMultipleExpectedPartner(partner_denomination_preference)
+        );
+      }
+      if (partner_church_attendance_preference) {
+        setPartnerChurchAttendancePreference(
+          partner_church_attendance_preference
+        );
+      }
     }
   }, [expectedPartnerInfo]);
 
@@ -129,6 +205,27 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
       economical_condition: getDataFromMultipleInputExpectedPartner(financial),
       expected_characteristics: expected,
     };
+
+    // Add Hindu-specific fields
+    if (religion === 'hinduism') {
+      expectedPartnerInfoData.partner_caste_preference =
+        getDataFromMultipleInputExpectedPartner(partnerCastePreference);
+      expectedPartnerInfoData.partner_sub_caste_preference =
+        getDataFromMultipleInputExpectedPartner(partnerSubCastePreference);
+      expectedPartnerInfoData.partner_gotra_preference = partnerGotraPreference;
+      expectedPartnerInfoData.partner_sampraday_preference =
+        getDataFromMultipleInputExpectedPartner(partnerSampradayPreference);
+      expectedPartnerInfoData.partner_mangalik_preference =
+        partnerMangalikPreference;
+    }
+
+    // Add Christian-specific fields
+    if (religion === 'christianity') {
+      expectedPartnerInfoData.partner_denomination_preference =
+        getDataFromMultipleInputExpectedPartner(partnerDenominationPreference);
+      expectedPartnerInfoData.partner_church_attendance_preference =
+        partnerChurchAttendancePreference;
+    }
 
     if (!getToken()?.token || !userInfo?.data?._id) {
       alert('Please logout and try again');
@@ -265,6 +362,101 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
             classes="z-[6]"
           />
           <br />
+
+          {/* Hindu-specific partner preference fields */}
+          {religion === 'hinduism' && (
+            <>
+              <div className="p-4 mb-4 border-l-4 border-orange-500 bg-orange-50 rounded-r-lg">
+                <h3 className="text-lg font-semibold text-orange-800 mb-3">
+                  হিন্দু ধর্মীয় প্রত্যাশা
+                </h3>
+
+                <MultipleSelect
+                  title="প্রত্যাশিত বর্ণ/জাতি"
+                  subtitle="একাধিক নির্বাচন করতে পারবেন"
+                  placeholder="বর্ণ নির্বাচন করুন"
+                  options={hinduCasteOptionsMultiple}
+                  value={partnerCastePreference}
+                  setValue={setPartnerCastePreference}
+                  classes="z-[5]"
+                />
+                <br />
+
+                <MultipleSelect
+                  title="প্রত্যাশিত উপ-জাতি"
+                  subtitle="একাধিক নির্বাচন করতে পারবেন"
+                  placeholder="উপ-জাতি নির্বাচন করুন"
+                  options={hinduSubCasteOptionsMultiple}
+                  value={partnerSubCastePreference}
+                  setValue={setPartnerSubCastePreference}
+                  classes="z-[4]"
+                />
+                <br />
+
+                <Select
+                  title="প্রত্যাশিত গোত্র"
+                  subtitle="সাধারণত নিজের গোত্র বাদে যেকোনো গোত্রে বিবাহ হয়"
+                  value={partnerGotraPreference}
+                  setValue={setPartnerGotraPreference}
+                  options={hinduGotraOptionsMultiple}
+                  placeholder="গোত্র নির্বাচন করুন"
+                />
+                <br />
+
+                <MultipleSelect
+                  title="প্রত্যাশিত সম্প্রদায়"
+                  subtitle="একাধিক নির্বাচন করতে পারবেন"
+                  placeholder="সম্প্রদায় নির্বাচন করুন"
+                  options={hinduSampradayOptionsMultiple}
+                  value={partnerSampradayPreference}
+                  setValue={setPartnerSampradayPreference}
+                  classes="z-[3]"
+                />
+                <br />
+
+                <Select
+                  title="মাঙ্গলিক অবস্থা প্রত্যাশা"
+                  subtitle="জীবনসঙ্গীর মাঙ্গলিক অবস্থা সম্পর্কে প্রত্যাশা"
+                  value={partnerMangalikPreference}
+                  setValue={setPartnerMangalikPreference}
+                  options={hinduMangalikOptionsMultiple}
+                  placeholder="মাঙ্গলিক প্রত্যাশা নির্বাচন করুন"
+                />
+              </div>
+            </>
+          )}
+
+          {/* Christian-specific partner preference fields */}
+          {religion === 'christianity' && (
+            <>
+              <div className="p-4 mb-4 border-l-4 border-blue-500 bg-blue-50 rounded-r-lg">
+                <h3 className="text-lg font-semibold text-blue-800 mb-3">
+                  খ্রিস্টান ধর্মীয় প্রত্যাশা
+                </h3>
+
+                <MultipleSelect
+                  title="প্রত্যাশিত মণ্ডলী/গির্জার ধরন"
+                  subtitle="একাধিক নির্বাচন করতে পারবেন"
+                  placeholder="মণ্ডলী নির্বাচন করুন"
+                  options={christianDenominationOptionsMultiple}
+                  value={partnerDenominationPreference}
+                  setValue={setPartnerDenominationPreference}
+                  classes="z-[5]"
+                />
+                <br />
+
+                <Select
+                  title="গির্জায় যাওয়ার প্রত্যাশা"
+                  subtitle="জীবনসঙ্গীর গির্জায় যাওয়ার অভ্যাস সম্পর্কে প্রত্যাশা"
+                  value={partnerChurchAttendancePreference}
+                  setValue={setPartnerChurchAttendancePreference}
+                  options={christianChurchAttendanceOptionsMultiple}
+                  placeholder="গির্জায় যাওয়ার প্রত্যাশা নির্বাচন করুন"
+                />
+              </div>
+            </>
+          )}
+
           <Textarea
             value={expected}
             setValue={setExpected}

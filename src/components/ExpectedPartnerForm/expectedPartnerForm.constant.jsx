@@ -89,3 +89,78 @@ export const financialOptionsMultiple = [
   { value: 'নিম্ন মধ্যবিত্ত', label: 'নিম্ন মধ্যবিত্ত' },
   { value: 'নিম্নবিত্ত', label: 'নিম্নবিত্ত' },
 ];
+
+// ============ HINDU PARTNER PREFERENCE CONSTANTS ============
+
+export const hinduCasteOptionsMultiple = [
+  { value: 'ব্রাহ্মণ', label: 'ব্রাহ্মণ' },
+  { value: 'ক্ষত্রিয়', label: 'ক্ষত্রিয়' },
+  { value: 'বৈশ্য', label: 'বৈশ্য' },
+  { value: 'শূদ্র', label: 'শূদ্র' },
+  { value: 'নমশূদ্র', label: 'নমশূদ্র' },
+  { value: 'কায়স্থ', label: 'কায়স্থ' },
+  { value: 'বৈদ্য', label: 'বৈদ্য' },
+  { value: 'যেকোনো', label: 'যেকোনো' },
+  { value: 'অন্যান্য', label: 'অন্যান্য' },
+];
+
+export const hinduSubCasteOptionsMultiple = [
+  { value: 'রাঢ়ী', label: 'রাঢ়ী' },
+  { value: 'বারেন্দ্র', label: 'বারেন্দ্র' },
+  { value: 'বৈদিক', label: 'বৈদিক' },
+  { value: 'যেকোনো', label: 'যেকোনো' },
+  { value: 'অন্যান্য', label: 'অন্যান্য' },
+];
+
+export const hinduGotraOptionsMultiple = [
+  { value: 'কশ্যপ', label: 'কশ্যপ' },
+  { value: 'ভরদ্বাজ', label: 'ভরদ্বাজ' },
+  { value: 'বশিষ্ঠ', label: 'বশিষ্ঠ' },
+  { value: 'গৌতম', label: 'গৌতম' },
+  { value: 'অত্রি', label: 'অত্রি' },
+  { value: 'বিশ্বামিত্র', label: 'বিশ্বামিত্র' },
+  { value: 'জমদগ্নি', label: 'জমদগ্নি' },
+  { value: 'অগস্ত্য', label: 'অগস্ত্য' },
+  { value: 'শান্ডিল্য', label: 'শান্ডিল্য' },
+  { value: 'মৌদগল্য', label: 'মৌদগল্য' },
+  { value: 'সাবর্ণ', label: 'সাবর্ণ' },
+  { value: 'নিজের গোত্র বাদে যেকোনো', label: 'নিজের গোত্র বাদে যেকোনো' },
+  { value: 'অন্যান্য', label: 'অন্যান্য' },
+];
+
+export const hinduSampradayOptionsMultiple = [
+  { value: 'বৈষ্ণব', label: 'বৈষ্ণব' },
+  { value: 'শাক্ত', label: 'শাক্ত' },
+  { value: 'শৈব', label: 'শৈব' },
+  { value: 'স্মার্ত', label: 'স্মার্ত' },
+  { value: 'যেকোনো', label: 'যেকোনো' },
+  { value: 'অন্যান্য', label: 'অন্যান্য' },
+];
+
+export const hinduMangalikOptionsMultiple = [
+  { value: 'মাঙ্গলিক', label: 'মাঙ্গলিক' },
+  { value: 'মাঙ্গলিক নয়', label: 'মাঙ্গলিক নয়' },
+  { value: 'যেকোনো চলবে', label: 'যেকোনো চলবে' },
+];
+
+// ============ CHRISTIAN PARTNER PREFERENCE CONSTANTS ============
+
+export const christianDenominationOptionsMultiple = [
+  { value: 'রোমান ক্যাথলিক', label: 'রোমান ক্যাথলিক' },
+  { value: 'প্রটেস্ট্যান্ট', label: 'প্রটেস্ট্যান্ট' },
+  { value: 'ব্যাপ্টিস্ট', label: 'ব্যাপ্টিস্ট' },
+  { value: 'অ্যাংলিকান', label: 'অ্যাংলিকান' },
+  { value: 'মেথডিস্ট', label: 'মেথডিস্ট' },
+  { value: 'পেন্টেকস্টাল', label: 'পেন্টেকস্টাল' },
+  { value: 'অর্থোডক্স', label: 'অর্থোডক্স' },
+  { value: 'যেকোনো', label: 'যেকোনো' },
+  { value: 'অন্যান্য', label: 'অন্যান্য' },
+];
+
+export const christianChurchAttendanceOptionsMultiple = [
+  { value: 'প্রতি রবিবার', label: 'প্রতি রবিবার' },
+  { value: 'সাপ্তাহিক একাধিকবার', label: 'সাপ্তাহিক একাধিকবার' },
+  { value: 'মাসে কয়েকবার', label: 'মাসে কয়েকবার' },
+  { value: 'বিশেষ অনুষ্ঠানে', label: 'বিশেষ অনুষ্ঠানে' },
+  { value: 'যেকোনো চলবে', label: 'যেকোনো চলবে' },
+];
