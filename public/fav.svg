@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#16ADB4" />
+      <stop offset="50%" stop-color="#118B90" />
+      <stop offset="100%" stop-color="#0C666A" />
+    </linearGradient>
+    
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000000" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <circle cx="256" cy="256" r="240" fill="url(#bgGrad)" />
+  
+  <circle cx="256" cy="256" r="220" fill="none" stroke="#FFFFFF" stroke-width="4" opacity="0.2" />
+
+  <g filter="url(#shadow)">
+    <circle cx="206" cy="350" r="55" fill="none" stroke="#FFFFFF" stroke-width="16" />
+    <circle cx="306" cy="350" r="55" fill="none" stroke="#FFFFFF" stroke-width="16" />
+    
+    <polygon points="256,265 225,295 256,325 287,295" fill="#FFFFFF" />
+    <polygon points="230,292 240,280 272,280 282,292" fill="#FFFFFF" opacity="0.8"/>
+  </g>
+
+  <text x="256" y="225" font-family="'Noto Sans Bengali', 'Hind Siliguri', 'Kalpurush', sans-serif" font-size="150" font-weight="bold" fill="#FFFFFF" text-anchor="middle" filter="url(#shadow)">বিয়ে</text>
+
+  <g fill="#FFFFFF">
+    <path d="M120,310 Q135,310 135,295 Q135,310 150,310 Q135,310 135,325 Q135,310 120,310 Z" opacity="0.9"/>
+    <path d="M362,310 Q377,310 377,295 Q377,310 392,310 Q377,310 377,325 Q377,310 362,310 Z" opacity="0.9"/>
+    <path d="M165,380 Q173,380 173,372 Q173,380 181,380 Q173,380 173,388 Q173,380 165,380 Z" opacity="0.6"/>
+    <path d="M331,380 Q339,380 339,372 Q339,380 347,380 Q339,380 339,388 Q339,380 331,380 Z" opacity="0.6"/>
+  </g>
+</svg>
