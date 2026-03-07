@@ -76,29 +76,25 @@ const BioInfoButton = () => {
   }
 
   return (
-    <div className="grid grid-cols-[40%,60%] gap-2 rounded-lg">
-      <div className="p-4">
-        <button
-          onClick={handleShortlistClick}
-          disabled={toggleMutation.isPending}
-          className={`shortlist text-white border-2 transition-all duration-500 ease-out py-2 px-7 rounded-full ${
-            isShortlisted
-              ? 'bg-yellow-600 hover:bg-yellow-700 border-yellow-600'
-              : 'bg-green-800 hover:bg-green-600 border-green-800'
-          } ${toggleMutation.isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          {toggleMutation.isPending
-            ? 'Loading...'
-            : isShortlisted
-            ? 'Shortlisted ✓'
-            : 'Shortlist'}
-        </button>
-      </div>
-      <div className="p-4">
-        <button className="bg-red-900 hover:bg-custom-blue-dark border-2 hover:bg-red-600 transition-all duration-500 ease-out border-red-900 text-white py-2 px-7 rounded-full">
-          Ignore
-        </button>
-      </div>
+    <div className="flex gap-3 p-4">
+      <button
+        onClick={handleShortlistClick}
+        disabled={toggleMutation.isPending}
+        className={`flex-1 text-sm sm:text-base text-white border-2 transition-all duration-500 ease-out py-2 px-3 sm:px-7 rounded-full ${
+          isShortlisted
+            ? 'bg-yellow-600 hover:bg-yellow-700 border-yellow-600'
+            : 'bg-green-800 hover:bg-green-600 border-green-800'
+        } ${toggleMutation.isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
+      >
+        {toggleMutation.isPending
+          ? 'Loading...'
+          : isShortlisted
+          ? 'Shortlisted ✓'
+          : 'Shortlist'}
+      </button>
+      <button className="flex-1 text-sm sm:text-base bg-red-900 hover:bg-red-600 border-2 transition-all duration-500 ease-out border-red-900 text-white py-2 px-3 sm:px-7 rounded-full">
+        Ignore
+      </button>
     </div>
   );
 };

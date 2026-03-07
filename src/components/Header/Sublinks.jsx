@@ -10,7 +10,7 @@ const SubLinks = ({ navItem, setOpenNav }) => {
       <button className="flex  items-center   ease-linear transition-all duration-150 h-full">
         {navItem.title} <DrobdownIcon />{' '}
       </button>
-      <ul className="absolute hidden text-gray-700 group-hover:block w-40 text-sm nav-item-dropdown-ul">
+      <ul className="absolute left-0 lg:left-0 hidden text-gray-700 group-hover:block w-full lg:w-40 text-sm nav-item-dropdown-ul">
         {navItem.subLinks.map((_linkItem, _in) =>
           _linkItem.path === '/voter-list' ? (
             <a
