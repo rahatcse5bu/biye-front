@@ -21,11 +21,10 @@ const Footer = () => {
 			<div className="flex flex-col justify-between gap-8 px-10 py-10 lg:flex-row md:px-20 md:gap-12">
 				<div className=" w-[100%] lg:w-[25%] flex flex-col gap-4 ">
 					<h1 className="text-[25px] mb-4 text-[#ffff] font-semibold tracking-widest">
-						PNC Nikah
+						বিয়ে
 					</h1>
 					<p className=" text-[18px] text-[#fff] font-normal leading-[25px] ">
-						PNC Nikah is a platform of PNC Soft Tech Company which helps only
-						the practicing muslims who are searching for deeni-life-partner.
+						বিয়ে একটি ম্যাট্রিমনি প্ল্যাটফর্ম যা সকল ধর্মের মানুষদের জীবনসঙ্গী খুঁজে পেতে সাহায্য করে।
 					</p>
 				</div>
 
@@ -153,7 +152,7 @@ const Footer = () => {
 				style={{ backgroundColor: Colors.primary800 }}>
 				<p className="text-center text-[#fff] text-[17px] leading-[30px] tracking-widest ">
 					{" "}
-					Copyright © 2023 by PNC Nikah | PNC Soft Tech{" "}
+					Copyright © 2023-{new Date().getFullYear()} বিয়ে | সর্বস্বত্ব সংরক্ষিত{" "}
 				</p>
 				<div className="powr-hit-counter" id="2c3bf98a_1720928514"></div><script src="https://www.powr.io/powr.js?platform=html"></script>
 			</div>
