@@ -12,7 +12,7 @@ function EducationInfo() {
     <div className="w-auto border-t-2 rounded shadow single-bio-educational-qualification">
       <h5 className="my-3 text-2xl text-center card-title">শিক্ষাগত যোগ্যতা</h5>
 
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-0 my-3">
+      <div className="grid grid-cols-1 gap-0 my-3">
         <GridQuestionAnswerCard
           question="আপনার শিক্ষা মাধ্যম"
           answer={educationInfo?.education_medium}

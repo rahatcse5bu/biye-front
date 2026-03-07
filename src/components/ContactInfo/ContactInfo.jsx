@@ -207,7 +207,7 @@ const ContactInfo = ({ status }) => {
         <>
           <h5 className="my-3 text-2xl text-center card-title">যোগাযোগ</h5>
           <div className="paid-contact-info">
-            <div className="grid md:grid-cols-2 grid-cols-1 gap-0 my-3">
+            <div className="grid grid-cols-1 gap-0 my-3">
               <>
                 <GridQuestionAnswerCard
                   question={

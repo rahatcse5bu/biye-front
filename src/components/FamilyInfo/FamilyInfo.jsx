@@ -13,7 +13,7 @@ const FamilyInfo = () => {
     <div className="w-auto border-t-2 rounded shadow single-bio-family-info">
       <h5 className="my-3 text-2xl text-center card-title">পারিবারিক তথ্য</h5>
       <table className="w-full table-auto">
-        <div className="grid md:grid-cols-2 grid-cols-1 gap-0 my-3">
+        <div className="grid grid-cols-1 gap-0 my-3">
           <GridQuestionAnswerCard
             question="আপনার পিতা কি জীবিত?"
             answer={familyStatus?.isFatherAlive}

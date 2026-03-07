@@ -15,7 +15,7 @@ const MaritalInfo = () => {
         বিবাহ সম্পর্কিত তথ্য
       </h5>
 
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-0 my-3">
+      <div className="grid grid-cols-1 gap-0 my-3">
         <>
           <GridQuestionAnswerCard
             question="অভিভাবক আপনার বিয়েতে রাজি কি না?"

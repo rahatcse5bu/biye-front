@@ -9,7 +9,7 @@ const OngikarNama = () => {
     <div className="single-bio-ongikar-info rounded shadow">
       <h5 className="card-title text-center text-2xl my-3">অঙ্গীকারনামা</h5>
 
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-0 my-3">
+      <div className="grid grid-cols-1 gap-0 my-3">
         <GridQuestionAnswerCard
           question={`${siteUrl} ওয়েবসাইটে বায়োডাটা জমা দিচ্ছেন, তা আপনার অভিভাবক জানেন?`}
           answer={ongikarNama?.is_family_know}

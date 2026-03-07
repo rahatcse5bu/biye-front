@@ -43,7 +43,7 @@ const ProfessionalInfo = () => {
     <div className="single-bio-ocupational-info rounded shadow">
       <h5 className="card-title text-center text-2xl my-3">পেশাগত তথ্য</h5>
 
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-0 my-3">
+      <div className="grid grid-cols-1 gap-0 my-3">
         <GridQuestionAnswerCard
           question="পেশা"
           answer={
@@ -73,7 +73,7 @@ const ProfessionalInfo = () => {
           </div>
           
           {workingHistory.map((history, index) => (
-            <div key={index} className="grid md:grid-cols-2 grid-cols-1 gap-0">
+            <div key={index} className="grid grid-cols-1 gap-0">
               <GridQuestionAnswerCard
                 question="প্রতিষ্ঠান"
                 answer={

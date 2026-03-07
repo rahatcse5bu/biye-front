@@ -9,7 +9,7 @@ function AddressInfo() {
   return (
     <div className="single-bio-address rounded shadow">
       <h5 className="card-title text-center text-2xl my-3">ঠিকানা</h5>
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-0 my-3">
+      <div className="grid grid-cols-1 gap-0 my-3">
         <GridQuestionAnswerCard
           question="স্থায়ী ঠিকানা"
           answer={

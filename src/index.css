@@ -6,7 +6,7 @@ html {
   overflow-x: hidden;
 }
 * {
-  font-family: 'Bangla', 'segoe ui', sans-serif;
+  font-family: 'ShohidAbuSayed', 'Bangla', 'segoe ui', sans-serif;
 }
 #root {
   padding: 0;
@@ -135,4 +135,16 @@ vertical-timeline-element-icon {
 
 .filter-open {
   animation: openFromBottom 1s ease-out;
+}
+
+@font-face {
+  font-family: 'ShohidAbuSayed';
+  src: url('/assets/fonts/ShohidAbuSayed/Unicode/Li Shohid Abu Sayed Unicode.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Use ShohidAbuSayed for Bengali text */
+.bangla-text, [lang="bn"] {
+  font-family: 'ShohidAbuSayed', 'Bangla', 'segoe ui', sans-serif !important;
 }
