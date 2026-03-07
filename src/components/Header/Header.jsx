@@ -102,9 +102,7 @@ const Header = () => {
   }, [isError, error]);
 
   useEffect(() => {
-    Toast.tipsToast(
-      'If you have any technical issues,please logout and login again'
-    );
+    // Removed technical issues toast
   }, []);
 
   const elementStyle = {
