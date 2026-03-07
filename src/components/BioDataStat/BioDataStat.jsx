@@ -55,11 +55,11 @@ const BioDataStat = ({ id }) => {
         className="single-bio-left-sidebar-stats card-left px-2 mx-[2px] rounded-md text-white shadow-md"
         style={{ backgroundColor: Colors.pncPrimaryColor }}
       >
-        <h5 className="card-titlee text-lg text-center my-4 pt-5">STATS:</h5>
+        <h5 className="card-titlee text-lg text-center my-4 pt-5">পরিসংখ্যান</h5>
         <table className="w-full  mx-auto py-10">
           <thead>
             <tr className="border-b">
-              <td className="px-4 text-left  py-2">Total Views</td>
+              <td className="px-4 text-left  py-2">মোট ভিউ</td>
               <td className="px-4 text-left  py-2">
                 {generalInfo?.views_count}
               </td>
@@ -67,35 +67,35 @@ const BioDataStat = ({ id }) => {
           </thead>
           <tbody>
             <tr className="border-b">
-              <td className="px-4 text-left  py-2">Total Pending:</td>
+              <td className="px-4 text-left  py-2">মোট পেন্ডিং</td>
               <td className="px-4 text-left  py-2">{data?.results?.pending}</td>
             </tr>
             <tr className="border-b">
-              <td className="px-4 text-left  py-2">Total Approved</td>
+              <td className="px-4 text-left  py-2">মোট অনুমোদিত</td>
               <td className="px-4 text-left  py-2">
                 {data?.results?.approved}
               </td>
             </tr>
             <tr className="border-b">
-              <td className="px-4 text-left  py-2">Total Rejected</td>
+              <td className="px-4 text-left  py-2">মোট বাতিল</td>
               <td className="px-4 text-left  py-2">
                 {data?.results?.rejected}
               </td>
             </tr>
             <tr className="border-b">
-              <td className="px-4 text-left  py-2">Approval Rate</td>
+              <td className="px-4 text-left  py-2">অনুমোদনের হার</td>
               <td className="px-4 text-left  py-2">
                 {data?.results.approvedPercentage}%
               </td>
             </tr>
             <tr>
-              <td className="px-4 text-left  py-2">Rejection Rate</td>
+              <td className="px-4 text-left  py-2">বাতিলের হার</td>
               <td className="px-4 text-left  py-2">
                 {data?.results.rejectedPercentage}%
               </td>
             </tr>
             <tr>
-              <td className="px-4 text-left  py-2">Pending Rate</td>
+              <td className="px-4 text-left  py-2">পেন্ডিং হার</td>
               <td className="px-4 text-left  py-2">
                 {data?.results.pendingPercentage}%
               </td>
