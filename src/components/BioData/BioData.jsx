@@ -100,8 +100,7 @@ const BioData = ({ biodata }) => {
         </div>
         <h4 className="my-2"> বায়োডাটা নং </h4>
         <h3>
-          {biodata?.gender === 'মহিলা' ? 'PNCF-' : 'PNCM-'}
-          {biodata?.user_id}
+          {'BID-'}{biodata?.user_id}
         </h3>
         {/* view icons */}
         <div className="flex absolute top-2 left-2">

@@ -35,7 +35,7 @@ const MyReports = () => {
 											PNCRID453
 										</td>
 										<td className="px-4 py-2 text-center border-l w-1/7">
-											PNCF-2023
+											BID-2023
 										</td>
 										<td className="px-4 py-2 text-center border-l w-1/7">
 											Pending
@@ -61,7 +61,7 @@ const MyReports = () => {
 											PNCRID453
 										</td>
 										<td className="px-4 py-2 text-center border-l w-1/7">
-											PNCF-2023
+											BID-2023
 										</td>
 										<td className="px-4 py-2 text-center border-l w-1/7">
 											Pending
@@ -87,7 +87,7 @@ const MyReports = () => {
 											PNCRID453
 										</td>
 										<td className="px-4 py-2 text-center border-l w-1/7">
-											PNCF-2023
+											BID-2023
 										</td>
 										<td className="px-4 py-2 text-center border-l w-1/7">
 											Pending
@@ -113,7 +113,7 @@ const MyReports = () => {
 											PNCRID403
 										</td>
 										<td className="px-4 py-2 text-center border-l w-1/7">
-											PNCM-2049
+											BID-2049
 										</td>
 										<td className="px-4 py-2 text-center border-l w-1/7">
 											Completed

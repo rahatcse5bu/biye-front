@@ -143,7 +143,7 @@ const ContactUs = () => {
                 value={formData.bio}
                 onChange={handleChange}
                 className="w-full border rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
-                placeholder="PNCM-2102"
+                placeholder="BID-2102"
               />
             </div>
             <div className="mb-4">

@@ -44,8 +44,7 @@ const UserSidebar = ({ openSidebar, setOpenSidebar }) => {
         </div>
         <div className="mt-2">
           <h3 style={{ color: Colors.siteGlobal }} className="font-semibold">
-            {gender === 'মহিলা' ? 'PNCF-' : 'PNCM-'}
-            {userInfo?.data?.user_id}
+            {'BID-'}{userInfo?.data?.user_id}
           </h3>
         </div>
         <h2 className=" text-[20px] text-[#c9c7c7df] self-center mt-2 ">

@@ -134,7 +134,7 @@ const BioDataStat = ({ id }) => {
           style={{ backgroundColor: Colors.pncPrimaryColor }}
           className="copy-biodata-link mx-auto text-white py-3 px-10 rounded-full"
         >
-          Copy Biodata Link
+          বায়োডাটার লিংক কপি করুন
         </button>
       </div>
     </>
