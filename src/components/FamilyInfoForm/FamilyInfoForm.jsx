@@ -34,6 +34,8 @@ const FamilyInfoForm = ({ setUserForm, userForm, religion = 'islam' }) => {
   const [economicStatus, setEconomicStatus] = useState("");
   const [uncleInfo, setUncleInfo] = useState("");
   const [familyDeen, setFamilyDeen] = useState("");
+  const [houseType, setHouseType] = useState("");
+  const [familyAssets, setFamilyAssets] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { userInfo } = useContext(UserContext);
@@ -74,6 +76,8 @@ const FamilyInfoForm = ({ setUserForm, userForm, religion = 'islam' }) => {
         uncle_info,
         family_eco_condition,
         eco_condition_type,
+        house_type,
+        family_assets,
         family_deeni_info,
       } = familyInfo.data;
       setFatherName(father_name);
@@ -90,6 +94,8 @@ const FamilyInfoForm = ({ setUserForm, userForm, religion = 'islam' }) => {
       setEconomicInfo(family_eco_condition);
       setSistersInfo(sister_info);
       setUncleInfo(uncle_info);
+      setHouseType(house_type || "");
+      setFamilyAssets(family_assets || "");
     }
   }, [familyInfo]);
 
@@ -110,6 +116,8 @@ const FamilyInfoForm = ({ setUserForm, userForm, religion = 'islam' }) => {
       uncle_info: uncleInfo,
       family_eco_condition: economicInfo,
       eco_condition_type: economicStatus,
+      house_type: houseType,
+      family_assets: familyAssets,
       family_deeni_info: familyDeen,
     };
 
@@ -262,6 +270,19 @@ const FamilyInfoForm = ({ setUserForm, userForm, religion = 'islam' }) => {
             value={economicInfo}
             setValue={setEconomicInfo}
             required
+          />
+
+          <Textarea
+            title="বর্তমান বাড়ি ও নিজস্ব বাড়ির ধরণ"
+            subtitle="যেমন: ভাড়া বাড়ি / নিজস্ব বাড়ি / টিনশেড / পাকা বিল্ডিং ইত্যাদি"
+            value={houseType}
+            setValue={setHouseType}
+          />
+
+          <Textarea
+            title="পারিবারিক জমিজমা, ব্যবসা বা অন্যান্য সম্পদের বিবরণ"
+            value={familyAssets}
+            setValue={setFamilyAssets}
           />
           {religion === 'islam' && (
             <Textarea

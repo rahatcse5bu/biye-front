@@ -220,6 +220,13 @@ function EducationInfo() {
           />
         )}
 
+        {educationInfo?.after_ssc_status !== undefined && educationInfo?.after_ssc_status !== null && (
+          <GridQuestionAnswerCard
+            question="এইচ.এস.সি / আলিম অবস্থা"
+            answer={educationInfo?.after_ssc_status ? 'চলমান' : 'সম্পন্ন'}
+          />
+        )}
+
         {educationInfo?.after_ssc_group && (
           <GridQuestionAnswerCard
             question="বিভাগ"
@@ -320,6 +327,13 @@ function EducationInfo() {
                 ? educationInfo?.deeni_edu.join(', ')
                 : educationInfo?.deeni_edu
             }
+          />
+        )}
+
+        {educationInfo?.edu_details && (
+          <GridQuestionAnswerCard
+            question="শিক্ষা সম্পর্কিত বিস্তারিত"
+            answer={educationInfo?.edu_details}
           />
         )}
       </div>

@@ -68,6 +68,16 @@ const FamilyInfo = () => {
             answer={familyStatus?.family_eco_condition}
           />
 
+          <GridQuestionAnswerCard
+            question="বর্তমান বাড়ি ও নিজস্ব বাড়ির ধরণ"
+            answer={familyStatus?.house_type}
+          />
+
+          <GridQuestionAnswerCard
+            question="পারিবারিক জমিজমা, ব্যবসা বা অন্যান্য সম্পদের বিবরণ"
+            answer={familyStatus?.family_assets}
+          />
+
           {religion === 'islam' && (
             <GridQuestionAnswerCard
               question="পারিবারিক দ্বীনি পরিবেশ কেমন?"
