@@ -42,6 +42,15 @@
 .navigation-bar-custom .mobile-nav-open .nav-list-ul li a,
 .navigation-bar-custom .mobile-nav-open .nav-list-ul li {
   display: block;
+  width: 100%;
+  color: #1f2937 !important;
+  text-align: center;
+}
+.navigation-bar-custom .mobile-nav-open .nav-list-ul li button {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   color: #1f2937 !important;
 }
 
@@ -55,6 +64,7 @@
 .navigation-bar-custom .nav-item-primary a {
   padding: 12px 20px !important;
   transition: 0.4s;
+  text-align: center;
 }
 
 .navigation-bar-custom li.nav-item-dropdown {
