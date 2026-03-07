@@ -24,6 +24,7 @@ e .single-bio-left-sidebar .card {
 .card-title {
 	/* color: #1d5b79; */
 	color: #071952;
+	text-align: center !important;
 }
 
 .single-bio-address,

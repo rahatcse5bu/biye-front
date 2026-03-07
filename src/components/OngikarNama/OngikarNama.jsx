@@ -4,7 +4,7 @@ import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswer
 const OngikarNama = () => {
   const { bio } = useContext(BioContext);
   const ongikarNama = bio?.ongikarNama || null;
-  const siteUrl = import.meta.env.VITE_SITE_URL || 'pncnikah.com';
+  const siteUrl = window.location.hostname;
   return (
     <div className="single-bio-ongikar-info rounded shadow">
       <h5 className="card-title text-center text-2xl my-3">অঙ্গীকারনামা</h5>

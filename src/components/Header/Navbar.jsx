@@ -403,11 +403,11 @@ export default function NavBar() {
           <NavList />
         </div>
 
-        <div className="flex justify-between">
+        <div className="flex items-center justify-between lg:hidden">
           <div className="p-2 text-left">
             <IconButton
               variant="text"
-              className="w-6 h-6 mr-auto text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
+              className="w-6 h-6 mr-auto text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent"
               ripple={false}
               onClick={() => setOpenNav(!openNav)}
             >
@@ -443,7 +443,7 @@ export default function NavBar() {
               )}
             </IconButton>
           </div>
-          <div className="flex items-center gap-2 text-center lg:hidden">
+          <div className="flex items-center gap-2">
             <Link className="" to="/">
               <img className="" src={navLogo} alt="" />
             </Link>
@@ -468,7 +468,7 @@ export default function NavBar() {
             </select>
           </div>
 
-          <div className="block lg:hidden">
+          <div className="flex items-center">
             {!user ? (
               <Typography
                 as="li"
@@ -487,8 +487,8 @@ export default function NavBar() {
                 onMouseEnter={handleIconHover}
                 onMouseLeave={handleIconLeave}
               >
-                <div className="flex flex-row-reverse">
-                  <div className="relative w-12 h-12 flex items-center justify-center">
+                <div className="flex flex-row-reverse items-center">
+                  <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
                     <FaUserLarge className="w-4 h-4 " />
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-full h-full border-4 border-orange-700 rounded-full rotate-border">
@@ -500,7 +500,7 @@ export default function NavBar() {
                   {userInfo?.data.points > 0 && (
                     <div
                       title={`${userInfo?.data.points.toFixed(2)} points`}
-                      className="flex items-center text-white bg-orange-700 px-2 rounded-lg mr-2"
+                      className="flex items-center text-white bg-orange-700 px-1.5 sm:px-2 py-0.5 rounded-lg mr-1 sm:mr-2 text-xs sm:text-sm whitespace-nowrap"
                     >
                       {userInfo?.data.points.toFixed(2)} P
                     </div>
