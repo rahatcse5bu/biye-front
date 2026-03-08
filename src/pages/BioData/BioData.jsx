@@ -12,6 +12,7 @@ import MaritalInfo from '../../components/MaritalInfo/MaritalInfo';
 import ExpectedPartner from '../../components/ExpectedPartner/ExpectedPartner';
 import OngikarNama from '../../components/OngikarNama/OngikarNama';
 import ContactInfo from '../../components/ContactInfo/ContactInfo';
+import Achievement from '../../components/Achievement/Achievement';
 import './BioData.css';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -70,6 +71,9 @@ const BioData = () => {
     if (data && data?.data) {
       setBio(data.data);
     }
+    return () => {
+      setBio(null);
+    };
   }, [data, setBio, id]);
 
   const location = useLocation();
@@ -142,6 +146,9 @@ const BioData = () => {
             {/*<!-- End of Expected Life Partner  -->*/}
             <div className="h-5"></div>
             <OngikarNama />
+
+            <div className="h-5"></div>
+            <Achievement />
 
             <div className="h-5"></div>
             {id &&

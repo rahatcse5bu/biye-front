@@ -13,6 +13,7 @@ import {
 } from 'firebase/auth';
 import { createContext, useEffect, useState } from 'react';
 import { auth } from '../firebase/app.js';
+import { useQueryClient } from '@tanstack/react-query';
 
 // Create a new context instance
 const UserContext = createContext();
@@ -24,6 +25,7 @@ export const UserProvider = ({ children }) => {
   const [tokenInfo, setTokenInfo] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const googleProvider = new GoogleAuthProvider();
+  const queryClient = useQueryClient();
 
   // const {
   //   data: userInfo = null,
@@ -79,6 +81,9 @@ export const UserProvider = ({ children }) => {
   const logOut = () => {
     setUserLoading(true);
     setUser(null);
+    setUserInfo(null);
+    setTokenInfo(null);
+    queryClient.clear();
     return signOut(auth);
   };
 

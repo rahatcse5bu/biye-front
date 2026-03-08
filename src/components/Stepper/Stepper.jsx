@@ -9,7 +9,7 @@ export function StepperLine({ userForm, setUserForm }) {
   const { userInfo } = useContext(UserContext);
 
   const editedTimelineIndex = userInfo?.data?.edited_timeline_index || 1;
-  const stepperSize = Array.from({ length: 10 }, (_, index) => index);
+  const stepperSize = Array.from({ length: 11 }, (_, index) => index);
   const clickStep = (index) => {
     setUserForm(index + 1);
   };

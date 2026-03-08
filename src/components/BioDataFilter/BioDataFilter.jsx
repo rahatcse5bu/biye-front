@@ -26,11 +26,12 @@ import EducationFilter from './EducationFilter';
 import PersonalInfoFilter from './PersonalInfoFilte';
 import OccupationFilter from './OccupationFilter';
 import OthersFilter from './OthersFilter';
+import ExpectedPartnerFilter from './ExpectedPartnerFilter';
 import { useFilter } from '../../contexts/useFilter';
 import { usePrimary } from '../../contexts/userPrimary';
 
 const BioDataFilter = () => {
-  const { setQuery, setFilterFields, filterFields } = useContext(BioContext);
+  const { setQuery, setFilterFields, filterFields, filterResetKey } = useContext(BioContext);
   const { setAddressFilterOpen, setPrimaryFilterOpen } = useFilter();
   const { setBioType, bioType, maritalStatus, setMaritalStatus } = usePrimary();
   const [openAccordions, setOpenAccordions] = useState({
@@ -134,13 +135,15 @@ const BioDataFilter = () => {
         setZilla={setZilla}
       />
 
-      <EducationFilter />
+      <EducationFilter key={`edu-${filterResetKey}`} />
 
-      <PersonalInfoFilter />
+      <PersonalInfoFilter key={`personal-${filterResetKey}`} />
 
-      <OccupationFilter />
+      <OccupationFilter key={`occ-${filterResetKey}`} />
 
-      <OthersFilter />
+      <OthersFilter key={`others-${filterResetKey}`} />
+
+      <ExpectedPartnerFilter key={`exp-${filterResetKey}`} />
       <BioDataFilterButton />
     </List>
   );

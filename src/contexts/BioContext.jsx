@@ -13,6 +13,7 @@ const BioContext = createContext();
 export const BioProvider = ({ children }) => {
   const [bio, setBio] = useState(null);
   const [bioLoading, setBioLoading] = useState(false);
+  const [filterResetKey, setFilterResetKey] = useState(0);
 
   // Auto-include religion filter from localStorage
   const { religion } = getReligionInfo();

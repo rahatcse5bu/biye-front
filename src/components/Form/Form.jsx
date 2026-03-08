@@ -10,6 +10,7 @@ import OngikarNamaForm from "../OngikarNamaForm/OngikarNamaForm";
 import PersonalInfoForm from "../PersonalInfoForm/PersonalInfoForm";
 import ProfessionInfoForm from "../ProfessionInfoForm/ProfessionInfoForm";
 import ReviewForm from "../ReviewForm/ReviewForm";
+import AchievementForm from "../AchievementForm/AchievementForm";
 import UserContext from "../../contexts/UserContext";
 import { getToken } from "../../utils/cookies";
 import { GeneralInfoServices } from "../../services/generalInfo";
@@ -116,6 +117,8 @@ const Form = ({ userForm, setUserForm }) => {
 			) : userForm === 6 ? (
 				<ProfessionInfoForm setUserForm={setUserForm} userForm={userForm} />
 			) : userForm === 7 ? (
+				<AchievementForm setUserForm={setUserForm} userForm={userForm} />
+			) : userForm === 8 ? (
 				<MaritalInfoForm
 					setUserForm={setUserForm}
 					userForm={userForm}
@@ -123,15 +126,15 @@ const Form = ({ userForm, setUserForm }) => {
 					gender={gender}
 					maritalStatus={maritalStatus}
 				/>
-			) : userForm === 8 ? (
-				<ExpectedPartnerForm setUserForm={setUserForm} userForm={userForm} />
 			) : userForm === 9 ? (
+				<ExpectedPartnerForm setUserForm={setUserForm} userForm={userForm} />
+			) : userForm === 10 ? (
 				<OngikarNamaForm
 					setUserForm={setUserForm}
 					userForm={userForm}
 					religion={religion}
 				/>
-			) : userForm === 10 ? (
+			) : userForm === 11 ? (
 				<ContactInfoForm
 					setUserForm={setUserForm}
 					userForm={userForm}

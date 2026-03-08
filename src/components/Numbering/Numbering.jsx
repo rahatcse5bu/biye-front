@@ -13,6 +13,7 @@ import { Colors } from '../../constants/colors';
 import UserContext from '../../contexts/UserContext';
 import { UserInfoServices } from '../../services/userInfo';
 import { getToken, removeToken } from '../../utils/cookies';
+import { clearUserLocalStorage } from '../../utils/localStorage';
 import { Toast } from '../../utils/toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -40,6 +41,7 @@ const Numbering = ({ setUserForm, userForm }) => {
   const logoutHandler = async () => {
     await logOut();
     removeToken();
+    clearUserLocalStorage();
     navigate('/');
   };
 
@@ -71,6 +73,7 @@ const Numbering = ({ setUserForm, userForm }) => {
     'পারিবারিক তথ্য',
     'ব্যাক্তিগত তথ্য ',
     'পেশাগত তথ্য',
+    'অর্জন',
     'বিবাহ সম্পর্কিত তথ্য ',
     'প্রত্যাশিত জীবনসঙ্গী',
     'অঙ্গীকারনামা',

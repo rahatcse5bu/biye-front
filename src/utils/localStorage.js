@@ -38,3 +38,10 @@ export const getReligionInfo = () => {
     religiousType: localStorage.getItem('pnc-nikah-religious-type') || null,
   };
 };
+
+export const clearUserLocalStorage = () => {
+  localStorage.removeItem('pnc-nikah-profile-photo');
+  localStorage.removeItem('pnc-nikah-gender');
+  localStorage.removeItem('pnc-nikah-religion');
+  localStorage.removeItem('pnc-nikah-religious-type');
+};

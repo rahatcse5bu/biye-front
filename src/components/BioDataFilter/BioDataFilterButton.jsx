@@ -8,7 +8,7 @@ import { useFilter } from '../../contexts/useFilter';
 import { usePrimary } from '../../contexts/userPrimary';
 
 const BioDataFilterButton = () => {
-  const { filterFields, setQuery, setFilterFields } = useBio();
+  const { filterFields, setQuery, setFilterFields, resetAllFilters } = useBio();
   const {
     setSideBarDisplay,
     setSelectedDivisions,
@@ -43,7 +43,7 @@ const BioDataFilterButton = () => {
       navigate(`/biodatas?${temp}`);
     } else if (type === 'delete') {
       setQuery({});
-      setFilterFields({});
+      resetAllFilters();
       setSelectedDivisions([]);
       setSelectedDistricts([]);
       setSelectedPresentDivisions([]);
