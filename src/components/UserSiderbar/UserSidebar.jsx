@@ -35,41 +35,43 @@ const UserSidebar = ({ openSidebar, setOpenSidebar }) => {
 
   return (
     <div
-      className={`min-h-screen w-full bg-white shadow-xl rounded-b-lg border-l-2 border-gray-400 flex-col relative ${
+      className={`min-h-screen w-full bg-white shadow-xl rounded-b-lg border-l-2 border-gray-400 flex flex-col relative ${
         !openSidebar && 'hidden'
-      } `}
+      }`}
     >
-      <div className="flex flex-col ">
-        <div className="h-[80px] w-[80px] pt-2  self-center mb-3 ">
+      {/* Profile section */}
+      <div className="flex flex-col items-center pt-4 pb-3 border-b border-gray-100 px-3">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 mb-2 shrink-0">
           <img
-            className="w-24 h-24 py-2 mx-auto rounded-full object-cover"
+            className="w-full h-full rounded-full object-cover"
             src={gender === 'মহিলা' ? female : profilePhoto || male}
             alt="Person"
           />
         </div>
-        <div className="mt-2">
-          <h3 style={{ color: Colors.siteGlobal }} className="font-semibold">
-            {'BID-'}
-            {userInfo?.data?.user_id}
-          </h3>
-        </div>
-        <h2 className=" text-[20px] text-[#c9c7c7df] self-center mt-2 ">
-          Biodata Status
-        </h2>
-        <p className="text-[20px] text-green self-center  capitalize ">
+        <h3
+          style={{ color: Colors.siteGlobal }}
+          className="text-sm font-semibold text-center mt-1"
+        >
+          {'BID-'}
+          {userInfo?.data?.user_id}
+        </h3>
+        <span className="text-xs text-gray-400 mt-1">Biodata Status</span>
+        <p className="text-sm font-semibold text-green-600 capitalize mt-0.5">
           {userInfo?.data?.user_status}
         </p>
         <button
           onClick={myBioDataHandler}
           style={{
-            background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
+            background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
           }}
-          className="h-10 w-36 text-[20px] rounded-full p-1 text-[#ffff] self-center  mt-3 "
+          className="h-8 w-32 text-sm rounded-full text-white self-center mt-3"
         >
           My Biodata
         </button>
       </div>
-      <div className="mt-6 overflow-x-hidden overflow-y-auto">
+
+      {/* Nav items */}
+      <div className="flex-1 overflow-x-hidden overflow-y-auto mt-2">
         {sidebarDetails.map((data, index) => (
           <OptionCart
             setOpenSidebar={setOpenSidebar}
@@ -81,10 +83,10 @@ const UserSidebar = ({ openSidebar, setOpenSidebar }) => {
         ))}
         <button
           onClick={logOutHandler}
-          className="flex items-center p-5 cursor-pointer hover:bg-gray-300"
+          className="flex items-center w-full px-6 py-2 cursor-pointer hover:bg-gray-300"
         >
-          <FiLogOut className="h-8 w-8 text-[12px] p-1 bg-gray-100 rounded-md " />
-          <span className="ml-2">লগআউট</span>
+          <FiLogOut className="h-6 w-6 shrink-0 p-1 bg-gray-100 rounded-md" />
+          <span className="ml-3 text-sm">লগআউট</span>
         </button>
       </div>
     </div>
