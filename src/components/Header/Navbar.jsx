@@ -28,7 +28,6 @@ import {
   setUserOPenLarge,
   setUserOPenSmall,
 } from '../../utils/cookies';
-import { Modal } from '../Modal/Modal';
 import {
   getGender,
   getProfilePhoto,
@@ -392,7 +391,7 @@ export default function NavBar() {
 
   return (
     <>
-      {!getGender() && <Modal />}
+
       <Navbar
         className="w-full z-[999999] rounded-none justify-between box-border styles.headerColor navigation-bar-custom sticky top-0 "
         style={{

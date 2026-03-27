@@ -49,10 +49,16 @@ const getDashBoardData = async () => {
   return generalInfo.data;
 };
 
+const submitForReview = async () => {
+  const { data } = await axiosInstance.post(`/general-info/submit-review`);
+  return data;
+};
+
 export const GeneralInfoServices = {
   getGeneralInfoByUser,
   updateGeneralInfo,
   updateWatchOfBioData,
   getALLGeneralInfo,
   getDashBoardData,
+  submitForReview,
 };

@@ -13,12 +13,18 @@ const RELIGIOUS_TYPE = {
   general_christian: 'সাধারণ খ্রিস্টান',
 };
 
+const BIO_GENDER_LABEL = { male: 'পাত্রের বায়োডাটা', female: 'পাত্রীর বায়োডাটা' };
+const MARITAL_EN_LABEL = {
+  unmarried: 'অবিবাহিত', married: 'বিবাহিত', divorced: 'ডিভোর্সড',
+  widow: 'বিধবা', widower: 'বিপত্নীক',
+};
+
 const chipLabel = (key, value) => {
   const map = {
-    bio_type: () => value,
+    bio_gender: () => BIO_GENDER_LABEL[value] || value,
+    marital_status_en: () => MARITAL_EN_LABEL[value] || value,
     religion: () => RELIGION[value] || value,
     religious_type: () => RELIGIOUS_TYPE[value] || value,
-    marital_status: () => value,
     minAge: () => `বয়স ≥ ${value}`,
     maxAge: () => `বয়স ≤ ${value}`,
     minHeight: () => `উচ্চতা ≥ ${value}'`,

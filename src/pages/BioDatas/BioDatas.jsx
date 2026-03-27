@@ -91,9 +91,9 @@ const BioDatas = () => {
         />
       )}
     </div>
-    </div>
 
-    <ChatAgent onApply={handlePromptApply} />
+      <ChatAgent onApply={handlePromptApply} />
+    </div>
   );
 };
 

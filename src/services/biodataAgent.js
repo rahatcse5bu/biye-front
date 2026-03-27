@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { convertToQuery } from '../utils/query';
 
 const OPENROUTER_API_KEY =
   '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';
-const MODEL = 'openai/gpt-4o-mini';
+const MODEL = 'anthropic/claude-haiku-4-5';
 
 const API_BASE =
   import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
@@ -16,10 +15,17 @@ const USER_STATUS =
 // ── Tool definitions ──────────────────────────────────────────────────────────
 
 const FILTER_PROPS = {
-  bio_type: {
+  // ── English-only params (no Bengali in query string) ──────────────────────
+  bio_gender: {
     type: 'string',
-    enum: ['পাত্রের বায়োডাটা', 'পাত্রীর বায়োডাটা'],
-    description: 'Groom (পাত্রের বায়োডাটা) or bride (পাত্রীর বায়োডাটা)',
+    enum: ['male', 'female'],
+    description: 'Groom/পাত্র → "male", Bride/পাত্রী → "female"',
+  },
+  marital_status_en: {
+    type: 'string',
+    enum: ['unmarried', 'married', 'divorced', 'widow', 'widower'],
+    description:
+      'অবিবাহিত→unmarried, বিবাহিত→married, ডিভোর্সড→divorced, বিধবা→widow, বিপত্নীক→widower',
   },
   religion: {
     type: 'string',
@@ -35,10 +41,6 @@ const FILTER_PROPS = {
       'practicing_christian',
       'general_christian',
     ],
-  },
-  marital_status: {
-    type: 'string',
-    enum: ['অবিবাহিত', 'বিবাহিত', 'ডিভোর্সড', 'বিধবা', 'বিপত্নীক'],
   },
   minAge: { type: 'number', description: 'Minimum age (18–60)' },
   maxAge: { type: 'number', description: 'Maximum age (18–60)' },
@@ -112,39 +114,82 @@ const SYSTEM_PROMPT = `You are a friendly biodata search assistant for PNC Nikah
 
 CRITICAL RULES:
 1. Always respond in Bengali (বাংলা).
-2. Call search_biodatas with ONLY filters the user mentioned. Never carry over filters from previous turns unless user confirms them.
-3. If the user says "যেকোনো" (any) for something, do NOT include that field in the filter — omit it entirely.
-4. If the user asks for a total count (e.g. "site এ মোট কয়টা"), call search_biodatas with {} (no filters) or only bio_type if specified.
-5. Always report the EXACT count returned by search_biodatas. Do not say "0" if the tool returned a different number.
-6. If search fails, say so honestly — do not assume zero results.
+2. Call search_biodatas with ONLY filters the user mentioned. Never carry over filters from previous turns unless user confirms.
+3. If the user says "যেকোনো" / "any" for a field, omit that field entirely from the tool call.
+4. For a total site count ("মোট কয়টা", "total"), call search_biodatas with {}.
+5. ALWAYS report the EXACT count from the tool result. NEVER say "no results" if the tool returned count > 0.
+6. If the tool returns { error: ... }, tell the user "সার্ভারে সমস্যা হচ্ছে" — do NOT say "no results found".
 7. Ask only ONE clarifying question at a time.
-8. When count is good (5–50), confirm with user and then call apply_filters.
+8. When count is reasonable (3–60), confirm with user then call apply_filters.
+9. The site has thousands of biodatas. If you get count=0 with many filters, suggest removing some filters.
 
-FILTER MAPPINGS:
-- পাত্র/ছেলে/বর → bio_type: "পাত্রের বায়োডাটা"
-- পাত্রী/মেয়ে/কনে → bio_type: "পাত্রীর বায়োডাটা"
+FILTER MAPPINGS (use ONLY these exact values):
+- পাত্র/ছেলে/বর/groom → bio_gender: "male"
+- পাত্রী/মেয়ে/কনে/bride → bio_gender: "female"
+- অবিবাহিত/single → marital_status_en: "unmarried"
+- বিবাহিত/married → marital_status_en: "married"
+- ডিভোর্সড/divorced → marital_status_en: "divorced"
+- বিধবা/widow → marital_status_en: "widow"
+- বিপত্নীক/widower → marital_status_en: "widower"
 - ইসলাম/মুসলিম → religion: "islam"
 - হিন্দু → religion: "hinduism"
 - খ্রিস্টান → religion: "christianity"
-- প্র্যাকটিসিং → religious_type uses "practicing_" prefix
+- প্র্যাকটিসিং মুসলিম → religious_type: "practicing_muslim"
 - "২৫-৩০ বছর" → minAge:25, maxAge:30
 - "৫ ফুট ৬" → 5.5
 
 Keep responses brief and conversational.`;
 
+// ── Normalise LLM-generated values ────────────────────────────────────────────
+// bio_gender and marital_status_en are English — no Unicode issues.
+// division is still Bengali; NFC-normalize it against the canonical list.
+
+const DIVISION_NORM = {
+  'ঢাকা': 'ঢাকা',
+  'চট্টগ্রাম': 'চট্টগ্রাম',
+  'খুলনা': 'খুলনা',
+  'রাজশাহী': 'রাজশাহী',
+  'বরিশাল': 'বরিশাল',
+  'সিলেট': 'সিলেট',
+  'রংপুর': 'রংপুর',
+  'ময়মনসিংহ': 'ময়মনসিংহ',
+};
+
+const normaliseFilters = (filters) => {
+  const out = { ...filters };
+  if (out.division) {
+    out.division = out.division
+      .split(',')
+      .map((v) => {
+        const key = v.trim().normalize('NFC');
+        return DIVISION_NORM[key] ?? key;
+      })
+      .join(',');
+  }
+  return out;
+};
+
 // ── Search tool execution ─────────────────────────────────────────────────────
 
-const searchBiodatas = async (filters) => {
+const searchBiodatas = async (rawFilters) => {
   try {
-    const query = { ...filters, limit: 1, page: 1, user_status: USER_STATUS };
-    const queryString = convertToQuery(query);
-    const response = await axios.get(`${API_BASE}/general-info?${queryString}`);
+    const filters = normaliseFilters(rawFilters);
+    const params = { ...filters, limit: 1, page: 1, user_status: USER_STATUS };
+    // Remove null/undefined/empty so axios doesn't serialize them
+    Object.keys(params).forEach((k) => {
+      if (params[k] === null || params[k] === undefined || params[k] === '') delete params[k];
+    });
+    console.log('[Agent] search params:', params);
+    const response = await axios.get(`${API_BASE}/general-info`, { params });
+    console.log('[Agent] response data:', response.data);
     const count = response.data?.size ?? response.data?.total ?? 0;
     return { count };
   } catch (err) {
     const status = err?.response?.status;
+    const detail = err?.response?.data?.message || err?.message || 'unknown error';
+    console.error('[Agent] search error:', err?.response?.data || err?.message);
     return {
-      error: `API call failed (status ${status || 'unknown'}). Cannot determine count.`,
+      error: `Search failed (HTTP ${status ?? '?'}): ${detail}. Tell the user the search is temporarily unavailable.`,
     };
   }
 };
@@ -177,6 +222,20 @@ const callLLM = async (messages) => {
   return data.choices[0].message;
 };
 
+// ── Strip function-call leakage from LLM text content ────────────────────────
+// Some models (Gemini) sometimes include raw tool-call syntax in the content
+// field alongside tool_calls. Remove those lines before showing to the user.
+const TOOL_CALL_LINE_RE = /^\s*`?\s*(search_biodatas|apply_filters)\s*\(/;
+
+const cleanContent = (text) => {
+  if (!text) return '';
+  return text
+    .split('\n')
+    .filter((line) => !TOOL_CALL_LINE_RE.test(line))
+    .join('\n')
+    .trim();
+};
+
 // ── Agent class ───────────────────────────────────────────────────────────────
 
 export class BiodataAgent {
@@ -195,12 +254,22 @@ export class BiodataAgent {
 
     for (let i = 0; i < 8; i++) {
       const assistantMsg = await callLLM(this.history);
+      // Some models (Gemini) return content: null on tool-call turns.
+      // Normalize to '' so re-sending the history doesn't cause a 400 error.
+      if (assistantMsg.content === null || assistantMsg.content === undefined) {
+        assistantMsg.content = '';
+      }
       this.history.push(assistantMsg);
 
+      const hasCalls = assistantMsg.tool_calls && assistantMsg.tool_calls.length > 0;
+
       // No tool calls → final text response
-      if (!assistantMsg.tool_calls || assistantMsg.tool_calls.length === 0) {
-        return { text: assistantMsg.content || '', appliedFilters };
+      if (!hasCalls) {
+        return { text: cleanContent(assistantMsg.content || ''), appliedFilters };
       }
+
+      // If the message also has content alongside tool_calls, ignore it —
+      // we only show text from the final (non-tool-call) response.
 
       // Execute each tool call
       for (const toolCall of assistantMsg.tool_calls) {
