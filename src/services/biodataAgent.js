@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const OPENROUTER_API_KEY =
-  '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';
 const MODEL = 'anthropic/claude-haiku-4-5';
 
 const API_BASE =
   import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
     ? 'http://localhost:5000/api/v1'
     : 'https://server.pncnikah.com/api/v1';
+
+const LLM_PROXY = `${API_BASE}/llm/chat`;
 
 const USER_STATUS =
   import.meta.env.VITE_REACT_APP_NODE_ENV === 'development' ? 'in review' : 'active';
@@ -194,32 +194,18 @@ const searchBiodatas = async (rawFilters) => {
   }
 };
 
-// ── OpenRouter call ───────────────────────────────────────────────────────────
+// ── LLM call via backend proxy (API key never leaves the server) ──────────────
 
 const callLLM = async (messages) => {
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': window.location.origin,
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      messages,
-      tools: TOOLS,
-      tool_choice: 'auto',
-      temperature: 0.3,
-    }),
+  const res = await axios.post(LLM_PROXY, {
+    model: MODEL,
+    messages,
+    tools: TOOLS,
+    tool_choice: 'auto',
+    temperature: 0.3,
   });
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err?.error?.message || `LLM call failed (${res.status})`);
-  }
-
-  const data = await res.json();
-  return data.choices[0].message;
+  return res.data.choices[0].message;
 };
 
 // ── Strip function-call leakage from LLM text content ────────────────────────
