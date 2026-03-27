@@ -14,33 +14,44 @@ import { convertHeightToBengali } from '../../utils/height';
 import { GeneralInfoServices } from '../../services/generalInfo';
 import ReactionButton from '../ReactionButton/ReactionButton';
 import PhotoViewer from '../PhotoViewer/PhotoViewer';
+import { religionToApiKey } from '../../constants/religionContent';
 
-// Helper function to get combined religion + type display name
-const getReligionBadgeLabel = (religion, religiousType) => {
-  switch (religion) {
-    case 'islam':
-      return religiousType === 'practicing_muslim' ? 'প্র্যাক্টিসিং মুসলিম' : 'মুসলিম';
-    case 'hinduism':
-      return religiousType === 'practicing_hindu' ? 'প্র্যাক্টিসিং হিন্দু' : 'হিন্দু';
-    case 'christianity':
-      return religiousType === 'practicing_christian' ? 'প্র্যাক্টিসিং খ্রিস্টান' : 'খ্রিস্টান';
-    default:
-      return 'মুসলিম';
-  }
+const RELIGION_LABELS = {
+  islam: {
+    base: 'মুসলিম',
+    practicing: 'প্র্যাক্টিসিং মুসলিম',
+    color: 'bg-green-600',
+  },
+  hinduism: {
+    base: 'হিন্দু',
+    practicing: 'প্র্যাক্টিসিং হিন্দু',
+    color: 'bg-orange-500',
+  },
+  christianity: {
+    base: 'খ্রিস্টান',
+    practicing: 'প্র্যাক্টিসিং খ্রিস্টান',
+    color: 'bg-blue-600',
+  },
 };
 
-// Helper function to get badge color based on religion
+const PRACTICING_TYPES = new Set([
+  'practicing_muslim',
+  'practicing_hindu',
+  'practicing_christian',
+]);
+
+const getReligionKey = (religion) =>
+  religionToApiKey[religion] || religion || 'islam';
+
+const getReligionBadgeLabel = (religion, religiousType) => {
+  const key = getReligionKey(religion);
+  const entry = RELIGION_LABELS[key] || RELIGION_LABELS.islam;
+  return PRACTICING_TYPES.has(religiousType) ? entry.practicing : entry.base;
+};
+
 const getBadgeColor = (religion) => {
-  switch (religion) {
-    case 'islam':
-      return 'bg-green-600';
-    case 'hinduism':
-      return 'bg-orange-500';
-    case 'christianity':
-      return 'bg-blue-600';
-    default:
-      return 'bg-green-600';
-  }
+  const key = getReligionKey(religion);
+  return (RELIGION_LABELS[key] || RELIGION_LABELS.islam).color;
 };
 
 const BioData = ({ biodata }) => {
@@ -87,8 +98,8 @@ const BioData = ({ biodata }) => {
               biodata?.gender === 'মহিলা'
                 ? '/assets/icons/female.svg'
                 : hasMalePhotos
-                ? biodata.photos[0]
-                : '/assets/icons/male.svg'
+                  ? biodata.photos[0]
+                  : '/assets/icons/male.svg'
             }
             alt=""
           />

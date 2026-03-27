@@ -4,7 +4,9 @@ import FeaturedBioDataGrid from '../../components/FeaturedBioDataGrid/FeaturedBi
 import HadithSlider from '../../components/HadithSlider/HadithSlider';
 
 import '../../fonts/fonts.css';
+import { useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { GeneralInfoServices } from '../../services/generalInfo';
 import LoadingCircle from '../../components/LoadingCircle/LoadingCircle';
 import BioStats from '../../components/Home/BioStats/BioStats';
@@ -13,6 +15,9 @@ import IslamicQuote from '../../components/Home/IslamicQuote/IslamicQuote';
 import HomeBanner from '../../components/Home/HomeBanner/HomeBanner';
 import HomeFilter from '../../components/Home/HomeFilter/HomeFilter';
 import AboutFeature from '../../components/Home/AboutFeature/AboutFeature';
+import PromptFilter from '../../components/PromptFilter/PromptFilter';
+import ChatAgent from '../../components/ChatAgent/ChatAgent';
+import BioContext from '../../contexts/BioContext';
 import { getReligionInfo } from '../../utils/localStorage';
 import {
   getContentForReligion,
@@ -23,6 +28,18 @@ const Home = () => {
   const { religion } = getReligionInfo();
   const content = getContentForReligion(religion);
   const apiReligion = religionToApiKey[religion] || null;
+  const { setQuery, setFilterFields } = useContext(BioContext);
+  const navigate = useNavigate();
+
+  const handlePromptApply = (filters) => {
+    const userStatus =
+      import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+        ? 'in review'
+        : 'active';
+    setQuery({ page: 1, limit: 12, user_status: userStatus, ...filters });
+    setFilterFields({ user_status: userStatus, ...filters });
+    navigate('/biodatas');
+  };
 
   const featuredQuery = { isFeatured: true };
   if (apiReligion) {
@@ -47,6 +64,13 @@ const Home = () => {
 
       <HomeFilter />
 
+      <div className="mt-4 p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
+        <p className="text-sm font-semibold text-gray-600 mb-2">
+          ✨ AI দিয়ে বায়োডাটা খুঁজুন
+        </p>
+        <PromptFilter onApply={handlePromptApply} />
+      </div>
+
       <div className="mt-5">
         {isLoading ? (
           <LoadingCircle classes="my-5" />
@@ -61,6 +85,8 @@ const Home = () => {
 
       <HadithSlider slides={content.slides} />
       <BioStats />
+
+      <ChatAgent onApply={handlePromptApply} />
     </div>
   );
 };

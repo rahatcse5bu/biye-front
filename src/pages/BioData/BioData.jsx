@@ -114,6 +114,15 @@ const BioData = () => {
           <h4 className="text-red-900 font-semibold">Not found</h4>
         </div>
       ) : (
+        <>
+          {id &&
+            userInfo?.data?.user_id &&
+            Number(id) === Number(userInfo?.data?.user_id) &&
+            data?.data?.generalInfo?.has_pending_changes && (
+              <div className="mb-4 p-4 rounded-lg border border-amber-300 bg-amber-50 text-amber-900 text-sm font-medium">
+                ⏳ আপনার পরিবর্তনগুলো রিভিউয়ের অপেক্ষায় আছে। অনুমোদনের পরে নতুন পরিবর্তন প্রকাশিত হবে। নিচে বর্তমান সক্রিয় বায়োডাটা দেখানো হচ্ছে।
+              </div>
+            )}
         <div className="grid text-[16px] lg:grid-cols-[30%,70%] md:grid-cols-[50%,50%] grid-cols-1 ">
           <div className="col px-2 single-bio-left-sidebar">
             <BioInfo id={id} />
@@ -176,6 +185,7 @@ const BioData = () => {
             )}
           </div>
         </div>
+        </>
       )}
     </div>
   );

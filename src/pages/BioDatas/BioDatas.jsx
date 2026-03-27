@@ -7,10 +7,26 @@ import BioContext from '../../contexts/BioContext';
 import { FaXmark } from 'react-icons/fa6';
 import LoadingCircle from '../../components/LoadingCircle/LoadingCircle';
 import { useFilter } from '../../contexts/useFilter';
+import PromptFilter from '../../components/PromptFilter/PromptFilter';
+import ChatAgent from '../../components/ChatAgent/ChatAgent';
 
 const BioDatas = () => {
   const { bioLoading, setQuery, setFilterFields } = useContext(BioContext);
   const { sideBarDisplay, setSideBarDisplay } = useFilter();
+
+  const handlePromptApply = (filters) => {
+    setQuery((prev) => ({ ...prev, ...filters, page: 1 }));
+    setFilterFields((prev) => ({ ...prev, ...filters }));
+  };
+
+  const handlePromptClear = () => {
+    const userStatus =
+      import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+        ? 'in review'
+        : 'active';
+    setQuery({ page: 1, limit: 12, user_status: userStatus });
+    setFilterFields({ user_status: userStatus });
+  };
 
   useEffect(() => {
     setQuery((prev) => {
@@ -34,6 +50,13 @@ const BioDatas = () => {
   }, []);
 
   return (
+    <div>
+      <div className="px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
+        <PromptFilter
+          onApply={handlePromptApply}
+          onClear={handlePromptClear}
+        />
+      </div>
     <div className="relative flex items-start">
       {sideBarDisplay && (
         <div
@@ -68,6 +91,9 @@ const BioDatas = () => {
         />
       )}
     </div>
+    </div>
+
+    <ChatAgent onApply={handlePromptApply} />
   );
 };
 

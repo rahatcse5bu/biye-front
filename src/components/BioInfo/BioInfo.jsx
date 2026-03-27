@@ -7,6 +7,36 @@ import BioContext from "../../contexts/BioContext";
 import { getDateMonthYear } from "../../utils/date";
 import { convertHeightToBengali } from "../../utils/height";
 import PhotoViewer from "../PhotoViewer/PhotoViewer";
+import { religionToApiKey } from "../../constants/religionContent";
+
+const RELIGION_META = {
+  islam: {
+    base: "মুসলিম",
+    practicing: "প্র্যাক্টিসিং মুসলিম",
+    color: "bg-green-600",
+  },
+  hinduism: {
+    base: "হিন্দু",
+    practicing: "প্র্যাক্টিসিং হিন্দু",
+    color: "bg-orange-500",
+  },
+  christianity: {
+    base: "খ্রিস্টান",
+    practicing: "প্র্যাক্টিসিং খ্রিস্টান",
+    color: "bg-blue-600",
+  },
+};
+
+const PRACTICING_TYPES = new Set([
+  "practicing_muslim",
+  "practicing_hindu",
+  "practicing_christian",
+]);
+
+const getReligionMeta = (religion) => {
+  const key = religionToApiKey[religion] || religion || "islam";
+  return RELIGION_META[key] || RELIGION_META.islam;
+};
 
 function BioInfo({ id }) {
   const { bio } = useContext(BioContext);
@@ -112,19 +142,21 @@ function BioInfo({ id }) {
               <tr>
                 <td className="px-4 text-left py-2">ধর্ম</td>
                 <td className="px-4 text-left py-2">
-                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    generalInfo?.religion === 'islam' ? 'bg-green-600' :
-                    generalInfo?.religion === 'hinduism' ? 'bg-orange-500' :
-                    generalInfo?.religion === 'christianity' ? 'bg-blue-600' : 'bg-gray-500'
-                  }`}>
-                    {generalInfo?.religion === 'islam' 
-                      ? (generalInfo?.religious_type === 'practicing_muslim' ? 'প্র্যাক্টিসিং মুসলিম' : 'মুসলিম')
-                      : generalInfo?.religion === 'hinduism'
-                      ? (generalInfo?.religious_type === 'practicing_hindu' ? 'প্র্যাক্টিসিং হিন্দু' : 'হিন্দু')
-                      : generalInfo?.religion === 'christianity'
-                      ? (generalInfo?.religious_type === 'practicing_christian' ? 'প্র্যাক্টিসিং খ্রিস্টান' : 'খ্রিস্টান')
-                      : generalInfo?.religion}
-                  </span>
+                  {(() => {
+                    const meta = getReligionMeta(generalInfo.religion);
+                    const label = PRACTICING_TYPES.has(
+                      generalInfo.religious_type
+                    )
+                      ? meta.practicing
+                      : meta.base;
+                    return (
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-semibold ${meta.color}`}
+                      >
+                        {label}
+                      </span>
+                    );
+                  })()}
                 </td>
               </tr>
             )}
