@@ -38,6 +38,7 @@ import RefundFail from '../pages/RefundFail/RefundFail';
 import PrivateRoute from './PrivateRoute';
 import ErrorPage from '../components/ErrorBoundary/ErrorPage';
 import Shortlist from '../pages/Shortlist/Shortlist';
+import UnverifiedBioData from '../pages/UnverifiedBioData/UnverifiedBioData';
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: '/biodata/:id',
         element: <BioData />,
+      },
+      {
+        path: '/biodata/unverified/:id',
+        element: <UnverifiedBioData />,
       },
       {
         path: '/biodatas',

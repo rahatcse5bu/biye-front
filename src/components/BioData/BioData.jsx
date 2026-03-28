@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useState } from 'react';
 import { Button } from '@material-tailwind/react';
 import { Colors } from '../../constants/colors';
@@ -14,6 +16,7 @@ import { convertHeightToBengali } from '../../utils/height';
 import { GeneralInfoServices } from '../../services/generalInfo';
 import ReactionButton from '../ReactionButton/ReactionButton';
 import PhotoViewer from '../PhotoViewer/PhotoViewer';
+import BiodataTypeBadge from '../BiodataTypeBadge/BiodataTypeBadge';
 import { religionToApiKey } from '../../constants/religionContent';
 
 const RELIGION_LABELS = {
@@ -59,9 +62,7 @@ const BioData = ({ biodata }) => {
   const [showViewer, setShowViewer] = useState(false);
 
   const hasMalePhotos =
-    biodata?.gender !== 'মহিলা' &&
-    biodata?.photos &&
-    biodata.photos.length > 0;
+    biodata?.gender !== 'মহিলা' && biodata?.photos && biodata.photos.length > 0;
 
   const bioDataHandler = async () => {
     if (biodata?._id) {
@@ -71,7 +72,11 @@ const BioData = ({ biodata }) => {
         console.error('Error incrementing view count', error);
       }
     }
-    navigate(`/biodata/${biodata?.user_id}`);
+    if (biodata?.is_unverified) {
+      navigate(`/biodata/unverified/${biodata?._id}`);
+    } else {
+      navigate(`/biodata/${biodata?.user_id}`);
+    }
   };
 
   return (
@@ -111,18 +116,27 @@ const BioData = ({ biodata }) => {
         </div>
         <h4 className="my-2"> বায়োডাটা নং </h4>
         <h3>
-          {'BID-'}{biodata?.user_id}
+          {'BID-'}
+          {biodata?.is_unverified ? biodata?.bio_id : biodata?.user_id}
         </h3>
         {/* view icons */}
         <div className="flex absolute top-2 left-2">
           <FaEye className="w-6 h-6 mr-2" />
           {biodata?.views_count}
         </div>
-        
+
         {/* Religion Badge */}
-        <div className={`absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-semibold text-white ${getBadgeColor(biodata?.religion)}`}>
+        <div
+          className={`absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-semibold text-white ${getBadgeColor(biodata?.religion)}`}
+        >
           {getReligionBadgeLabel(biodata?.religion, biodata?.religious_type)}
         </div>
+
+        {/* Unverified Badge */}
+        <BiodataTypeBadge
+          isUnverified={biodata?.is_unverified}
+          position="top-12 right-2"
+        />
       </div>
       <div className="mx-2 mt-4">
         <table className="min-w-full divide-y divide-gray-200 border-0 border-gray-300">
@@ -165,11 +179,11 @@ const BioData = ({ biodata }) => {
           </tbody>
         </table>
       </div>
-      
+
       {/* Enhanced Reaction Section - Facebook Style */}
       <div className="bg-white border-t border-gray-100">
-        <ReactionButton 
-          bioUserId={biodata?.user} 
+        <ReactionButton
+          bioUserId={biodata?.user}
           initialCounts={{
             like: biodata?.likes_count || 0,
             dislike: biodata?.dislikes_count || 0,

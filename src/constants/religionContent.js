@@ -109,12 +109,19 @@ export const sliderContent = {
 // Helper to get content for a religion, defaults to islam
 // Map Bengali dropdown values to English API keys
 export const religionToApiKey = {
-  ইসলাম: 'islam',
-  হিন্দু: 'hinduism',
-  খ্রিষ্টান: 'christianity',
+  // English keys
   islam: 'islam',
   hinduism: 'hinduism',
   christianity: 'christianity',
+  // Bengali variants (multiple spellings exist in older DB records)
+  ইসলাম: 'islam',
+  মুসলিম: 'islam',
+  হিন্দু: 'hinduism',
+  হিন্দুধর্ম: 'hinduism',
+  খ্রিষ্টান: 'christianity',
+  খ্রিস্টান: 'christianity',
+  খ্রীষ্টান: 'christianity',
+  খ্রীস্টান: 'christianity',
 };
 
 export const getContentForReligion = (religion) => {

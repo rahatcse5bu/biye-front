@@ -16,6 +16,7 @@ import { convertToBengaliNumerals } from '../../utils/weight';
 import { getToken } from '../../utils/cookies';
 import { BioChoiceDataServices } from '../../services/bioChoiceData';
 import { ContactPurchaseDataServices } from '../../services/contactPurchaseData';
+import { UnverifiedContactPurchaseService } from '../../services/unverifiedContactPurchase';
 import { Colors } from '../../constants/colors';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswerCard';
@@ -201,9 +202,105 @@ const ContactInfo = ({ status }) => {
     }
   };
 
+  const unverifiedPurchaseHandler = () => {
+    if (!user?.email) {
+      Toast.errorToast('Please login first');
+      return;
+    }
+
+    const biodataId = bio?._id;
+    const requiredPoints = 50;
+
+    Swal.fire({
+      title: 'যোগাযোগ তথ্য কিনতে চান?',
+      text: `এই বায়োডাটার যোগাযোগ তথ্য পেতে আপনার ${convertToBengaliNumerals(
+        requiredPoints.toString()
+      )} পয়েন্ট খরচ হবে | ${
+        points >= requiredPoints
+          ? convertToBengaliNumerals(
+              (points - requiredPoints).toFixed(2).toString()
+            ) + ' অবশিষ্ট থাকবে'
+          : 'আপনার আরও ' +
+            convertToBengaliNumerals(
+              (requiredPoints - points).toFixed(2).toString()
+            ) +
+            ' পয়েন্ট লাগবে'
+      }`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'হ্যাঁ, কিনুন',
+    }).then(async (result) => {
+      if (!result.isConfirmed) {
+        return;
+      }
+
+      if (points < requiredPoints) {
+        // Need to buy more points
+        BkashCreatePaymentAPICall(
+          requiredPoints - points,
+          biodataId,
+          'unverified_purchase',
+          location.pathname
+        );
+      } else {
+        // Proceed with purchase
+        try {
+          setLoading(true);
+          const response =
+            await UnverifiedContactPurchaseService.purchaseContact(
+              biodataId,
+              getToken().token
+            );
+
+          if (response.success) {
+            Toast.successToast('যোগাযোগ তথ্য সফলভাবে ক্রয় হয়েছে।');
+            window.location.reload();
+          } else {
+            Toast.errorToast(response.message || 'Purchase failed');
+          }
+        } catch (error) {
+          Toast.errorToast(error.response?.data?.message || 'Purchase failed');
+        } finally {
+          setLoading(false);
+        }
+      }
+    });
+  };
+
   return (
     <div className="rounded shadow single-bio-contact-info">
-      {contactInfo ? (
+      {/* For Unverified Biodatas - Single Step Purchase */}
+      {bio?.is_unverified ? (
+        <div className="ask-contact-info p-5">
+          <h4 className="my-4 text-center text-sm">
+            এটি একটি অ-যাচাইকৃত বায়োডাটা। যোগাযোগ তথ্য পেতে মাত্র ৫০ পয়েন্ট
+            খরচ হবে।
+          </h4>
+          <h2 className="my-5 text-2xl text-center">
+            যোগাযোগ তথ্য পেতে আপনার {convertToBengaliNumerals('50')} টি পয়েন্ট
+            হবে। আপনার একাউন্টে{' '}
+            {convertToBengaliNumerals(points.toFixed(2).toString())} পয়েন্ট
+            আছে!
+          </h2>
+          <div className="flex flex-col items-center justify-center">
+            {loading ? (
+              <LoadingCircle />
+            ) : (
+              <button
+                onClick={unverifiedPurchaseHandler}
+                className="px-8 py-3 text-white rounded-md hover:opacity-90 transition-opacity"
+                style={{
+                  background: `linear-gradient(to right, ${Colors.lnLeft}, ${Colors.lnRight})`,
+                }}
+              >
+                যোগাযোগ তথ্য কিনুন ({convertToBengaliNumerals('50')} পয়েন্ট)
+              </button>
+            )}
+          </div>
+        </div>
+      ) : contactInfo ? (
         <>
           <h5 className="my-3 text-2xl text-center card-title">যোগাযোগ</h5>
           <div className="paid-contact-info">

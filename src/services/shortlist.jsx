@@ -44,9 +44,35 @@ const getWhoShortlistedMe = async (token) => {
   return response.data;
 };
 
+const toggleUnverifiedShortlist = async (unverified_bio, token) => {
+  const response = await axios.post(
+    baseUrl + '/unverified-shortlist',
+    { unverified_bio },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  return response.data;
+};
+
+const checkUnverifiedShortlist = async (id, token) => {
+  const response = await axios.get(
+    baseUrl + `/unverified-shortlist/check/${id}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  return response.data;
+};
+
 export const ShortlistServices = {
   toggleShortlist,
   checkShortlist,
   getMyShortlist,
   getWhoShortlistedMe,
+  toggleUnverifiedShortlist,
+  checkUnverifiedShortlist,
 };

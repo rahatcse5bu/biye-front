@@ -61,9 +61,69 @@ const getALLGeneralInfo = async (query) => {
   return generalInfo.data;
 };
 
+const getALLUnverifiedBiodatas = async (query) => {
+  const queryString = convertToQuery(query);
+  const unverifiedBiodatas = await axios.get(
+    baseUrl + `/unverified-biodatas?${queryString}`
+  );
+  return unverifiedBiodatas.data;
+};
+
+const getALLBiodatas = async (query) => {
+  // Fetch verified and unverified independently so one failure doesn't block the other
+  const [verifiedResult, unverifiedResult] = await Promise.allSettled([
+    axios.get(baseUrl + `/general-info?${convertToQuery(query)}`),
+    axios.get(baseUrl + `/unverified-biodatas?${convertToQuery(query)}`),
+  ]);
+
+  const verifiedData = verifiedResult.status === 'fulfilled' ? verifiedResult.value.data : null;
+  const unverifiedData = unverifiedResult.status === 'fulfilled' ? unverifiedResult.value.data : null;
+
+  // If verified completely failed, throw so the UI shows an error
+  if (!verifiedData) throw verifiedResult.reason;
+
+  const verifiedBiodatas = (verifiedData?.data || []).map((bio) => ({
+    ...bio,
+    is_unverified: false,
+  }));
+
+  const unverifiedBiodatas = (unverifiedData?.data || []).map((bio) => ({
+    ...bio,
+    is_unverified: true,
+  }));
+
+  const combined = [...verifiedBiodatas, ...unverifiedBiodatas].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+
+  const total =
+    (verifiedData?.size || verifiedData?.meta?.total || 0) +
+    (unverifiedData?.meta?.total || unverifiedData?.size || 0);
+
+  return {
+    success: true,
+    data: combined,
+    size: total,
+    page: verifiedData?.page || query?.page || 1,
+    limit: verifiedData?.limit || query?.limit || 12,
+  };
+};
+
 const getBioData = async (id) => {
-  const { data } = await axios.get(baseUrl + '/bio-data/' + Number(id));
-  return data;
+  try {
+    // Try to fetch verified biodata first (by user_id)
+    const { data } = await axios.get(baseUrl + '/bio-data/' + Number(id));
+    return { ...data, is_unverified: false };
+  } catch (error) {
+    // If not found, try to fetch as unverified biodata (by biodata _id)
+    try {
+      const { data } = await axios.get(baseUrl + `/unverified-biodatas/${id}`);
+      return { ...data, is_unverified: true };
+    } catch (unverifiedError) {
+      // If both fail, throw the original error
+      throw error;
+    }
+  }
 };
 
 const createGeneralInfo = async (data, token) => {
@@ -92,6 +152,8 @@ const getAllBioDataStats = async () => {
 
 export const BioDataServices = {
   getALLGeneralInfo,
+  getALLUnverifiedBiodatas,
+  getALLBiodatas,
   getBioData,
   getAllDivisions,
   getAllDistricts,
