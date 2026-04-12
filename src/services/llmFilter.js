@@ -1,6 +1,6 @@
 const OPENROUTER_API_KEY =
   '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';
-const MODEL = 'openai/gpt-4o-mini';
+const MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 
 const SYSTEM_PROMPT = `You are a biodata filter assistant for PNC Nikah, a Bangladeshi matrimonial website.
 
@@ -36,12 +36,16 @@ Mapping rules:
 - Return {} if nothing specific was mentioned`;
 
 export const parseBiodataQuery = async (userQuery) => {
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+  const API_BASE =
+    typeof import.meta !== 'undefined' && import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+      ? 'http://localhost:5000/api/v1'
+      : 'https://server.pncnikah.com/api/v1';
+
+  // Use backend proxy for Groq API
+  const res = await fetch(`${API_BASE}/llm/chat`, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${OPENROUTER_API_KEY}`,
       'Content-Type': 'application/json',
-      'HTTP-Referer': window.location.origin,
     },
     body: JSON.stringify({
       model: MODEL,
@@ -50,17 +54,22 @@ export const parseBiodataQuery = async (userQuery) => {
         { role: 'user', content: userQuery },
       ],
       temperature: 0,
-      response_format: { type: 'json_object' },
     }),
   });
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err?.error?.message || 'LLM request failed');
+    throw new Error(err?.message || 'LLM request failed');
   }
 
   const data = await res.json();
   const content = data.choices?.[0]?.message?.content;
   if (!content) throw new Error('Empty response from LLM');
-  return JSON.parse(content);
+
+  try {
+    return JSON.parse(content);
+  } catch {
+    // If response is not JSON, return empty object
+    return {};
+  }
 };

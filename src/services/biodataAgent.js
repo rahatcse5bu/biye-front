@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const MODEL = 'anthropic/claude-haiku-4-5';
+const MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 
 const API_BASE =
   import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
