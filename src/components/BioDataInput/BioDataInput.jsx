@@ -3,7 +3,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { FaTrash } from "react-icons/fa";
 import { Colors } from "../../constants/colors";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/lib/navigation";
 const BioDataInput = () => {
 	const [bioId, setBioId] = useState(0);
 	const navigate = useNavigate();

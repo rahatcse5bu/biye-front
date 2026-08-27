@@ -1,163 +1,258 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import Image from 'next/image';
+import { Link } from '@/lib/navigation';
 import {
-	BiLogoFacebook,
-	BiSolidAddToQueue,
-	BiLogoLinkedin,
-	BiLogoGmail,
-	BiLogoWhatsapp,
-} from "react-icons/bi";
-import { BsTelephoneInbound } from "react-icons/bs";
-import { Colors } from "../../constants/colors";
+  BiLogoFacebook,
+  BiLogoGmail,
+  BiLogoLinkedin,
+  BiLogoWhatsapp,
+} from 'react-icons/bi';
+import { BsTelephoneInbound } from 'react-icons/bs';
+import { HiOutlineChevronRight, HiOutlineLocationMarker } from 'react-icons/hi';
+
+const biodataLinks = [
+  { label: 'সকল বায়োডাটা', to: '/biodatas' },
+  { label: 'বায়োডাটা তৈরি করুন', to: '/biodata-submit' },
+  { label: 'নিবন্ধন করুন', to: '/signup' },
+  { label: 'পয়েন্ট প্যাকেজ', to: '/points-package' },
+];
+
+const helpLinks = [
+  { label: 'আমাদের সম্পর্কে', to: '/about-us' },
+  { label: 'যোগাযোগ', to: '/contact-us' },
+  { label: 'সাধারণ জিজ্ঞাসা', to: '/faq' },
+  { label: 'গোপনীয়তা নীতিমালা', to: '/privacy-policy' },
+  { label: 'শর্তাবলি', to: '/terms-and-condition' },
+  { label: 'রিফান্ড নীতিমালা', to: '/refund-policy' },
+];
+
+const socialLinks = [
+  {
+    label: 'Facebook',
+    href: 'https://www.facebook.com/profile.php?id=61551063894495',
+    Icon: BiLogoFacebook,
+  },
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/showcase/pnc-nikah/',
+    Icon: BiLogoLinkedin,
+  },
+  {
+    label: 'WhatsApp',
+    href: 'https://wa.me/8801793278360',
+    Icon: BiLogoWhatsapp,
+  },
+];
+
+const internalLinkClass =
+  'group inline-flex w-fit items-center gap-2 rounded-sm text-sm leading-6 text-white/75 transition-colors duration-200 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transition-none';
+
+const contactLinkClass =
+  'rounded-sm text-sm leading-6 text-white/75 transition-colors duration-200 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transition-none';
 
 const Footer = () => {
-	const [impLinks, setImpLinks] = useState([]);
-	const [contactInfo, setContactInfo] = useState({});
+  const currentYear = new Date().getFullYear();
 
-	return (
-		<div className="mt-[20px] text-white font-serif text-sm leading-4 sm:p-[0] sm:m-[0] relative"
-			style={{ background: `linear-gradient(to right, ${Colors.primary900}, ${Colors.primary700})` }}>
-			<div className="flex flex-col justify-between gap-8 px-10 py-10 lg:flex-row md:px-20 md:gap-12">
-				<div className=" w-[100%] lg:w-[25%] flex flex-col gap-4 ">
-					<h1 className="text-[25px] mb-4 text-[#ffff] font-semibold tracking-widest">
-						বিয়ে
-					</h1>
-					<p className=" text-[18px] text-[#fff] font-normal leading-[25px] ">
-						বিয়ে একটি ম্যাট্রিমনি প্ল্যাটফর্ম যা সকল ধর্মের মানুষদের জীবনসঙ্গী খুঁজে পেতে সাহায্য করে।
-					</p>
-				</div>
+  return (
+    <footer
+      className="mt-8 border-t border-white/10 bg-brand-900 text-white"
+      aria-labelledby="footer-brand"
+    >
+      <div className="mx-auto max-w-7xl px-6 py-14 sm:px-8 lg:px-10 lg:py-16">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+          <section
+            className="sm:col-span-2 lg:col-span-1"
+            aria-labelledby="footer-brand"
+          >
+            <Link
+              to="/"
+              className="inline-flex rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+              aria-label="বিয়ে বাংলাদেশী ম্যাট্রিমনি হোমপেজ"
+            >
+              <Image
+                src="/assets/logo/biye-logo.svg"
+                alt="বিয়ে বাংলাদেশী ম্যাট্রিমনি"
+                width={220}
+                height={70}
+                className="h-auto w-44"
+              />
+            </Link>
 
-				<div className="flex flex-col  gap-4 w-[100%] lg:w-[25%] ">
-					<h1 className="text-[25px] mb-4 text-[#ffff] font-semibold tracking-widest">
-						Quick Contact
-					</h1>
-					<div className="flex flex-row gap-2 ">
-						<h3 className=" flex flex-row gap-3 text-[15px]  text-[#fff] font-bold p-0 m-0 ">
-							<p className="text-[18px] text-[#fff] font-normal ">
-								<BsTelephoneInbound />
-							</p>
-						</h3>
-						<p className="text-[18px] text-[#fff] font-normal ">
-							+880 1793-278360
-						</p>
-					</div>
+            <h2 id="footer-brand" className="sr-only">
+              বিয়ে বাংলাদেশী ম্যাট্রিমনি
+            </h2>
+            <p className="mt-5 max-w-sm text-sm leading-7 text-white/75 sm:text-base">
+              বিয়ে একটি বাংলাদেশী ম্যাট্রিমনি প্ল্যাটফর্ম, যেখানে
+              পাত্র-পাত্রীরা সহজে বায়োডাটা তৈরি করতে এবং পছন্দের জীবনসঙ্গী
+              খুঁজতে পারেন।
+            </p>
+            <p className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/80">
+              <HiOutlineLocationMarker className="h-5 w-5" aria-hidden="true" />
+              সেবা এলাকা: বাংলাদেশ
+            </p>
+          </section>
 
-					<div className="flex flex-row gap-3 ">
-						<h3 className=" flex flex-row gap-1 text-[15px] text-[#fff] font-bold p-0 m-0 ">
-							<p className="text-[18px] text-[#fff] font-normal ">
-								<BiLogoGmail />
-							</p>
-						</h3>
-						<p className="text-[18px] text-[#fff] font-normal ">
-							pnc.nikah@gmail.com
-						</p>
-					</div>
+          <nav aria-labelledby="footer-biodata-heading">
+            <h2
+              id="footer-biodata-heading"
+              className="text-base font-semibold text-white"
+            >
+              বায়োডাটা
+            </h2>
+            <ul className="mt-5 space-y-3">
+              {biodataLinks.map((link) => (
+                <li key={link.to}>
+                  <Link to={link.to} className={internalLinkClass}>
+                    <HiOutlineChevronRight
+                      className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none"
+                      aria-hidden="true"
+                    />
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-					<div className="flex flex-row gap-3">
-						<p className="text-[18px]">
-							<BiLogoWhatsapp />
-						</p>
-						<p>+880 1793278360</p>
-					</div>
-				</div>
+          <nav aria-labelledby="footer-help-heading">
+            <h2
+              id="footer-help-heading"
+              className="text-base font-semibold text-white"
+            >
+              সহায়তা ও গুরুত্বপূর্ণ লিংক
+            </h2>
+            <ul className="mt-5 space-y-3">
+              {helpLinks.map((link) => (
+                <li key={link.to}>
+                  <Link to={link.to} className={internalLinkClass}>
+                    <HiOutlineChevronRight
+                      className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none"
+                      aria-hidden="true"
+                    />
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-				<div className=" flex flex-col  gap-4  sm:flex-row w-[100%] lg:w-[25%] ">
-					<div className="box-border flex flex-col gap-4 w-84 ">
-						<h1 className="text-[25px] mb-4 text-[#ffff] font-semibold tracking-widest">
-							Other Pages
-						</h1>
+          <section aria-labelledby="footer-contact-heading">
+            <h2
+              id="footer-contact-heading"
+              className="text-base font-semibold text-white"
+            >
+              যোগাযোগ
+            </h2>
+            <address className="mt-5 not-italic">
+              <ul className="space-y-4">
+                <li className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/10">
+                    <BsTelephoneInbound
+                      className="h-4 w-4"
+                      aria-hidden="true"
+                    />
+                  </span>
+                  <div>
+                    <span className="block text-xs text-white/55">ফোন</span>
+                    <a
+                      href="tel:+8801793278360"
+                      className={contactLinkClass}
+                      aria-label="বিয়ে ম্যাট্রিমনিতে ফোন করুন"
+                    >
+                      +880 1793-278360
+                    </a>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/10">
+                    <BiLogoGmail className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <div className="min-w-0">
+                    <span className="block text-xs text-white/55">ইমেইল</span>
+                    <a
+                      href="mailto:pnc.nikah@gmail.com"
+                      className={`${contactLinkClass} break-all`}
+                    >
+                      pnc.nikah@gmail.com
+                    </a>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/10">
+                    <BiLogoWhatsapp className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <div>
+                    <span className="block text-xs text-white/55">
+                      WhatsApp
+                    </span>
+                    <a
+                      href="https://wa.me/8801793278360"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={contactLinkClass}
+                      aria-label="WhatsApp-এ বিয়ে ম্যাট্রিমনির সঙ্গে যোগাযোগ করুন"
+                    >
+                      বার্তা পাঠান
+                    </a>
+                  </div>
+                </li>
+              </ul>
+            </address>
 
-						<div className="flex flex-row gap-3 ">
-							<div className=" text-[18px] ">
-								<BiSolidAddToQueue />
-							</div>
-							<Link to="/refund-policy" className=" text-[18px] ">
-								Refund Policy
-							</Link>
-						</div>
+            <div className="mt-7">
+              <h3 className="text-sm font-semibold text-white">
+                সামাজিক যোগাযোগ
+              </h3>
+              <ul
+                className="mt-4 flex flex-wrap gap-3"
+                aria-label="সামাজিক যোগাযোগমাধ্যম"
+              >
+                {socialLinks.map(({ label, href, Icon }) => (
+                  <li key={label}>
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${label}-এ বিয়ে ম্যাট্রিমনি`}
+                      title={label}
+                      className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition duration-200 hover:-translate-y-1 hover:border-white/40 hover:bg-white hover:text-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transform-none motion-reduce:transition-none"
+                    >
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                      <span className="sr-only">{label}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        </div>
+      </div>
 
-						<div className="flex flex-row gap-3 ">
-							<div className=" text-[18px] ">
-								<BiSolidAddToQueue />
-							</div>
-							<Link to="/privacy-policy" className=" text-[18px] ">
-								Privacy Policy
-							</Link>
-						</div>
-						<div className="flex flex-row gap-3 ">
-							<div className=" text-[18px] ">
-								<BiSolidAddToQueue />
-							</div>
-							<Link to="/terms-and-condition" className=" text-[18px] ">
-								Terms And Conditions
-							</Link>
-						</div>
-
-						<div className="flex flex-row gap-3 ">
-							<div className=" text-[18px] ">
-								<BiSolidAddToQueue />
-							</div>
-							<Link to="/faq" className=" text-[18px] ">
-								FAQ
-							</Link>
-						</div>
-					</div>
-				</div>
-
-				<div className=" w-[100%] lg:w-[25%] flex flex-col gap-2 item-center ">
-					<h1 className="text-[25px] text-[#ffff] mb-4 font-semibold tracking-widest">
-						Our Social Media
-					</h1>
-
-					<a
-						href="https://www.facebook.com/profile.php?id=61551063894495"
-						className="flex flex-row gap-3 cursor-pointer "
-					>
-						<p className="cursor-pointer bg-[#505e96]  p-2 border-solid border-[0px] border-[#fff]  hover:bg-[#fff] rounded-full transition ease-in duration-700 ">
-							<BiLogoFacebook className="text-[18px] text-[#fff] hover:text-[#ff5e14] " />
-						</p>
-						<p className="text-[18px] hover:text-[#ff5e14] transition ease-in duration-700 text-[#fff] p-2 ">
-							Facebook
-						</p>
-					</a>
-
-					<a
-						href="https://www.linkedin.com/showcase/pnc-nikah/"
-						className="flex flex-row gap-3 cursor-pointer "
-					>
-						<p className="cursor-pointer bg-[#505e96]  p-2 border-solid border-[0px] border-[#fff]  hover:bg-[#fff] rounded-full transition ease-in duration-700 ">
-							<BiLogoLinkedin className="text-[18px] text-[#fff] hover:text-[#ff5e14] " />
-						</p>
-						<p className="text-[18px] hover:text-[#ff5e14] transition ease-in duration-700 text-[#fff] p-2 ">
-							Linkedin
-						</p>
-					</a>
-
-					<a
-						href="https://wa.me/+8801793278360"
-						className="flex flex-row gap-3 cursor-pointer "
-					>
-						<p className="cursor-pointer bg-[#505e96]  p-2 border-solid border-[0px] border-[#fff]  hover:bg-[#fff] rounded-full transition ease-in duration-700 ">
-							<BiLogoWhatsapp className="text-[20px] text-[#fff] hover:text-[#ff5e14] " />
-						</p>
-						<p className="text-[18px] hover:text-[#ff5e14] transition ease-in duration-700 text-[#fff] p-2 ">
-							Whatsapp
-						</p>
-					</a>
-				</div>
-			</div>
-
-			<div className="p-[20px] text-[15px] text-[#f2f2f2]"
-				style={{ backgroundColor: Colors.primary800 }}>
-				<p className="text-center text-[#fff] text-[17px] leading-[30px] tracking-widest ">
-					{" "}
-					Copyright © 2023-{new Date().getFullYear()} বিয়ে | সর্বস্বত্ব সংরক্ষিত{" "}
-				</p>
-				<div className="powr-hit-counter" id="2c3bf98a_1720928514"></div><script src="https://www.powr.io/powr.js?platform=html"></script>
-			</div>
-		</div>
-	);
+      <div className="relative border-t border-white/10 bg-black/10">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-5 text-center text-sm text-white/70 sm:px-8 md:flex-row md:text-left lg:px-10">
+          <p>Copyright © 2023-{currentYear} বিয়ে | সর্বস্বত্ব সংরক্ষিত</p>
+          <nav aria-label="আইনি নীতিমালা">
+            <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 md:justify-end">
+              <li>
+                <Link to="/privacy-policy" className={contactLinkClass}>
+                  গোপনীয়তা
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms-and-condition" className={contactLinkClass}>
+                  শর্তাবলি
+                </Link>
+              </li>
+              <li>
+                <Link to="/refund-policy" className={contactLinkClass}>
+                  রিফান্ড নীতি
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </footer>
+  );
 };
 
 export default Footer;

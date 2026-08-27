@@ -21,7 +21,7 @@ import { useContext } from 'react';
 import UserContext from '../../contexts/UserContext';
 import { useEffect } from 'react';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
-// import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "@/lib/navigation";
 import MultipleSelect from '../MultitpleSelect/MultipleSelect';
 import {
   dataToMultipleExpectedPartner,

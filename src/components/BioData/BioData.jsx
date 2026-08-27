@@ -1,15 +1,12 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useState } from 'react';
 import { Button } from '@material-tailwind/react';
-import { Colors } from '../../constants/colors';
 import {
   formatDate,
   formatDateAndCalculateAge,
   getDateMonthYear,
 } from '../../utils/date';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/navigation';
 import { ScrollToTop } from '../../constants/ScrolltoTop';
 import { FaEye } from 'react-icons/fa';
 import { convertHeightToBengali } from '../../utils/height';
@@ -63,6 +60,15 @@ const BioData = ({ biodata }) => {
 
   const hasMalePhotos =
     biodata?.gender !== 'মহিলা' && biodata?.photos && biodata.photos.length > 0;
+  const profileImage =
+    biodata?.gender === 'মহিলা'
+      ? '/assets/icons/female.svg'
+      : hasMalePhotos
+        ? biodata.photos[0]
+        : '/assets/icons/male.svg';
+  const profileImageAlt = `বায়োডাটা BID-${
+    biodata?.is_unverified ? biodata?.bio_id : biodata?.user_id
+  } এর প্রোফাইল`;
 
   const bioDataHandler = async () => {
     if (biodata?._id) {
@@ -80,54 +86,56 @@ const BioData = ({ biodata }) => {
   };
 
   return (
-    <div className="my-5 min-w-[280px] relative hover:shadow-2xl transition-all  duration-300 ease-in rounded-md border-2">
+    <article className="relative min-w-0 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-900/20 hover:shadow-lg motion-reduce:transform-none motion-reduce:transition-none">
       <ScrollToTop />
-      <div
-        style={{
-          backgroundColor: Colors.pncPrimaryColor,
-        }}
-        className="h-[200px] min flex relative  flex-col justify-center rounded-t-md text-white"
-      >
-        <div
-          className={`relative w-16 mx-auto ${hasMalePhotos ? 'cursor-pointer group' : ''}`}
-          onClick={(e) => {
-            if (hasMalePhotos) {
-              e.stopPropagation();
+      <div className="relative flex h-[176px] flex-col justify-center bg-brand-900 text-center text-white">
+        {hasMalePhotos ? (
+          <button
+            type="button"
+            className="group relative mx-auto w-16 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-900"
+            onClick={(event) => {
+              event.stopPropagation();
               setShowViewer(true);
-            }
-          }}
-        >
-          <img
-            className="w-16 h-16 mx-auto rounded-full object-cover"
-            src={
-              biodata?.gender === 'মহিলা'
-                ? '/assets/icons/female.svg'
-                : hasMalePhotos
-                  ? biodata.photos[0]
-                  : '/assets/icons/male.svg'
-            }
-            alt=""
-          />
-          {hasMalePhotos && (
-            <span className="absolute bottom-0 left-1/2 -translate-x-1/2 bg-black/60 text-white text-[10px] px-2 py-[2px] rounded-full transition-opacity whitespace-nowrap">
+            }}
+            aria-label="প্রোফাইলের ছবি দেখুন"
+          >
+            <img
+              className="mx-auto h-16 w-16 rounded-2xl border-2 border-white/50 bg-white/10 object-cover"
+              src={profileImage}
+              alt={profileImageAlt}
+            />
+            <span className="absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/60 px-2 py-0.5 text-[10px] text-white">
               দেখুন
             </span>
-          )}
-        </div>
-        <h4 className="my-2"> বায়োডাটা নং </h4>
-        <h3>
+          </button>
+        ) : (
+          <div className="relative mx-auto w-16">
+            <img
+              className="mx-auto h-16 w-16 rounded-2xl border-2 border-white/50 bg-white/10 object-cover"
+              src={profileImage}
+              alt={profileImageAlt}
+            />
+          </div>
+        )}
+        <p className="mb-1 mt-3 text-xs font-semibold text-white/65">
+          বায়োডাটা নম্বর
+        </p>
+        <h3 className="text-lg font-bold tracking-wide">
           {'BID-'}
           {biodata?.is_unverified ? biodata?.bio_id : biodata?.user_id}
         </h3>
         {/* view icons */}
-        <div className="flex absolute top-2 left-2">
-          <FaEye className="w-6 h-6 mr-2" />
+        <div
+          className="absolute left-3 top-3 flex items-center rounded-full bg-black/15 px-2 py-1 text-xs"
+          aria-label={`${biodata?.views_count || 0} বার দেখা হয়েছে`}
+        >
+          <FaEye className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
           {biodata?.views_count}
         </div>
 
         {/* Religion Badge */}
         <div
-          className={`absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-semibold text-white ${getBadgeColor(biodata?.religion)}`}
+          className={`absolute right-3 top-3 rounded-full px-2 py-1 text-[11px] font-semibold text-white ${getBadgeColor(biodata?.religion)}`}
         >
           {getReligionBadgeLabel(biodata?.religion, biodata?.religious_type)}
         </div>
@@ -138,14 +146,17 @@ const BioData = ({ biodata }) => {
           position="top-12 right-2"
         />
       </div>
-      <div className="mx-2 mt-4">
-        <table className="min-w-full divide-y divide-gray-200 border-0 border-gray-300">
-          <tbody className="bg-white divide-y divide-gray-200">
+      <div className="px-4 pt-4">
+        <table className="w-full text-sm">
+          <tbody className="divide-y divide-gray-100">
             <tr>
-              <td className="px-6 py-4 whitespace-nowrap border-r border-t border-b">
+              <th
+                scope="row"
+                className="whitespace-nowrap py-3 pr-3 text-left font-semibold text-gray-500"
+              >
                 জন্মসন
-              </td>
-              <td className="px-6 py-4 text-sm whitespace-nowrap border-b border-t">
+              </th>
+              <td className="py-3 text-right text-gray-800">
                 {formatDate(getDateMonthYear(biodata?.date_of_birth))}
                 <b className="text-indigo-900">
                   {` [${formatDateAndCalculateAge(biodata?.date_of_birth)?.age} বছর]`}
@@ -153,26 +164,35 @@ const BioData = ({ biodata }) => {
               </td>
             </tr>
             <tr>
-              <td className="px-6 py-4 whitespace-nowrap border-r  border-b">
-                উচ্চতা{' '}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap border-b">
+              <th
+                scope="row"
+                className="whitespace-nowrap py-3 pr-3 text-left font-semibold text-gray-500"
+              >
+                উচ্চতা
+              </th>
+              <td className="py-3 text-right text-gray-800">
                 <span>{convertHeightToBengali(biodata?.height)}</span>
               </td>
             </tr>
             <tr>
-              <td className="px-6 py-4 whitespace-nowrap border-r border-b">
-                গাত্রবর্ন{' '}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap border-b">
+              <th
+                scope="row"
+                className="whitespace-nowrap py-3 pr-3 text-left font-semibold text-gray-500"
+              >
+                গাত্রবর্ণ
+              </th>
+              <td className="py-3 text-right text-gray-800">
                 {biodata?.screen_color}
               </td>
             </tr>
             <tr>
-              <td className="px-6 py-4 whitespace-nowrap border-r border-b">
-                উপজেলা{' '}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap border-b">
+              <th
+                scope="row"
+                className="whitespace-nowrap py-3 pr-3 text-left font-semibold text-gray-500"
+              >
+                উপজেলা
+              </th>
+              <td className="py-3 text-right text-gray-800">
                 {biodata?.upzilla}
               </td>
             </tr>
@@ -196,15 +216,12 @@ const BioData = ({ biodata }) => {
         />
       </div>
 
-      <div className="my-4">
+      <div className="p-4 pt-3">
         <Button
           onClick={bioDataHandler}
-          className=" rounded-3xl"
-          style={{
-            background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
-          }}
+          className="w-full rounded-xl bg-brand-900 py-3 text-sm shadow-none transition-colors duration-200 hover:bg-[#0F8287] hover:shadow-none focus:ring-2 focus:ring-brand-900 focus:ring-offset-2"
         >
-          সম্পূর্ন বায়োডাটা
+          সম্পূর্ণ বায়োডাটা দেখুন
         </Button>
       </div>
 
@@ -217,7 +234,7 @@ const BioData = ({ biodata }) => {
           onClose={() => setShowViewer(false)}
         />
       )}
-    </div>
+    </article>
   );
 };
 

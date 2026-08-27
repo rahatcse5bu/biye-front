@@ -1,47 +1,71 @@
+const getStorage = () => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  return window.localStorage;
+};
+
 export const setGenderToLocal = (gender) => {
-  // console.log('set-gender', gender);
-  localStorage.setItem('pnc-nikah-gender', gender);
+  getStorage()?.setItem('pnc-nikah-gender', gender);
 };
 
 export const getGender = () => {
-  return localStorage.getItem('pnc-nikah-gender');
+  return getStorage()?.getItem('pnc-nikah-gender') || null;
 };
 
 export const setProfilePhotoToLocal = (photoUrl) => {
+  const storage = getStorage();
+
+  if (!storage) {
+    return;
+  }
+
   if (photoUrl) {
-    localStorage.setItem('pnc-nikah-profile-photo', photoUrl);
+    storage.setItem('pnc-nikah-profile-photo', photoUrl);
   } else {
-    localStorage.removeItem('pnc-nikah-profile-photo');
+    storage.removeItem('pnc-nikah-profile-photo');
   }
 };
 
 export const getProfilePhoto = () => {
-  return localStorage.getItem('pnc-nikah-profile-photo');
+  return getStorage()?.getItem('pnc-nikah-profile-photo') || null;
 };
 
 export const setReligionToLocal = (religion, religiousType) => {
-  if (religion) {
-    localStorage.setItem('pnc-nikah-religion', religion);
-  } else {
-    localStorage.removeItem('pnc-nikah-religion');
+  const storage = getStorage();
+
+  if (!storage) {
+    return;
   }
-  if (religiousType) {
-    localStorage.setItem('pnc-nikah-religious-type', religiousType);
+
+  if (religion) {
+    storage.setItem('pnc-nikah-religion', religion);
   } else {
-    localStorage.removeItem('pnc-nikah-religious-type');
+    storage.removeItem('pnc-nikah-religion');
+  }
+
+  if (religiousType) {
+    storage.setItem('pnc-nikah-religious-type', religiousType);
+  } else {
+    storage.removeItem('pnc-nikah-religious-type');
   }
 };
 
 export const getReligionInfo = () => {
+  const storage = getStorage();
+
   return {
-    religion: localStorage.getItem('pnc-nikah-religion') || null,
-    religiousType: localStorage.getItem('pnc-nikah-religious-type') || null,
+    religion: storage?.getItem('pnc-nikah-religion') || null,
+    religiousType: storage?.getItem('pnc-nikah-religious-type') || null,
   };
 };
 
 export const clearUserLocalStorage = () => {
-  localStorage.removeItem('pnc-nikah-profile-photo');
-  localStorage.removeItem('pnc-nikah-gender');
-  localStorage.removeItem('pnc-nikah-religion');
-  localStorage.removeItem('pnc-nikah-religious-type');
+  const storage = getStorage();
+
+  storage?.removeItem('pnc-nikah-profile-photo');
+  storage?.removeItem('pnc-nikah-gender');
+  storage?.removeItem('pnc-nikah-religion');
+  storage?.removeItem('pnc-nikah-religious-type');
 };

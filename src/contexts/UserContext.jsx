@@ -1,105 +1,81 @@
-/* eslint-disable react/prop-types */
-// src/contexts/UserContext.js
-import {
-  signInWithPopup,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  sendPasswordResetEmail,
-  updateProfile,
-  updatePassword,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-} from 'firebase/auth';
-import { createContext, useEffect, useState } from 'react';
-import { auth } from '../firebase/app.js';
 import { useQueryClient } from '@tanstack/react-query';
+import { createContext, useEffect, useState } from 'react';
+import { userServices } from '../services/user';
+import { getToken, removeToken } from '../utils/cookies';
 
-// Create a new context instance
 const UserContext = createContext();
 
-// Create a provider component to wrap your app
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
   const [tokenInfo, setTokenInfo] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
-  const googleProvider = new GoogleAuthProvider();
   const queryClient = useQueryClient();
 
-  // const {
-  //   data: userInfo = null,
-  //   isLoading: userInfoFetchLoading,
-  //   refetch: userInfoRefetch,
-  // } = useQuery({
-  //   queryKey: ["user-info", user?.email],
-  //   queryFn: async () => {
-  //     return await userServices.getUserInfoByEmail(user?.email);
-  //   },
-  //   retry: false,
-  //   enabled: !!user?.email,
-  // });
-
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUserLoading(false);
-      // console.log(currentUser);
-      setUser(currentUser);
-    });
-    return () => {
-      unsubscribe();
+    let isActive = true;
+
+    const clearAuth = (clearQueries = false) => {
+      removeToken();
+      setUser(null);
+      setUserInfo(null);
+      setTokenInfo(null);
+      if (clearQueries) queryClient.clear();
     };
-  }, []);
 
-  const handleGoogleSignIn = () => {
+    const restoreUser = async () => {
+      try {
+        const token = getToken()?.token;
+
+        if (!token) {
+          clearAuth();
+          return;
+        }
+
+        const response = await userServices.getCurrentUser(token);
+        const currentUser = response?.data;
+
+        if (!response?.success || !currentUser?.email) {
+          throw new Error('Invalid authentication session');
+        }
+
+        if (isActive) {
+          setUser(currentUser);
+          setUserInfo(response);
+          setTokenInfo({ token });
+        }
+      } catch {
+        if (isActive) {
+          clearAuth(true);
+        }
+      } finally {
+        if (isActive) {
+          setUserLoading(false);
+        }
+      }
+    };
+
+    restoreUser();
+
+    return () => {
+      isActive = false;
+    };
+  }, [queryClient]);
+
+  const logOut = async () => {
     setUserLoading(true);
-    return signInWithPopup(auth, googleProvider);
-  };
-
-  const createUser = (email, password) => {
-    setUserLoading(true);
-    return createUserWithEmailAndPassword(auth, email, password);
-  };
-
-  const signIn = (email, password) => {
-    setUserLoading(true);
-    return signInWithEmailAndPassword(auth, email, password);
-  };
-
-  const updateUserProfile = (profile) => {
-    return updateProfile(auth.currentUser, profile);
-  };
-
-  const updateUserPassword = (password) => {
-    return updatePassword(auth.currentUser, password);
-  };
-
-  const forgotPassword = (email) => {
-    return sendPasswordResetEmail(auth, email);
-  };
-
-  const logOut = () => {
-    setUserLoading(true);
+    removeToken();
     setUser(null);
     setUserInfo(null);
     setTokenInfo(null);
     queryClient.clear();
-    return signOut(auth);
+    setUserLoading(false);
   };
-
-  // console.log({ userInfo });
-  // console.log({ tokenInfo });
 
   return (
     <UserContext.Provider
       value={{
         user,
-        updateUserPassword,
-        createUser,
-        handleGoogleSignIn,
-        updateUserProfile,
-        signIn,
-        forgotPassword,
         logOut,
         userLoading,
         setUserLoading,
@@ -108,8 +84,6 @@ export const UserProvider = ({ children }) => {
         tokenInfo,
         setTokenInfo,
         setUserInfo,
-        // userInfoRefetch,
-        // userInfoFetchLoading,
       }}
     >
       {children}

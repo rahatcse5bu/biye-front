@@ -25,7 +25,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getYearMonthDate } from '../../utils/date';
 import { getToken, removeToken } from '../../utils/cookies';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/navigation';
 import { convertToBengaliNumerals } from '../../utils/weight';
 import { convertToEnglishDigits } from '../../utils/weight';
 import { verifyToken } from '../../services/verifyToken';

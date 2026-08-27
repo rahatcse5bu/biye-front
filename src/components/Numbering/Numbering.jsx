@@ -15,7 +15,7 @@ import { UserInfoServices } from '../../services/userInfo';
 import { getToken, removeToken } from '../../utils/cookies';
 import { clearUserLocalStorage } from '../../utils/localStorage';
 import { Toast } from '../../utils/toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/navigation';
 
 const Numbering = ({ setUserForm, userForm }) => {
   const { userInfo, logOut, user } = useContext(UserContext);
@@ -50,7 +50,7 @@ const Numbering = ({ setUserForm, userForm }) => {
       isError &&
       error &&
       getToken()?.token &&
-      import.meta.env.VITE_REACT_APP_NODE_ENV === 'production'
+      process.env.NODE_ENV === 'production'
     ) {
       Toast.errorToast(error?.response.data?.error);
       logoutHandler();

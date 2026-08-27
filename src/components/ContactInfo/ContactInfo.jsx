@@ -6,7 +6,7 @@ import BioContext from '../../contexts/BioContext';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useContext } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from '@/lib/navigation';
 import Swal from 'sweetalert2';
 import { FaYoutube } from 'react-icons/fa';
 import UserContext from '../../contexts/UserContext';

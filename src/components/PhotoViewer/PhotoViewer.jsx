@@ -7,6 +7,11 @@ import { IoClose, IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
 const PhotoViewer = ({ photos = [], initialIndex = 0, isOpen, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setCurrentIndex(initialIndex);
@@ -44,7 +49,7 @@ const PhotoViewer = ({ photos = [], initialIndex = 0, isOpen, onClose }) => {
     setCurrentIndex((prev) => (prev - 1 + photos.length) % photos.length);
   }, [photos.length]);
 
-  if (!isOpen || !photos.length) return null;
+  if (!mounted || !isOpen || !photos.length) return null;
 
   return createPortal(
     <div

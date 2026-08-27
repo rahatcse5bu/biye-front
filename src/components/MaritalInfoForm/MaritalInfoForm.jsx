@@ -8,7 +8,7 @@ import UserContext from "../../contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";
 import { getToken } from "../../utils/cookies";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
-// import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "@/lib/navigation";
 import { MaritalInfoInfoServices } from "../../services/maritalInfo";
 import { getErrorMessage } from "../../utils/error";
 import { Toast } from "../../utils/toast";

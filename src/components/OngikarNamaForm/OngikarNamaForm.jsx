@@ -23,7 +23,7 @@ const OngikarNamaForm = ({ userForm, setUserForm, religion = 'islam' }) => {
   const [loading, setLoading] = useState(false);
 
 
-  const siteUrl = window.location.hostname;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_HOST || 'pncnikah.com';
 
   const { data: ongikarNamaInfo = null, isLoading } = useQuery({
     queryKey: ['ongikar-nama', userInfo?.data?._id, getToken()?.token],

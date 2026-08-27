@@ -8,7 +8,7 @@ import { FaFilter } from 'react-icons/fa';
 import { Pagination } from '../Pagination/Pagination';
 import { useBio } from '../../contexts/useBio';
 import { convertToQuery } from '../../utils/query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/navigation';
 import { Toast } from '../../utils/toast';
 import { convertToBengaliDigits } from '../../utils/language';
 import { useQuery } from '@tanstack/react-query';

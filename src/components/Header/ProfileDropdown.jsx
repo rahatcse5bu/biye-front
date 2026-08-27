@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/navigation';
 import { FaUserLarge, FaEdit } from 'react-icons/fa';
 import { BiSolidDashboard } from 'react-icons/bi';
 import { MdExitToApp } from 'react-icons/md';

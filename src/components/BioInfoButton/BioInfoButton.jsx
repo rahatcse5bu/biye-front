@@ -6,7 +6,7 @@ import { getToken } from '../../utils/cookies';
 import { Toast } from '../../utils/toast';
 import BioContext from '../../contexts/BioContext';
 import UserContext from '../../contexts/UserContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/navigation';
 
 const BioInfoButton = () => {
   const { bio } = useContext(BioContext);

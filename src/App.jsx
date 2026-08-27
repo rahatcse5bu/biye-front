@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
-import { RouterProvider, useLocation } from 'react-router-dom';
+import { RouterProvider, useLocation } from '@/lib/navigation';
 import router from './routes/Routes';
 import toast, { Toaster } from 'react-hot-toast';
 import { Toast } from './utils/toast';

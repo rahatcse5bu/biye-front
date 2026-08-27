@@ -15,7 +15,7 @@ import { Colors } from '../../constants/colors';
 import { AiOutlineDelete, AiOutlineSearch } from 'react-icons/ai';
 import { useContext } from 'react';
 import BioContext from '../../contexts/BioContext';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate } from '@/lib/navigation';
 import { convertToQuery } from '../../utils/query';
 import PrimaryFilter from './PrimaryFilter';
 import { useQuery } from '@tanstack/react-query';

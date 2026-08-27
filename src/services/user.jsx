@@ -1,10 +1,37 @@
 import axios from 'axios';
 const baseUrl =
-  import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+  process.env.NODE_ENV === 'development'
     ? 'http://localhost:5000/api/v1'
-    : 'https://server.pncnikah.com/api/v1';
+    : 'https://biye-backend.vercel.app/api/v1';
 
 // console.log(baseUrl);
+
+const googleAuth = async (payload) => {
+  const { data } = await axios.post(
+    baseUrl + '/user-info/google-auth',
+    payload
+  );
+  return data;
+};
+
+const register = async (payload) => {
+  const { data } = await axios.post(baseUrl + '/user-info/register', payload);
+  return data;
+};
+
+const login = async (payload) => {
+  const { data } = await axios.post(baseUrl + '/user-info/login', payload);
+  return data;
+};
+
+const getCurrentUser = async (token) => {
+  const { data } = await axios.get(baseUrl + '/user-info/me', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return data;
+};
 
 const verifyToken = async (token) => {
   const { data } = await axios.get(baseUrl + `/token/verify-token`, {
@@ -17,20 +44,6 @@ const verifyToken = async (token) => {
 
 const createUserInfo = async (data) => {
   const generalInfo = await axios.post(baseUrl + '/user-info', data);
-  return generalInfo;
-};
-
-const createUserInfoForGoogleSignIn = async (data, token = '') => {
-  const generalInfo = await axios.post(
-    baseUrl + '/user-info/create-login-user',
-    data,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    }
-  );
   return generalInfo;
 };
 
@@ -368,8 +381,11 @@ const getMaritalInfoByUserId = async (id) => {
 };
 
 export const userServices = {
+  googleAuth,
+  register,
+  login,
+  getCurrentUser,
   createUserInfo,
-  createUserInfoForGoogleSignIn,
   getUserInfoByEmail,
   getGeneralInfoByUserId,
   getUserToken,

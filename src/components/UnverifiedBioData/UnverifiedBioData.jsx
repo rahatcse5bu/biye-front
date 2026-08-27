@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/navigation';
 import { Colors } from '../../constants/colors';
 import { formatDate, formatDateAndCalculateAge, getDateMonthYear } from '../../utils/date';
 import { convertHeightToBengali } from '../../utils/height';

@@ -26,3 +26,6 @@ dist-ssr
 
 *.sw?
 dist/
+.vercel
+.next
+.next/

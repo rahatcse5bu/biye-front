@@ -1,31 +1,28 @@
+import { BookOpenIcon } from '@heroicons/react/24/outline';
 
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
+const HadithSlider = ({ slides = [] }) => {
+  if (!slides.length) return null;
 
-// eslint-disable-next-line react/prop-types
-const HadidthSlider = ({ slides = [] }) => {
   return (
-    <Carousel
-      autoPlay
-      interval={3100}
-      infiniteLoop
-      showStatus={false}
-      statusFormatter={(current, total) => (
-        <span className="text-blue-500">
-          {current} of {total}
-        </span>
-      )}
-    >
+    <ol className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:thin] [scrollbar-color:#0D7377_transparent] lg:grid lg:grid-cols-3 lg:overflow-visible">
       {slides.map((slide, index) => (
-        <div key={index} className="hadith-card flex justify-center items-center mt-2">
-          <div className="rounded-lg border border-blue-500 w-[95%] lg:w-[90%] px-4 bg-white">
-            <h3 className="text-sm md:text-md lg:text-xl pt-8">{slide.text}</h3>
-            <h4 className="text-sm pt-2 pb-4 text-blue-500">{slide.ref}</h4>
-          </div>
-        </div>
+        <li
+          key={`${slide.ref}-${index}`}
+          className="min-w-[88%] snap-center rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:min-w-[58%] lg:min-w-0 lg:p-6"
+        >
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-900/10 text-brand-900">
+            <BookOpenIcon className="h-5 w-5" aria-hidden="true" />
+          </span>
+          <blockquote className="mt-4">
+            <p className="leading-8 text-gray-700">{slide.text}</p>
+            <footer className="mt-3 text-sm font-bold text-brand-900">
+              {slide.ref}
+            </footer>
+          </blockquote>
+        </li>
       ))}
-    </Carousel>
+    </ol>
   );
 };
 
-export default HadidthSlider;
+export default HadithSlider;

@@ -1,72 +1,91 @@
-import React from 'react';
-import { Colors } from '../../../constants/colors';
+import {
+  CheckBadgeIcon,
+  HeartIcon,
+  UserGroupIcon,
+  UsersIcon,
+} from '@heroicons/react/24/outline';
 import { BioDataServices } from '../../../services/bioData';
 import { useQuery } from '@tanstack/react-query';
 import LoadingCircle from '../../LoadingCircle/LoadingCircle';
 
-// Custom Hook for fetching BioData Stats
-const useBioStats = () => {
-  return useQuery({
+const useBioStats = () =>
+  useQuery({
     queryKey: ['bio-all-stats'],
     queryFn: async () => {
-      try {
-        const response = await BioDataServices.getAllBioDataStats();
-        return response.data;
-      } catch (error) {
-        throw new Error('Error fetching biodata stats');
-      }
+      const response = await BioDataServices.getAllBioDataStats();
+      return response.data;
     },
-    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
-    refetchOnWindowFocus: false, // Disable refetching on window focus
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
   });
-};
 
-const StatCard = ({ value, label }) => (
-  <div className="p-4 py-12 m-2 bg-white border border-blue-500 shadow-xl stat-card rounded-xl">
-    <h1 className="text-3xl font-semibold text-center">{value}</h1>
-    <h3 className="text-xl text-center">{label}</h3>
-  </div>
+const formatNumber = (value) =>
+  new Intl.NumberFormat('bn-BD').format(value || 0);
+
+const StatCard = ({ value, label, icon: Icon }) => (
+  <article className="rounded-2xl border border-white/15 bg-white/10 p-4 text-center sm:p-5">
+    <span className="mx-auto inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15 text-white">
+      <Icon className="h-6 w-6" aria-hidden="true" />
+    </span>
+    <p className="mt-3 text-2xl font-bold text-white sm:text-3xl">
+      {formatNumber(value)}
+    </p>
+    <h3 className="mt-1 text-sm leading-6 text-white/75 sm:text-base">
+      {label}
+    </h3>
+  </article>
 );
 
 const BioStats = () => {
   const { data: biosStats, isLoading, error } = useBioStats();
-
-  if (error) {
-    return <div className="text-center text-red-500">Failed to load data</div>;
-  }
-
   const totalBios = (biosStats?.পুরুষ || 0) + (biosStats?.মহিলা || 0);
 
   return (
-    <div>
-      <h2
-        className="mt-8 mb-2 text-xl font-bold text-center md:text-2xl lg:text-4xl text-uppercase"
-        style={{
-          color: Colors.titleText,
-        }}
-      >
-        এক নজরে আমাদের সাইটঃ
-      </h2>
-      {isLoading ? (
-        <LoadingCircle />
+    <section
+      className="rounded-3xl bg-brand-900 px-4 py-8 sm:px-7 sm:py-10"
+      aria-labelledby="stats-heading"
+    >
+      <div className="mx-auto max-w-2xl text-center">
+        <p className="text-sm font-bold text-white/70">এক নজরে বিয়ে</p>
+        <h2
+          id="stats-heading"
+          className="mt-2 text-2xl font-bold text-white sm:text-3xl"
+        >
+          আমাদের কমিউনিটি প্রতিদিন এগিয়ে যাচ্ছে
+        </h2>
+      </div>
+
+      {error ? (
+        <p className="mt-8 rounded-xl bg-white/10 p-4 text-center text-white">
+          পরিসংখ্যান এখন দেখানো যাচ্ছে না। পরে আবার চেষ্টা করুন।
+        </p>
+      ) : isLoading ? (
+        <LoadingCircle classes="my-10" />
       ) : (
-        <div className="grid grid-cols-1 py-5 md:grid-cols-2 lg:grid-cols-4">
-          <StatCard value={totalBios} label="সর্বমোট বায়োডাটা" />
+        <div className="mt-7 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
           <StatCard
-            value={biosStats?.পুরুষ || 0}
-            label="সর্বমোট পাত্রের বায়োডাটা"
+            value={totalBios}
+            label="সর্বমোট বায়োডাটা"
+            icon={UserGroupIcon}
           />
           <StatCard
-            value={biosStats?.মহিলা || 0}
-            label="সর্বমোট পাত্রীর বায়োডাটা"
+            value={biosStats?.পুরুষ}
+            label="পাত্রের বায়োডাটা"
+            icon={UsersIcon}
           />
           <StatCard
-            value={biosStats?.completedMarriages || 0}
-            label="বিয়ে সম্পন্ন হয়েছে"
+            value={biosStats?.মহিলা}
+            label="পাত্রীর বায়োডাটা"
+            icon={CheckBadgeIcon}
+          />
+          <StatCard
+            value={biosStats?.completedMarriages}
+            label="বিয়ে সম্পন্ন হয়েছে"
+            icon={HeartIcon}
           />
         </div>
       )}
-    </div>
+    </section>
   );
 };
 

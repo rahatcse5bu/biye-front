@@ -20,6 +20,20 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
+
+// Take control of all clients as soon as this service worker activates
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
+// Never intercept page navigation requests.
+// Only let Firebase messaging use this worker.
+self.addEventListener('fetch', (event) => {
+  if (event.request.mode === 'navigate') {
+    return;
+  }
+});
+
 // Customize background notification handling here
 messaging.onBackgroundMessage((payload) => {
   console.log('Background Message:', payload);

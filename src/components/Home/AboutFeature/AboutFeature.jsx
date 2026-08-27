@@ -1,39 +1,44 @@
-import React, { useState } from 'react';
-import CustomButton from '../../CustomButton/CustomButton';
-import { Colors } from '../../../constants/colors';
-import { FaYoutube } from 'react-icons/fa';
+import { useState } from 'react';
+import { PlayIcon } from '@heroicons/react/24/solid';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 import CustomModal from '../../CustomModal/CustomModal';
 
 const AboutFeature = () => {
   const [openModal, setOpenModal] = useState(false);
+
   return (
-    <div className="my-4 px-2">
-      <CustomButton
-        onClick={() => {
-          setOpenModal(true);
-        }}
-        className=" flex w-full mx-auto md:w-[50%] items-center justify-center border hover:bg-transparent border-indigo-700 rounded-full py-2 bg-white"
+    <div className="mt-4 flex flex-col items-start justify-between gap-4 rounded-2xl border border-brand-900/15 bg-brand-900/5 p-5 sm:flex-row sm:items-center sm:p-6">
+      <div>
+        <p className="text-sm font-bold text-brand-900">
+          বিয়ে কীভাবে কাজ করে?
+        </p>
+        <h3 className="mt-1 text-lg font-bold text-gray-900 sm:text-xl">
+          ফিচারগুলো এক নজরে ভিডিওতে দেখুন
+        </h3>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
+          বায়োডাটা তৈরি, অনুসন্ধান এবং যোগাযোগের অনুরোধের প্রক্রিয়া সহজে বুঝে
+          নিন।
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={() => setOpenModal(true)}
+        className="inline-flex min-h-12 w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-brand-900 px-5 py-3 font-bold text-white transition-colors duration-200 hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2 motion-reduce:transition-none sm:w-auto"
+        aria-label="বিয়ের ফিচার সম্পর্কিত ভিডিও দেখুন"
       >
-        <FaYoutube className="mb-0 pb-0 mr-2 text-red-500 w-12 h-6  rounded-full bg-white" />{' '}
-        <span
-          className="md:text-xl text-sm"
-          style={{
-            color: Colors.titleText,
-          }}
-        >
-          বিয়ে এর ব্যতিক্রমী ফিচারসমূহ
-        </span>
-      </CustomButton>
+        <PlayIcon className="h-5 w-5" aria-hidden="true" />
+        ভিডিও দেখুন
+      </button>
+
       <CustomModal
         onClose={() => setOpenModal(false)}
         isOpen={openModal}
-        title="বিয়ে এর ব্যতিক্রমী ফিচারসমূহ"
+        title="বিয়ের ব্যতিক্রমী ফিচারসমূহ"
       >
         <LiteYouTubeEmbed
           id="czYI7NaHymg"
-          title="বিয়ে এর ব্যতিক্রমী ফিচারসমূহ"
+          title="বিয়ের ব্যতিক্রমী ফিচারসমূহ"
         />
       </CustomModal>
     </div>

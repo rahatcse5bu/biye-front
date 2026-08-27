@@ -9,7 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useBio } from '../../contexts/useBio';
 import { convertToQuery } from '../../utils/query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/navigation';
 
 export function Pagination() {
   const { setQuery, setFilterFields, limit, size, page, query } = useBio();
@@ -32,7 +32,7 @@ export function Pagination() {
       setQuery((prev) => ({
         ...prev,
         user_status:
-          import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+          process.env.NODE_ENV === 'development'
             ? 'in review'
             : 'active',
         page: active,
@@ -41,7 +41,7 @@ export function Pagination() {
       setFilterFields((prev) => ({
         ...prev,
         user_status:
-          import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+          process.env.NODE_ENV === 'development'
             ? 'in review'
             : 'active',
         page: active,
@@ -51,7 +51,7 @@ export function Pagination() {
       const textString = convertToQuery({
         ...query,
         user_status:
-          import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+          process.env.NODE_ENV === 'development'
             ? 'in review'
             : 'active',
         page: active,

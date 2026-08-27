@@ -3,14 +3,14 @@ import axios from 'axios';
 const MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 
 const API_BASE =
-  import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+  process.env.NODE_ENV === 'development'
     ? 'http://localhost:5000/api/v1'
-    : 'https://server.pncnikah.com/api/v1';
+    : 'https://biye-backend.vercel.app/api/v1';
 
 const LLM_PROXY = `${API_BASE}/llm/chat`;
 
 const USER_STATUS =
-  import.meta.env.VITE_REACT_APP_NODE_ENV === 'development' ? 'in review' : 'active';
+  process.env.NODE_ENV === 'development' ? 'in review' : 'active';
 
 // ── Tool definitions ──────────────────────────────────────────────────────────
 

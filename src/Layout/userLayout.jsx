@@ -1,9 +1,10 @@
-import { Outlet } from 'react-router-dom';
+'use client';
+
 import UserSidebar from '../components/UserSiderbar/UserSidebar';
 // import { useState } from 'react';
 import { FaArrowLeftLong, FaArrowRightLong } from 'react-icons/fa6';
 import { useFilter } from '../contexts/useFilter';
-const UserLayout = () => {
+const UserLayout = ({ children }) => {
   // const [openSidebar, setOpenSidebar] = useState(true);
   const { openSidebar, setOpenSidebar } = useFilter();
 
@@ -45,7 +46,7 @@ const UserLayout = () => {
           openSidebar ? 'lg:w-[78%] w-full' : 'w-[100vw] '
         }  lg:px-5 px-3  pt-2 pb-8`}
       >
-        <Outlet />
+        {children}
       </div>
     </div>
   );

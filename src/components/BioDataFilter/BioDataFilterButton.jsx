@@ -2,7 +2,7 @@ import { Button } from '@material-tailwind/react';
 import { Colors } from '../../constants/colors';
 import { AiOutlineDelete, AiOutlineSearch } from 'react-icons/ai';
 import { useBio } from '../../contexts/useBio';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/navigation';
 import { convertToQuery } from '../../utils/query';
 import { useFilter } from '../../contexts/useFilter';
 import { usePrimary } from '../../contexts/userPrimary';

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/navigation';
 import SubLinks from './Sublinks';
 import { Typography } from '@material-tailwind/react';
 import ProfileDropdown from './ProfileDropdown';

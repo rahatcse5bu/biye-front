@@ -37,9 +37,9 @@ Mapping rules:
 
 export const parseBiodataQuery = async (userQuery) => {
   const API_BASE =
-    typeof import.meta !== 'undefined' && import.meta.env.VITE_REACT_APP_NODE_ENV === 'development'
+    typeof import.meta !== 'undefined' && process.env.NODE_ENV === 'development'
       ? 'http://localhost:5000/api/v1'
-      : 'https://server.pncnikah.com/api/v1';
+      : 'https://biye-backend.vercel.app/api/v1';
 
   // Use backend proxy for Groq API
   const res = await fetch(`${API_BASE}/llm/chat`, {

@@ -1,33 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { useState, useEffect, useContext, useRef } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { FaCircle } from 'react-icons/fa';
-import { FcLike, FcDislike, FcSettings, FcSupport } from 'react-icons/fc';
+import { Link, useNavigate, useLocation } from '@/lib/navigation';
 import {
-  Navbar,
-  Collapse,
-  Typography,
-  IconButton,
-  Button,
-} from '@material-tailwind/react';
+  BanknotesIcon,
+  Bars3Icon,
+  DocumentPlusIcon,
+  HomeIcon,
+  UserCircleIcon,
+  UsersIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
+import { FcLike, FcDislike, FcSettings, FcSupport } from 'react-icons/fc';
+import { Navbar, Typography, Button } from '@material-tailwind/react';
 import { navData } from './navigation_data';
 import SubLinks from './Sublinks.jsx';
-import '../../assets/styles/nav-bar.css';
 import UserContext from '../../contexts/UserContext';
 import { FaUserLarge } from 'react-icons/fa6';
 import { MdExitToApp } from 'react-icons/md';
 import { FaEdit } from 'react-icons/fa';
 import { BiSolidDashboard } from 'react-icons/bi';
 const navLogo = '/assets/logo/biye-logo.svg';
-import {
-  getToken,
-  getUserOPenLarge,
-  getUserOPenSmall,
-  removeToken,
-  setUserOPenLarge,
-  setUserOPenSmall,
-} from '../../utils/cookies';
+import { getToken, removeToken } from '../../utils/cookies';
 import {
   getGender,
   getProfilePhoto,
@@ -42,22 +36,13 @@ import classNames from 'classnames';
 import { UserInfoServices } from '../../services/userInfo';
 import { Toast } from '../../utils/toast';
 import { useBio } from '../../contexts/useBio.jsx';
-import { Colors } from '../../constants/colors';
+
 import { GeneralInfoServices } from '../../services/generalInfo';
 
 export default function NavBar() {
   const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
-  const [filteredNavData, setFilteredNavData] = useState(navData);
+  const filteredNavData = navData;
   const [isHovered, setIsHovered] = useState(false);
-  const [hoverOpenCountForSmall, setHoverOpenCountForSmall] = useState(
-    getUserOPenSmall()?.count ?? 0
-  );
-  const [hoverOpenCountForLarge, setHoverOpenCountForLarge] = useState(
-    getUserOPenLarge()?.count ?? 0
-  );
-
-  // console.log('hoverOpenCountForSmall~~', getUserOPenSmall()?.count);
-  // console.log('hoverOpenCountForLarge~~', getUserOPenSmall()?.count);
   const [openNav, setOpenNav] = useState(false);
   const { query } = useBio();
   const profileCardRef = useRef(null);
@@ -78,6 +63,7 @@ export default function NavBar() {
   const { pathname } = useLocation();
 
   useEffect(() => {
+    setOpenNav(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [pathname, query]);
 
@@ -143,24 +129,27 @@ export default function NavBar() {
       isError &&
       error &&
       getToken()?.token &&
-      import.meta.env.VITE_REACT_APP_NODE_ENV === 'production'
+      process.env.NODE_ENV === 'production'
     ) {
       Toast.errorToast(error?.response?.data?.error);
       logoutHandler();
     }
   }, [isError, error]);
 
-  document.addEventListener('keydown', function (event) {
-    // Prevent Ctrl+C (67) keypress
-    if (
-      import.meta.env.VITE_REACT_APP_NODE_ENV === 'production' &&
-      event.ctrlKey &&
-      (event.keyCode === 67 || event.keyCode === 99)
-    ) {
-      event.preventDefault();
-      return false;
-    }
-  });
+  useEffect(() => {
+    const preventCopy = (event) => {
+      if (
+        process.env.NODE_ENV === 'production' &&
+        event.ctrlKey &&
+        (event.keyCode === 67 || event.keyCode === 99)
+      ) {
+        event.preventDefault();
+      }
+    };
+
+    document.addEventListener('keydown', preventCopy);
+    return () => document.removeEventListener('keydown', preventCopy);
+  }, []);
 
   const handleIconHover = () => {
     setIsHovered(true);
@@ -176,13 +165,17 @@ export default function NavBar() {
   };
 
   const NavList = () => (
-    <ul className="box-border z-50 border-none nav-list-ul py-3 pt-6 pl-[10px] flex flex-col lg:flex-row  justify-between ">
-      <div className="hidden lg:block">
-        <Link to="/">
-          <img width={180} src={navLogo} alt="" />
+    <div className="mx-auto flex max-h-[calc(100dvh-132px-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[1440px] flex-col items-center gap-0.5 overflow-y-auto bg-white px-3 pb-4 pt-3 lg:h-[68px] lg:max-h-none lg:flex-row lg:justify-between lg:gap-2 lg:overflow-visible lg:bg-transparent lg:px-3.5 lg:py-0 xl:gap-[18px] xl:px-[clamp(18px,3vw,42px)]">
+      <div className="hidden shrink-0 lg:block">
+        <Link to="/" aria-label="হোম পেজ">
+          <img
+            className="block h-auto w-[118px] xl:w-[136px]"
+            src={navLogo}
+            alt="বিয়ে ম্যাট্রিমনি"
+          />
         </Link>
       </div>
-      <div>
+      <ul className="m-0 flex w-full flex-col items-center justify-center gap-0.5 p-0 lg:w-auto lg:flex-row lg:gap-0 xl:gap-[clamp(0px,0.35vw,5px)]">
         {filteredNavData.map((_navDataItem, _in) =>
           _navDataItem.subLinks ? (
             <SubLinks
@@ -196,15 +189,28 @@ export default function NavBar() {
               as="li"
               variant="small"
               color="white"
-              className={`text-lg  font-semibold   ${
-                _navDataItem.title === 'Dashboard'
-                  ? 'h-full py-[11px] px-[15px] w-[120px] bg-[#FFD66C] hover:bg-[#01503b] hover:text-[#fff] '
-                  : 'nav-item-primary'
-              } `}
+              className="block w-full list-none whitespace-nowrap text-base font-semibold lg:w-auto"
             >
               <Link
                 to={_navDataItem.path}
-                className="rounded-lg"
+                className={`inline-flex min-h-11 w-full items-center justify-center rounded-[10px] border border-transparent px-3 py-2.5 leading-none text-gray-800 transition-colors duration-200 hover:bg-[#0D7377]/10 hover:text-[#0D7377] lg:min-h-10 lg:w-auto lg:px-[7px] lg:py-[9px] lg:text-white/90 lg:hover:border-white/10 lg:hover:bg-white/[0.14] lg:hover:text-white xl:px-[clamp(9px,1vw,14px)] ${
+                  (
+                    _navDataItem.path === '/'
+                      ? pathname === '/'
+                      : pathname.startsWith(_navDataItem.path)
+                  )
+                    ? 'bg-[#0D7377]/10 text-[#0D7377] lg:border-white/10 lg:bg-white/[0.14] lg:text-white lg:shadow-[inset_0_-2px_0_#F6A6B5]'
+                    : ''
+                }`}
+                aria-current={
+                  (
+                    _navDataItem.path === '/'
+                      ? pathname === '/'
+                      : pathname.startsWith(_navDataItem.path)
+                  )
+                    ? 'page'
+                    : undefined
+                }
                 onClick={() => setOpenNav(false)}
               >
                 {_navDataItem.title}
@@ -212,13 +218,13 @@ export default function NavBar() {
             </Typography>
           )
         )}
-      </div>
-      <div className="hidden lg:flex lg:items-center lg:gap-3">
+      </ul>
+      <div className="hidden shrink-0 items-center gap-2.5 lg:flex">
         <select
           value={selectedReligion}
           onChange={handleReligionChange}
-          className="bg-white/20 text-white text-sm font-semibold rounded-md px-2 py-1 border border-white/30 outline-none cursor-pointer"
-          style={{ minWidth: '100px' }}
+          className="h-[38px] min-w-24 cursor-pointer rounded-[9px] border border-white/25 bg-white/[0.13] px-[9px] py-1.5 text-sm font-semibold text-white outline-none transition-colors duration-200 hover:border-white/45 hover:bg-white/20 focus:border-white/45 focus:bg-white/20 xl:min-w-[108px]"
+          aria-label="ধর্ম নির্বাচন করুন"
         >
           <option value="" className="text-black">
             সকল ধর্ম
@@ -235,28 +241,33 @@ export default function NavBar() {
         </select>
         {!user ? (
           <Typography
-            as="li"
+            as="div"
             variant="small"
             color="white"
-            className="text-lg font-semibold nav-item-primary"
+            className="text-base font-semibold"
           >
-            <Link to="/login">লগইন</Link>
+            <Link
+              className="inline-flex min-h-10 items-center justify-center rounded-[10px] border border-transparent px-[7px] py-[9px] leading-none text-white/90 transition-colors duration-200 hover:border-white/10 hover:bg-white/[0.14] hover:text-white xl:px-[clamp(9px,1vw,14px)]"
+              to="/login"
+            >
+              লগইন
+            </Link>
           </Typography>
         ) : (
           <Typography
             as="div"
             variant="small"
             color="white"
-            className="relative mx-5 text-lg font-semibold cursor-pointer nav-item-primary"
+            className="relative mx-0.5 cursor-pointer text-base font-semibold"
             onMouseEnter={handleIconHover}
             onMouseLeave={handleIconLeave}
           >
-            <div className="flex flex-row-reverse ">
-              <div className="relative w-12 h-12 flex items-center justify-center">
+            <div className="flex flex-row-reverse items-center">
+              <div className="relative flex h-[42px] w-[42px] items-center justify-center">
                 <FaUserLarge className="w-4 h-4 z-10" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-full h-full border-4 border-orange-700 rounded-full rotate-border">
-                    <div className="absolute inset-0 border-2 border-purple-300 rounded-full"></div>
+                  <div className="h-full w-full rounded-full border-[3px] border-[#F09DAD]">
+                    <div className="absolute inset-0 rounded-full border border-white/60"></div>
                   </div>
                 </div>
               </div>
@@ -264,7 +275,7 @@ export default function NavBar() {
               {userInfo?.data.points > 0 && (
                 <div
                   title={`${userInfo?.data.points.toFixed(2)} points`}
-                  className="flex items-center text-white bg-orange-700 px-2 rounded-lg mr-2"
+                  className="mr-2 flex min-h-[30px] items-center rounded-lg bg-[#E85D75] px-2 py-1 text-[13px] text-white"
                 >
                   {userInfo?.data.points.toFixed(2)} P
                 </div>
@@ -274,13 +285,7 @@ export default function NavBar() {
             {isHovered && (
               <div
                 ref={profileCardRef}
-                className={`absolute ${
-                  !isHovered ? 'hidden' : 'block'
-                }  w-[250px] rounded-md profile-card z-[2000000] mx-5 h-[450px] transition-all duration-300 ease-in p-4 top-12 right-[100px] scrollbar-thumb-blue scrollbar-thumb-rounded-full scrollbar-track-blue-lighter scrollbar-w-2 translate-x-1/2 overflow-y-scroll overflow-x-hidden`}
-                style={{
-                  background: `linear-gradient(to right, ${Colors.primary900}, ${Colors.primary700})`,
-                }}
-                id="profile-card"
+                className="absolute right-0 top-[calc(100%+8px)] z-[2000000] h-[450px] w-[250px] overflow-y-auto overflow-x-hidden rounded-xl bg-brand-900 p-4 shadow-2xl transition-all duration-300 ease-in"
               >
                 <div className="py-5 text-center">
                   <div className="">
@@ -291,8 +296,9 @@ export default function NavBar() {
                     />
                   </div>
 
-                  {import.meta.env.VITE_REACT_APP_NODE_ENV ===
-                    'development' && <h5>ID: {userInfo?.data?.user_id}</h5>}
+                  {process.env.NODE_ENV === 'development' && (
+                    <h5>ID: {userInfo?.data?.user_id}</h5>
+                  )}
 
                   <h4 className="pt-2 font-bold text-gray-500">
                     Biodata Status
@@ -312,7 +318,7 @@ export default function NavBar() {
                   </h6>
                   <Button
                     onClick={myBioDataHandler}
-                    className="mt-2 bg-gradient-to-r from-purple-900 to-blue-900 rounded-3xl"
+                    className="mt-2 rounded-3xl bg-white text-brand-900 hover:bg-white/90"
                   >
                     My Biodata
                   </Button>
@@ -386,234 +392,149 @@ export default function NavBar() {
           </Typography>
         )}
       </div>
-    </ul>
+    </div>
   );
+
+  const mobileNavItems = [
+    { label: 'হোম', path: '/', icon: HomeIcon },
+    { label: 'বায়োডাটা', path: '/biodatas', icon: UsersIcon },
+    {
+      label: 'তৈরি করুন',
+      path: '/biodata-submit',
+      icon: DocumentPlusIcon,
+      primary: true,
+    },
+    { label: 'প্যাকেজ', path: '/points-package', icon: BanknotesIcon },
+    {
+      label: user ? 'অ্যাকাউন্ট' : 'লগইন',
+      path: user ? '/user/account/dashboard' : '/login',
+      icon: UserCircleIcon,
+    },
+  ];
+
+  const isActiveRoute = (path) =>
+    path === '/' ? pathname === '/' : pathname.startsWith(path);
 
   return (
     <>
-
-      <Navbar
-        className="w-full z-[999999] rounded-none justify-between box-border styles.headerColor navigation-bar-custom sticky top-0 "
-        style={{
-          background: `linear-gradient(to right, ${Colors.primary900}, ${Colors.primary700})`,
-        }}
-      >
+      <Navbar className="sticky top-0 z-[1000] box-border !min-h-[60px] !w-full !min-w-full !overflow-visible !rounded-none !border-0 !border-b !border-white/10 !bg-brand-900 !p-0 text-white !shadow-[0_4px_16px_rgba(4,69,72,0.18)] lg:!min-h-[68px]">
         <div className="hidden lg:block">
           <NavList />
         </div>
 
-        <div className="flex items-center justify-between lg:hidden">
-          <div className="p-2 text-left">
-            <IconButton
-              variant="text"
-              className="w-6 h-6 mr-auto text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent"
-              ripple={false}
-              onClick={() => setOpenNav(!openNav)}
-            >
-              {openNav ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  className="w-6 h-6"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              )}
-            </IconButton>
-          </div>
-          <div className="flex items-center gap-2">
-            <Link className="" to="/">
-              <img className="" src={navLogo} alt="" />
-            </Link>
+        <div className="relative z-[1003] mx-auto flex min-h-[60px] w-full max-w-lg items-center justify-between bg-brand-900 px-3 pt-[env(safe-area-inset-top)] lg:hidden">
+          <Link
+            to="/"
+            className="rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-900"
+            aria-label="বিয়ে হোম পেজ"
+          >
+            <img
+              className="block h-auto w-[102px]"
+              src={navLogo}
+              alt="বিয়ে ম্যাট্রিমনি"
+            />
+          </Link>
+
+          <div className="flex items-center gap-1">
             <select
               value={selectedReligion}
               onChange={handleReligionChange}
-              className="bg-white/20 text-white text-xs font-semibold rounded-md px-1 py-1 border border-white/30 outline-none cursor-pointer"
-              style={{ minWidth: '70px' }}
+              className="h-10 max-w-[76px] cursor-pointer rounded-xl border border-white/25 bg-white/10 px-2 text-xs font-semibold text-white outline-none transition-colors duration-200 hover:bg-white/15 focus-visible:border-white/70 focus-visible:ring-2 focus-visible:ring-white/40 [&>option]:text-gray-900"
+              aria-label="ধর্ম নির্বাচন করুন"
             >
-              <option value="" className="text-black">
-                সকল
-              </option>
-              <option value="ইসলাম" className="text-black">
-                ইসলাম
-              </option>
-              <option value="হিন্দু" className="text-black">
-                হিন্দু
-              </option>
-              <option value="খ্রিষ্টান" className="text-black">
-                খ্রিষ্টান
-              </option>
+              <option value="">সকল</option>
+              <option value="ইসলাম">ইসলাম</option>
+              <option value="হিন্দু">হিন্দু</option>
+              <option value="খ্রিষ্টান">খ্রিষ্টান</option>
             </select>
-          </div>
 
-          <div className="flex items-center">
-            {!user ? (
-              <Typography
-                as="li"
-                variant="small"
-                color="white"
-                className="text-lg font-semibold nav-item-primary"
-              >
-                <Link to="/login">লগইন</Link>
-              </Typography>
-            ) : (
-              <Typography
-                as="div"
-                variant="small"
-                color="white"
-                className="relative mx-5 text-lg font-semibold cursor-pointer nav-item-primary"
-                onMouseEnter={handleIconHover}
-                onMouseLeave={handleIconLeave}
-              >
-                <div className="flex flex-row-reverse items-center">
-                  <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
-                    <FaUserLarge className="w-4 h-4 " />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-full h-full border-4 border-orange-700 rounded-full rotate-border">
-                        <div className="absolute inset-0 border-2 border-purple-300 rounded-full"></div>
-                      </div>
-                    </div>
-                  </div>
+            <Link
+              to={user ? '/user/account/dashboard' : '/login'}
+              className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl text-white transition-colors duration-200 hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transition-none"
+              aria-label={user ? 'আমার অ্যাকাউন্ট' : 'লগইন করুন'}
+            >
+              <UserCircleIcon className="h-7 w-7" aria-hidden="true" />
+              {userInfo?.data?.points > 0 && (
+                <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-[#E85D75] ring-2 ring-brand-900">
+                  <span className="sr-only">অ্যাকাউন্টে পয়েন্ট আছে</span>
+                </span>
+              )}
+            </Link>
 
-                  {userInfo?.data.points > 0 && (
-                    <div
-                      title={`${userInfo?.data.points.toFixed(2)} points`}
-                      className="flex items-center text-white bg-orange-700 px-1.5 sm:px-2 py-0.5 rounded-lg mr-1 sm:mr-2 text-xs sm:text-sm whitespace-nowrap"
-                    >
-                      {userInfo?.data.points.toFixed(2)} P
-                    </div>
-                  )}
-                </div>
-                {isHovered && (
-                  <div
-                    className={`absolute ${
-                      !isHovered ? 'hidden' : 'block'
-                    }  w-[250px] rounded-md profile-card mx-5 h-[450px] transition-all duration-300 ease-in p-4 top-12 right-[100px]  scrollbar-thumb-blue scrollbar-thumb-rounded-full scrollbar-track-blue-lighter scrollbar-w-2 translate-x-1/2 overflow-y-scroll overflow-x-hidden z-40`}
-                    style={{
-                      background: `linear-gradient(to right, ${Colors.primary900}, ${Colors.primary700})`,
-                    }}
-                    id="profile-card"
-                  >
-                    <div className="py-5 text-center">
-                      <FaUserLarge className="w-10 h-10 p-2 mx-auto border-2 border-white rounded-full" />
-                      <h4 className="pt-2 font-bold text-gray-600">
-                        Biodata Status
-                      </h4>
-                      <h6
-                        className={classNames('font-bold  capitalize', {
-                          'text-green-600':
-                            userInfo?.data?.user_status === 'active',
-                          'text-orange-600':
-                            userInfo?.data?.user_status === 'in review',
-                          'text-purple-600':
-                            userInfo?.data?.user_status === 'pending',
-                          'text-red-600':
-                            userInfo?.data?.user_status === 'banned',
-                        })}
-                      >
-                        {userInfo?.data?.user_status}
-                      </h6>
-                      <Button
-                        onClick={myBioDataHandler}
-                        className="mt-2 bg-gradient-to-r from-purple-900 to-blue-900 rounded-3xl"
-                      >
-                        My Biodata
-                      </Button>
-                    </div>
-                    <Link
-                      className="flex items-center w-full transition-all  duration-300 ease-in-out rounded-md "
-                      to={`/user/account/edit-biodata`}
-                      onClick={handleIconLeave}
-                    >
-                      <FaEdit className="mr-2" />
-                      <span>বায়োডাটা এডিট করুন</span>
-                    </Link>
-
-                    <Link
-                      onClick={handleIconLeave}
-                      className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
-                      to={`/user/account/dashboard`}
-                    >
-                      <BiSolidDashboard className="mr-2" />
-                      <span>ড্যাসবোর্ড</span>
-                    </Link>
-
-                    <Link
-                      onClick={handleIconLeave}
-                      className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
-                      to={`/user/account/likes`}
-                    >
-                      <FcLike className="mr-2" />
-                      <span>পছন্দের তালিকা </span>
-                    </Link>
-
-                    <Link
-                      onClick={handleIconLeave}
-                      className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
-                      to={`/user/account/dislikes`}
-                    >
-                      <FcDislike className="mr-2" />
-                      <span>অপছন্দের তালিকা </span>
-                    </Link>
-                    <Link
-                      onClick={handleIconLeave}
-                      className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
-                      to={`/user/account/settings`}
-                    >
-                      <FcSettings className="mr-2" />
-                      <span>সেটিংস </span>
-                    </Link>
-                    <Link
-                      onClick={handleIconLeave}
-                      className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
-                      to={`/user/account/reports`}
-                    >
-                      <FcSupport className="mr-2" />
-                      <span>সাপোর্ট এবং রিপোর্ট </span>
-                    </Link>
-                    <Link
-                      className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
-                      to="#!"
-                      onClick={logoutHandler}
-                    >
-                      <MdExitToApp className="mr-2" />
-                      <span>লগ আউট</span>
-                    </Link>
-                  </div>
-                )}
-              </Typography>
-            )}
+            <button
+              type="button"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-white transition-colors duration-200 hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transition-none"
+              aria-label={openNav ? 'মেনু বন্ধ করুন' : 'মেনু খুলুন'}
+              aria-expanded={openNav}
+              aria-controls="mobile-navigation-menu"
+              onClick={() => setOpenNav((isOpen) => !isOpen)}
+            >
+              {openNav ? (
+                <XMarkIcon className="h-7 w-7" aria-hidden="true" />
+              ) : (
+                <Bars3Icon className="h-7 w-7" aria-hidden="true" />
+              )}
+            </button>
           </div>
         </div>
 
-        <Collapse
-          open={openNav}
-          className={`mobile-nav ${openNav ? 'mobile-nav-open' : ''}`}
-        >
-          <NavList />
-        </Collapse>
+        {openNav && (
+          <>
+            <button
+              type="button"
+              className="fixed inset-0 z-[1001] cursor-default bg-black/30 lg:hidden"
+              aria-label="নেভিগেশন মেনু বন্ধ করুন"
+              tabIndex={-1}
+              onClick={() => setOpenNav(false)}
+            />
+            <div
+              id="mobile-navigation-menu"
+              className="absolute inset-x-0 top-full z-[1002] border-t border-gray-200 bg-white shadow-[0_16px_32px_rgba(15,23,42,0.18)] lg:hidden"
+            >
+              <NavList />
+            </div>
+          </>
+        )}
       </Navbar>
+
+      <nav
+        className="fixed inset-x-0 bottom-0 z-[1100] border-t border-gray-200 bg-white shadow-[0_-8px_24px_rgba(15,23,42,0.08)] lg:hidden"
+        aria-label="মোবাইল প্রধান নেভিগেশন"
+      >
+        <ul className="mx-auto grid min-h-[64px] max-w-lg grid-cols-5 px-1 pb-[max(0.35rem,env(safe-area-inset-bottom))] pt-1.5">
+          {mobileNavItems.map(({ label, path, icon: Icon, primary }) => {
+            const isActive = isActiveRoute(path);
+
+            return (
+              <li key={path} className="flex items-stretch justify-center">
+                <Link
+                  to={path}
+                  className={`group flex min-w-0 flex-1 flex-col items-center justify-center rounded-xl px-1 text-[11px] font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-1 motion-reduce:transition-none ${
+                    isActive ? 'text-brand-900' : 'text-gray-500'
+                  }`}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  <span
+                    className={`inline-flex items-center justify-center transition-colors duration-200 motion-reduce:transition-none ${
+                      primary
+                        ? '-mt-5 h-12 w-12 rounded-2xl border-4 border-white bg-brand-900 text-white shadow-[0_6px_16px_rgba(13,115,119,0.28)] group-hover:bg-[#0F8287]'
+                        : `h-7 w-9 rounded-lg group-hover:bg-brand-900/10 group-hover:text-brand-900 ${
+                            isActive ? 'bg-brand-900/10' : ''
+                          }`
+                    }`}
+                  >
+                    <Icon
+                      className={primary ? 'h-6 w-6' : 'h-[22px] w-[22px]'}
+                      aria-hidden="true"
+                    />
+                  </span>
+                  <span className={primary ? 'mt-0.5' : 'mt-1'}>{label}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
     </>
   );
 }

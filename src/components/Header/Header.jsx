@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { Link, useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { Link, useNavigate } from '@/lib/navigation';
+import { useLocation } from '@/lib/navigation';
 import Tittle from './Title';
 import NavBar from './Navbar';
 import { Colors } from '../../constants/colors';
@@ -92,7 +92,7 @@ const Header = () => {
       isError &&
       error &&
       getToken()?.token &&
-      import.meta.env.VITE_REACT_APP_NODE_ENV === 'production'
+      process.env.NODE_ENV === 'production'
     ) {
       console.error('Error', error);
       logoutHandler();

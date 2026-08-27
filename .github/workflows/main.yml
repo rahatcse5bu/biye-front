@@ -1,46 +1,37 @@
-#dangerous-clean-slate: true
+name: Next.js frontend checks
 
-name: 🚀 Deploy PNC-Nikah-Front-End website on push
 on:
   push:
     branches:
       - main
+  pull_request:
+
 jobs:
-  web-deploy:
-    name: 🎉 Deploy
+  build:
     runs-on: ubuntu-latest
-    env:
-      VITE_REACT_APP_authDomain: 'pnc-nikah.firebaseapp.com'
-      VITE_REACT_APP_apiKey: 'AIzaSyCGMfMlLJk65tcQi1_IocJKI-KD11mfGpE'
-      VITE_REACT_APP_projectId: 'pnc-nikah'
-      VITE_REACT_APP_storageBucket: 'pnc-nikah.appspot.com'
-      VITE_REACT_APP_messagingSenderId: '893917202752'
-      VITE_REACT_APP_appId: '1:893917202752:web:37d31a29adbf37bcd712a5'
-      VITE_REACT_APP_NODE_ENV: 'producttion'
-      VITE_REACT_APP_vapidKey: 'BPFs6JWBmfzCdWbHW7TfxrTAa5ZWcXs1WvTFyd7ErF1f0TzObZySfvg6OzRJatI_pzYVEd-phO1cZdh8ZQ9G_o8'
+
     steps:
-      - name: environment variable
-        run: echo Hello world $REACT_APP_IMGBB_KEY
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: 🚚 Get latest code
-        uses: actions/checkout@v2
-
-      - name: Use Node.js 18
-        uses: actions/setup-node@v2
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: 20
+          cache: npm
 
-      - name: 🔨 Build Project
-        run: |
-          npm install --legacy-peer-deps
-          CI=false npm run build
+      - name: Install dependencies
+        run: npm ci
 
-      - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: 'ftp.pncnikah.com'
-          username: 'pncnikah.com@pncnikah.com'
-          # dangerous-clean-slate: true
-          password: 'GGj,5-nQ#$%4'
-          port: 21
-          local-dir: ./dist/
+      - name: Build Next.js application
+        env:
+          NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
+          NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }}
+          NEXT_PUBLIC_FIREBASE_VAPID_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_VAPID_KEY }}
+        run: npm run build

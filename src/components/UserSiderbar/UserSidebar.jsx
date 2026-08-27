@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { sidebarDetails } from '../../constants/Sidebardata';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/navigation';
 import { useContext } from 'react';
 import UserContext from '../../contexts/UserContext';
 import { Colors } from '../../constants/colors';
