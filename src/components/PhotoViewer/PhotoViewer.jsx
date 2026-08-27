@@ -94,6 +94,8 @@ const PhotoViewer = ({ photos = [], initialIndex = 0, isOpen, onClose }) => {
           src={photos[currentIndex]}
           alt={`ছবি ${currentIndex + 1}`}
           className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl select-none"
+          width="1200"
+          height="900"
           draggable={false}
         />
       </div>
@@ -130,6 +132,8 @@ const PhotoViewer = ({ photos = [], initialIndex = 0, isOpen, onClose }) => {
               <img
                 src={url}
                 alt={`থাম্বনেইল ${idx + 1}`}
+                width="48"
+                height="48"
                 className="w-full h-full object-cover"
               />
             </button>

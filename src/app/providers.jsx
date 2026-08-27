@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ThemeProvider } from '@material-tailwind/react';
+
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
@@ -40,18 +40,16 @@ export default function Providers({ children }) {
       clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''}
     >
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          <UserProvider>
-            <BioProvider>
-              <FilterProvider>
-                <PrimaryFilterProvider>
-                  {children}
-                  <Toaster />
-                </PrimaryFilterProvider>
-              </FilterProvider>
-            </BioProvider>
-          </UserProvider>
-        </ThemeProvider>
+        <UserProvider>
+          <BioProvider>
+            <FilterProvider>
+              <PrimaryFilterProvider>
+                {children}
+                <Toaster />
+              </PrimaryFilterProvider>
+            </FilterProvider>
+          </BioProvider>
+        </UserProvider>
       </QueryClientProvider>
     </GoogleOAuthProvider>
   );

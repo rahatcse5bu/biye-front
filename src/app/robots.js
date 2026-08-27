@@ -11,18 +11,14 @@ export default function robots() {
           '/api/',
           '/biodata/unverified/',
           '/error-page',
-          '/forgot-password',
-          '/login',
           '/pay',
           '/refund/',
           '/reports',
           '/send-form',
-          '/signup',
           '/user/account/',
         ],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
-
   };
 }

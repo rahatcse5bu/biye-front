@@ -172,6 +172,8 @@ export default function NavBar() {
             className="block h-auto w-[118px] xl:w-[136px]"
             src={navLogo}
             alt="বিয়ে ম্যাট্রিমনি"
+            width="220"
+            height="70"
           />
         </Link>
       </div>
@@ -292,7 +294,9 @@ export default function NavBar() {
                     <img
                       className="w-24 h-24 py-2 mx-auto rounded-full object-cover"
                       src={gender === 'মহিলা' ? female : profilePhoto || male}
-                      alt="Person"
+                      alt="ব্যবহারকারীর প্রোফাইল"
+                      width="96"
+                      height="96"
                     />
                   </div>
 
@@ -432,6 +436,8 @@ export default function NavBar() {
               className="block h-auto w-[102px]"
               src={navLogo}
               alt="বিয়ে ম্যাট্রিমনি"
+              width="220"
+              height="70"
             />
           </Link>
 
@@ -454,6 +460,9 @@ export default function NavBar() {
               aria-label={user ? 'আমার অ্যাকাউন্ট' : 'লগইন করুন'}
             >
               <UserCircleIcon className="h-7 w-7" aria-hidden="true" />
+              <span className="sr-only">
+                {user ? 'আমার অ্যাকাউন্ট' : 'লগইন করুন'}
+              </span>
               {userInfo?.data?.points > 0 && (
                 <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-[#E85D75] ring-2 ring-brand-900">
                   <span className="sr-only">অ্যাকাউন্টে পয়েন্ট আছে</span>

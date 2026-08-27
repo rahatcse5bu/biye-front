@@ -31,7 +31,8 @@ import { useFilter } from '../../contexts/useFilter';
 import { usePrimary } from '../../contexts/userPrimary';
 
 const BioDataFilter = () => {
-  const { setQuery, setFilterFields, filterFields, filterResetKey } = useContext(BioContext);
+  const { setQuery, setFilterFields, filterFields, filterResetKey } =
+    useContext(BioContext);
   const { setAddressFilterOpen, setPrimaryFilterOpen } = useFilter();
   const { setBioType, bioType, maritalStatus, setMaritalStatus } = usePrimary();
   const [openAccordions, setOpenAccordions] = useState({
@@ -54,10 +55,10 @@ const BioDataFilter = () => {
     setAddressFilterOpen(true);
   }, []);
   useEffect(() => {
-    setBioType(searchParams.get('bio_type'));
-    setMaritalStatus(searchParams.get('marital_status'));
-    setDivision(searchParams.get('division'));
-    setZilla(searchParams.get('zilla'));
+    setBioType(searchParams.get('bio_type') ?? '');
+    setMaritalStatus(searchParams.get('marital_status') ?? '');
+    setDivision(searchParams.get('division') ?? '');
+    setZilla(searchParams.get('zilla') ?? '');
   }, [searchParams]);
 
   useEffect(() => {

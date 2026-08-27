@@ -40,7 +40,9 @@ const PrimaryFilter = () => {
   } = usePrimary();
 
   // Get religious type options based on selected religion
-  const religiousTypeOptions = religion ? religiousTypesByReligion[religion] || [] : [];
+  const religiousTypeOptions = religion
+    ? religiousTypesByReligion[religion] || []
+    : [];
 
   return (
     <div>
@@ -51,15 +53,15 @@ const PrimaryFilter = () => {
       >
         <div className="lg:w-64 w-full">
           <label
-            htmlFor="select"
+            htmlFor="bio-type"
             className="block my-2 text-sm font-bold text-left text-gray-700"
           >
             আমি খুজছি
           </label>
           <div className="relative">
             <select
-              id="select"
-              name="select"
+              id="bio-type"
+              name="bio_type"
               onChange={(e) => {
                 const value = e.target.value;
 
@@ -72,7 +74,7 @@ const PrimaryFilter = () => {
                   };
                 });
               }}
-              value={bioType}
+              value={bioType ?? ''}
               className="block w-[90%] px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
             >
               <option value="">সকল</option>
@@ -93,16 +95,16 @@ const PrimaryFilter = () => {
 
         <div className="lg:w-64 w-full">
           <label
-            htmlFor="select"
+            htmlFor="marital-status"
             className="block my-2 text-sm font-bold text-left text-gray-700"
           >
             বৈবাহিক অবস্থা
           </label>
           <div className="relative">
             <select
-              id="select"
-              name="select"
-              value={maritalStatus}
+              id="marital-status"
+              name="marital_status"
+              value={maritalStatus ?? ''}
               onChange={(e) => {
                 const value = e.target.value;
 
@@ -121,7 +123,7 @@ const PrimaryFilter = () => {
               <option value="">সকল</option>
               <option value="অবিবাহিত"> অবিবাহিত </option>
               <option value="বিবাহিত">বিবাহিত</option>
-              <option value="বিবাহিত"> ডিভোর্সড</option>
+              <option value="ডিভোর্সড">ডিভোর্সড</option>
               <option value="বিধবা">বিধবা</option>
               <option value="বিপত্নীক">বিপত্নীক </option>
             </select>
@@ -149,7 +151,7 @@ const PrimaryFilter = () => {
             <select
               id="religion"
               name="religion"
-              value={religion}
+              value={religion ?? ''}
               onChange={(e) => {
                 const value = e.target.value;
                 setReligion(value);
@@ -197,7 +199,7 @@ const PrimaryFilter = () => {
               <select
                 id="religiousType"
                 name="religiousType"
-                value={religiousType}
+                value={religiousType ?? ''}
                 onChange={(e) => {
                   const value = e.target.value;
                   setReligiousType(value);

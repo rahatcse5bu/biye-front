@@ -46,7 +46,9 @@ const UnverifiedBioData = ({ biodata }) => {
                 ? '/assets/icons/female.svg'
                 : '/assets/icons/male.svg'
             }
-            alt=""
+            alt="বায়োডাটা প্রোফাইল"
+            width="64"
+            height="64"
           />
         </div>
         <h4 className="my-2">বায়োডাটা নং</h4>

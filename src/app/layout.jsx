@@ -3,7 +3,7 @@ import './globals.css';
 import Providers from './providers';
 import { SITE_URL } from '@/lib/seo';
 
-const siteTitle = 'বিয়ে | বাংলাদেশি ম্যাট্রিমনি';
+const siteTitle = 'বিয়ে | বিশ্বস্ত বাংলাদেশি ম্যাট্রিমনি প্ল্যাটফর্ম';
 const siteDescription =
   'বিয়ে একটি বিশ্বস্ত বাংলাদেশি ম্যাট্রিমনি প্ল্যাটফর্ম, যেখানে পাত্র-পাত্রীরা বায়োডাটা তৈরি করতে এবং পছন্দের জীবনসঙ্গী খুঁজতে পারেন।';
 
@@ -21,9 +21,6 @@ export const metadata = {
     template: '%s | বিয়ে',
   },
   description: siteDescription,
-  alternates: {
-    canonical: SITE_URL,
-  },
   openGraph: {
     type: 'website',
     locale: 'bn_BD',

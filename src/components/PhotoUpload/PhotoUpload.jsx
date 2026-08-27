@@ -97,6 +97,8 @@ const PhotoUpload = ({ photos = [], setPhotos }) => {
             <img
               src={url}
               alt={`ছবি ${index + 1}`}
+              width="112"
+              height="112"
               className="w-full h-24 sm:h-28 object-cover rounded-lg border-2 border-gray-200"
             />
             <button

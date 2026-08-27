@@ -1,6 +1,6 @@
-import { NO_INDEX_METADATA } from '@/lib/seo';
+import { NO_INDEX_FOLLOW_METADATA } from '@/lib/seo';
 
-export const metadata = NO_INDEX_METADATA;
+export const metadata = NO_INDEX_FOLLOW_METADATA;
 
 export default function SignupLayout({ children }) {
   return children;

@@ -73,7 +73,9 @@ function BioInfo({ id }) {
               ? generalInfo.photos[0]
               : male
           }
-          alt="Person"
+          alt="বায়োডাটা প্রোফাইল"
+          width="96"
+          height="96"
         />
         {hasMalePhotos && (
           <span className="absolute bottom-0 left-1/2 -translate-x-1/2 bg-black/60 text-white text-[10px] px-2 py-[2px] rounded-full transition-opacity">
@@ -178,6 +180,8 @@ function BioInfo({ id }) {
                   <img
                     src={url}
                     alt={`ছবি ${index + 1}`}
+                    width="80"
+                    height="80"
                     className="w-full h-20 object-cover rounded-md border border-white/30 group-hover:opacity-70 transition-opacity"
                   />
                   <span className="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-xs font-semibold transition-opacity rounded-md">

@@ -8,14 +8,20 @@ const AboutUs = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="md:order-2">
             <img
-              src="https://www.dreamhost.com/blog/wp-content/uploads/2020/11/The-Perfect-About-Us-Page-Feature-730x486.jpg" // Replace with your image URL
-              alt="About Us"
-              className="rounded-lg shadow-lg"
+              src="https://www.dreamhost.com/blog/wp-content/uploads/2020/11/The-Perfect-About-Us-Page-Feature-730x486.jpg"
+              alt="বিয়ে ম্যাট্রিমনি সম্পর্কে"
+              width="730"
+              height="486"
+              loading="lazy"
+              className="h-auto w-full rounded-lg shadow-lg"
             />
             <img
-              src="https://img.freepik.com/premium-vector/communicate-online-concept_118813-10252.jpg" // Replace with your image URL
-              alt="About Us"
-              className="rounded-lg shadow-lg"
+              src="https://img.freepik.com/premium-vector/communicate-online-concept_118813-10252.jpg"
+              alt="অনলাইনে যোগাযোগের ধারণা"
+              width="730"
+              height="486"
+              loading="lazy"
+              className="h-auto w-full rounded-lg shadow-lg"
             />
           </div>
           <div>

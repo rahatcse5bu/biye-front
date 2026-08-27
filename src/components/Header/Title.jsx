@@ -24,7 +24,9 @@ export default function Tittle() {
             <img
               src={LogoImage}
               className="h-full w-full object-cover rounded-full  "
-              alt="bholaBar"
+              alt="বিয়ে ম্যাট্রিমনি"
+              width="50"
+              height="50"
             />
           </Link>
         </div>

@@ -103,6 +103,8 @@ const BioData = ({ biodata }) => {
               className="mx-auto h-16 w-16 rounded-2xl border-2 border-white/50 bg-white/10 object-cover"
               src={profileImage}
               alt={profileImageAlt}
+              width="64"
+              height="64"
             />
             <span className="absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/60 px-2 py-0.5 text-[10px] text-white">
               দেখুন
@@ -114,6 +116,8 @@ const BioData = ({ biodata }) => {
               className="mx-auto h-16 w-16 rounded-2xl border-2 border-white/50 bg-white/10 object-cover"
               src={profileImage}
               alt={profileImageAlt}
+              width="64"
+              height="64"
             />
           </div>
         )}

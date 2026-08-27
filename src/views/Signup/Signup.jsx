@@ -157,6 +157,8 @@ export function Signup() {
               <img
                 src="/assets/logo/biye-logo.svg"
                 alt="বিয়ে বাংলাদেশী ম্যাট্রিমনি"
+                width="220"
+                height="70"
                 className="h-auto w-36"
               />
             </Link>

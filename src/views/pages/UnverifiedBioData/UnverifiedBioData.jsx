@@ -177,7 +177,9 @@ const UnverifiedBioData = () => {
             <img
               className="w-20 h-20 mx-auto rounded-full object-cover mb-3 opacity-80"
               src={biodata.gender === 'মহিলা' ? '/assets/icons/female.svg' : '/assets/icons/male.svg'}
-              alt=""
+              alt="যাচাই না হওয়া বায়োডাটা প্রোফাইল"
+              width="80"
+              height="80"
             />
             <p className="text-sm opacity-80">বায়োডাটা নং</p>
             <h2 className="text-2xl font-bold">UB-{biodata.bio_id?.toString().slice(-6)}</h2>

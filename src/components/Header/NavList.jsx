@@ -6,7 +6,12 @@ const NavList = ({ navData, setOpenNav, user }) => (
   <ul className="box-border z-50 border-none nav-list-ul py-3 pt-6 pl-[10px] flex flex-col lg:flex-row  justify-between ">
     <div className="hidden lg:block">
       <Link to="/">
-        <img src="/assets/icons/logo.png" alt="Logo" />
+        <img
+          src="/assets/icons/logo.png"
+          alt="বিয়ে ম্যাট্রিমনি"
+          width="177"
+          height="55"
+        />
       </Link>
     </div>
     <div>

@@ -1,3 +1,5 @@
+'use client';
+
 import FeaturedBioDataGrid from '../../../components/FeaturedBioDataGrid/FeaturedBioDataGrid';
 import HadithSlider from '../../../components/HadithSlider/HadithSlider';
 import { useContext } from 'react';

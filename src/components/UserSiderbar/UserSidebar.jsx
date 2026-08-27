@@ -45,7 +45,9 @@ const UserSidebar = ({ openSidebar, setOpenSidebar }) => {
           <img
             className="w-full h-full rounded-full object-cover"
             src={gender === 'মহিলা' ? female : profilePhoto || male}
-            alt="Person"
+            alt="ব্যবহারকারীর প্রোফাইল"
+            width="80"
+            height="80"
           />
         </div>
         <h3

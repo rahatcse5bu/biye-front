@@ -50,9 +50,11 @@ const ProfileDropdown = ({ userInfo, myBioDataHandler }) => {
               src={
                 gender === 'মহিলা'
                   ? '/assets/icons/female.svg'
-                  : (profilePhoto || '/assets/icons/male.svg')
+                  : profilePhoto || '/assets/icons/male.svg'
               }
-              alt="Person"
+              alt="ব্যবহারকারীর প্রোফাইল"
+              width="96"
+              height="96"
             />
             <h4 className="pt-2 font-bold text-gray-500">Biodata Status</h4>
             <h6
