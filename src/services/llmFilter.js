@@ -1,5 +1,5 @@
-const OPENROUTER_API_KEY =
-  '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';
+import axiosInstance from '../utils/axios';
+
 const MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 
 const SYSTEM_PROMPT = `You are a biodata filter assistant for PNC Nikah, a Bangladeshi matrimonial website.
@@ -36,33 +36,21 @@ Mapping rules:
 - Return {} if nothing specific was mentioned`;
 
 export const parseBiodataQuery = async (userQuery) => {
-  const API_BASE =
-    typeof import.meta !== 'undefined' && process.env.NODE_ENV === 'development'
-      ? 'http://localhost:5000/api/v1'
-      : 'https://biye-backend.vercel.app/api/v1';
+  let data;
 
-  // Use backend proxy for Groq API
-  const res = await fetch(`${API_BASE}/llm/chat`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  try {
+    const response = await axiosInstance.post('/llm/chat', {
       model: MODEL,
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: userQuery },
       ],
       temperature: 0,
-    }),
-  });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err?.message || 'LLM request failed');
+    });
+    data = response.data;
+  } catch (error) {
+    throw new Error(error?.response?.data?.message || 'LLM request failed');
   }
-
-  const data = await res.json();
   const content = data.choices?.[0]?.message?.content;
   if (!content) throw new Error('Empty response from LLM');
 

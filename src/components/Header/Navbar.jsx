@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import { useState, useEffect, useContext, useRef } from 'react';
-import { Link, useNavigate, useLocation } from '@/lib/navigation';
+import { useState, useEffect, useContext } from 'react';
+import { Link, useLocation } from '@/lib/navigation';
 import {
   BanknotesIcon,
   Bars3Icon,
@@ -11,15 +10,11 @@ import {
   UsersIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import { FcLike, FcDislike, FcSettings, FcSupport } from 'react-icons/fc';
-import { Navbar, Typography, Button } from '@material-tailwind/react';
+import { Navbar, Typography } from '@material-tailwind/react';
 import { navData } from './navigation_data';
 import SubLinks from './Sublinks.jsx';
 import UserContext from '../../contexts/UserContext';
-import { FaUserLarge } from 'react-icons/fa6';
-import { MdExitToApp } from 'react-icons/md';
-import { FaEdit } from 'react-icons/fa';
-import { BiSolidDashboard } from 'react-icons/bi';
+
 const navLogo = '/assets/logo/biye-logo.svg';
 import { getToken, removeToken } from '../../utils/cookies';
 import {
@@ -32,7 +27,7 @@ import female from '../../assets/icons/female.svg';
 import male from '../../assets/icons/male.svg';
 import { useQuery } from '@tanstack/react-query';
 import { userServices } from '../../services/user';
-import classNames from 'classnames';
+
 import { UserInfoServices } from '../../services/userInfo';
 import { Toast } from '../../utils/toast';
 import { useBio } from '../../contexts/useBio.jsx';
@@ -42,13 +37,11 @@ import { GeneralInfoServices } from '../../services/generalInfo';
 export default function NavBar() {
   const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
   const filteredNavData = navData;
-  const [isHovered, setIsHovered] = useState(false);
   const [openNav, setOpenNav] = useState(false);
   const { query } = useBio();
-  const profileCardRef = useRef(null);
   const gender = getGender();
   const profilePhoto = getProfilePhoto();
-  const navigate = useNavigate();
+
   const [selectedReligion, setSelectedReligion] = useState(
     getReligionInfo()?.religion || ''
   );
@@ -97,7 +90,6 @@ export default function NavBar() {
 
   const logoutHandler = async () => {
     await logOut();
-    setIsHovered(false);
     removeToken();
     // Clear religion from localStorage on logout
     setReligionToLocal(null, null);
@@ -150,19 +142,6 @@ export default function NavBar() {
     document.addEventListener('keydown', preventCopy);
     return () => document.removeEventListener('keydown', preventCopy);
   }, []);
-
-  const handleIconHover = () => {
-    setIsHovered(true);
-  };
-
-  const handleIconLeave = () => {
-    setIsHovered(false);
-  };
-
-  const myBioDataHandler = () => {
-    setIsHovered(false);
-    navigate(`/user/account/preview-biodata/${userInfo?.data?.user_id}`);
-  };
 
   const NavList = () => (
     <div className="mx-auto flex max-h-[calc(100dvh-132px-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[1440px] flex-col items-center gap-0.5 overflow-y-auto bg-white px-3 pb-4 pt-3 lg:h-[68px] lg:max-h-none lg:flex-row lg:justify-between lg:gap-2 lg:overflow-visible lg:bg-transparent lg:px-3.5 lg:py-0 xl:gap-[18px] xl:px-[clamp(18px,3vw,42px)]">
@@ -256,143 +235,31 @@ export default function NavBar() {
             </Link>
           </Typography>
         ) : (
-          <Typography
-            as="div"
-            variant="small"
-            color="white"
-            className="relative mx-0.5 cursor-pointer text-base font-semibold"
-            onMouseEnter={handleIconHover}
-            onMouseLeave={handleIconLeave}
-          >
-            <div className="flex flex-row-reverse items-center">
-              <div className="relative flex h-[42px] w-[42px] items-center justify-center">
-                <FaUserLarge className="w-4 h-4 z-10" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="h-full w-full rounded-full border-[3px] border-[#F09DAD]">
-                    <div className="absolute inset-0 rounded-full border border-white/60"></div>
-                  </div>
-                </div>
-              </div>
-
-              {userInfo?.data.points > 0 && (
-                <div
-                  title={`${userInfo?.data.points.toFixed(2)} points`}
-                  className="mr-2 flex min-h-[30px] items-center rounded-lg bg-[#E85D75] px-2 py-1 text-[13px] text-white"
+          <Typography as="div" variant="small" color="white">
+            <Link
+              to="/user/account/dashboard"
+              className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-2 py-1.5 text-white transition-colors duration-200 hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              aria-label="আমার অ্যাকাউন্টে যান"
+            >
+              <img
+                className="h-8 w-8 rounded-lg border border-white/50 bg-white/10 object-cover"
+                src={gender === 'মহিলা' ? female : profilePhoto || male}
+                alt="ব্যবহারকারীর প্রোফাইল"
+                width="32"
+                height="32"
+              />
+              <span className="hidden text-sm font-bold xl:inline">
+                অ্যাকাউন্ট
+              </span>
+              {userInfo?.data?.points > 0 && (
+                <span
+                  title={`${userInfo.data.points.toFixed(2)} points`}
+                  className="rounded-md bg-[#E85D75] px-1.5 py-1 text-[11px] font-bold leading-none text-white"
                 >
-                  {userInfo?.data.points.toFixed(2)} P
-                </div>
+                  {userInfo.data.points.toFixed(0)} P
+                </span>
               )}
-            </div>
-
-            {isHovered && (
-              <div
-                ref={profileCardRef}
-                className="absolute right-0 top-[calc(100%+8px)] z-[2000000] h-[450px] w-[250px] overflow-y-auto overflow-x-hidden rounded-xl bg-brand-900 p-4 shadow-2xl transition-all duration-300 ease-in"
-              >
-                <div className="py-5 text-center">
-                  <div className="">
-                    <img
-                      className="w-24 h-24 py-2 mx-auto rounded-full object-cover"
-                      src={gender === 'মহিলা' ? female : profilePhoto || male}
-                      alt="ব্যবহারকারীর প্রোফাইল"
-                      width="96"
-                      height="96"
-                    />
-                  </div>
-
-                  {process.env.NODE_ENV === 'development' && (
-                    <h5>ID: {userInfo?.data?.user_id}</h5>
-                  )}
-
-                  <h4 className="pt-2 font-bold text-gray-500">
-                    Biodata Status
-                  </h4>
-                  <h6
-                    className={classNames('font-bold capitalize', {
-                      'text-green-600':
-                        userInfo?.data?.user_status === 'active',
-                      'text-orange-600':
-                        userInfo?.data?.user_status === 'in review',
-                      'text-purple-600':
-                        userInfo?.data?.user_status === 'pending',
-                      'text-red-600': userInfo?.data?.user_status === 'banned',
-                    })}
-                  >
-                    {userInfo?.data?.user_status}
-                  </h6>
-                  <Button
-                    onClick={myBioDataHandler}
-                    className="mt-2 rounded-3xl bg-white text-brand-900 hover:bg-white/90"
-                  >
-                    My Biodata
-                  </Button>
-                </div>
-
-                {/* Link items */}
-                <Link
-                  onClick={handleIconLeave}
-                  className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
-                  to={`/user/account/edit-biodata`}
-                >
-                  <FaEdit className="mr-2" />
-                  <span>বায়োডাটা এডিট করুন</span>
-                </Link>
-
-                <Link
-                  onClick={handleIconLeave}
-                  className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
-                  to={`/user/account/dashboard`}
-                >
-                  <BiSolidDashboard className="mr-2" />
-                  <span>ড্যাসবোর্ড</span>
-                </Link>
-
-                <Link
-                  onClick={handleIconLeave}
-                  className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
-                  to={`/user/account/likes`}
-                >
-                  <FcLike className="mr-2" />
-                  <span>পছন্দের তালিকা </span>
-                </Link>
-
-                <Link
-                  onClick={handleIconLeave}
-                  className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
-                  to={`/user/account/dislikes`}
-                >
-                  <FcDislike className="mr-2" />
-                  <span>অপছন্দের তালিকা </span>
-                </Link>
-
-                <Link
-                  onClick={handleIconLeave}
-                  className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
-                  to={`/user/account/settings`}
-                >
-                  <FcSettings className="mr-2" />
-                  <span>সেটিংস </span>
-                </Link>
-
-                <Link
-                  onClick={handleIconLeave}
-                  className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
-                  to={`/user/account/reports`}
-                >
-                  <FcSupport className="mr-2" />
-                  <span>সাপোর্ট এবং রিপোর্ট </span>
-                </Link>
-
-                <Link
-                  className="flex items-center w-full transition-all duration-300 ease-in-out rounded-md "
-                  to="#!"
-                  onClick={logoutHandler}
-                >
-                  <MdExitToApp className="mr-2" />
-                  <span>লগ আউট</span>
-                </Link>
-              </div>
-            )}
+            </Link>
           </Typography>
         )}
       </div>

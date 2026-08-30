@@ -1,26 +1,20 @@
-import axios from 'axios';
 import axiosInstance from '../utils/axios';
 import { convertToQuery } from '../utils/query';
 
-const baseUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000/api/v1'
-    : 'https://biye-backend.vercel.app/api/v1';
-
 const getAll = async (query = {}) => {
   const queryString = convertToQuery(query);
-  const res = await axios.get(`${baseUrl}/unverified-biodatas?${queryString}`);
+  const res = await axiosInstance.get(`/unverified-biodatas?${queryString}`);
   return res.data;
 };
 
 const getById = async (id) => {
-  const res = await axios.get(`${baseUrl}/unverified-biodatas/${id}`);
+  const res = await axiosInstance.get(`/unverified-biodatas/${id}`);
   return res.data;
 };
 
 const purchaseContact = async (unverified_bio, token) => {
-  const res = await axios.post(
-    `${baseUrl}/unverified-contact-purchase`,
+  const res = await axiosInstance.post(
+    '/unverified-contact-purchase',
     { unverified_bio },
     { headers: { Authorization: `Bearer ${token}` } }
   );
@@ -28,8 +22,8 @@ const purchaseContact = async (unverified_bio, token) => {
 };
 
 const checkPurchase = async (bioId, token) => {
-  const res = await axios.get(
-    `${baseUrl}/unverified-contact-purchase/check/${bioId}`,
+  const res = await axiosInstance.get(
+    `/unverified-contact-purchase/check/${bioId}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return res.data;

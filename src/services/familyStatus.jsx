@@ -1,11 +1,10 @@
-import axios from "axios";
-import { baseUrl } from "../utils/url";
+import axios from '../utils/axios';
 
 const getFamilyStatusInfoByUser = async (token) => {
   if (!token) {
     return null;
   }
-  const { data } = await axios.get(baseUrl + `/family-status/token`, {
+  const { data } = await axios.get(`/family-status/token`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -17,10 +16,10 @@ const updateFamilyStatusInfo = async (updatedData, token) => {
   if (!token) {
     return null;
   }
-  const { data } = await axios.put(baseUrl + `/family-status`, updatedData, {
+  const { data } = await axios.put(`/family-status`, updatedData, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
   return data;
@@ -30,10 +29,10 @@ const createFamilyStatusInfo = async (data, token) => {
   if (!token) {
     return null;
   }
-  const generalInfo = await axios.post(baseUrl + "/family-status", data, {
+  const generalInfo = await axios.post('/family-status', data, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
   return generalInfo.data;

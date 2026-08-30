@@ -1,22 +1,14 @@
-import axios from 'axios';
-import { baseUrl } from '../utils/url';
+import axios from '../utils/axios';
 
 const toggleShortlist = async (data, token) => {
-  const response = await axios.post(baseUrl + '/shortlist', data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  void token;
+  const response = await axios.post('/shortlist', data);
   return response.data;
 };
 
 const checkShortlist = async (id, token) => {
-  const response = await axios.get(baseUrl + `/shortlist/check/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  void token;
+  const response = await axios.get(`/shortlist/check/${id}`);
   return response.data;
 };
 
@@ -24,11 +16,7 @@ const getMyShortlist = async (token) => {
   if (!token) {
     return null;
   }
-  const response = await axios.get(`${baseUrl}/shortlist`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await axios.get('/shortlist');
   return response.data;
 };
 
@@ -36,35 +24,21 @@ const getWhoShortlistedMe = async (token) => {
   if (!token) {
     return null;
   }
-  const response = await axios.get(`${baseUrl}/shortlist/who-shortlisted-me`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await axios.get('/shortlist/who-shortlisted-me');
   return response.data;
 };
 
 const toggleUnverifiedShortlist = async (unverified_bio, token) => {
-  const response = await axios.post(
-    baseUrl + '/unverified-shortlist',
-    { unverified_bio },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    }
-  );
+  void token;
+  const response = await axios.post('/unverified-shortlist', {
+    unverified_bio,
+  });
   return response.data;
 };
 
 const checkUnverifiedShortlist = async (id, token) => {
-  const response = await axios.get(
-    baseUrl + `/unverified-shortlist/check/${id}`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
+  void token;
+  const response = await axios.get(`/unverified-shortlist/check/${id}`);
   return response.data;
 };
 

@@ -1,74 +1,34 @@
-import { useState } from "react";
-import { Colors } from "../../../constants/colors";
-import { sendPasswordResetEmail } from "firebase/auth";
-import toast from "react-hot-toast";
-import { auth } from "../../../firebase/app";
+import { Link } from '@/lib/navigation';
 
 function ForgotPasswordForm() {
-	const [email, setEmail] = useState("");
-
-	const handleEmailChange = (e) => {
-		setEmail(e.target.value);
-	};
-
-	const handleResetPassword = () => {
-		//! Implement the logic to send a password reset email using the 'email' state.
-
-		if (!email) {
-			toast.success("Enter your email", {
-				duration: 5000,
-				position: "bottom-right",
-				style: { backgroundColor: "red", color: "#fff" },
-			});
-			return;
-		}
-
-		sendPasswordResetEmail(auth, email)
-			.then(() => {
-				// Password reset email sent!
-				toast.success("Password reset email sent!", {
-					duration: 5000,
-					position: "bottom-right",
-					style: { backgroundColor: "green", color: "#fff" },
-				});
-				setEmail("");
-				// ..
-			})
-			.catch((error) => {
-				const errorCode = error.code;
-				console.log("🚀 ~ file: Login.jsx:131 ~ Login ~ errorCode:", errorCode);
-				const errorMessage = error.message;
-				toast.error(errorMessage, {
-					duration: 5000,
-					position: "bottom-right",
-					style: { backgroundColor: "red", color: "#fff" },
-				});
-			});
-	};
-
-	return (
-		<div className="bg-white w-[400px] mx-auto my-10 p-6 rounded-lg shadow-md">
-			<p className="text-gray-900 mb-4">
-				Enter your email address to reset your password:
-			</p>
-			<input
-				type="email"
-				placeholder="Email"
-				value={email}
-				onChange={handleEmailChange}
-				className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-400"
-			/>
-			<button
-				style={{
-					background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
-				}}
-				onClick={handleResetPassword}
-				className="w-full mt-4 px-4 py-2  text-white rounded-md  focus:outline-none focus:ring focus:ring-blue-400"
-			>
-				Reset Password
-			</button>
-		</div>
-	);
+  return (
+    <main className="bg-gray-50 px-4 py-16 sm:px-6">
+      <section className="mx-auto max-w-lg rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm sm:p-8">
+        <h1 className="text-2xl font-bold text-gray-900">
+          অ্যাকাউন্ট পুনরুদ্ধার
+        </h1>
+        <p className="mt-4 text-sm leading-7 text-gray-600">
+          Google দিয়ে নিবন্ধন করে থাকলে একই Google অ্যাকাউন্ট ব্যবহার করে লগইন
+          করুন। ইমেইল ও পাসওয়ার্ডের অ্যাকাউন্ট পুনরুদ্ধারের জন্য সহায়তা টিমের
+          সঙ্গে যোগাযোগ করুন।
+        </p>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <Link
+            to="/login"
+            className="rounded-lg bg-brand-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2"
+          >
+            লগইন পেজে ফিরুন
+          </Link>
+          <Link
+            to="/contact-us"
+            className="rounded-lg border border-brand-900 px-5 py-3 text-sm font-semibold text-brand-900 transition-colors hover:bg-brand-900/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2"
+          >
+            সহায়তা নিন
+          </Link>
+        </div>
+      </section>
+    </main>
+  );
 }
 
 export default ForgotPasswordForm;

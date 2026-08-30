@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { SparklesIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { parseBiodataQuery } from '../../services/llmFilter';

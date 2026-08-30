@@ -1,11 +1,10 @@
-import axios from "axios";
-import { baseUrl } from "../utils/url";
+import axios from '../utils/axios';
 
 const getOngikarNamaByUser = async (token) => {
   if (!token) {
     return null;
   }
-  const { data } = await axios.get(baseUrl + `/ongikar-nama/token`, {
+  const { data } = await axios.get(`/ongikar-nama/token`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -17,10 +16,10 @@ const updateOngikarNama = async (updatedData, token) => {
   if (!token) {
     return null;
   }
-  const { data } = await axios.put(baseUrl + `/ongikar-nama`, updatedData, {
+  const { data } = await axios.put(`/ongikar-nama`, updatedData, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
   return data;
@@ -30,10 +29,10 @@ const createOngikarNama = async (data, token) => {
   if (!token) {
     return null;
   }
-  const generalInfo = await axios.post(baseUrl + "/ongikar-nama", data, {
+  const generalInfo = await axios.post('/ongikar-nama', data, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
   return generalInfo.data;

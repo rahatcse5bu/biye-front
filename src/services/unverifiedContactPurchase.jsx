@@ -1,14 +1,8 @@
-import axios from 'axios';
 import axiosInstance from '../utils/axios';
 
-const baseUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000/api/v1'
-    : 'https://biye-backend.vercel.app/api/v1';
-
 const purchaseContact = async (biodataId, token) => {
-  const response = await axios.post(
-    baseUrl + `/unverified-biodatas/${biodataId}/purchase-contact`,
+  const response = await axiosInstance.post(
+    `/unverified-biodatas/${biodataId}/purchase-contact`,
     {},
     {
       headers: {
@@ -21,14 +15,11 @@ const purchaseContact = async (biodataId, token) => {
 };
 
 const getUnverifiedContactPurchases = async (token) => {
-  const response = await axiosInstance.get(
-    `/unverified-contact-purchases`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await axiosInstance.get(`/unverified-contact-purchases`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };
 

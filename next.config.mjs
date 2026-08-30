@@ -63,6 +63,18 @@ const nextConfig = {
         destination: 'https://www.biye.info/:path*',
         permanent: true,
       },
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'pncnikah.com' }],
+        destination: 'https://www.biye.info/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.pncnikah.com' }],
+        destination: 'https://www.biye.info/:path*',
+        permanent: true,
+      },
     ];
   },
   async headers() {

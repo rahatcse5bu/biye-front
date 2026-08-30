@@ -1,11 +1,6 @@
-// useChangePassword.js
 import { useState } from 'react';
-import {
-  updatePassword,
-  EmailAuthProvider,
-  reauthenticateWithCredential,
-} from 'firebase/auth';
-import { auth } from '../firebase/app';
+import { userServices } from '../services/user';
+import { getToken } from '../utils/cookies';
 
 const useChangePassword = () => {
   const [loading, setLoading] = useState(false);
@@ -17,25 +12,23 @@ const useChangePassword = () => {
     setError(null);
     setSuccess(false);
 
-    const user = auth.currentUser;
-
-    if (!user) {
-      setError('User not authenticated.');
-      setLoading(false);
-      return;
-    }
-
-    const credential = EmailAuthProvider.credential(
-      user.email,
-      currentPassword
-    );
-
     try {
-      await reauthenticateWithCredential(user, credential);
-      await updatePassword(user, newPassword);
+      const token = getToken()?.token;
+      if (!token) {
+        throw new Error('User not authenticated.');
+      }
+
+      await userServices.changePassword(
+        { currentPassword, newPassword },
+        token
+      );
       setSuccess(true);
     } catch (err) {
-      setError(err.message);
+      setError(
+        err?.response?.data?.message ||
+          err?.message ||
+          'Password could not be changed.'
+      );
     } finally {
       setLoading(false);
     }

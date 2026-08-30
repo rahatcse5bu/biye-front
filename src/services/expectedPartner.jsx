@@ -1,11 +1,10 @@
-import axios from "axios";
-import { baseUrl } from "../utils/url";
+import axios from '../utils/axios';
 
 const getExpectedPartnerByUser = async (token) => {
   if (!token) {
     return null;
   }
-  const { data } = await axios.get(baseUrl + `/expected-life-partner/token`, {
+  const { data } = await axios.get(`/expected-life-partner/token`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -17,16 +16,12 @@ const updateExpectedPartner = async (updatedData, token) => {
   if (!token) {
     return null;
   }
-  const { data } = await axios.put(
-    baseUrl + `/expected-life-partner`,
-    updatedData,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const { data } = await axios.put(`/expected-life-partner`, updatedData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
   return data;
 };
 
@@ -34,16 +29,12 @@ const createExpectedPartner = async (data, token) => {
   if (!token) {
     return null;
   }
-  const generalInfo = await axios.post(
-    baseUrl + "/expected-life-partner",
-    data,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const generalInfo = await axios.post('/expected-life-partner', data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
   return generalInfo.data;
 };
 

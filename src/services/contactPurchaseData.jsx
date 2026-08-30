@@ -1,19 +1,9 @@
-import axios from 'axios';
-
-const baseUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000/api/v1'
-    : 'https://biye-backend.vercel.app/api/v1';
+import axios from '../utils/axios';
 
 const createContactPurchaseData = async (data, token) => {
   if (!token) return;
 
-  const response = await axios.post(baseUrl + '/contact-purchase-data', data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  const response = await axios.post('/contact-purchase-data', data);
   return response.data;
 };
 

@@ -4,6 +4,8 @@ export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL?.trim() || DEFAULT_SITE_URL
 ).replace(/\/+$/, '');
 
+export const SITE_HOST = new URL(SITE_URL).host;
+
 export const createPageMetadata = ({ title, description, path }) => {
   const normalizedPath = path === '/' ? '' : path;
   const url = `${SITE_URL}${normalizedPath}`;

@@ -7,59 +7,10 @@ import { RouterProvider, useLocation } from '@/lib/navigation';
 import router from './routes/Routes';
 import toast, { Toaster } from 'react-hot-toast';
 import { Toast } from './utils/toast';
-import { logEvent } from 'firebase/analytics';
-import { analytics, onMessageListener, requestForToken } from './firebase/app';
-import AnalyticsService from './firebase/analyticsService';
 
 function App() {
   const [count, setCount] = useState(0);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-
-  // useEffect(() => {
-  //   // Check if Notification API is supported
-  //   if ('Notification' in window) {
-  //     // Check current permission
-  //     if (Notification.permission === 'default') {
-  //       // Request permission if not granted or denied yet
-  //       Notification.requestPermission()
-  //         .then((permission) => {
-  //           if (permission === 'granted') {
-  //             console.log('Notification permission granted.');
-  //             requestForToken().then((token) => {
-  //               console.log('toke', token);
-  //             });
-  //           } else if (permission === 'denied') {
-  //             console.log('Notification permission denied.');
-  //           }
-  //         })
-  //         .catch((error) => {
-  //           console.error('Error requesting notification permission:', error);
-  //         });
-  //     } else {
-  //       console.log('Notification permission:', Notification.permission);
-  //     }
-  //   } else {
-  //     console.log('This browser does not support notifications.');
-  //   }
-  //   // Handle incoming messages
-  //   onMessageListener()
-  //     .then((payload) => {
-  //       console.log('Message received. ', payload);
-  //       // Show notification in your React app
-  //     })
-  //     .catch((err) => console.log('failed: ', err));
-  // }, []);
-
-  // window.addEventListener('load', () => {
-  //   if ('serviceWorker' in navigator) {
-  //     navigator.serviceWorker
-  //       .register('/service-worker.js')
-  //       .then((reg) => console.log('Service Worker registered:', reg))
-  //       .catch((err) =>
-  //         console.log('Service Worker registration failed:', err)
-  //       );
-  //   }
-  // });
 
   useEffect(() => {
     const handleOnline = () => {

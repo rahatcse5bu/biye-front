@@ -1,22 +1,17 @@
-import axios from 'axios';
-
-const baseUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000/api/v1'
-    : 'https://biye-backend.vercel.app/api/v1';
+import axios from '../utils/axios';
 
 const getUserInfoStatus = async (bioId) => {
   if (!bioId) {
     return null;
   }
-  const response = await axios.get(baseUrl + `/user-info/status/${bioId}`);
+  const response = await axios.get(`/user-info/status/${bioId}`);
   return response.data;
 };
 const getAllUsersInfoId = async (token) => {
   if (!token) {
     return null;
   }
-  const response = await axios.get(baseUrl + `/user-info/all-users-id`, {
+  const response = await axios.get(`/user-info/all-users-id`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -27,7 +22,7 @@ const verifyTokenByUser = async (token) => {
   if (!token) {
     return null;
   }
-  const response = await axios.get(baseUrl + `/user-info/verify-token`, {
+  const response = await axios.get(`/user-info/verify-token`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -38,7 +33,7 @@ const updateUserInfo = async (data, token) => {
   if (!token) {
     return null;
   }
-  const response = await axios.put(baseUrl + `/user-info`, data, {
+  const response = await axios.put(`/user-info`, data, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -50,7 +45,7 @@ const updateUserStatusByUser = async (data, token) => {
   if (!token) {
     return null;
   }
-  const response = await axios.put(baseUrl + `/user-info/update-status`, data, {
+  const response = await axios.put(`/user-info/update-status`, data, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,

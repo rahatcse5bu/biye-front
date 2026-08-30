@@ -1,13 +1,6 @@
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 
 const MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
-
-const API_BASE =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000/api/v1'
-    : 'https://biye-backend.vercel.app/api/v1';
-
-const LLM_PROXY = `${API_BASE}/llm/chat`;
 
 const USER_STATUS =
   process.env.NODE_ENV === 'development' ? 'in review' : 'active';
@@ -145,14 +138,14 @@ Keep responses brief and conversational.`;
 // division is still Bengali; NFC-normalize it against the canonical list.
 
 const DIVISION_NORM = {
-  'ঢাকা': 'ঢাকা',
-  'চট্টগ্রাম': 'চট্টগ্রাম',
-  'খুলনা': 'খুলনা',
-  'রাজশাহী': 'রাজশাহী',
-  'বরিশাল': 'বরিশাল',
-  'সিলেট': 'সিলেট',
-  'রংপুর': 'রংপুর',
-  'ময়মনসিংহ': 'ময়মনসিংহ',
+  ঢাকা: 'ঢাকা',
+  চট্টগ্রাম: 'চট্টগ্রাম',
+  খুলনা: 'খুলনা',
+  রাজশাহী: 'রাজশাহী',
+  বরিশাল: 'বরিশাল',
+  সিলেট: 'সিলেট',
+  রংপুর: 'রংপুর',
+  ময়মনসিংহ: 'ময়মনসিংহ',
 };
 
 const normaliseFilters = (filters) => {
@@ -177,16 +170,18 @@ const searchBiodatas = async (rawFilters) => {
     const params = { ...filters, limit: 1, page: 1, user_status: USER_STATUS };
     // Remove null/undefined/empty so axios doesn't serialize them
     Object.keys(params).forEach((k) => {
-      if (params[k] === null || params[k] === undefined || params[k] === '') delete params[k];
+      if (params[k] === null || params[k] === undefined || params[k] === '')
+        delete params[k];
     });
     console.log('[Agent] search params:', params);
-    const response = await axios.get(`${API_BASE}/general-info`, { params });
+    const response = await axiosInstance.get('/general-info', { params });
     console.log('[Agent] response data:', response.data);
     const count = response.data?.size ?? response.data?.total ?? 0;
     return { count };
   } catch (err) {
     const status = err?.response?.status;
-    const detail = err?.response?.data?.message || err?.message || 'unknown error';
+    const detail =
+      err?.response?.data?.message || err?.message || 'unknown error';
     console.error('[Agent] search error:', err?.response?.data || err?.message);
     return {
       error: `Search failed (HTTP ${status ?? '?'}): ${detail}. Tell the user the search is temporarily unavailable.`,
@@ -197,7 +192,7 @@ const searchBiodatas = async (rawFilters) => {
 // ── LLM call via backend proxy (API key never leaves the server) ──────────────
 
 const callLLM = async (messages) => {
-  const res = await axios.post(LLM_PROXY, {
+  const res = await axiosInstance.post('/llm/chat', {
     model: MODEL,
     messages,
     tools: TOOLS,
@@ -247,11 +242,15 @@ export class BiodataAgent {
       }
       this.history.push(assistantMsg);
 
-      const hasCalls = assistantMsg.tool_calls && assistantMsg.tool_calls.length > 0;
+      const hasCalls =
+        assistantMsg.tool_calls && assistantMsg.tool_calls.length > 0;
 
       // No tool calls → final text response
       if (!hasCalls) {
-        return { text: cleanContent(assistantMsg.content || ''), appliedFilters };
+        return {
+          text: cleanContent(assistantMsg.content || ''),
+          appliedFilters,
+        };
       }
 
       // If the message also has content alongside tool_calls, ignore it —

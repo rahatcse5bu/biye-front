@@ -13,6 +13,7 @@ import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import { OngikarNamaServices } from '../../services/ongikarNama';
 import { getErrorMessage } from '../../utils/error';
 import { Toast } from '../../utils/toast';
+import { SITE_HOST } from '@/lib/seo';
 
 const OngikarNamaForm = ({ userForm, setUserForm, religion = 'islam' }) => {
   const [isAgree, setIsAgree] = useState('');
@@ -22,8 +23,7 @@ const OngikarNamaForm = ({ userForm, setUserForm, religion = 'islam' }) => {
   const { userInfo } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
 
-
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_HOST || 'pncnikah.com';
+  const siteUrl = SITE_HOST;
 
   const { data: ongikarNamaInfo = null, isLoading } = useQuery({
     queryKey: ['ongikar-nama', userInfo?.data?._id, getToken()?.token],

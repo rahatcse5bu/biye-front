@@ -1,16 +1,8 @@
-import axios from 'axios';
-const baseUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000/api/v1'
-    : 'https://biye-backend.vercel.app/api/v1';
+import axios from '../utils/axios';
 
 const createPayments = async (data, token) => {
-  const response = await axios.post(baseUrl + '/payments', data, {
-    headers: {
-      Authorization: token,
-      'Content-Type': 'application/json',
-    },
-  });
+  void token;
+  const response = await axios.post('/payments', data);
   return response.data;
 };
 
@@ -18,23 +10,14 @@ const getPaymentsByUser = async (token) => {
   if (!token) {
     return;
   }
-  const response = await axios.get(baseUrl + '/payments/token', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await axios.get('/payments/token');
   return response.data;
 };
 const updatePaymentInfo = async (updatedData, token) => {
   if (!updatedData || !token) {
     return null;
   }
-  const { data } = await axios.put(baseUrl + `/payments`, updatedData, {
-    headers: {
-      Authorization: token,
-      'Content-Type': 'application/json',
-    },
-  });
+  const { data } = await axios.put('/payments', updatedData);
   return data;
 };
 export const paymentServices = {

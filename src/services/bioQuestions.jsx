@@ -1,14 +1,7 @@
-import axios from 'axios';
-
-const baseUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000/api/v1'
-    : 'https://biye-backend.vercel.app/api/v1';
+import axios from '../utils/axios';
 
 const getQuestionsByUser = async (userId) => {
-  const response = await axios.get(
-    `${baseUrl}/bio-questions/user/${userId}`
-  );
+  const response = await axios.get(`/bio-questions/user/${userId}`);
   return response.data;
 };
 
@@ -16,11 +9,7 @@ const getMyQuestions = async (token) => {
   if (!token) {
     return null;
   }
-  const response = await axios.get(`${baseUrl}/bio-questions/my-questions`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await axios.get('/bio-questions/my-questions');
   return response.data;
 };
 
@@ -28,16 +17,7 @@ const upsertQuestions = async (questions, token) => {
   if (!token) {
     return null;
   }
-  const response = await axios.post(
-    `${baseUrl}/bio-questions`,
-    { questions },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    }
-  );
+  const response = await axios.post('/bio-questions', { questions });
   return response.data;
 };
 
@@ -45,11 +25,7 @@ const deleteQuestions = async (token) => {
   if (!token) {
     return null;
   }
-  const response = await axios.delete(`${baseUrl}/bio-questions`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await axios.delete('/bio-questions');
   return response.data;
 };
 

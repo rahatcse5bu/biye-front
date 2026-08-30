@@ -1,8 +1,5 @@
-import axios from 'axios';
-const baseUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000/api/v1'
-    : 'https://biye-backend.vercel.app/api/v1';
+import { SITE_URL } from '@/lib/seo';
+import axiosInstance from '../utils/axios';
 
 export default function BkashCreatePaymentAPICall(
   amount,
@@ -11,14 +8,14 @@ export default function BkashCreatePaymentAPICall(
   pathname = '/'
 ) {
   console.log('Button Clicked !!');
-  let url = `https://pncnikah.com/pay${
+  let url = `${SITE_URL}/pay${
     bio_user
       ? `?bio_user=${bio_user}&purpose=${purpose}&pathname=${pathname}`
       : `?purpose=${purpose}&pathname=${pathname}`
   }`;
   // console.log(url, bioId);
-  axios
-    .post(baseUrl + '/bkash/create', {
+  axiosInstance
+    .post('/bkash/create', {
       amount: amount,
       callbackURL: url,
     })
@@ -37,8 +34,8 @@ export default function BkashCreatePaymentAPICall(
 }
 export function BkashExecutePaymentAPICall(paymentID) {
   return new Promise((resolve, reject) => {
-    axios
-      .post(baseUrl + '/bkash/execute', {
+    axiosInstance
+      .post('/bkash/execute', {
         paymentID: paymentID,
       })
       .then((response) => {
@@ -53,7 +50,7 @@ export function BkashExecutePaymentAPICall(paymentID) {
 }
 
 export const BkashCallAfterPay = async (data) => {
-  const response = await axios.post(baseUrl + '/bkash/after-pay', data, {
+  const response = await axiosInstance.post('/bkash/after-pay', data, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -63,8 +60,8 @@ export const BkashCallAfterPay = async (data) => {
 
 export function BkashQueryPaymentAPICall(paymentID) {
   return new Promise((resolve, reject) => {
-    axios
-      .post(baseUrl + '/bkash/query', {
+    axiosInstance
+      .post('/bkash/query', {
         paymentID: paymentID,
       })
       .then((response) => {
@@ -80,8 +77,8 @@ export function BkashQueryPaymentAPICall(paymentID) {
 
 export function BkashRefundPaymentAPICall(paymentID, trxID, amount) {
   return new Promise((resolve, reject) => {
-    axios
-      .post(baseUrl + '/bkash/refund', {
+    axiosInstance
+      .post('/bkash/refund', {
         paymentID: paymentID,
         trxID: trxID,
         amount: amount,

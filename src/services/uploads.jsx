@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { baseUrl } from '../utils/url';
+import axios from '../utils/axios';
 
 const MAX_FILE_SIZE = 1024 * 1024;
 const MAX_PHOTOS = 5;
@@ -31,11 +30,7 @@ const uploadMultipleImages = async (files, existingPhotos = [], token) => {
   const formData = new FormData();
   files.forEach((file) => formData.append('images', file));
 
-  const { data } = await axios.post(baseUrl + '/uploads/images', formData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const { data } = await axios.post('/uploads/images', formData);
 
   if (!data?.success || !Array.isArray(data?.data?.urls)) {
     throw new Error('ছবি আপলোড করতে সমস্যা হয়েছে');
@@ -52,10 +47,7 @@ const deleteImage = async (url, token) => {
     throw new Error('ছবি মুছতে লগইন করুন');
   }
 
-  await axios.delete(baseUrl + '/uploads/image', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+  await axios.delete('/uploads/image', {
     data: { url },
   });
 };

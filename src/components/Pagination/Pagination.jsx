@@ -1,188 +1,158 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { Button, IconButton, Menu, MenuItem } from '@material-tailwind/react';
-import {
-  ArrowRightIcon,
-  ArrowLeftIcon,
-  ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon,
-  ChevronDownIcon,
-} from '@heroicons/react/24/outline';
+import { useEffect, useMemo, useState } from 'react';
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
+import { useNavigate } from '@/lib/navigation';
 import { useBio } from '../../contexts/useBio';
 import { convertToQuery } from '../../utils/query';
-import { useNavigate } from '@/lib/navigation';
+import { convertToBengaliDigits } from '../../utils/language';
+
+const PAGE_SIZES = [5, 12, 20, 30, 50];
 
 export function Pagination() {
   const { setQuery, setFilterFields, limit, size, page, query } = useBio();
-  const [active, setActive] = useState(page);
-  const [itemsPerPage, setItemsPerPage] = useState(limit);
-  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(page || 1);
+  const [itemsPerPage, setItemsPerPage] = useState(limit || 12);
   const navigate = useNavigate();
-
   const totalPage = size ? Math.ceil(size / itemsPerPage) : 0;
 
-  const handleOpen = () => setOpen(!open);
-  const handleSelect = (value) => {
-    setItemsPerPage(value);
-    setActive(1);
-    setOpen(false);
-  };
+  useEffect(() => {
+    setActive(page || 1);
+  }, [page]);
 
   useEffect(() => {
-    const updateQuery = () => {
-      setQuery((prev) => ({
-        ...prev,
-        user_status:
-          process.env.NODE_ENV === 'development'
-            ? 'in review'
-            : 'active',
-        page: active,
-        limit: itemsPerPage,
-      }));
-      setFilterFields((prev) => ({
-        ...prev,
-        user_status:
-          process.env.NODE_ENV === 'development'
-            ? 'in review'
-            : 'active',
-        page: active,
-        limit: itemsPerPage,
-      }));
-
-      const textString = convertToQuery({
-        ...query,
-        user_status:
-          process.env.NODE_ENV === 'development'
-            ? 'in review'
-            : 'active',
-        page: active,
-        limit: itemsPerPage,
-      });
-      navigate(`/biodatas?${textString}`);
-    };
-
-    const debouncedUpdateQuery = setTimeout(updateQuery, 300);
-
-    return () => clearTimeout(debouncedUpdateQuery);
-  }, [active, itemsPerPage, setQuery, setFilterFields]);
-
-  const getItemProps = (index) => ({
-    variant: active === index ? 'filled' : 'text',
-    color: 'gray',
-    onClick: () => setActive(index),
-    className: 'rounded-full',
-  });
-
-  const next = () => {
-    if (active === totalPage) return;
-    setActive(active + 1);
-  };
-
-  const prev = () => {
-    if (active === 1) return;
-    setActive(active - 1);
-  };
-
-  const goToFirst = () => {
-    setActive(1);
-  };
-
-  const goToLast = () => {
-    setActive(totalPage);
-  };
+    setItemsPerPage(limit || 12);
+  }, [limit]);
 
   const visiblePages = useMemo(() => {
     if (totalPage <= 5) {
-      return Array.from({ length: totalPage }, (_, i) => i + 1);
+      return Array.from({ length: totalPage }, (_, index) => index + 1);
     }
-
-    if (active <= 3) {
-      return [1, 2, 3, 4, '...', totalPage];
-    } else if (active >= totalPage - 2) {
-      return [1, '...', totalPage - 3, totalPage - 2, totalPage - 1, totalPage];
-    } else {
-      return [1, '...', active - 1, active, active + 1, '...', totalPage];
+    if (active <= 3) return [1, 2, 3, 4, 'end-gap', totalPage];
+    if (active >= totalPage - 2) {
+      return [
+        1,
+        'start-gap',
+        totalPage - 3,
+        totalPage - 2,
+        totalPage - 1,
+        totalPage,
+      ];
     }
+    return [
+      1,
+      'start-gap',
+      active - 1,
+      active,
+      active + 1,
+      'end-gap',
+      totalPage,
+    ];
   }, [active, totalPage]);
 
+  if (!size) return null;
+
+  const applyPagination = (nextPage, nextLimit = itemsPerPage) => {
+    const userStatus =
+      query?.user_status ||
+      (process.env.NODE_ENV === 'development' ? 'in review' : 'active');
+    const safePage = Math.min(Math.max(nextPage, 1), Math.max(totalPage, 1));
+    const nextQuery = {
+      ...query,
+      user_status: userStatus,
+      page: safePage,
+      limit: nextLimit,
+    };
+
+    setActive(safePage);
+    setItemsPerPage(nextLimit);
+    setQuery(nextQuery);
+    setFilterFields((previous) => ({
+      ...previous,
+      user_status: userStatus,
+      page: safePage,
+      limit: nextLimit,
+    }));
+    navigate(`/biodatas?${convertToQuery(nextQuery)}`, { scroll: false });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <div className="flex flex-col items-center md:gap-4 gap-1 py-5">
-      <div className="relative inline-block text-left">
-        <Button
-          variant="text"
-          className="flex items-center md:px-4 px-2 md:gap-2 gap-1"
-          onClick={handleOpen}
-        >
-          Items per page: {itemsPerPage}
-          <ChevronDownIcon strokeWidth={2} className="w-4 h-4" />
-        </Button>
-        {open && (
-          <Menu
-            className="absolute z-10 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
-            onClose={() => setOpen(false)}
+    <nav
+      className="mt-5 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm sm:p-4"
+      aria-label="বায়োডাটা পৃষ্ঠা পরিবর্তন"
+    >
+      <div className="flex items-center justify-between gap-3">
+        <label className="flex items-center gap-2 text-xs font-semibold text-gray-500 sm:text-sm">
+          প্রতি পৃষ্ঠায়
+          <select
+            value={itemsPerPage}
+            onChange={(event) => applyPagination(1, Number(event.target.value))}
+            className="min-h-11 rounded-xl border border-gray-200 bg-white px-3 py-2 font-bold text-gray-700 outline-none focus:border-brand-900 focus:ring-2 focus:ring-brand-900/10"
           >
-            {[5, 12, 20, 30, 50, 100].map((item) => (
-              <MenuItem
-                key={item}
-                className={`block px-4 py-2 text-sm cursor-pointer ${item === itemsPerPage ? 'font-bold text-blue-500' : 'text-gray-700 hover:bg-gray-100'}`}
-                onClick={() => handleSelect(item)}
-              >
-                {item}
-              </MenuItem>
+            {PAGE_SIZES.map((item) => (
+              <option key={item} value={item}>
+                {convertToBengaliDigits(item)}
+              </option>
             ))}
-          </Menu>
-        )}
+          </select>
+        </label>
+
+        <span className="text-xs font-semibold text-gray-500 sm:text-sm">
+          পৃষ্ঠা {convertToBengaliDigits(active)} /{' '}
+          {convertToBengaliDigits(totalPage)}
+        </span>
       </div>
-      <div className="flex items-center justify-center gap-1 md:gap-4 flex-wrap">
-        <Button
-          variant="text"
-          className="flex items-center md:gap-2 gap-1 md:px-4 px-2 rounded-full"
-          onClick={goToFirst}
-          disabled={active === 1}
-        >
-          <ChevronDoubleLeftIcon strokeWidth={2} className="w-4 h-4" />
-          <span className="hidden md:inline">First</span>
-        </Button>
-        <Button
-          variant="text"
-          className="flex items-center md:gap-2 md:px-4 px-2 gap-1 rounded-full"
-          onClick={prev}
-          disabled={active === 1}
-        >
-          <ArrowLeftIcon strokeWidth={2} className="w-4 h-4" />
-          <span className="hidden md:inline">Previous</span>
-        </Button>
-        <div className="flex items-center md:gap-2 gap-1 flex-wrap justify-center">
-          {visiblePages.map((item, index) =>
-            typeof item === 'string' ? (
-              <span key={index} className="px-2">
-                ...
-              </span>
-            ) : (
-              <IconButton key={index} {...getItemProps(item)}>
-                {item}
-              </IconButton>
-            )
-          )}
+
+      {totalPage > 1 && (
+        <div className="mt-3 flex items-center justify-between gap-2 border-t border-gray-100 pt-3">
+          <button
+            type="button"
+            onClick={() => applyPagination(active - 1)}
+            disabled={active === 1}
+            className="inline-flex min-h-11 items-center gap-1 rounded-xl border border-gray-200 px-3 py-2 text-sm font-bold text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <ArrowLeftIcon className="h-4 w-4" aria-hidden="true" />
+            <span className="hidden sm:inline">আগের</span>
+          </button>
+
+          <div className="flex min-w-0 items-center justify-start gap-1 overflow-x-auto px-1 sm:justify-center">
+            {visiblePages.map((item) =>
+              typeof item === 'string' ? (
+                <span
+                  key={item}
+                  className="flex h-10 min-w-6 items-center justify-center text-gray-400"
+                  aria-hidden="true"
+                >
+                  …
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  key={item}
+                  onClick={() => applyPagination(item)}
+                  aria-current={active === item ? 'page' : undefined}
+                  className={`h-10 min-w-10 rounded-xl px-2 text-sm font-bold transition-colors ${
+                    active === item
+                      ? 'bg-brand-900 text-white'
+                      : 'text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  {convertToBengaliDigits(item)}
+                </button>
+              )
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => applyPagination(active + 1)}
+            disabled={active === totalPage}
+            className="inline-flex min-h-11 items-center gap-1 rounded-xl border border-gray-200 px-3 py-2 text-sm font-bold text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <span className="hidden sm:inline">পরের</span>
+            <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
+          </button>
         </div>
-        <Button
-          variant="text"
-          className="flex items-center md:px-4 px-2 md:gap-2 gap-1 rounded-full"
-          onClick={next}
-          disabled={active === totalPage || totalPage === 0}
-        >
-          <span className="hidden md:inline">Next</span>
-          <ArrowRightIcon strokeWidth={2} className="w-4 h-4" />
-        </Button>
-        <Button
-          variant="text"
-          className="flex items-center md:px-4 px-2 md:gap-2 gap-1 rounded-full"
-          onClick={goToLast}
-          disabled={active === totalPage || totalPage === 0}
-        >
-          <span className="hidden md:inline">Last</span>
-          <ChevronDoubleRightIcon strokeWidth={2} className="w-4 h-4" />
-        </Button>
-      </div>
-    </div>
+      )}
+    </nav>
   );
 }

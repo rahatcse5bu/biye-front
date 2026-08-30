@@ -1,11 +1,10 @@
-import axios from "axios";
-import { baseUrl } from "../utils/url";
+import axios from '../utils/axios';
 
 const getProfessionalInfoByUser = async (token) => {
   if (!token) {
     return null;
   }
-  const { data } = await axios.get(baseUrl + `/occupation/token`, {
+  const { data } = await axios.get(`/occupation/token`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -17,10 +16,10 @@ const updateProfessionalInfo = async (updatedData, token) => {
   if (!token) {
     return null;
   }
-  const { data } = await axios.put(baseUrl + `/occupation`, updatedData, {
+  const { data } = await axios.put(`/occupation`, updatedData, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
   return data;
@@ -30,10 +29,10 @@ const createProfessionalInfo = async (data, token) => {
   if (!token) {
     return null;
   }
-  const generalInfo = await axios.post(baseUrl + "/occupation", data, {
+  const generalInfo = await axios.post('/occupation', data, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
   return generalInfo.data;

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState, useEffect, useContext, useRef } from 'react';
 import { ReactionsServices } from '../../services/reactions';
 import { getToken } from '../../utils/cookies';
@@ -46,7 +45,7 @@ const ReactionButton = ({
   // Fetch user's current reaction
   useEffect(() => {
     const fetchUserReaction = async () => {
-      if (userInfo?.data?._id && getToken()?.token) {
+      if (bioUserId && userInfo?.data?._id && getToken()?.token) {
         try {
           const response = await ReactionsServices.getUserReaction(
             getToken().token,
@@ -67,6 +66,8 @@ const ReactionButton = ({
   // Fetch reaction counts
   useEffect(() => {
     const fetchReactionCounts = async () => {
+      if (!bioUserId) return;
+
       try {
         const response = await ReactionsServices.getReactionCounts(bioUserId);
         if (response?.data) {
@@ -80,6 +81,8 @@ const ReactionButton = ({
   }, [bioUserId]);
 
   const handleReactionClick = async (reactionType) => {
+    if (!bioUserId) return;
+
     if (!userInfo?.data?._id || !getToken()?.token) {
       Toast.errorToast('Please, Login First');
       return;

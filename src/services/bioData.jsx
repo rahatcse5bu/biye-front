@@ -1,22 +1,21 @@
-import axios from 'axios';
 import { convertToQuery } from '../utils/query';
 import axiosInstance from '../utils/axios';
-const baseUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000/api/v1'
-    : 'https://biye-backend.vercel.app/api/v1';
+
+const getPublicJson = async (path) => {
+  const response = await fetch(path);
+  if (!response.ok) {
+    throw new Error(`Failed to load ${path}`);
+  }
+  return response.json();
+};
 
 const getAllDivisions = async () => {
-  const response = await axios.get('/divisions.json');
-  //console.log(response);
-  return response.data;
+  return getPublicJson('/divisions.json');
 };
 
 const getAllDistricts = async (division) => {
-  const res1 = await axios.get('/divisions.json');
-  const divisions = res1?.data;
-  const resp2 = await axios.get('/districts.json');
-  const districts = resp2?.data;
+  const divisions = await getPublicJson('/divisions.json');
+  const districts = await getPublicJson('/districts.json');
   if (!division) {
     return districts;
   }
@@ -32,10 +31,8 @@ const getAllDistricts = async (division) => {
 };
 
 const getAllUpzilla = async (district) => {
-  const res1 = await axios.get('/upzila.json');
-  const upzillas = res1?.data;
-  const resp2 = await axios.get('/districts.json');
-  const districts = resp2?.data;
+  const upzillas = await getPublicJson('/upzila.json');
+  const districts = await getPublicJson('/districts.json');
   if (!district) {
     return upzillas;
   }
@@ -57,14 +54,14 @@ const getALLGeneralInfo = async (query) => {
   //   queryString
   // );
 
-  const generalInfo = await axios.get(baseUrl + `/general-info?${queryString}`);
+  const generalInfo = await axiosInstance.get(`/general-info?${queryString}`);
   return generalInfo.data;
 };
 
 const getALLUnverifiedBiodatas = async (query) => {
   const queryString = convertToQuery(query);
-  const unverifiedBiodatas = await axios.get(
-    baseUrl + `/unverified-biodatas?${queryString}`
+  const unverifiedBiodatas = await axiosInstance.get(
+    `/unverified-biodatas?${queryString}`
   );
   return unverifiedBiodatas.data;
 };
@@ -72,12 +69,16 @@ const getALLUnverifiedBiodatas = async (query) => {
 const getALLBiodatas = async (query) => {
   // Fetch verified and unverified independently so one failure doesn't block the other
   const [verifiedResult, unverifiedResult] = await Promise.allSettled([
-    axios.get(baseUrl + `/general-info?${convertToQuery(query)}`),
-    axios.get(baseUrl + `/unverified-biodatas?${convertToQuery(query)}`),
+    axiosInstance.get(`/general-info?${convertToQuery(query)}`),
+    axiosInstance.get(`/unverified-biodatas?${convertToQuery(query)}`),
   ]);
 
-  const verifiedData = verifiedResult.status === 'fulfilled' ? verifiedResult.value.data : null;
-  const unverifiedData = unverifiedResult.status === 'fulfilled' ? unverifiedResult.value.data : null;
+  const verifiedData =
+    verifiedResult.status === 'fulfilled' ? verifiedResult.value.data : null;
+  const unverifiedData =
+    unverifiedResult.status === 'fulfilled'
+      ? unverifiedResult.value.data
+      : null;
 
   // If verified completely failed, throw so the UI shows an error
   if (!verifiedData) throw verifiedResult.reason;
@@ -112,14 +113,14 @@ const getALLBiodatas = async (query) => {
 const getBioData = async (id) => {
   try {
     // Try to fetch verified biodata first (by user_id)
-    const { data } = await axios.get(baseUrl + '/bio-data/' + Number(id));
+    const { data } = await axiosInstance.get('/bio-data/' + Number(id));
     return { ...data, is_unverified: false };
   } catch (error) {
     // If not found, try to fetch as unverified biodata (by biodata _id)
     try {
-      const { data } = await axios.get(baseUrl + `/unverified-biodatas/${id}`);
+      const { data } = await axiosInstance.get(`/unverified-biodatas/${id}`);
       return { ...data, is_unverified: true };
-    } catch (unverifiedError) {
+    } catch {
       // If both fail, throw the original error
       throw error;
     }
@@ -127,7 +128,7 @@ const getBioData = async (id) => {
 };
 
 const createGeneralInfo = async (data, token) => {
-  const generalInfo = await axios.post(baseUrl + '/general-info', data, {
+  const generalInfo = await axiosInstance.post('/general-info', data, {
     headers: {
       Authorization: 'Bearer ' + token,
       'Content-Type': 'application/json',
@@ -140,9 +141,7 @@ const getBioDataStatistics = async (id) => {
   if (!id) {
     return null;
   }
-  const bioData = await axios.get(
-    baseUrl + `/bio-choice-data/statistics/${id}`
-  );
+  const bioData = await axiosInstance.get(`/bio-choice-data/statistics/${id}`);
   return bioData.data;
 };
 const getAllBioDataStats = async () => {

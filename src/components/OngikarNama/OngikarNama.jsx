@@ -1,10 +1,11 @@
 import BioContext from '../../contexts/BioContext';
 import { useContext } from 'react';
 import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswerCard';
+import { SITE_HOST } from '@/lib/seo';
 const OngikarNama = () => {
   const { bio } = useContext(BioContext);
   const ongikarNama = bio?.ongikarNama || null;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_HOST || 'pncnikah.com';
+  const siteUrl = SITE_HOST;
   return (
     <div className="single-bio-ongikar-info rounded shadow">
       <h5 className="card-title text-center text-2xl my-3">অঙ্গীকারনামা</h5>

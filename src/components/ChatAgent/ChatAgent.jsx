@@ -1,9 +1,12 @@
-/* eslint-disable react/prop-types */
 import { useState, useRef, useEffect } from 'react';
 import { BiodataAgent } from '../../services/biodataAgent';
 
 // ── Filter chip labels (reused from PromptFilter) ────────────────────────────
-const RELIGION = { islam: 'ইসলাম', hinduism: 'হিন্দু', christianity: 'খ্রিস্টান' };
+const RELIGION = {
+  islam: 'ইসলাম',
+  hinduism: 'হিন্দু',
+  christianity: 'খ্রিস্টান',
+};
 const RELIGIOUS_TYPE = {
   practicing_muslim: 'প্র্যাকটিসিং মুসলিম',
   general_muslim: 'সাধারণ মুসলিম',
@@ -13,10 +16,16 @@ const RELIGIOUS_TYPE = {
   general_christian: 'সাধারণ খ্রিস্টান',
 };
 
-const BIO_GENDER_LABEL = { male: 'পাত্রের বায়োডাটা', female: 'পাত্রীর বায়োডাটা' };
+const BIO_GENDER_LABEL = {
+  male: 'পাত্রের বায়োডাটা',
+  female: 'পাত্রীর বায়োডাটা',
+};
 const MARITAL_EN_LABEL = {
-  unmarried: 'অবিবাহিত', married: 'বিবাহিত', divorced: 'ডিভোর্সড',
-  widow: 'বিধবা', widower: 'বিপত্নীক',
+  unmarried: 'অবিবাহিত',
+  married: 'বিবাহিত',
+  divorced: 'ডিভোর্সড',
+  widow: 'বিধবা',
+  widower: 'বিপত্নীক',
 };
 
 const chipLabel = (key, value) => {
@@ -41,7 +50,9 @@ const chipLabel = (key, value) => {
 
 // ── FilterChips ───────────────────────────────────────────────────────────────
 const FilterChips = ({ filters }) => {
-  const entries = Object.entries(filters).filter(([, v]) => v !== undefined && v !== null);
+  const entries = Object.entries(filters).filter(
+    ([, v]) => v !== undefined && v !== null
+  );
   if (entries.length === 0) return null;
   return (
     <div className="mt-2 flex flex-wrap gap-1">
@@ -135,7 +146,8 @@ const ChatAgent = ({ onApply }) => {
     setLoading(true);
 
     try {
-      const { text: agentText, appliedFilters } = await agentRef.current.sendMessage(trimmed);
+      const { text: agentText, appliedFilters } =
+        await agentRef.current.sendMessage(trimmed);
 
       const agentMsg = { role: 'agent', text: agentText };
       if (appliedFilters && Object.keys(appliedFilters).length > 0) {
@@ -148,7 +160,10 @@ const ChatAgent = ({ onApply }) => {
     } catch (err) {
       setMessages((prev) => [
         ...prev,
-        { role: 'agent', text: 'দুঃখিত, একটি সমস্যা হয়েছে। আবার চেষ্টা করুন।' },
+        {
+          role: 'agent',
+          text: 'দুঃখিত, একটি সমস্যা হয়েছে। আবার চেষ্টা করুন।',
+        },
       ]);
       console.error('Agent error:', err);
     } finally {
@@ -189,15 +204,30 @@ const ChatAgent = ({ onApply }) => {
       {/* Floating button */}
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
+        className="fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom))] right-4 z-30 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-900 text-white shadow-lg transition-colors duration-200 hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2 lg:bottom-6 lg:right-6"
         title="AI বায়োডাটা সহায়তা"
       >
         {open ? (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         ) : (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -214,9 +244,7 @@ const ChatAgent = ({ onApply }) => {
 
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden"
-          style={{ height: '520px' }}
-        >
+        <div className="fixed bottom-[calc(9.5rem+env(safe-area-inset-bottom))] left-3 right-3 top-20 z-[1100] flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl sm:bottom-[calc(9.5rem+env(safe-area-inset-bottom))] sm:left-auto sm:right-4 sm:top-auto sm:h-[min(520px,calc(100dvh-11rem))] sm:w-[360px] lg:bottom-24 lg:right-6">
           {/* Header */}
           <div className="bg-indigo-600 px-4 py-3 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-2">
@@ -224,7 +252,9 @@ const ChatAgent = ({ onApply }) => {
                 AI
               </div>
               <div>
-                <p className="text-white font-semibold text-sm leading-tight">বায়োডাটা সহায়তা</p>
+                <p className="text-white font-semibold text-sm leading-tight">
+                  বায়োডাটা সহায়তা
+                </p>
                 <p className="text-indigo-200 text-xs">
                   {loading ? 'ভাবছি...' : 'অনলাইন'}
                 </p>
@@ -249,7 +279,9 @@ const ChatAgent = ({ onApply }) => {
             {/* Quick suggestions */}
             {showSuggestions && !loading && (
               <div className="mt-1 mb-2">
-                <p className="text-xs text-gray-400 mb-2 text-center">দ্রুত খুঁজুন:</p>
+                <p className="text-xs text-gray-400 mb-2 text-center">
+                  দ্রুত খুঁজুন:
+                </p>
                 <div className="flex flex-wrap gap-1.5 justify-center">
                   {suggestions.map((s) => (
                     <button
@@ -285,7 +317,11 @@ const ChatAgent = ({ onApply }) => {
               disabled={loading || !input.trim()}
               className="w-9 h-9 rounded-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white flex items-center justify-center transition-colors flex-shrink-0 self-end"
             >
-              <svg className="w-4 h-4 rotate-90" fill="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-4 h-4 rotate-90"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
               </svg>
             </button>
