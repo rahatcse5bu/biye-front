@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useContext } from 'react';
-import CustomAccordion from '../CustomAccordion/CustomAccordion';
-import { Colors } from '../../constants/colors';
-import BioContext from '../../contexts/BioContext';
+import React, { useState, useContext } from "react";
+import CustomAccordion from "../CustomAccordion/CustomAccordion";
+import { Colors } from "../../constants/colors";
+import BioContext from "../../contexts/BioContext";
 
 const CheckboxOption = ({ id, label, checked, onChange }) => (
   <div className="inline-flex items-center">
@@ -58,7 +58,7 @@ const PersonalInfoFilter = () => {
     setComplexion(updated);
     setFilterFields((prev) => ({
       ...prev,
-      complexion: updated.length > 0 ? updated.join(',') : undefined,
+      complexion: updated.length > 0 ? updated.join(",") : undefined,
     }));
   };
 
@@ -70,7 +70,7 @@ const PersonalInfoFilter = () => {
     setFiqh(updated);
     setFilterFields((prev) => ({
       ...prev,
-      fiqh: updated.length > 0 ? updated.join(',') : undefined,
+      fiqh: updated.length > 0 ? updated.join(",") : undefined,
     }));
   };
   return (
@@ -90,37 +90,35 @@ const PersonalInfoFilter = () => {
           <CheckboxOption
             id="dark"
             label="কালো"
-            checked={complexion.includes('কালো')}
-            onChange={(e) => handleComplexionChange('কালো', e.target.checked)}
+            checked={complexion.includes("কালো")}
+            onChange={(e) => handleComplexionChange("কালো", e.target.checked)}
           />
           <CheckboxOption
             id="medium"
             label="শ্যামলা"
-            checked={complexion.includes('শ্যামলা')}
-            onChange={(e) =>
-              handleComplexionChange('শ্যামলা', e.target.checked)
-            }
+            checked={complexion.includes("শ্যমলা")}
+            onChange={(e) => handleComplexionChange("শ্যমলা", e.target.checked)}
           />
           <CheckboxOption
             id="lightMedium"
             label="উজ্জ্বল শ্যামলা"
-            checked={complexion.includes('উজ্জ্বল শ্যামলা')}
+            checked={complexion.includes("উজ্জ্বল শ্যামলা")}
             onChange={(e) =>
-              handleComplexionChange('উজ্জ্বল শ্যামলা', e.target.checked)
+              handleComplexionChange("উজ্জ্বল শ্যামলা", e.target.checked)
             }
           />
           <CheckboxOption
             id="fair"
             label="ফর্সা"
-            checked={complexion.includes('ফর্সা')}
-            onChange={(e) => handleComplexionChange('ফর্সা', e.target.checked)}
+            checked={complexion.includes("ফর্সা")}
+            onChange={(e) => handleComplexionChange("ফর্সা", e.target.checked)}
           />
           <CheckboxOption
             id="veryFair"
             label="উজ্জ্বল ফর্সা"
-            checked={complexion.includes('উজ্জ্বল ফর্সা')}
+            checked={complexion.includes("উজ্জ্বল ফর্সা")}
             onChange={(e) =>
-              handleComplexionChange('উজ্জ্বল ফর্সা', e.target.checked)
+              handleComplexionChange("উজ্জ্বল ফর্সা", e.target.checked)
             }
           />
         </div>
@@ -137,26 +135,26 @@ const PersonalInfoFilter = () => {
           <CheckboxOption
             id="hanafi"
             label="হানাফি"
-            checked={fiqh.includes('হানাফি')}
-            onChange={(e) => handleFiqhChange('হানাফি', e.target.checked)}
+            checked={fiqh.includes("হানাফি")}
+            onChange={(e) => handleFiqhChange("হানাফি", e.target.checked)}
           />
           <CheckboxOption
             id="maliki"
             label="মালিকি"
-            checked={fiqh.includes('মালিকি')}
-            onChange={(e) => handleFiqhChange('মালিকি', e.target.checked)}
+            checked={fiqh.includes("মালিকি")}
+            onChange={(e) => handleFiqhChange("মালিকি", e.target.checked)}
           />
           <CheckboxOption
             id="shafi"
             label="শাফিঈ"
-            checked={fiqh.includes('শাফিঈ')}
-            onChange={(e) => handleFiqhChange('শাফিঈ', e.target.checked)}
+            checked={fiqh.includes("শাফিঈ")}
+            onChange={(e) => handleFiqhChange("শাফিঈ", e.target.checked)}
           />
           <CheckboxOption
             id="hanbali"
             label="হাম্বলি"
-            checked={fiqh.includes('হাম্বলি')}
-            onChange={(e) => handleFiqhChange('হাম্বলি', e.target.checked)}
+            checked={fiqh.includes("হাম্বলি")}
+            onChange={(e) => handleFiqhChange("হাম্বলি", e.target.checked)}
           />
         </div>
       </div>

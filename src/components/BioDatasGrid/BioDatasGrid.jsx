@@ -1,50 +1,84 @@
-import { useState } from 'react';
+import { useEffect, useState } from "react";
 import {
   AdjustmentsHorizontalIcon,
   CheckBadgeIcon,
   ClockIcon,
-} from '@heroicons/react/24/outline';
-import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from '@/lib/navigation';
-import BioData from '../BioData/BioData';
-import { Pagination } from '../Pagination/Pagination';
-import { useBio } from '../../contexts/useBio';
-import { convertToQuery } from '../../utils/query';
-import { Toast } from '../../utils/toast';
-import { convertToBengaliDigits } from '../../utils/language';
-import { BioDataServices } from '../../services/bioData';
+} from "@heroicons/react/24/outline";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "@/lib/navigation";
+import BioData from "../BioData/BioData";
+import { Pagination } from "../Pagination/Pagination";
+import { useBio } from "../../contexts/useBio";
+import { convertToQuery } from "../../utils/query";
+import { Toast } from "../../utils/toast";
+import { convertToBengaliDigits } from "../../utils/language";
+import { BioDataServices } from "../../services/bioData";
 
 const LIMIT = 12;
+const UNVERIFIED_FILTER_KEYS = new Set([
+  "bio_type",
+  "bio_gender",
+  "gender",
+  "marital_status",
+  "marital_status_en",
+  "religion",
+  "religious_type",
+  "zilla",
+  "division",
+  "upazila",
+  "minAge",
+  "maxAge",
+  "minHeight",
+  "maxHeight",
+  "complexion",
+  "sortOrder",
+]);
 
 const getBiodataKey = (biodata) =>
   biodata?._id || biodata?.user || biodata?.user_id || biodata?.bio_id;
 
 const BioDatasGrid = ({ setSideBarDisplay }) => {
-  const [sortOrder, setSortOrder] = useState('desc');
-  const [activeTab, setActiveTab] = useState('verified');
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [activeTab, setActiveTab] = useState("verified");
   const [unverifiedPage, setUnverifiedPage] = useState(1);
   const { setQuery, query, bios, size, bioError } = useBio();
   const navigate = useNavigate();
+
+  const unverifiedFilters = Object.fromEntries(
+    Object.entries(query || {}).filter(
+      ([key, value]) =>
+        UNVERIFIED_FILTER_KEYS.has(key) && value !== undefined && value !== ""
+    )
+  );
+
+  useEffect(() => {
+    setUnverifiedPage(1);
+  }, [query]);
+
+  useEffect(() => {
+    setSortOrder(query?.sortOrder === "asc" ? "asc" : "desc");
+  }, [query?.sortOrder]);
 
   const {
     data: unverifiedRes,
     isLoading: unverifiedLoading,
     isError: unverifiedError,
   } = useQuery({
-    queryKey: ['unverified-biodatas', unverifiedPage, LIMIT],
+    queryKey: ["unverified-biodatas", unverifiedPage, unverifiedFilters],
     queryFn: () =>
       BioDataServices.getALLUnverifiedBiodatas({
+        ...unverifiedFilters,
         page: unverifiedPage,
         limit: LIMIT,
       }),
-    enabled: activeTab === 'unverified',
+    enabled: activeTab === "unverified",
     retry: false,
   });
 
   const unverifiedBios = unverifiedRes?.data || [];
   const unverifiedTotal = unverifiedRes?.meta?.total || 0;
   const unverifiedTotalPages = Math.ceil(unverifiedTotal / LIMIT);
-  const visibleTotal = activeTab === 'verified' ? size || 0 : unverifiedTotal;
+  const visibleTotal = activeTab === "verified" ? size || 0 : unverifiedTotal;
 
   const handleSortChange = (event) => {
     const value = event.target.value;
@@ -54,9 +88,9 @@ const BioDatasGrid = ({ setSideBarDisplay }) => {
     setQuery(nextQuery);
     navigate(`/biodatas?${convertToQuery(nextQuery)}`);
     Toast.successToast(
-      value === 'desc'
-        ? 'নতুন বায়োডাটা আগে দেখানো হচ্ছে।'
-        : 'পুরোনো বায়োডাটা আগে দেখানো হচ্ছে।'
+      value === "desc"
+        ? "নতুন বায়োডাটা আগে দেখানো হচ্ছে।"
+        : "পুরোনো বায়োডাটা আগে দেখানো হচ্ছে।"
     );
   };
 
@@ -93,12 +127,12 @@ const BioDatasGrid = ({ setSideBarDisplay }) => {
         >
           <button
             type="button"
-            aria-pressed={activeTab === 'verified'}
-            onClick={() => setActiveTab('verified')}
+            aria-pressed={activeTab === "verified"}
+            onClick={() => setActiveTab("verified")}
             className={`inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-sm font-bold transition-colors ${
-              activeTab === 'verified'
-                ? 'bg-white text-brand-900 shadow-sm'
-                : 'text-gray-500 hover:text-gray-800'
+              activeTab === "verified"
+                ? "bg-white text-brand-900 shadow-sm"
+                : "text-gray-500 hover:text-gray-800"
             }`}
           >
             <CheckBadgeIcon className="h-4 w-4" aria-hidden="true" />
@@ -106,12 +140,12 @@ const BioDatasGrid = ({ setSideBarDisplay }) => {
           </button>
           <button
             type="button"
-            aria-pressed={activeTab === 'unverified'}
-            onClick={() => setActiveTab('unverified')}
+            aria-pressed={activeTab === "unverified"}
+            onClick={() => setActiveTab("unverified")}
             className={`inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-sm font-bold transition-colors ${
-              activeTab === 'unverified'
-                ? 'bg-white text-brand-900 shadow-sm'
-                : 'text-gray-500 hover:text-gray-800'
+              activeTab === "unverified"
+                ? "bg-white text-brand-900 shadow-sm"
+                : "text-gray-500 hover:text-gray-800"
             }`}
           >
             <ClockIcon className="h-4 w-4" aria-hidden="true" />
@@ -119,7 +153,7 @@ const BioDatasGrid = ({ setSideBarDisplay }) => {
           </button>
         </div>
 
-        {activeTab === 'verified' && (
+        {activeTab === "verified" && (
           <div className="mt-3 flex items-center justify-between gap-3 border-t border-gray-100 pt-3">
             <span className="text-sm font-semibold text-gray-600">
               সাজানোর ধরন
@@ -142,7 +176,7 @@ const BioDatasGrid = ({ setSideBarDisplay }) => {
         )}
       </div>
 
-      {activeTab === 'verified' && (
+      {activeTab === "verified" && (
         <>
           {bioError ? (
             <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-10 text-center text-sm font-semibold text-red-700">
@@ -163,7 +197,7 @@ const BioDatasGrid = ({ setSideBarDisplay }) => {
         </>
       )}
 
-      {activeTab === 'unverified' && (
+      {activeTab === "unverified" && (
         <>
           {unverifiedLoading ? (
             <div className="flex min-h-48 items-center justify-center rounded-2xl border border-gray-200 bg-white text-sm font-semibold text-gray-500">
@@ -204,7 +238,7 @@ const BioDatasGrid = ({ setSideBarDisplay }) => {
                 আগের
               </button>
               <span className="whitespace-nowrap text-sm font-semibold text-gray-600">
-                {convertToBengaliDigits(unverifiedPage)} /{' '}
+                {convertToBengaliDigits(unverifiedPage)} /{" "}
                 {convertToBengaliDigits(unverifiedTotalPages)}
               </span>
               <button

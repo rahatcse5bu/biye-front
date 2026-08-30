@@ -1,31 +1,68 @@
-import BioDatasGrid from '../../../components/BioDatasGrid/BioDatasGrid';
-import { SideBar } from '../../../components/SideBar/SideBar';
-import { useContext, useEffect, useRef } from 'react';
-import BioContext from '../../../contexts/BioContext';
-import { FaXmark } from 'react-icons/fa6';
-import LoadingCircle from '../../../components/LoadingCircle/LoadingCircle';
-import { useFilter } from '../../../contexts/useFilter';
-import PromptFilter from '../../../components/PromptFilter/PromptFilter';
-import ChatAgent from '../../../components/ChatAgent/ChatAgent';
+import BioDatasGrid from "../../../components/BioDatasGrid/BioDatasGrid";
+import { SideBar } from "../../../components/SideBar/SideBar";
+import { useContext, useEffect, useRef } from "react";
+import BioContext from "../../../contexts/BioContext";
+import { FaXmark } from "react-icons/fa6";
+import LoadingCircle from "../../../components/LoadingCircle/LoadingCircle";
+import { useFilter } from "../../../contexts/useFilter";
+import { usePrimary } from "../../../contexts/userPrimary";
+import { useNavigate } from "@/lib/navigation";
+import { convertToQuery } from "../../../utils/query";
+import PromptFilter from "../../../components/PromptFilter/PromptFilter";
+import ChatAgent from "../../../components/ChatAgent/ChatAgent";
 
 const getVisibleUserStatus = () =>
-  process.env.NODE_ENV === 'development' ? 'in review' : 'active';
+  process.env.NODE_ENV === "development" ? "in review" : "active";
 
 const BioDatas = () => {
-  const { bioLoading, setQuery, setFilterFields } = useContext(BioContext);
-  const { sideBarDisplay, setSideBarDisplay } = useFilter();
+  const {
+    bioLoading,
+    setQuery,
+    setFilterFields,
+    resetAllFilters,
+    defaultReligion,
+  } = useContext(BioContext);
+  const {
+    sideBarDisplay,
+    setSideBarDisplay,
+    setSelectedDivisions,
+    setSelectedDistricts,
+    setSelectedPresentDivisions,
+    setSelectedPresentDistricts,
+  } = useFilter();
+  const { resetPrimaryFilters } = usePrimary();
+  const navigate = useNavigate();
   const filterDialogRef = useRef(null);
   const previousFocusRef = useRef(null);
 
   const handlePromptApply = (filters) => {
-    setQuery((prev) => ({ ...prev, ...filters, page: 1 }));
-    setFilterFields((prev) => ({ ...prev, ...filters }));
+    const userStatus = getVisibleUserStatus();
+    const nextQuery = {
+      page: 1,
+      limit: 12,
+      user_status: userStatus,
+      ...(defaultReligion &&
+        !("religion" in filters) && { religion: defaultReligion }),
+      ...filters,
+    };
+
+    setQuery(nextQuery);
+    setFilterFields(nextQuery);
+    setSelectedDivisions([]);
+    setSelectedDistricts([]);
+    setSelectedPresentDivisions([]);
+    setSelectedPresentDistricts([]);
+    navigate(`/biodatas?${convertToQuery(nextQuery)}`, { replace: true });
   };
 
   const handlePromptClear = () => {
-    const userStatus = getVisibleUserStatus();
-    setQuery({ page: 1, limit: 12, user_status: userStatus });
-    setFilterFields({ user_status: userStatus });
+    resetAllFilters();
+    resetPrimaryFilters(defaultReligion || "");
+    setSelectedDivisions([]);
+    setSelectedDistricts([]);
+    setSelectedPresentDivisions([]);
+    setSelectedPresentDistricts([]);
+    navigate("/biodatas", { replace: true });
   };
 
   useEffect(() => {
@@ -38,7 +75,7 @@ const BioDatas = () => {
   useEffect(() => {
     if (!sideBarDisplay) return undefined;
 
-    const desktopMedia = window.matchMedia('(min-width: 1024px)');
+    const desktopMedia = window.matchMedia("(min-width: 1024px)");
     if (desktopMedia.matches) {
       setSideBarDisplay(false);
       return undefined;
@@ -46,25 +83,25 @@ const BioDatas = () => {
 
     const previousOverflow = document.body.style.overflow;
     previousFocusRef.current = document.activeElement;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
 
     const focusDialog = window.requestAnimationFrame(() => {
       filterDialogRef.current
-        ?.querySelector('button, select, input, textarea, [href]')
+        ?.querySelector("button, select, input, textarea, [href]")
         ?.focus();
     });
 
     const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         setSideBarDisplay(false);
         return;
       }
 
-      if (event.key !== 'Tab' || !filterDialogRef.current) return;
+      if (event.key !== "Tab" || !filterDialogRef.current) return;
 
       const focusableElements = Array.from(
         filterDialogRef.current.querySelectorAll(
-          'button:not([disabled]), select:not([disabled]), input:not([disabled]), textarea:not([disabled]), [href]'
+          "button:not([disabled]), select:not([disabled]), input:not([disabled]), textarea:not([disabled]), [href]"
         )
       );
       if (!focusableElements.length) return;
@@ -85,14 +122,14 @@ const BioDatas = () => {
       if (event.matches) setSideBarDisplay(false);
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    desktopMedia.addEventListener('change', handleBreakpointChange);
+    window.addEventListener("keydown", handleKeyDown);
+    desktopMedia.addEventListener("change", handleBreakpointChange);
 
     return () => {
       window.cancelAnimationFrame(focusDialog);
       document.body.style.overflow = previousOverflow;
-      window.removeEventListener('keydown', handleKeyDown);
-      desktopMedia.removeEventListener('change', handleBreakpointChange);
+      window.removeEventListener("keydown", handleKeyDown);
+      desktopMedia.removeEventListener("change", handleBreakpointChange);
       previousFocusRef.current?.focus?.();
       previousFocusRef.current = null;
     };
@@ -137,14 +174,18 @@ const BioDatas = () => {
 
         <div
           ref={filterDialogRef}
-          className={`bottom-[calc(4.75rem+env(safe-area-inset-bottom))] left-3 right-3 top-3 z-[1110] overflow-hidden rounded-3xl bg-white shadow-2xl lg:sticky lg:bottom-auto lg:left-auto lg:right-auto lg:top-20 lg:z-auto lg:block lg:h-[calc(100dvh-6rem)] lg:w-80 lg:shrink-0 lg:rounded-none lg:bg-transparent lg:shadow-none ${
-            sideBarDisplay ? 'fixed' : 'hidden'
+          className={`bottom-0 left-0 right-0 top-auto z-[1110] h-[82dvh] max-h-[760px] overflow-hidden rounded-t-3xl bg-white shadow-2xl sm:left-4 sm:right-4 md:left-1/2 md:right-auto md:w-[680px] md:-translate-x-1/2 lg:sticky lg:bottom-auto lg:left-auto lg:right-auto lg:top-20 lg:z-auto lg:block lg:h-[calc(100dvh-6rem)] lg:max-h-none lg:w-80 lg:shrink-0 lg:translate-x-0 lg:rounded-none lg:bg-transparent lg:shadow-none ${
+            sideBarDisplay ? "fixed" : "hidden"
           }`}
-          role={sideBarDisplay ? 'dialog' : undefined}
-          aria-modal={sideBarDisplay ? 'true' : undefined}
+          role={sideBarDisplay ? "dialog" : undefined}
+          aria-modal={sideBarDisplay ? "true" : undefined}
           aria-label="বায়োডাটা ফিল্টার"
         >
-          <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 lg:hidden">
+          <div className="relative flex items-center justify-between border-b border-gray-100 px-4 pb-3 pt-6 lg:hidden">
+            <span
+              className="absolute left-1/2 top-2 h-1 w-12 -translate-x-1/2 rounded-full bg-gray-300"
+              aria-hidden="true"
+            />
             <div>
               <p className="font-bold text-gray-900">ফিল্টার</p>
               <p className="text-xs text-gray-500">আপনার পছন্দ নির্বাচন করুন</p>
@@ -158,7 +199,7 @@ const BioDatas = () => {
               <FaXmark className="h-5 w-5" aria-hidden="true" />
             </button>
           </div>
-          <div className="h-[calc(100%_-_69px)] lg:h-full">
+          <div className="h-[calc(100%_-_77px)] lg:h-full">
             <SideBar />
           </div>
         </div>

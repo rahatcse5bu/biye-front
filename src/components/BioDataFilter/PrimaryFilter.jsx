@@ -1,23 +1,22 @@
-/* eslint-disable react/prop-types */
-import DoubleRangeSlider from '../DoubleRangeSlider/DoubleRangeSlider';
-import { useBio } from '../../contexts/useBio';
-import CustomAccordion from '../CustomAccordion/CustomAccordion';
-import { useFilter } from '../../contexts/useFilter';
-import { usePrimary } from '../../contexts/userPrimary';
+import DoubleRangeSlider from "../DoubleRangeSlider/DoubleRangeSlider";
+import { useBio } from "../../contexts/useBio";
+import CustomAccordion from "../CustomAccordion/CustomAccordion";
+import { useFilter } from "../../contexts/useFilter";
+import { usePrimary } from "../../contexts/userPrimary";
 
 // Religious type options based on religion
 const religiousTypesByReligion = {
   islam: [
-    { value: 'practicing_muslim', label: 'প্র্যাকটিসিং মুসলিম' },
-    { value: 'general_muslim', label: 'সাধারণ মুসলিম' },
+    { value: "practicing_muslim", label: "প্র্যাকটিসিং মুসলিম" },
+    { value: "general_muslim", label: "সাধারণ মুসলিম" },
   ],
   hinduism: [
-    { value: 'practicing_hindu', label: 'প্র্যাকটিসিং হিন্দু' },
-    { value: 'general_hindu', label: 'সাধারণ হিন্দু' },
+    { value: "practicing_hindu", label: "প্র্যাকটিসিং হিন্দু" },
+    { value: "general_hindu", label: "সাধারণ হিন্দু" },
   ],
   christianity: [
-    { value: 'practicing_christian', label: 'প্র্যাকটিসিং খ্রিস্টান' },
-    { value: 'general_christian', label: 'সাধারণ খ্রিস্টান' },
+    { value: "practicing_christian", label: "প্র্যাকটিসিং খ্রিস্টান" },
+    { value: "general_christian", label: "সাধারণ খ্রিস্টান" },
   ],
 };
 
@@ -51,7 +50,7 @@ const PrimaryFilter = () => {
         onToggle={() => setPrimaryFilterOpen((prev) => !prev)}
         title="প্রাথমিক"
       >
-        <div className="lg:w-64 w-full">
+        <div className="w-full">
           <label
             htmlFor="bio-type"
             className="block my-2 text-sm font-bold text-left text-gray-700"
@@ -74,8 +73,8 @@ const PrimaryFilter = () => {
                   };
                 });
               }}
-              value={bioType ?? ''}
-              className="block w-[90%] px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
+              value={bioType ?? ""}
+              className="block min-h-11 w-full cursor-pointer appearance-none rounded-xl border border-gray-200 bg-white px-3 py-2.5 pr-9 text-sm text-gray-800 outline-none transition-colors hover:border-brand-900/40 focus:border-brand-900 focus:ring-2 focus:ring-brand-900/10"
             >
               <option value="">সকল</option>
               <option value="পাত্রের বায়োডাটা">পাত্রের বায়োডাটা</option>
@@ -93,7 +92,7 @@ const PrimaryFilter = () => {
           </div>
         </div>
 
-        <div className="lg:w-64 w-full">
+        <div className="w-full">
           <label
             htmlFor="marital-status"
             className="block my-2 text-sm font-bold text-left text-gray-700"
@@ -104,7 +103,7 @@ const PrimaryFilter = () => {
             <select
               id="marital-status"
               name="marital_status"
-              value={maritalStatus ?? ''}
+              value={maritalStatus ?? ""}
               onChange={(e) => {
                 const value = e.target.value;
 
@@ -118,7 +117,7 @@ const PrimaryFilter = () => {
                 });
                 // navigate(`/biodatas?${queryString}`);
               }}
-              className="block  w-[90%]  px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
+              className="block min-h-11 w-full cursor-pointer appearance-none rounded-xl border border-gray-200 bg-white px-3 py-2.5 pr-9 text-sm text-gray-800 outline-none transition-colors hover:border-brand-900/40 focus:border-brand-900 focus:ring-2 focus:ring-brand-900/10"
             >
               <option value="">সকল</option>
               <option value="অবিবাহিত"> অবিবাহিত </option>
@@ -140,7 +139,7 @@ const PrimaryFilter = () => {
         </div>
 
         {/* Religion Filter */}
-        <div className="lg:w-64 w-full">
+        <div className="w-full">
           <label
             htmlFor="religion"
             className="block my-2 text-sm font-bold text-left text-gray-700"
@@ -151,12 +150,12 @@ const PrimaryFilter = () => {
             <select
               id="religion"
               name="religion"
-              value={religion ?? ''}
+              value={religion ?? ""}
               onChange={(e) => {
                 const value = e.target.value;
                 setReligion(value);
                 // Reset religious type when religion changes
-                setReligiousType('');
+                setReligiousType("");
                 setFilterFields((filterFields) => {
                   const newFields = {
                     ...filterFields,
@@ -167,7 +166,7 @@ const PrimaryFilter = () => {
                   return newFields;
                 });
               }}
-              className="block w-[90%] px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
+              className="block min-h-11 w-full cursor-pointer appearance-none rounded-xl border border-gray-200 bg-white px-3 py-2.5 pr-9 text-sm text-gray-800 outline-none transition-colors hover:border-brand-900/40 focus:border-brand-900 focus:ring-2 focus:ring-brand-900/10"
             >
               <option value="">সকল ধর্ম</option>
               <option value="islam">ইসলাম</option>
@@ -188,7 +187,7 @@ const PrimaryFilter = () => {
 
         {/* Religious Type Filter - Only show when religion is selected */}
         {religion && religiousTypeOptions.length > 0 && (
-          <div className="lg:w-64 w-full">
+          <div className="w-full">
             <label
               htmlFor="religiousType"
               className="block my-2 text-sm font-bold text-left text-gray-700"
@@ -199,7 +198,7 @@ const PrimaryFilter = () => {
               <select
                 id="religiousType"
                 name="religiousType"
-                value={religiousType ?? ''}
+                value={religiousType ?? ""}
                 onChange={(e) => {
                   const value = e.target.value;
                   setReligiousType(value);
@@ -208,7 +207,7 @@ const PrimaryFilter = () => {
                     religious_type: value,
                   }));
                 }}
-                className="block w-[90%] px-4 py-2 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none cursor-pointer hover:border-gray-500 focus:outline-none focus:shadow-outline"
+                className="block min-h-11 w-full cursor-pointer appearance-none rounded-xl border border-gray-200 bg-white px-3 py-2.5 pr-9 text-sm text-gray-800 outline-none transition-colors hover:border-brand-900/40 focus:border-brand-900 focus:ring-2 focus:ring-brand-900/10"
               >
                 <option value="">সকল ধরন</option>
                 {religiousTypeOptions.map((option) => (
@@ -257,7 +256,7 @@ const PrimaryFilter = () => {
             }}
           />
         </div>
-        <div className="lg:w-64 w-full px-2 py-2">
+        <div className="w-full px-2 py-2">
           <DoubleRangeSlider
             // value={height}
             value={{

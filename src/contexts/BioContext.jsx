@@ -1,10 +1,9 @@
-/* eslint-disable react/prop-types */
 // src/contexts/BioContext.js
-import { useState, useEffect, createContext } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { BioDataServices } from '../services/bioData';
-import { getReligionInfo } from '../utils/localStorage';
-import { religionToApiKey } from '../constants/religionContent';
+import { useState, useEffect, createContext } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { BioDataServices } from "../services/bioData";
+import { getReligionInfo } from "../utils/localStorage";
+import { religionToApiKey } from "../constants/religionContent";
 
 // Create a new context instance
 const BioContext = createContext();
@@ -23,7 +22,27 @@ export const BioProvider = ({ children }) => {
     initialQuery.religion = apiReligion;
   }
   const [query, setQuery] = useState(initialQuery);
-  const [filterFields, setFilterFields] = useState({});
+  const [filterFields, setFilterFields] = useState(() =>
+    apiReligion ? { religion: apiReligion } : {}
+  );
+
+  const resetAllFilters = () => {
+    const userStatus =
+      process.env.NODE_ENV === "development" ? "in review" : "active";
+    const defaultQuery = {
+      page: 1,
+      limit: 12,
+      user_status: userStatus,
+      ...(apiReligion && { religion: apiReligion }),
+    };
+
+    setQuery(defaultQuery);
+    setFilterFields({
+      user_status: userStatus,
+      ...(apiReligion && { religion: apiReligion }),
+    });
+    setFilterResetKey((previous) => previous + 1);
+  };
 
   //! get all bio datas
   const {
@@ -31,7 +50,7 @@ export const BioProvider = ({ children }) => {
     error: bioError,
     isLoading,
   } = useQuery({
-    queryKey: ['bioData', 'generalInfo', query],
+    queryKey: ["bioData", "generalInfo", query],
     queryFn: async () => {
       return await BioDataServices.getALLGeneralInfo(query);
     },
@@ -57,6 +76,9 @@ export const BioProvider = ({ children }) => {
     query,
     setFilterFields,
     filterFields,
+    filterResetKey,
+    resetAllFilters,
+    defaultReligion: apiReligion,
   };
   // console.log("Bios-from-db~", bios);
   // console.log("Size-from-db~", bios?.size);

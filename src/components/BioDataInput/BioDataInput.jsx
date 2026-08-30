@@ -1,56 +1,56 @@
-import { Button, Input } from "@material-tailwind/react";
+import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaTrash } from "react-icons/fa";
-import { Colors } from "../../constants/colors";
-import { useState } from "react";
 import { useNavigate } from "@/lib/navigation";
+
 const BioDataInput = () => {
-	const [bioId, setBioId] = useState(0);
-	const navigate = useNavigate();
+  const [bioId, setBioId] = useState("");
+  const navigate = useNavigate();
 
-	const navigateHandler = () => {
-		if (bioId < 2000) {
-			return;
-		}
-		navigate(`/biodata/${bioId}`);
-	};
-	return (
-		<div className="flex mt-5 flex-col  lg:w-[20rem] w-full">
-			<div className="mr-8">
-				<Input
-					value={bioId}
-					onChange={(e) => setBioId(e.target.value)}
-					color="purple"
-					className="py-5 "
-					type="number"
-					label="বায়োডাটা নং"
-				/>
-			</div>
+  const navigateHandler = () => {
+    if (Number(bioId) < 2000) return;
+    navigate(`/biodata/${bioId}`);
+  };
 
-			<div className="grid grid-cols-2 gap-4 my-10 mr-8 ">
-			
-				<Button
-					className="flex items-center px-5 py-1 text-[16px]"
-					onClick={() => setBioId(0)}
-					style={{
-						background: `#c41010`,
-					}}
-				>
-					<FaTrash className="w-4 h-6 pr-2" />
-					<span>ক্লিয়ার</span>
-				</Button>
-				<Button
-					className="flex items-center px-5 text-[16px]"
-					style={{
-						background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
-					}}
-					onClick={navigateHandler}
-				>
-					<AiOutlineSearch className="w-4 h-6 " /> <span>বায়োডাটা খুজুন</span>
-				</Button>
-			</div>
-		</div>
-	);
+  return (
+    <div className="w-full rounded-2xl border border-gray-200 bg-white p-4">
+      <label
+        htmlFor="biodata-number"
+        className="mb-2 block text-sm font-bold text-gray-700"
+      >
+        বায়োডাটা নম্বর
+      </label>
+      <input
+        id="biodata-number"
+        value={bioId}
+        onChange={(event) => setBioId(event.target.value)}
+        type="number"
+        inputMode="numeric"
+        placeholder="যেমন: ২০৬৮"
+        className="min-h-12 w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-base text-gray-900 outline-none focus:border-brand-900 focus:ring-2 focus:ring-brand-900/10"
+      />
+
+      <div className="mt-4 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-3 text-sm font-bold text-red-700 hover:bg-red-100"
+          onClick={() => setBioId("")}
+        >
+          <FaTrash className="h-4 w-4" aria-hidden="true" />
+          মুছুন
+        </button>
+        <button
+          type="button"
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-brand-900 px-3 py-3 text-sm font-bold text-white hover:bg-[#0F8287] disabled:cursor-not-allowed disabled:opacity-50"
+          onClick={navigateHandler}
+          disabled={Number(bioId) < 2000}
+        >
+          <AiOutlineSearch className="h-5 w-5" aria-hidden="true" />
+          খুঁজুন
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default BioDataInput;

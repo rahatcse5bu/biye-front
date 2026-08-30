@@ -1,18 +1,14 @@
 export const convertToQuery = (query = {}) => {
-  let queryString = '';
+  const searchParams = new URLSearchParams();
 
-  if (!Object.values(query).length) {
-    return '';
-  }
+  Object.entries(query).forEach(([key, value]) => {
+    if (value === undefined || value === null || value === "") return;
 
-  Object.keys(query).forEach((key, index) => {
-    if (query[key]) {
-      queryString += `${key}=${query[key]}`;
-      if (index < Object.keys(query).length - 1) {
-        queryString += '&';
-      }
-    }
+    searchParams.set(
+      key,
+      Array.isArray(value) ? value.join(",") : String(value)
+    );
   });
 
-  return queryString;
+  return searchParams.toString();
 };

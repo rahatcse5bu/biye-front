@@ -1,152 +1,143 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-import {
-  Typography,
-  List,
-  ListItem,
-  Accordion,
-  AccordionHeader,
-  AccordionBody,
-  Button,
-} from '@material-tailwind/react';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { useState, useEffect } from 'react';
-import { Colors } from '../../constants/colors';
-import { AiOutlineDelete, AiOutlineSearch } from 'react-icons/ai';
-import { useContext } from 'react';
-import BioContext from '../../contexts/BioContext';
-import { useSearchParams, useNavigate } from '@/lib/navigation';
-import { convertToQuery } from '../../utils/query';
-import PrimaryFilter from './PrimaryFilter';
-import { useQuery } from '@tanstack/react-query';
-import AddressFilter from './AddressFilter';
-import BioDataFilterButton from './BioDataFilterButton';
-import CustomAccordion from '../CustomAccordion/CustomAccordion';
-import EducationFilter from './EducationFilter';
-import PersonalInfoFilter from './PersonalInfoFilte';
-import OccupationFilter from './OccupationFilter';
-import OthersFilter from './OthersFilter';
-import ExpectedPartnerFilter from './ExpectedPartnerFilter';
-import { useFilter } from '../../contexts/useFilter';
-import { usePrimary } from '../../contexts/userPrimary';
+import { useEffect } from "react";
+import { useSearchParams } from "@/lib/navigation";
+import { useBio } from "../../contexts/useBio";
+import { usePrimary } from "../../contexts/userPrimary";
+import PrimaryFilter from "./PrimaryFilter";
+import AddressFilter from "./AddressFilter";
+import BioDataFilterButton from "./BioDataFilterButton";
+import EducationFilter from "./EducationFilter";
+import PersonalInfoFilter from "./PersonalInfoFilte";
+import OccupationFilter from "./OccupationFilter";
+import OthersFilter from "./OthersFilter";
+import ExpectedPartnerFilter from "./ExpectedPartnerFilter";
+
+const ALLOWED_QUERY_KEYS = new Set([
+  "page",
+  "limit",
+  "user_status",
+  "sortBy",
+  "sortOrder",
+  "isFeatured",
+  "bio_type",
+  "bio_gender",
+  "gender",
+  "marital_status",
+  "marital_status_en",
+  "religion",
+  "religious_type",
+  "minAge",
+  "maxAge",
+  "minHeight",
+  "maxHeight",
+  "complexion",
+  "division",
+  "zilla",
+  "upazila",
+  "current_division",
+  "current_zilla",
+  "current_upzilla",
+  "permanent_address",
+  "education_medium",
+  "deeni_edu",
+  "occupation",
+  "fiqh",
+  "economic_status",
+  "categories",
+  "exp_zilla",
+  "exp_marital_status",
+  "exp_occupation",
+  "exp_economical_condition",
+  "exp_educational_qualifications",
+]);
+
+const NUMBER_QUERY_KEYS = new Set([
+  "page",
+  "limit",
+  "minAge",
+  "maxAge",
+  "minHeight",
+  "maxHeight",
+]);
 
 const BioDataFilter = () => {
-  const { setQuery, setFilterFields, filterFields, filterResetKey } =
-    useContext(BioContext);
-  const { setAddressFilterOpen, setPrimaryFilterOpen } = useFilter();
-  const { setBioType, bioType, maritalStatus, setMaritalStatus } = usePrimary();
-  const [openAccordions, setOpenAccordions] = useState({
-    3: true,
-  });
-  const navigate = useNavigate();
-  const [searchParams, currentQueryParameters, setSearchParams] =
-    useSearchParams();
-  const newQueryParameters = new URLSearchParams();
-  const [open, setOpen] = useState(3);
-
-  const [zilla, setZilla] = useState('');
-  const [division, setDivision] = useState('');
-
-  const [value, setValue] = useState(50);
-
-  // console.log("searchParams~", searchParams.get("marital_status"));
-  useEffect(() => {
-    setPrimaryFilterOpen(true);
-    setAddressFilterOpen(true);
-  }, []);
-  useEffect(() => {
-    setBioType(searchParams.get('bio_type') ?? '');
-    setMaritalStatus(searchParams.get('marital_status') ?? '');
-    setDivision(searchParams.get('division') ?? '');
-    setZilla(searchParams.get('zilla') ?? '');
-  }, [searchParams]);
+  const [searchParams] = useSearchParams();
+  const { setFilterFields, setQuery, filterResetKey, defaultReligion } =
+    useBio();
+  const {
+    setBioType,
+    setMaritalStatus,
+    setReligion,
+    setReligiousType,
+    setAge,
+    setHeight,
+  } = usePrimary();
 
   useEffect(() => {
-    if (division || zilla) {
-      setOpenAccordions((prevState) => ({
-        ...prevState,
-        [1]: true,
-      }));
+    const urlFilters = {};
+
+    searchParams.forEach((value, key) => {
+      if (!ALLOWED_QUERY_KEYS.has(key)) return;
+      urlFilters[key] = NUMBER_QUERY_KEYS.has(key) ? Number(value) : value;
+    });
+
+    const hasUrlFilters = Object.keys(urlFilters).length > 0;
+    const userStatus =
+      process.env.NODE_ENV === "development" ? "in review" : "active";
+    const nextQuery = {
+      page: 1,
+      limit: 12,
+      user_status: userStatus,
+      ...(defaultReligion && { religion: defaultReligion }),
+      ...urlFilters,
+    };
+
+    if (hasUrlFilters && !("religion" in urlFilters)) {
+      delete nextQuery.religion;
     }
 
-    if (maritalStatus || bioType) {
-      setOpenAccordions((prevState) => ({
-        ...prevState,
-        [3]: true,
-      }));
-    }
+    setQuery(nextQuery);
+    setFilterFields(nextQuery);
 
-    let queryObj = {};
-    if (bioType) {
-      queryObj = {
-        ...queryObj,
-        bio_type: bioType,
-      };
-    }
-    if (maritalStatus) {
-      queryObj = {
-        ...queryObj,
-        marital_status: maritalStatus,
-      };
-    }
-    // const queryString = convertToQuery(queryObj);
-    // setQuery(queryObj);
-    setFilterFields(queryObj);
-  }, [bioType, division, maritalStatus, setFilterFields, setQuery, zilla]);
+    setBioType(urlFilters.bio_type || "");
+    setMaritalStatus(urlFilters.marital_status || "");
+    setReligion(
+      "religion" in urlFilters
+        ? urlFilters.religion || ""
+        : defaultReligion || ""
+    );
+    setReligiousType(urlFilters.religious_type || "");
+    setAge({
+      min: Number(urlFilters.minAge) || 18,
+      max: Number(urlFilters.maxAge) || 60,
+    });
+    setHeight({
+      min: Number(urlFilters.minHeight) || 4.5,
+      max: Number(urlFilters.maxHeight) || 7,
+    });
+  }, [
+    defaultReligion,
+    searchParams,
+    setAge,
+    setBioType,
+    setFilterFields,
+    setHeight,
+    setMaritalStatus,
+    setQuery,
+    setReligion,
+    setReligiousType,
+  ]);
 
-  // useEffect(() => {}, [division, zilla, maritalStatus, bioType]);
-
-  const handleOpen = (value) => {
-    setOpen(open === value ? 0 : value);
-  };
-
-  const handleChange = (e) => {
-    setValue(e.target.value);
-  };
-
-  const handleToggle = (index) => {
-    setOpenAccordions((prevState) => ({
-      ...prevState,
-      [index]: !prevState[index],
-    }));
-  };
-
-  // console.log("openAccordions~~", openAccordions);
-  // console.log("filterFields~", filterFields);
   return (
-    <List className=" lg:min-h-[80vh] lg:max-h-[200vh] h-auto overflow-auto overflow-x-hidden">
-      <PrimaryFilter
-        openAccordions={openAccordions}
-        handleToggle={handleToggle}
-        setBioType={setBioType}
-        bioType={bioType}
-        maritalStatus={maritalStatus}
-        setMaritalStatus={setMaritalStatus}
-        setSearchParams={setSearchParams}
-        newQueryParameters={newQueryParameters}
-        setOpenAccordions={setOpenAccordions}
-      />
-
-      <AddressFilter
-        handleToggle={handleToggle}
-        openAccordions={openAccordions}
-        division={division}
-        zilla={zilla}
-        setDivision={setDivision}
-        setZilla={setZilla}
-      />
-
-      <EducationFilter key={`edu-${filterResetKey}`} />
-
+    <div className="space-y-3 pb-2">
+      <PrimaryFilter />
+      <AddressFilter key={`address-${filterResetKey}`} />
+      <EducationFilter key={`education-${filterResetKey}`} />
       <PersonalInfoFilter key={`personal-${filterResetKey}`} />
-
-      <OccupationFilter key={`occ-${filterResetKey}`} />
-
+      <OccupationFilter key={`occupation-${filterResetKey}`} />
       <OthersFilter key={`others-${filterResetKey}`} />
-
-      <ExpectedPartnerFilter key={`exp-${filterResetKey}`} />
+      <ExpectedPartnerFilter key={`expected-${filterResetKey}`} />
       <BioDataFilterButton />
-    </List>
+    </div>
   );
 };
 

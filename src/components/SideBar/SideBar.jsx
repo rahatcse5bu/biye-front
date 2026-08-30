@@ -1,4 +1,4 @@
-import { BioDataTab } from '../BioDataTab/BioDataTab';
+import { BioDataTab } from "../BioDataTab/BioDataTab";
 
 export function SideBar() {
   return (

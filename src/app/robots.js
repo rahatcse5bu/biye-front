@@ -19,6 +19,6 @@ export default function robots() {
         ],
       },
     ],
-    sitemap: `${SITE_URL}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap-v2.xml`,
   };
 }

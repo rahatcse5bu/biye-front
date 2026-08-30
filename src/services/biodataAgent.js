@@ -1,99 +1,108 @@
-import axiosInstance from '../utils/axios';
+import axiosInstance from "../utils/axios";
 
-const MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
+const MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";
 
 const USER_STATUS =
-  process.env.NODE_ENV === 'development' ? 'in review' : 'active';
+  process.env.NODE_ENV === "development" ? "in review" : "active";
 
 // ── Tool definitions ──────────────────────────────────────────────────────────
 
 const FILTER_PROPS = {
-  // ── English-only params (no Bengali in query string) ──────────────────────
-  bio_gender: {
-    type: 'string',
-    enum: ['male', 'female'],
-    description: 'Groom/পাত্র → "male", Bride/পাত্রী → "female"',
+  bio_type: {
+    type: "string",
+    enum: ["পাত্রের বায়োডাটা", "পাত্রীর বায়োডাটা"],
+    description:
+      'Groom/পাত্র → "পাত্রের বায়োডাটা", Bride/পাত্রী → "পাত্রীর বায়োডাটা"',
   },
   marital_status_en: {
-    type: 'string',
-    enum: ['unmarried', 'married', 'divorced', 'widow', 'widower'],
+    type: "string",
+    enum: ["unmarried", "married", "divorced", "widow", "widower"],
     description:
-      'অবিবাহিত→unmarried, বিবাহিত→married, ডিভোর্সড→divorced, বিধবা→widow, বিপত্নীক→widower',
+      "অবিবাহিত→unmarried, বিবাহিত→married, ডিভোর্সড→divorced, বিধবা→widow, বিপত্নীক→widower",
   },
   religion: {
-    type: 'string',
-    enum: ['islam', 'hinduism', 'christianity'],
+    type: "string",
+    enum: ["islam", "hinduism", "christianity"],
   },
   religious_type: {
-    type: 'string',
+    type: "string",
     enum: [
-      'practicing_muslim',
-      'general_muslim',
-      'practicing_hindu',
-      'general_hindu',
-      'practicing_christian',
-      'general_christian',
+      "practicing_muslim",
+      "general_muslim",
+      "practicing_hindu",
+      "general_hindu",
+      "practicing_christian",
+      "general_christian",
     ],
   },
-  minAge: { type: 'number', description: 'Minimum age (18–60)' },
-  maxAge: { type: 'number', description: 'Maximum age (18–60)' },
+  minAge: { type: "number", description: "Minimum age (18–60)" },
+  maxAge: { type: "number", description: "Maximum age (18–60)" },
   minHeight: {
-    type: 'number',
-    description: 'Minimum height in feet (e.g. 5.0 = 5ft, 5.5 = 5ft 6in)',
+    type: "number",
+    description: "Minimum height in feet (e.g. 5.0 = 5ft, 5.5 = 5ft 6in)",
   },
-  maxHeight: { type: 'number', description: 'Maximum height in feet' },
+  maxHeight: { type: "number", description: "Maximum height in feet" },
   division: {
-    type: 'string',
+    type: "string",
     description:
-      'Comma-separated division names in Bengali: ঢাকা,চট্টগ্রাম,খুলনা,রাজশাহী,বরিশাল,সিলেট,রংপুর,ময়মনসিংহ',
+      "Comma-separated division names in Bengali: ঢাকা,চট্টগ্রাম,খুলনা,রাজশাহী,বরিশাল,সিলেট,রংপুর,ময়মনসিংহ",
   },
   zilla: {
-    type: 'string',
-    description: 'Comma-separated Bengali district names',
+    type: "string",
+    description: "Comma-separated Bengali district names",
   },
   occupation: {
-    type: 'string',
+    type: "string",
     description:
-      'Comma-separated from: ইমাম,মাদ্রাসা শিক্ষক,শিক্ষক,ডাক্তার,ইঞ্জিনিয়ার,ব্যবসায়ী,সরকারি চাকুরি,বেসরকারি চাকুরি,ফ্রিল্যান্সার,শিক্ষার্থী,প্রবাসী,অন্যান্য,পেশা নেই',
+      "Comma-separated from: ইমাম,মাদ্রাসা শিক্ষক,শিক্ষক,ডাক্তার,ইঞ্জিনিয়ার,ব্যবসায়ী,সরকারী চাকুরী,বেসরকারী চাকুরী,ফ্রিল্যান্সার,শিক্ষার্থী,প্রবাসী,অন্যান্য,পেশা নেই",
   },
   education_medium: {
-    type: 'string',
-    description: 'Comma-separated from: জেনারেল,কওমী,আলিয়া',
+    type: "string",
+    description: "Comma-separated from: জেনারেল,কওমি,আলিয়া",
+  },
+  deeni_edu: {
+    type: "string",
+    description: "Comma-separated from: হাফেজ,মাওলানা,মুফতি,মুফাসসির,আদিব",
+  },
+  exp_occupation: {
+    type: "string",
+    description:
+      "Comma-separated from: ডাক্তার,ইঞ্জিনিয়ার,শিক্ষক,ব্যবসায়ী,সরকারী চাকুরী,বেসরকারী চাকুরী,ফ্রিল্যান্সার,প্রবাসী,শিক্ষার্থী,ইমাম,মাদ্রাসা শিক্ষক,হাফেজ,পেশা নেই,অন্যান্য",
   },
   complexion: {
-    type: 'string',
+    type: "string",
     description:
-      'Comma-separated from: কালো,শ্যামলা,উজ্জ্বল শ্যামলা,ফর্সা,উজ্জ্বল ফর্সা',
+      "Comma-separated from: কালো,শ্যমলা,উজ্জ্বল শ্যামলা,ফর্সা,উজ্জ্বল ফর্সা",
   },
   economic_status: {
-    type: 'string',
+    type: "string",
     description:
-      'Comma-separated from: উচ্চবিত্ত,উচ্চ মধ্যবিত্ত,মধ্যবিত্ত,নিম্ন মধ্যবিত্ত,নিম্নবিত্ত',
+      "Comma-separated from: উচ্চবিত্ত,উচ্চ মধ্যবিত্ত,মধ্যবিত্ত,নিম্ন মধ্যবিত্ত,নিম্নবিত্ত",
   },
 };
 
 const TOOLS = [
   {
-    type: 'function',
+    type: "function",
     function: {
-      name: 'search_biodatas',
+      name: "search_biodatas",
       description:
-        'Search biodatas with given filters and return the REAL count from the database. Only include filters the user explicitly mentioned — omit all others. Pass an empty object {} to get the total count of all biodatas on the site.',
+        "Search biodatas with given filters and return the REAL count from the database. Only include filters the user explicitly mentioned — omit all others. Pass an empty object {} to get the total count of all biodatas on the site.",
       parameters: {
-        type: 'object',
+        type: "object",
         properties: FILTER_PROPS,
         additionalProperties: false,
       },
     },
   },
   {
-    type: 'function',
+    type: "function",
     function: {
-      name: 'apply_filters',
+      name: "apply_filters",
       description:
-        'Apply the chosen filters to the biodata list and show results to the user. Call this when the user confirms or when a good result count (3–50) is found and the user seems satisfied.',
+        "Apply the chosen filters to the biodata list and show results to the user. Call this when the user confirms or when a good result count (3–50) is found and the user seems satisfied.",
       parameters: {
-        type: 'object',
+        type: "object",
         properties: FILTER_PROPS,
         additionalProperties: false,
       },
@@ -117,8 +126,8 @@ CRITICAL RULES:
 9. The site has thousands of biodatas. If you get count=0 with many filters, suggest removing some filters.
 
 FILTER MAPPINGS (use ONLY these exact values):
-- পাত্র/ছেলে/বর/groom → bio_gender: "male"
-- পাত্রী/মেয়ে/কনে/bride → bio_gender: "female"
+- পাত্র/ছেলে/বর/groom → bio_type: "পাত্রের বায়োডাটা"
+- পাত্রী/মেয়ে/কনে/bride → bio_type: "পাত্রীর বায়োডাটা"
 - অবিবাহিত/single → marital_status_en: "unmarried"
 - বিবাহিত/married → marital_status_en: "married"
 - ডিভোর্সড/divorced → marital_status_en: "divorced"
@@ -134,30 +143,31 @@ FILTER MAPPINGS (use ONLY these exact values):
 Keep responses brief and conversational.`;
 
 // ── Normalise LLM-generated values ────────────────────────────────────────────
-// bio_gender and marital_status_en are English — no Unicode issues.
-// division is still Bengali; NFC-normalize it against the canonical list.
+// marital_status_en is English; Bengali filter values are NFC-normalized
+// against the canonical values saved by the current forms.
 
 const DIVISION_NORM = {
-  ঢাকা: 'ঢাকা',
-  চট্টগ্রাম: 'চট্টগ্রাম',
-  খুলনা: 'খুলনা',
-  রাজশাহী: 'রাজশাহী',
-  বরিশাল: 'বরিশাল',
-  সিলেট: 'সিলেট',
-  রংপুর: 'রংপুর',
-  ময়মনসিংহ: 'ময়মনসিংহ',
+  ঢাকা: "ঢাকা",
+  চট্টগ্রাম: "চট্টগ্রাম",
+  খুলনা: "খুলনা",
+  রাজশাহী: "রাজশাহী",
+  বরিশাল: "বরিশাল",
+  সিলেট: "সিলেট",
+  রংপুর: "রংপুর",
+  ময়মনসিংহ: "ময়মনসিংহ",
+  ময়মনসিংহ: "ময়মনসিংহ",
 };
 
 const normaliseFilters = (filters) => {
   const out = { ...filters };
   if (out.division) {
     out.division = out.division
-      .split(',')
+      .split(",")
       .map((v) => {
-        const key = v.trim().normalize('NFC');
+        const key = v.trim().normalize("NFC");
         return DIVISION_NORM[key] ?? key;
       })
-      .join(',');
+      .join(",");
   }
   return out;
 };
@@ -170,21 +180,21 @@ const searchBiodatas = async (rawFilters) => {
     const params = { ...filters, limit: 1, page: 1, user_status: USER_STATUS };
     // Remove null/undefined/empty so axios doesn't serialize them
     Object.keys(params).forEach((k) => {
-      if (params[k] === null || params[k] === undefined || params[k] === '')
+      if (params[k] === null || params[k] === undefined || params[k] === "")
         delete params[k];
     });
-    console.log('[Agent] search params:', params);
-    const response = await axiosInstance.get('/general-info', { params });
-    console.log('[Agent] response data:', response.data);
+    console.log("[Agent] search params:", params);
+    const response = await axiosInstance.get("/general-info", { params });
+    console.log("[Agent] response data:", response.data);
     const count = response.data?.size ?? response.data?.total ?? 0;
     return { count };
   } catch (err) {
     const status = err?.response?.status;
     const detail =
-      err?.response?.data?.message || err?.message || 'unknown error';
-    console.error('[Agent] search error:', err?.response?.data || err?.message);
+      err?.response?.data?.message || err?.message || "unknown error";
+    console.error("[Agent] search error:", err?.response?.data || err?.message);
     return {
-      error: `Search failed (HTTP ${status ?? '?'}): ${detail}. Tell the user the search is temporarily unavailable.`,
+      error: `Search failed (HTTP ${status ?? "?"}): ${detail}. Tell the user the search is temporarily unavailable.`,
     };
   }
 };
@@ -192,11 +202,11 @@ const searchBiodatas = async (rawFilters) => {
 // ── LLM call via backend proxy (API key never leaves the server) ──────────────
 
 const callLLM = async (messages) => {
-  const res = await axiosInstance.post('/llm/chat', {
+  const res = await axiosInstance.post("/llm/chat", {
     model: MODEL,
     messages,
     tools: TOOLS,
-    tool_choice: 'auto',
+    tool_choice: "auto",
     temperature: 0.3,
   });
 
@@ -209,11 +219,11 @@ const callLLM = async (messages) => {
 const TOOL_CALL_LINE_RE = /^\s*`?\s*(search_biodatas|apply_filters)\s*\(/;
 
 const cleanContent = (text) => {
-  if (!text) return '';
+  if (!text) return "";
   return text
-    .split('\n')
+    .split("\n")
     .filter((line) => !TOOL_CALL_LINE_RE.test(line))
-    .join('\n')
+    .join("\n")
     .trim();
 };
 
@@ -221,7 +231,7 @@ const cleanContent = (text) => {
 
 export class BiodataAgent {
   constructor() {
-    this.history = [{ role: 'system', content: SYSTEM_PROMPT }];
+    this.history = [{ role: "system", content: SYSTEM_PROMPT }];
   }
 
   /**
@@ -229,7 +239,7 @@ export class BiodataAgent {
    * appliedFilters is non-null when the agent calls apply_filters.
    */
   async sendMessage(userMessage) {
-    this.history.push({ role: 'user', content: userMessage });
+    this.history.push({ role: "user", content: userMessage });
 
     let appliedFilters = null;
 
@@ -238,7 +248,7 @@ export class BiodataAgent {
       // Some models (Gemini) return content: null on tool-call turns.
       // Normalize to '' so re-sending the history doesn't cause a 400 error.
       if (assistantMsg.content === null || assistantMsg.content === undefined) {
-        assistantMsg.content = '';
+        assistantMsg.content = "";
       }
       this.history.push(assistantMsg);
 
@@ -248,7 +258,7 @@ export class BiodataAgent {
       // No tool calls → final text response
       if (!hasCalls) {
         return {
-          text: cleanContent(assistantMsg.content || ''),
+          text: cleanContent(assistantMsg.content || ""),
           appliedFilters,
         };
       }
@@ -264,32 +274,32 @@ export class BiodataAgent {
         try {
           args = JSON.parse(toolCall.function.arguments);
         } catch {
-          result = { error: 'Invalid tool arguments' };
+          result = { error: "Invalid tool arguments" };
         }
 
         if (!result) {
-          if (toolCall.function.name === 'search_biodatas') {
+          if (toolCall.function.name === "search_biodatas") {
             result = await searchBiodatas(args);
-          } else if (toolCall.function.name === 'apply_filters') {
+          } else if (toolCall.function.name === "apply_filters") {
             appliedFilters = args;
             result = { success: true };
           } else {
-            result = { error: 'Unknown tool' };
+            result = { error: "Unknown tool" };
           }
         }
 
         this.history.push({
-          role: 'tool',
+          role: "tool",
           tool_call_id: toolCall.id,
           content: JSON.stringify(result),
         });
       }
     }
 
-    return { text: 'দুঃখিত, আবার চেষ্টা করুন।', appliedFilters };
+    return { text: "দুঃখিত, আবার চেষ্টা করুন।", appliedFilters };
   }
 
   reset() {
-    this.history = [{ role: 'system', content: SYSTEM_PROMPT }];
+    this.history = [{ role: "system", content: SYSTEM_PROMPT }];
   }
 }

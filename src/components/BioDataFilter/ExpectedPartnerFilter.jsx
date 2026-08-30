@@ -1,51 +1,51 @@
-import React, { useState, useContext } from 'react';
-import CustomAccordion from '../CustomAccordion/CustomAccordion';
-import { Colors } from '../../constants/colors';
-import CustomCheckboxOption from '../CustomCheckBoxOption/CustomCheckBoxOption';
-import BioContext from '../../contexts/BioContext';
+import React, { useState, useContext } from "react";
+import CustomAccordion from "../CustomAccordion/CustomAccordion";
+import { Colors } from "../../constants/colors";
+import CustomCheckboxOption from "../CustomCheckBoxOption/CustomCheckBoxOption";
+import BioContext from "../../contexts/BioContext";
 
 const EXP_MARITAL_STATUS = [
-  'অবিবাহিত',
-  'বিবাহিত',
-  'ডিভোর্সড',
-  'বিধবা',
-  'বিপত্নীক',
+  "অবিবাহিত",
+  "বিবাহিত",
+  "ডিভোর্সড",
+  "বিধবা",
+  "বিপত্নীক",
 ];
 
 const EXP_OCCUPATION = [
-  'ডাক্তার',
-  'ইঞ্জিনিয়ার',
-  'শিক্ষক',
-  'ব্যবসায়ী',
-  'সরকারী চাকুরী',
-  'বেসরকারী চাকুরী',
-  'ফ্রিল্যান্সার',
-  'প্রবাসী',
-  'শিক্ষার্থী',
-  'ইমাম',
-  'মাদ্রাসা শিক্ষক',
-  'হাফেজ',
-  'পেশা নেই',
-  'অন্যান্য',
+  "ডাক্তার",
+  "ইঞ্জিনিয়ার",
+  "শিক্ষক",
+  "ব্যবসায়ী",
+  "সরকারী চাকুরী",
+  "বেসরকারী চাকুরী",
+  "ফ্রিল্যান্সার",
+  "প্রবাসী",
+  "শিক্ষার্থী",
+  "ইমাম",
+  "মাদ্রাসা শিক্ষক",
+  "হাফেজ",
+  "পেশা নেই",
+  "অন্যান্য",
 ];
 
 const EXP_ECONOMICAL_CONDITION = [
-  'উচ্চবিত্ত',
-  'উচ্চ মধ্যবিত্ত',
-  'মধ্যবিত্ত',
-  'নিম্ন মধ্যবিত্ত',
-  'নিম্নবিত্ত',
+  "উচ্চবিত্ত",
+  "উচ্চ মধ্যবিত্ত",
+  "মধ্যবিত্ত",
+  "নিম্ন মধ্যবিত্ত",
+  "নিম্নবিত্ত",
 ];
 
 const EXP_EDUCATION = [
   "এস.এস.সি'র নিচে",
-  'এস.এস.সি',
-  'এইচ.এস.সি',
-  'ডিপ্লোমা',
-  'স্নাতক',
-  'স্নাতকোত্তর',
-  'ডক্টরেট',
-  'হাফেজ',
+  "এস.এস.সি",
+  "এইচ.এস.সি",
+  "ডিপ্লোমা",
+  "স্নাতক",
+  "স্নাতকোত্তর",
+  "ডক্টরেট",
+  "হাফেজ",
 ];
 
 const ExpectedPartnerFilter = () => {
@@ -64,7 +64,7 @@ const ExpectedPartnerFilter = () => {
     setExpMaritalStatus(updated);
     setFilterFields((prev) => ({
       ...prev,
-      exp_marital_status: updated.length > 0 ? updated.join(',') : undefined,
+      exp_marital_status: updated.length > 0 ? updated.join(",") : undefined,
     }));
   };
 
@@ -75,7 +75,7 @@ const ExpectedPartnerFilter = () => {
     setExpOccupation(updated);
     setFilterFields((prev) => ({
       ...prev,
-      exp_occupation: updated.length > 0 ? updated.join(',') : undefined,
+      exp_occupation: updated.length > 0 ? updated.join(",") : undefined,
     }));
   };
 
@@ -87,7 +87,7 @@ const ExpectedPartnerFilter = () => {
     setFilterFields((prev) => ({
       ...prev,
       exp_economical_condition:
-        updated.length > 0 ? updated.join(',') : undefined,
+        updated.length > 0 ? updated.join(",") : undefined,
     }));
   };
 
@@ -99,7 +99,7 @@ const ExpectedPartnerFilter = () => {
     setFilterFields((prev) => ({
       ...prev,
       exp_educational_qualifications:
-        updated.length > 0 ? updated.join(',') : undefined,
+        updated.length > 0 ? updated.join(",") : undefined,
     }));
   };
 
