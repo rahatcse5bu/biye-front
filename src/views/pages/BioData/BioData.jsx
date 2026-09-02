@@ -1,35 +1,37 @@
+"use client";
+
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import BioInfo from '../../../components/BioInfo/BioInfo';
-import AddressInfo from '../../../components/AddressInfo/AddressInfo';
-import EducationInfo from '../../../components/EducationalInfo/EducationalInfo';
-import BioInfoButton from '../../../components/BioInfoButton/BioInfoButton';
-import BioDataStat from '../../../components/BioDataStat/BioDataStat';
-import FamilyInfo from '../../../components/FamilyInfo/FamilyInfo';
-import PersonalInfo from '../../../components/PersonalInfo/PersonalInfo';
-import ProfessionalInfo from '../../../components/ProfessionalInfo/ProfessionalInfo';
-import MaritalInfo from '../../../components/MaritalInfo/MaritalInfo';
-import ExpectedPartner from '../../../components/ExpectedPartner/ExpectedPartner';
-import OngikarNama from '../../../components/OngikarNama/OngikarNama';
-import ContactInfo from '../../../components/ContactInfo/ContactInfo';
-import Achievement from '../../../components/Achievement/Achievement';
-import './BioData.css';
-import { useParams, Link } from '@/lib/navigation';
-import { useQuery } from '@tanstack/react-query';
-import { BioDataServices } from '../../../services/bioData';
-import { ContactServices } from '../../../services/contact';
-import { UserInfoServices } from '../../../services/userInfo';
-import { getToken } from '../../../utils/cookies';
-import { useContext, useEffect } from 'react';
-import BioContext from '../../../contexts/BioContext';
-import UserContext from '../../../contexts/UserContext';
-import LoadingCircle from '../../../components/LoadingCircle/LoadingCircle';
-import { FcLeft } from 'react-icons/fc';
-import { useNavigate } from '@/lib/navigation';
-import ScrollToTop from '../../../components/ScrollTop/ScrollTop';
+import BioInfo from "../../../components/BioInfo/BioInfo";
+import AddressInfo from "../../../components/AddressInfo/AddressInfo";
+import EducationInfo from "../../../components/EducationalInfo/EducationalInfo";
+import BioInfoButton from "../../../components/BioInfoButton/BioInfoButton";
+import BioDataStat from "../../../components/BioDataStat/BioDataStat";
+import FamilyInfo from "../../../components/FamilyInfo/FamilyInfo";
+import PersonalInfo from "../../../components/PersonalInfo/PersonalInfo";
+import ProfessionalInfo from "../../../components/ProfessionalInfo/ProfessionalInfo";
+import MaritalInfo from "../../../components/MaritalInfo/MaritalInfo";
+import ExpectedPartner from "../../../components/ExpectedPartner/ExpectedPartner";
+import OngikarNama from "../../../components/OngikarNama/OngikarNama";
+import ContactInfo from "../../../components/ContactInfo/ContactInfo";
+import Achievement from "../../../components/Achievement/Achievement";
+import "./BioData.css";
+import { useParams, Link } from "@/lib/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { BioDataServices } from "../../../services/bioData";
+import { ContactServices } from "../../../services/contact";
+import { UserInfoServices } from "../../../services/userInfo";
+import { getToken } from "../../../utils/cookies";
+import { useContext, useEffect } from "react";
+import BioContext from "../../../contexts/BioContext";
+import UserContext from "../../../contexts/UserContext";
+import LoadingCircle from "../../../components/LoadingCircle/LoadingCircle";
+import { FcLeft } from "react-icons/fc";
+import { useNavigate } from "@/lib/navigation";
+import ScrollToTop from "../../../components/ScrollTop/ScrollTop";
 
-import Contact from '../Contact/Contact';
-const BioData = () => {
+import Contact from "../Contact/Contact";
+const BioData = ({ initialData = null }) => {
   const { id } = useParams();
   const { setBio } = useContext(BioContext);
   const { userInfo } = useContext(UserContext);
@@ -37,17 +39,18 @@ const BioData = () => {
 
   // console.log(id);
   const { isLoading, data, isError } = useQuery({
-    queryKey: ['bio-data', id],
+    queryKey: ["bio-data", id],
     queryFn: async () => {
       return await BioDataServices.getBioData(id);
     },
+    initialData,
     retry: false,
     enabled: !!id,
   });
 
   // console.log("data~~", data);
   const { data: userStatus = null } = useQuery({
-    queryKey: ['bio-data', 'status', id],
+    queryKey: ["bio-data", "status", id],
     queryFn: async () => {
       return await UserInfoServices.getUserInfoStatus(id);
     },
@@ -55,7 +58,7 @@ const BioData = () => {
     enabled: !!id,
   });
   const { data: contact = null } = useQuery({
-    queryKey: ['bio-data', 'contact', id, userInfo?.data?._id],
+    queryKey: ["bio-data", "contact", id, userInfo?.data?._id],
     queryFn: async () => {
       return await ContactServices.getContactForBuyer(
         userInfo?.data?._id,
@@ -89,12 +92,12 @@ const BioData = () => {
         <div className="flex flex-row md:mr-10 md:ml-0 ml-3 md:pt-0 pt-3 mr-0">
           <p className="md:mr-2  text-green-600 font-semibold">
             কীভাবে বায়োডাটা তৈরি করবেন
-          </p>{' '}
+          </p>{" "}
           <Link
             to="/biodata-submit"
             className="text-indigo-700 ml-3 underline font-semibold"
           >
-            এখানে ক্লিক করুন{' '}
+            এখানে ক্লিক করুন{" "}
           </Link>
         </div>
       </div>
@@ -172,7 +175,7 @@ const BioData = () => {
                     যোগাযোগের তথ্য দেখতে প্রথমে আপনার অ্যাকাউন্টে লগইন করুন।
                   </p>
                   <button
-                    onClick={() => navigate('/login')}
+                    onClick={() => navigate("/login")}
                     className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
                   >
                     এখনই লগইন করুন
