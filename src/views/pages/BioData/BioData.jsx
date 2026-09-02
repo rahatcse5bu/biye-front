@@ -1,7 +1,5 @@
 "use client";
 
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import BioInfo from "../../../components/BioInfo/BioInfo";
 import AddressInfo from "../../../components/AddressInfo/AddressInfo";
 import EducationInfo from "../../../components/EducationalInfo/EducationalInfo";
@@ -16,7 +14,7 @@ import OngikarNama from "../../../components/OngikarNama/OngikarNama";
 import ContactInfo from "../../../components/ContactInfo/ContactInfo";
 import Achievement from "../../../components/Achievement/Achievement";
 import "./BioData.css";
-import { useParams, Link } from "@/lib/navigation";
+import { useParams } from "@/lib/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { BioDataServices } from "../../../services/bioData";
 import { ContactServices } from "../../../services/contact";
@@ -26,7 +24,6 @@ import { useContext, useEffect } from "react";
 import BioContext from "../../../contexts/BioContext";
 import UserContext from "../../../contexts/UserContext";
 import LoadingCircle from "../../../components/LoadingCircle/LoadingCircle";
-import { FcLeft } from "react-icons/fc";
 import { useNavigate } from "@/lib/navigation";
 import ScrollToTop from "../../../components/ScrollTop/ScrollTop";
 
@@ -80,27 +77,7 @@ const BioData = ({ initialData = null }) => {
   }, [data, setBio, id]);
 
   return (
-    <div className=" py-2 w-full  ">
-      <div className="flex md:flex-row flex-col  py-3 justify-between">
-        <div
-          onClick={() => navigate(-1)}
-          className=" flex flex-row cursor-pointer "
-        >
-          <FcLeft className="w-8 h-6 text-white " />
-          <strong className="text-indigo-600">Back</strong>
-        </div>
-        <div className="flex flex-row md:mr-10 md:ml-0 ml-3 md:pt-0 pt-3 mr-0">
-          <p className="md:mr-2  text-green-600 font-semibold">
-            কীভাবে বায়োডাটা তৈরি করবেন
-          </p>{" "}
-          <Link
-            to="/biodata-submit"
-            className="text-indigo-700 ml-3 underline font-semibold"
-          >
-            এখানে ক্লিক করুন{" "}
-          </Link>
-        </div>
-      </div>
+    <div className="w-full py-2">
       <ScrollToTop />
       {isLoading ? (
         <LoadingCircle classes="my-10 h-[500px]" />
