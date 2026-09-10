@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import Select from '../../components/Select/Select';
 import Input from '../../components/Input/Input';
 import { Colors } from '../../constants/colors';
 import FormTitle from '../FormTitle/FormTitle';
 import {
+  bengaliMonths,
   bioDataTypes,
   bloodGroup,
   genderOptions,
@@ -45,7 +46,9 @@ const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved, generalInf
   const [referId, setReferId] = useState('');
   const [bioType, setBioType] = useState('');
   const [maritalStatus, setMaritalStatus] = useState('');
-  const [dob, setDob] = useState('');
+  const [dobDay, setDobDay] = useState('');
+  const [dobMonth, setDobMonth] = useState('');
+  const [dobYear, setDobYear] = useState('');
   const [height, setHeight] = useState('');
   const [color, setColor] = useState('');
   const [weight, setWeight] = useState('৫০');
@@ -97,7 +100,12 @@ const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved, generalInf
       setBioType(bio_type);
       setMaritalStatus(marital_status);
       setBlood(blood_group);
-      setDob(getYearMonthDate(date_of_birth));
+      if (date_of_birth) {
+        const [year, month, day] = getYearMonthDate(date_of_birth).split('-');
+        setDobYear(year);
+        setDobMonth(month);
+        setDobDay(day);
+      }
       setNationality(nationality);
       setHeight(height);
       setWeight(convertToBengaliNumerals(weight.toString()));
@@ -151,6 +159,38 @@ const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved, generalInf
     }
   }, [religion]);
 
+  const daysInSelectedMonth = (year, month) => {
+    if (!year || !month) return 31;
+    return new Date(Number(year), Number(month), 0).getDate();
+  };
+
+  const dayOptions = useMemo(() => {
+    const totalDays = daysInSelectedMonth(dobYear, dobMonth);
+    return Array.from({ length: totalDays }, (_, i) => {
+      const day = String(i + 1).padStart(2, '0');
+      return { value: day, label: convertToBengaliNumerals(day) };
+    });
+  }, [dobYear, dobMonth]);
+
+  const monthOptions = bengaliMonths;
+
+  const yearOptions = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    return Array.from({ length: 100 - 18 + 1 }, (_, i) => {
+      const year = currentYear - 18 - i;
+      return { value: String(year), label: convertToBengaliNumerals(year) };
+    });
+  }, []);
+
+  // Keep the selected day valid when switching to a shorter month/year (e.g. 31st -> February)
+  useEffect(() => {
+    if (!dobDay) return;
+    const maxDay = daysInSelectedMonth(dobYear, dobMonth);
+    if (Number(dobDay) > maxDay) {
+      setDobDay(String(maxDay).padStart(2, '0'));
+    }
+  }, [dobMonth, dobYear]);
+
   // console.log(userInfo?.data?._id);
 
   const backButtonHandler = () => {
@@ -186,10 +226,16 @@ const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved, generalInf
   const submitGeneralFormHandler = async (event) => {
     event.preventDefault();
 
+    if (!dobDay || !dobMonth || !dobYear) {
+      Toast.errorToast('জন্মতারিখ সম্পূর্ণভাবে নির্বাচন করুন');
+      return;
+    }
+
     let formData = {
       bio_type: bioType,
       marital_status: maritalStatus,
-      date_of_birth: dob,
+      date_of_birth:
+        dobYear && dobMonth && dobDay ? `${dobYear}-${dobMonth}-${dobDay}` : '',
       height: parseFloat(height),
       screen_color: color,
       weight: convertToEnglishDigits(weight.toString()),
@@ -310,13 +356,35 @@ const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved, generalInf
             options={filteredMaritalStatus}
           />
 
-          <Input
-            title={'জন্মসন '}
-            value={dob}
-            setValue={setDob}
-            required
-            type="date"
-          />
+          <div className="my-3 text-left">
+            <p className="mb-2 font-bold text-gray-500">
+              জন্মতারিখ <span className="text-red-900">*</span>
+            </p>
+            <div className="grid grid-cols-3 gap-2 mt-2">
+              <SingleSelect
+                value={dayOptions.find((option) => option.value === dobDay) || null}
+                setValue={(option) => setDobDay(option?.value || '')}
+                options={dayOptions}
+                placeholder="দিন"
+              />
+              <SingleSelect
+                value={
+                  monthOptions.find((option) => option.value === dobMonth) || null
+                }
+                setValue={(option) => setDobMonth(option?.value || '')}
+                options={monthOptions}
+                placeholder="মাস"
+              />
+              <SingleSelect
+                value={
+                  yearOptions.find((option) => option.value === dobYear) || null
+                }
+                setValue={(option) => setDobYear(option?.value || '')}
+                options={yearOptions}
+                placeholder="বছর"
+              />
+            </div>
+          </div>
 
           <div className="text-center w-full sm:hidden block">
             <CustomButton

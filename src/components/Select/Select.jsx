@@ -9,6 +9,7 @@ const Select = ({
   required = false,
   options = [],
   subtitle,
+  placeholder = 'নির্বাচন করুন',
 }) => {
   // console.log({ options: options });
   if (!options) {
@@ -28,7 +29,7 @@ const Select = ({
         onChange={(e) => setValue(e.target.value)}
         required={required}
       >
-        <option value="">নির্বাচন করুন</option>
+        <option value="">{placeholder}</option>
         {options?.map((option, index) => (
           <option className="text-black" key={index} value={option?.value}>
             {option?.label ? option?.label : option?.value}

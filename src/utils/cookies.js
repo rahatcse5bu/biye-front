@@ -1,46 +1,36 @@
-import Cookies from 'js-cookie';
-const setToken = (data) => {
-  Cookies.set('pnc-nikha-tokenInfo', JSON.stringify(data), { expires: 30 });
-};
-const setUserOPenSmall = (data) => {
-  Cookies.set('pnc-nikha-user-open-small', JSON.stringify(data));
-};
-const setUserOPenLarge = (data) => {
-  Cookies.set('pnc-nikha-user-open-large', JSON.stringify(data));
+import Cookies from "js-cookie";
+
+const RELIGION_COOKIE = "biye_religion";
+
+export const getToken = () => {
+  const token = Cookies.get("token");
+  return token ? { token } : null;
 };
 
-const getToken = () => {
-  let data = Cookies.get('pnc-nikha-tokenInfo');
-  if (data) {
-    data = JSON.parse(data);
+export const setToken = (tokenInfo) => {
+  if (tokenInfo?.token) {
+    Cookies.set("token", tokenInfo.token, { expires: 30 });
+  } else {
+    Cookies.remove("token");
   }
-  return data;
-};
-const getUserOPenSmall = () => {
-  let data = Cookies.get('pnc-nikha-user-open-small');
-  if (data) {
-    data = JSON.parse(data);
-  }
-  return data;
-};
-const getUserOPenLarge = () => {
-  let data = Cookies.get('pnc-nikha-user-open-large');
-  if (data) {
-    data = JSON.parse(data);
-  }
-  return data;
 };
 
-const removeToken = () => {
-  Cookies.remove('pnc-nikha-tokenInfo');
+export const removeToken = () => {
+  Cookies.remove("token");
 };
 
-export {
-  setToken,
-  getToken,
-  removeToken,
-  getUserOPenLarge,
-  getUserOPenSmall,
-  setUserOPenSmall,
-  setUserOPenLarge,
+export const getReligionCookie = () => {
+  return Cookies.get(RELIGION_COOKIE) || null;
+};
+
+export const setReligionCookie = (religion) => {
+  if (religion) {
+    Cookies.set(RELIGION_COOKIE, religion, { expires: 365 });
+  } else {
+    Cookies.remove(RELIGION_COOKIE);
+  }
+};
+
+export const removeReligionCookie = () => {
+  Cookies.remove(RELIGION_COOKIE);
 };

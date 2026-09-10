@@ -11,53 +11,7 @@ import OccupationFilter from "./OccupationFilter";
 import OthersFilter from "./OthersFilter";
 import ExpectedPartnerFilter from "./ExpectedPartnerFilter";
 
-const ALLOWED_QUERY_KEYS = new Set([
-  "page",
-  "limit",
-  "user_status",
-  "sortBy",
-  "sortOrder",
-  "isFeatured",
-  "bio_type",
-  "bio_gender",
-  "gender",
-  "marital_status",
-  "marital_status_en",
-  "religion",
-  "religious_type",
-  "minAge",
-  "maxAge",
-  "minHeight",
-  "maxHeight",
-  "complexion",
-  "division",
-  "zilla",
-  "upazila",
-  "current_division",
-  "current_zilla",
-  "current_upzilla",
-  "permanent_address",
-  "education_medium",
-  "deeni_edu",
-  "occupation",
-  "fiqh",
-  "economic_status",
-  "categories",
-  "exp_zilla",
-  "exp_marital_status",
-  "exp_occupation",
-  "exp_economical_condition",
-  "exp_educational_qualifications",
-]);
-
-const NUMBER_QUERY_KEYS = new Set([
-  "page",
-  "limit",
-  "minAge",
-  "maxAge",
-  "minHeight",
-  "maxHeight",
-]);
+import { parseBiodataFilters } from "../../utils/query";
 
 const BioDataFilter = () => {
   const [searchParams] = useSearchParams();
@@ -73,12 +27,7 @@ const BioDataFilter = () => {
   } = usePrimary();
 
   useEffect(() => {
-    const urlFilters = {};
-
-    searchParams.forEach((value, key) => {
-      if (!ALLOWED_QUERY_KEYS.has(key)) return;
-      urlFilters[key] = NUMBER_QUERY_KEYS.has(key) ? Number(value) : value;
-    });
+    const urlFilters = parseBiodataFilters(searchParams);
 
     const hasUrlFilters = Object.keys(urlFilters).length > 0;
     const userStatus =

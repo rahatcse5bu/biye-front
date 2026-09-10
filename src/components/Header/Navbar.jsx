@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { useState, useEffect, useContext } from 'react';
-import { Link, useLocation } from '@/lib/navigation';
+import { useState, useEffect, useContext } from "react";
+import { Link, useLocation } from "@/lib/navigation";
 import {
   BanknotesIcon,
   Bars3Icon,
@@ -9,30 +9,31 @@ import {
   UserCircleIcon,
   UsersIcon,
   XMarkIcon,
-} from '@heroicons/react/24/outline';
-import { Navbar, Typography } from '@material-tailwind/react';
-import { navData } from './navigation_data';
-import SubLinks from './Sublinks.jsx';
-import UserContext from '../../contexts/UserContext';
+} from "@heroicons/react/24/outline";
+import { Navbar, Typography } from "@material-tailwind/react";
+import { navData } from "./navigation_data";
+import SubLinks from "./Sublinks.jsx";
+import UserContext from "../../contexts/UserContext";
 
-const navLogo = '/assets/logo/biye-logo.svg';
-import { getToken, removeToken } from '../../utils/cookies';
+const navLogo = "/assets/logo/biye-logo.svg";
+import { getToken, removeToken } from "../../utils/cookies";
 import {
   getGender,
   getProfilePhoto,
   setReligionToLocal,
   getReligionInfo,
-} from '../../utils/localStorage';
-import female from '../../assets/icons/female.svg';
-import male from '../../assets/icons/male.svg';
-import { useQuery } from '@tanstack/react-query';
-import { userServices } from '../../services/user';
+} from "../../utils/localStorage";
+import female from "../../assets/icons/female.svg";
+import male from "../../assets/icons/male.svg";
+import { useQuery } from "@tanstack/react-query";
+import { userServices } from "../../services/user";
 
-import { UserInfoServices } from '../../services/userInfo';
-import { Toast } from '../../utils/toast';
-import { useBio } from '../../contexts/useBio.jsx';
+import { UserInfoServices } from "../../services/userInfo";
+import { Toast } from "../../utils/toast";
+import { useBio } from "../../contexts/useBio.jsx";
 
-import { GeneralInfoServices } from '../../services/generalInfo';
+import { useReligionPreference } from '../../contexts/ReligionPreferenceContext';
+import { setReligionCookie } from '../../utils/cookies';
 
 export default function NavBar() {
   const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
@@ -42,22 +43,20 @@ export default function NavBar() {
   const gender = getGender();
   const profilePhoto = getProfilePhoto();
 
-  const [selectedReligion, setSelectedReligion] = useState(
-    getReligionInfo()?.religion || ''
-  );
+  const { religion, chooseReligion } = useReligionPreference();
+  const selectedReligion = religion || "";
 
   const handleReligionChange = (e) => {
     const value = e.target.value;
-    setSelectedReligion(value);
-    setReligionToLocal(value || null, null);
-    window.location.reload();
+    chooseReligion(value || null);
+    setReligionCookie(value || null);
   };
 
   const { pathname } = useLocation();
 
   useEffect(() => {
     setOpenNav(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [pathname, query]);
 
   const {
@@ -65,7 +64,7 @@ export default function NavBar() {
     isLoading: userInfoFetchLoading,
     refetch: userInfoRefetch,
   } = useQuery({
-    queryKey: ['user-info', user?.email],
+    queryKey: ["user-info", user?.email],
     queryFn: async () => {
       return await userServices.getUserInfoByEmail(user?.email);
     },
@@ -78,7 +77,7 @@ export default function NavBar() {
     isError,
     error,
   } = useQuery({
-    queryKey: ['user-info', getToken()?.token],
+    queryKey: ["user-info", getToken()?.token],
     queryFn: async () => {
       return await UserInfoServices.verifyTokenByUser(getToken()?.token);
     },
@@ -94,7 +93,7 @@ export default function NavBar() {
     // Clear religion from localStorage on logout
     setReligionToLocal(null, null);
     // navigate("/");
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   useEffect(() => {
@@ -103,25 +102,12 @@ export default function NavBar() {
     }
   }, [data, setUserInfo]);
 
-  // Fetch religion for homepage content personalization - always sync with user's actual religion
-  useEffect(() => {
-    const token = getToken()?.token;
-    if (!token) return;
-    GeneralInfoServices.getGeneralInfoByUser(token)
-      .then((res) => {
-        if (res?.data?.religion) {
-          setReligionToLocal(res.data.religion, res.data.religious_type);
-          setSelectedReligion(res.data.religion);
-        }
-      })
-      .catch(() => {});
-  }, [data]);
   useEffect(() => {
     if (
       isError &&
       error &&
       getToken()?.token &&
-      process.env.NODE_ENV === 'production'
+      process.env.NODE_ENV === "production"
     ) {
       Toast.errorToast(error?.response?.data?.error);
       logoutHandler();
@@ -131,7 +117,7 @@ export default function NavBar() {
   useEffect(() => {
     const preventCopy = (event) => {
       if (
-        process.env.NODE_ENV === 'production' &&
+        process.env.NODE_ENV === "production" &&
         event.ctrlKey &&
         (event.keyCode === 67 || event.keyCode === 99)
       ) {
@@ -139,8 +125,8 @@ export default function NavBar() {
       }
     };
 
-    document.addEventListener('keydown', preventCopy);
-    return () => document.removeEventListener('keydown', preventCopy);
+    document.addEventListener("keydown", preventCopy);
+    return () => document.removeEventListener("keydown", preventCopy);
   }, []);
 
   const NavList = () => (
@@ -176,20 +162,20 @@ export default function NavBar() {
                 to={_navDataItem.path}
                 className={`inline-flex min-h-11 w-full items-center justify-center rounded-[10px] border border-transparent px-3 py-2.5 leading-none text-gray-800 transition-colors duration-200 hover:bg-[#0D7377]/10 hover:text-[#0D7377] lg:min-h-10 lg:w-auto lg:px-[7px] lg:py-[9px] lg:text-white/90 lg:hover:border-white/10 lg:hover:bg-white/[0.14] lg:hover:text-white xl:px-[clamp(9px,1vw,14px)] ${
                   (
-                    _navDataItem.path === '/'
-                      ? pathname === '/'
+                    _navDataItem.path === "/"
+                      ? pathname === "/"
                       : pathname.startsWith(_navDataItem.path)
                   )
-                    ? 'bg-[#0D7377]/10 text-[#0D7377] lg:border-white/10 lg:bg-white/[0.14] lg:text-white lg:shadow-[inset_0_-2px_0_#F6A6B5]'
-                    : ''
+                    ? "bg-[#0D7377]/10 text-[#0D7377] lg:border-white/10 lg:bg-white/[0.14] lg:text-white lg:shadow-[inset_0_-2px_0_#F6A6B5]"
+                    : ""
                 }`}
                 aria-current={
                   (
-                    _navDataItem.path === '/'
-                      ? pathname === '/'
+                    _navDataItem.path === "/"
+                      ? pathname === "/"
                       : pathname.startsWith(_navDataItem.path)
                   )
-                    ? 'page'
+                    ? "page"
                     : undefined
                 }
                 onClick={() => setOpenNav(false)}
@@ -210,13 +196,13 @@ export default function NavBar() {
           <option value="" className="text-black">
             সকল ধর্ম
           </option>
-          <option value="ইসলাম" className="text-black">
+          <option value="islam" className="text-black">
             ইসলাম
           </option>
-          <option value="হিন্দু" className="text-black">
+          <option value="hinduism" className="text-black">
             হিন্দু
           </option>
-          <option value="খ্রিষ্টান" className="text-black">
+          <option value="christianity" className="text-black">
             খ্রিষ্টান
           </option>
         </select>
@@ -243,7 +229,7 @@ export default function NavBar() {
             >
               <img
                 className="h-8 w-8 rounded-lg border border-white/50 bg-white/10 object-cover"
-                src={gender === 'মহিলা' ? female : profilePhoto || male}
+                src={gender === "মহিলা" ? female : profilePhoto || male}
                 alt="ব্যবহারকারীর প্রোফাইল"
                 width="32"
                 height="32"
@@ -267,24 +253,24 @@ export default function NavBar() {
   );
 
   const mobileNavItems = [
-    { label: 'হোম', path: '/', icon: HomeIcon },
-    { label: 'বায়োডাটা', path: '/biodatas', icon: UsersIcon },
+    { label: "হোম", path: "/", icon: HomeIcon },
+    { label: "বায়োডাটা", path: "/biodatas", icon: UsersIcon },
     {
-      label: 'তৈরি করুন',
-      path: '/biodata-submit',
+      label: "তৈরি করুন",
+      path: "/biodata-submit",
       icon: DocumentPlusIcon,
       primary: true,
     },
-    { label: 'প্যাকেজ', path: '/points-package', icon: BanknotesIcon },
+    { label: "প্যাকেজ", path: "/points-package", icon: BanknotesIcon },
     {
-      label: user ? 'অ্যাকাউন্ট' : 'লগইন',
-      path: user ? '/user/account/dashboard' : '/login',
+      label: user ? "অ্যাকাউন্ট" : "লগইন",
+      path: user ? "/user/account/dashboard" : "/login",
       icon: UserCircleIcon,
     },
   ];
 
   const isActiveRoute = (path) =>
-    path === '/' ? pathname === '/' : pathname.startsWith(path);
+    path === "/" ? pathname === "/" : pathname.startsWith(path);
 
   return (
     <>
@@ -316,19 +302,19 @@ export default function NavBar() {
               aria-label="ধর্ম নির্বাচন করুন"
             >
               <option value="">সকল</option>
-              <option value="ইসলাম">ইসলাম</option>
-              <option value="হিন্দু">হিন্দু</option>
-              <option value="খ্রিষ্টান">খ্রিষ্টান</option>
+              <option value="islam">ইসলাম</option>
+              <option value="hinduism">হিন্দু</option>
+              <option value="christianity">খ্রিষ্টান</option>
             </select>
 
             <Link
-              to={user ? '/user/account/dashboard' : '/login'}
+              to={user ? "/user/account/dashboard" : "/login"}
               className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl text-white transition-colors duration-200 hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transition-none"
-              aria-label={user ? 'আমার অ্যাকাউন্ট' : 'লগইন করুন'}
+              aria-label={user ? "আমার অ্যাকাউন্ট" : "লগইন করুন"}
             >
               <UserCircleIcon className="h-7 w-7" aria-hidden="true" />
               <span className="sr-only">
-                {user ? 'আমার অ্যাকাউন্ট' : 'লগইন করুন'}
+                {user ? "আমার অ্যাকাউন্ট" : "লগইন করুন"}
               </span>
               {userInfo?.data?.points > 0 && (
                 <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-[#E85D75] ring-2 ring-brand-900">
@@ -340,7 +326,7 @@ export default function NavBar() {
             <button
               type="button"
               className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-white transition-colors duration-200 hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transition-none"
-              aria-label={openNav ? 'মেনু বন্ধ করুন' : 'মেনু খুলুন'}
+              aria-label={openNav ? "মেনু বন্ধ করুন" : "মেনু খুলুন"}
               aria-expanded={openNav}
               aria-controls="mobile-navigation-menu"
               onClick={() => setOpenNav((isOpen) => !isOpen)}
@@ -386,25 +372,25 @@ export default function NavBar() {
                 <Link
                   to={path}
                   className={`group flex min-w-0 flex-1 flex-col items-center justify-center rounded-xl px-1 text-[11px] font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-1 motion-reduce:transition-none ${
-                    isActive ? 'text-brand-900' : 'text-gray-500'
+                    isActive ? "text-brand-900" : "text-gray-500"
                   }`}
-                  aria-current={isActive ? 'page' : undefined}
+                  aria-current={isActive ? "page" : undefined}
                 >
                   <span
                     className={`inline-flex items-center justify-center transition-colors duration-200 motion-reduce:transition-none ${
                       primary
-                        ? '-mt-5 h-12 w-12 rounded-2xl border-4 border-white bg-brand-900 text-white shadow-[0_6px_16px_rgba(13,115,119,0.28)] group-hover:bg-[#0F8287]'
+                        ? "-mt-5 h-12 w-12 rounded-2xl border-4 border-white bg-brand-900 text-white shadow-[0_6px_16px_rgba(13,115,119,0.28)] group-hover:bg-[#0F8287]"
                         : `h-7 w-9 rounded-lg group-hover:bg-brand-900/10 group-hover:text-brand-900 ${
-                            isActive ? 'bg-brand-900/10' : ''
+                            isActive ? "bg-brand-900/10" : ""
                           }`
                     }`}
                   >
                     <Icon
-                      className={primary ? 'h-6 w-6' : 'h-[22px] w-[22px]'}
+                      className={primary ? "h-6 w-6" : "h-[22px] w-[22px]"}
                       aria-hidden="true"
                     />
                   </span>
-                  <span className={primary ? 'mt-0.5' : 'mt-1'}>{label}</span>
+                  <span className={primary ? "mt-0.5" : "mt-1"}>{label}</span>
                 </Link>
               </li>
             );

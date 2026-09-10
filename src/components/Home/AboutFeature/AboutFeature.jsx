@@ -1,24 +1,23 @@
-import { useState } from 'react';
-import { PlayIcon } from '@heroicons/react/24/solid';
-import LiteYouTubeEmbed from 'react-lite-youtube-embed';
-import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
-import CustomModal from '../../CustomModal/CustomModal';
+import { useState } from "react";
+import { PlayIcon } from "@heroicons/react/24/solid";
+import LiteYouTubeEmbed from "react-lite-youtube-embed";
+import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
+import CustomModal from "../../CustomModal/CustomModal";
+import { aboutContent } from "@/constants/religionContent";
 
-const AboutFeature = () => {
+const AboutFeature = ({ content }) => {
   const [openModal, setOpenModal] = useState(false);
+  const about = { ...aboutContent.islam, ...content };
 
   return (
     <div className="mt-4 flex flex-col items-start justify-between gap-4 rounded-2xl border border-brand-900/15 bg-brand-900/5 p-5 sm:flex-row sm:items-center sm:p-6">
       <div>
-        <p className="text-sm font-bold text-brand-900">
-          বিয়ে কীভাবে কাজ করে?
-        </p>
+        <p className="text-sm font-bold text-brand-900">{about.eyebrow}</p>
         <h3 className="mt-1 text-lg font-bold text-gray-900 sm:text-xl">
-          ফিচারগুলো এক নজরে ভিডিওতে দেখুন
+          {about.title}
         </h3>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
-          বায়োডাটা তৈরি, অনুসন্ধান এবং যোগাযোগের অনুরোধের প্রক্রিয়া সহজে বুঝে
-          নিন।
+          {about.description}
         </p>
       </div>
       <button

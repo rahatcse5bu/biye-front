@@ -1,4 +1,3 @@
-'use client';
 
 import TermsAndConditions from '@/views/pages/TermsAndConditions/TermsAndConditions';
 

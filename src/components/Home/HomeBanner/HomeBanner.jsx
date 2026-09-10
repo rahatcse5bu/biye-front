@@ -1,17 +1,20 @@
-import { Link } from '@/lib/navigation';
+import { Link } from "@/lib/navigation";
+import { bannerContent } from "@/constants/religionContent";
 import {
   CheckCircleIcon,
   MagnifyingGlassIcon,
   PencilSquareIcon,
-} from '@heroicons/react/24/outline';
+} from "@heroicons/react/24/outline";
 
 const steps = [
-  'পছন্দ অনুযায়ী বায়োডাটা খুঁজুন',
-  'বিস্তারিত তথ্য দেখে সিদ্ধান্ত নিন',
-  'নিরাপদভাবে যোগাযোগের অনুরোধ করুন',
+  "পছন্দ অনুযায়ী বায়োডাটা খুঁজুন",
+  "বিস্তারিত তথ্য দেখে সিদ্ধান্ত নিন",
+  "নিরাপদভাবে যোগাযোগের অনুরোধ করুন",
 ];
 
 const HomeBanner = ({ content }) => {
+  const banner = { ...bannerContent.islam, ...content };
+
   return (
     <section
       className="overflow-hidden bg-brand-900 text-white"
@@ -26,16 +29,14 @@ const HomeBanner = ({ content }) => {
             id="home-heading"
             className="text-3xl font-bold leading-[1.35] sm:text-4xl lg:text-5xl lg:leading-[1.25]"
           >
-            {content?.title1 || 'বাংলাদেশী ইসলামিক'} ম্যাট্রিমনিতে
+            {banner.title1} ম্যাট্রিমনিতে
             <span className="mt-1 block text-[#F8DDE5]">
               জীবনসঙ্গী খোঁজা হোক সহজ ও সুন্দর
             </span>
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-8 text-white/80 sm:text-lg">
-            {content?.subtitle ||
-              'আপনার নিজ উপজেলায় পছন্দের পাত্রপাত্রী খুঁজুন খুব সহজে'}
-            । নিজের পছন্দ ও মূল্যবোধ অনুযায়ী বায়োডাটা দেখুন এবং নতুন জীবনের
-            পথে এগিয়ে যান।
+            {banner.subtitle}। নিজের পছন্দ ও মূল্যবোধ অনুযায়ী বায়োডাটা দেখুন
+            এবং নতুন জীবনের পথে এগিয়ে যান।
           </p>
 
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">

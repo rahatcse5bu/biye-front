@@ -52,9 +52,7 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+
   async redirects() {
     return [
       {

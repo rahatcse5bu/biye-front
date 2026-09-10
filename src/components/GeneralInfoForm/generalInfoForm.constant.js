@@ -94,6 +94,22 @@ export const religiousTypesByReligion = {
   ],
 };
 
+// Bengali month names for the day/month/year date-of-birth selects
+export const bengaliMonths = [
+  { value: '01', label: 'জানুয়ারি' },
+  { value: '02', label: 'ফেব্রুয়ারি' },
+  { value: '03', label: 'মার্চ' },
+  { value: '04', label: 'এপ্রিল' },
+  { value: '05', label: 'মে' },
+  { value: '06', label: 'জুন' },
+  { value: '07', label: 'জুলাই' },
+  { value: '08', label: 'আগস্ট' },
+  { value: '09', label: 'সেপ্টেম্বর' },
+  { value: '10', label: 'অক্টোবর' },
+  { value: '11', label: 'নভেম্বর' },
+  { value: '12', label: 'ডিসেম্বর' },
+];
+
 // Flat list of all religious types
 export const allReligiousTypes = [
   { value: 'practicing_muslim', label: 'প্র্যাকটিসিং মুসলিম' },

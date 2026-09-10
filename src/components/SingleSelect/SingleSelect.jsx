@@ -13,6 +13,8 @@ export default function SingleSelect({
   setValue,
   classes = 'z-40',
   required = false,
+  placeholder,
+  maxMenuHeight = 240,
 }) {
   // console.log(value);
   return (
@@ -31,6 +33,13 @@ export default function SingleSelect({
         isClearable={true}
         required={required}
         options={options}
+        placeholder={placeholder}
+        menuPlacement="auto"
+        maxMenuHeight={maxMenuHeight}
+        menuPortalTarget={
+          typeof document !== 'undefined' ? document.body : undefined
+        }
+        styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
         className={`text-left ${classes}`}
       />
       {subtitle && (

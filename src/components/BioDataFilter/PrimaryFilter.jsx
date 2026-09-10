@@ -3,6 +3,7 @@ import { useBio } from "../../contexts/useBio";
 import CustomAccordion from "../CustomAccordion/CustomAccordion";
 import { useFilter } from "../../contexts/useFilter";
 import { usePrimary } from "../../contexts/userPrimary";
+import { useReligionPreference } from "@/contexts/ReligionPreferenceContext";
 
 // Religious type options based on religion
 const religiousTypesByReligion = {
@@ -23,6 +24,7 @@ const religiousTypesByReligion = {
 const PrimaryFilter = () => {
   const { setFilterFields } = useBio();
   const { primaryFilterOpen, setPrimaryFilterOpen } = useFilter();
+  const { chooseReligion } = useReligionPreference();
   const {
     age,
     setAge,
@@ -154,6 +156,9 @@ const PrimaryFilter = () => {
               onChange={(e) => {
                 const value = e.target.value;
                 setReligion(value);
+                // Selecting religion also sets the global browsing preference,
+                // so the biodata list updates immediately.
+                chooseReligion(value || null);
                 // Reset religious type when religion changes
                 setReligiousType("");
                 setFilterFields((filterFields) => {

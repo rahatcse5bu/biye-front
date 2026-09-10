@@ -1,6 +1,10 @@
-import { ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
+import { ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/outline";
+import { quoteContent } from "@/constants/religionContent";
 
 const IslamicQuote = ({ content }) => {
+  const quote = content ?? quoteContent.islam;
+  const QuoteBody = quote.editorial ? "div" : "blockquote";
+
   return (
     <figure className="relative -mt-6 rounded-2xl border border-brand-900/10 bg-white p-5 shadow-sm sm:-mt-7 sm:p-7 lg:mx-12">
       <div className="flex items-start gap-4">
@@ -10,18 +14,17 @@ const IslamicQuote = ({ content }) => {
             aria-hidden="true"
           />
         </span>
-        <blockquote>
+        <QuoteBody>
           <p className="text-base font-semibold leading-8 text-gray-800 sm:text-lg">
-            “
-            {content?.text ||
-              'যে ব্যক্তি বিয়ে করলো সে তার অর্ধেক দ্বীন পূর্ণ করে ফেললো। বাকি অর্ধেকের জন্য সে আল্লাহকে ভয় করুক।'}
-            ”
+            {quote.text}
           </p>
-          <figcaption className="mt-2 text-sm font-bold text-brand-900 sm:text-base">
-            {content?.reference || '(বায়হাকী, শু’আবুল ঈমান - ৫৪৮৬)'}
-          </figcaption>
-        </blockquote>
+        </QuoteBody>
       </div>
+      {quote.reference && (
+        <figcaption className="mt-2 pl-[3.75rem] text-sm font-bold text-brand-900 sm:text-base">
+          {quote.reference}
+        </figcaption>
+      )}
     </figure>
   );
 };

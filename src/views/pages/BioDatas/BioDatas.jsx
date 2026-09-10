@@ -1,12 +1,16 @@
+"use client";
+
 import BioDatasGrid from "../../../components/BioDatasGrid/BioDatasGrid";
 import { SideBar } from "../../../components/SideBar/SideBar";
-import { useContext, useEffect, useRef } from "react";
-import BioContext from "../../../contexts/BioContext";
+import { Suspense, useContext, useEffect, useRef } from "react";
+import BioContext, { BioProvider } from "../../../contexts/BioContext";
 import { FaXmark } from "react-icons/fa6";
 import LoadingCircle from "../../../components/LoadingCircle/LoadingCircle";
 import { useFilter } from "../../../contexts/useFilter";
 import { usePrimary } from "../../../contexts/userPrimary";
-import { useNavigate } from "@/lib/navigation";
+import { useNavigate, useSearchParams } from "@/lib/navigation";
+import { useReligionPreference } from "@/contexts/ReligionPreferenceContext";
+import { religionToApiKey } from "../../../constants/religionContent";
 import { convertToQuery } from "../../../utils/query";
 import PromptFilter from "../../../components/PromptFilter/PromptFilter";
 import ChatAgent from "../../../components/ChatAgent/ChatAgent";
@@ -32,8 +36,60 @@ const BioDatas = () => {
   } = useFilter();
   const { resetPrimaryFilters } = usePrimary();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const {
+    religion: preferredReligion,
+    ready,
+    chooseReligion,
+  } = useReligionPreference();
   const filterDialogRef = useRef(null);
   const previousFocusRef = useRef(null);
+  // Track the last settled religion preference / URL so we can tell whether
+  // the user changed the preference (mirror it to the URL) or the URL changed
+  // externally (adopt it as the preference).
+  const lastPrefRef = useRef(null);
+  const lastUrlRef = useRef(null);
+
+  // Keep the religion preference and the /biodatas URL in agreement:
+  //  - choosing a religion (header / chooser / filters) updates the URL and
+  //    refetches the list immediately;
+  //  - opening a link with an explicit religion adopts it as the preference.
+  useEffect(() => {
+    if (!ready) return;
+
+    const pref = religionToApiKey[preferredReligion] || "";
+    const urlReligion = searchParams.get("religion") || "";
+
+    if (pref !== lastPrefRef.current && urlReligion === lastUrlRef.current) {
+      // The user changed the religion preference — mirror it into the URL.
+      setSearchParams(
+        (params) => {
+          const next = new URLSearchParams(params);
+          if (pref) next.set("religion", pref);
+          else next.delete("religion");
+          // Religious type no longer matches when the religion changes
+          next.delete("religious_type");
+          next.set("page", "1");
+          return next;
+        },
+        { replace: true },
+      );
+      lastPrefRef.current = pref;
+      lastUrlRef.current = pref;
+      return;
+    }
+
+    if (urlReligion !== lastUrlRef.current && urlReligion !== pref) {
+      // The URL changed externally (shared link, prompt/AI filter) with an
+      // explicit religion — treat it as the browsing preference.
+      if (religionToApiKey[urlReligion]) {
+        chooseReligion(urlReligion);
+      }
+    }
+
+    lastPrefRef.current = pref;
+    lastUrlRef.current = urlReligion;
+  }, [chooseReligion, preferredReligion, ready, searchParams, setSearchParams]);
 
   const handlePromptApply = (filters) => {
     const userStatus = getVisibleUserStatus();
@@ -101,8 +157,8 @@ const BioDatas = () => {
 
       const focusableElements = Array.from(
         filterDialogRef.current.querySelectorAll(
-          "button:not([disabled]), select:not([disabled]), input:not([disabled]), textarea:not([disabled]), [href]"
-        )
+          "button:not([disabled]), select:not([disabled]), input:not([disabled]), textarea:not([disabled]), [href]",
+        ),
       );
       if (!focusableElements.length) return;
 
@@ -200,7 +256,9 @@ const BioDatas = () => {
             </button>
           </div>
           <div className="h-[calc(100%_-_77px)] lg:h-full">
-            <SideBar />
+            <Suspense fallback={<p className="p-4">ফিল্টার লোড হচ্ছে...</p>}>
+              <SideBar />
+            </Suspense>
           </div>
         </div>
 
@@ -217,5 +275,11 @@ const BioDatas = () => {
     </main>
   );
 };
+
+export const ServerSeededBioDatas = ({ initialQuery, initialData }) => (
+  <BioProvider initialQuery={initialQuery} initialData={initialData}>
+    <BioDatas />
+  </BioProvider>
+);
 
 export default BioDatas;

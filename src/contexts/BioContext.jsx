@@ -2,29 +2,58 @@
 import { useState, useEffect, createContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { BioDataServices } from "../services/bioData";
-import { getReligionInfo } from "../utils/localStorage";
 import { religionToApiKey } from "../constants/religionContent";
+import { useReligionPreference } from "./ReligionPreferenceContext";
 
 // Create a new context instance
 const BioContext = createContext();
 
 // Create a provider component to wrap your app
-export const BioProvider = ({ children }) => {
+export const BioProvider = ({
+  children,
+  initialQuery: serverQuery,
+  initialData,
+}) => {
   const [bio, setBio] = useState(null);
   const [bioLoading, setBioLoading] = useState(false);
   const [filterResetKey, setFilterResetKey] = useState(0);
 
-  // Auto-include religion filter from localStorage
-  const { religion } = getReligionInfo();
-  const apiReligion = religionToApiKey[religion] || null;
+  // Religion is a global browsing preference (header / chooser / filters).
+  // Auto-include it in the biodata query.
+  const { religion: preferredReligion, ready } = useReligionPreference();
+  const apiReligion = religionToApiKey[preferredReligion] || null;
   const initialQuery = { page: 1, limit: 12 };
   if (apiReligion) {
     initialQuery.religion = apiReligion;
   }
-  const [query, setQuery] = useState(initialQuery);
-  const [filterFields, setFilterFields] = useState(() =>
-    apiReligion ? { religion: apiReligion } : {}
+  const [query, setQuery] = useState(serverQuery || initialQuery);
+  const [filterFields, setFilterFields] = useState(
+    () => serverQuery || (apiReligion ? { religion: apiReligion } : {}),
   );
+
+  // When the user selects a religion, fetch the biodata immediately with it.
+  // On server-seeded pages (biodatas listing) the URL + BioDataFilter own the
+  // sync and already include the preference; the URL never loses religion.
+  useEffect(() => {
+    if (!ready || serverQuery) return;
+
+    setQuery((prev) => {
+      const next = { ...prev, page: 1 };
+      if (apiReligion) next.religion = apiReligion;
+      else delete next.religion;
+      // Religious type no longer matches when the religion changes
+      delete next.religious_type;
+      return next;
+    });
+
+    setFilterFields((prev) => {
+      const next = { ...prev };
+      if (apiReligion) next.religion = apiReligion;
+      else delete next.religion;
+      delete next.religious_type;
+      return next;
+    });
+  }, [apiReligion, ready, serverQuery, setFilterFields, setQuery]);
 
   const resetAllFilters = () => {
     const userStatus =
@@ -54,6 +83,14 @@ export const BioProvider = ({ children }) => {
     queryFn: async () => {
       return await BioDataServices.getALLGeneralInfo(query);
     },
+    // Seed only the matching query; changed filters must fetch their own results.
+    initialData:
+      serverQuery &&
+      Object.keys(query).length === Object.keys(serverQuery).length &&
+      Object.entries(serverQuery).every(([key, value]) => query[key] === value)
+        ? initialData
+        : undefined,
+    staleTime: serverQuery ? 30000 : 0,
     retry: false,
     refetchInterval: 300000, //every five minutes
   });
@@ -70,7 +107,7 @@ export const BioProvider = ({ children }) => {
     limit: bios?.limit ?? 12,
     page: bios?.page ?? 1,
     size: bios?.size,
-    bioLoading,
+    bioLoading: serverQuery ? isLoading : bioLoading,
     bioError,
     setQuery,
     query,

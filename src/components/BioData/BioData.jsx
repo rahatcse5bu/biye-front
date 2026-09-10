@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   ArrowRightIcon,
   ArrowsPointingOutIcon,
@@ -6,48 +6,48 @@ import {
   CheckBadgeIcon,
   MapPinIcon,
   SparklesIcon,
-} from '@heroicons/react/24/outline';
-import { FaEye } from 'react-icons/fa';
-import { useNavigate } from '@/lib/navigation';
+} from "@heroicons/react/24/outline";
+import { FaEye } from "react-icons/fa";
+import { Link } from "@/lib/navigation";
 import {
   formatDate,
   formatDateAndCalculateAge,
   getDateMonthYear,
-} from '../../utils/date';
-import { ScrollToTop } from '../../constants/ScrolltoTop';
-import { convertHeightToBengali } from '../../utils/height';
-import { GeneralInfoServices } from '../../services/generalInfo';
-import { religionToApiKey } from '../../constants/religionContent';
-import BiodataTypeBadge from '../BiodataTypeBadge/BiodataTypeBadge';
-import PhotoViewer from '../PhotoViewer/PhotoViewer';
-import ReactionButton from '../ReactionButton/ReactionButton';
+} from "../../utils/date";
+import { ScrollToTop } from "../../constants/ScrolltoTop";
+import { convertHeightToBengali } from "../../utils/height";
+import { GeneralInfoServices } from "../../services/generalInfo";
+import { religionToApiKey } from "../../constants/religionContent";
+import BiodataTypeBadge from "../BiodataTypeBadge/BiodataTypeBadge";
+import PhotoViewer from "../PhotoViewer/PhotoViewer";
+// import ReactionButton from "../ReactionButton/ReactionButton";
 
 const RELIGION_LABELS = {
   islam: {
-    base: 'মুসলিম',
-    practicing: 'প্র্যাক্টিসিং মুসলিম',
-    color: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+    base: "মুসলিম",
+    practicing: "প্র্যাক্টিসিং মুসলিম",
+    color: "bg-emerald-50 text-emerald-700 ring-emerald-200",
   },
   hinduism: {
-    base: 'হিন্দু',
-    practicing: 'প্র্যাক্টিসিং হিন্দু',
-    color: 'bg-orange-50 text-orange-700 ring-orange-200',
+    base: "হিন্দু",
+    practicing: "প্র্যাক্টিসিং হিন্দু",
+    color: "bg-orange-50 text-orange-700 ring-orange-200",
   },
   christianity: {
-    base: 'খ্রিস্টান',
-    practicing: 'প্র্যাক্টিসিং খ্রিস্টান',
-    color: 'bg-blue-50 text-blue-700 ring-blue-200',
+    base: "খ্রিস্টান",
+    practicing: "প্র্যাক্টিসিং খ্রিস্টান",
+    color: "bg-blue-50 text-blue-700 ring-blue-200",
   },
 };
 
 const PRACTICING_TYPES = new Set([
-  'practicing_muslim',
-  'practicing_hindu',
-  'practicing_christian',
+  "practicing_muslim",
+  "practicing_hindu",
+  "practicing_christian",
 ]);
 
 const getReligionKey = (religion) =>
-  religionToApiKey[religion] || religion || 'islam';
+  religionToApiKey[religion] || religion || "islam";
 
 const getReligionBadge = (religion, religiousType) => {
   const key = getReligionKey(religion);
@@ -59,28 +59,28 @@ const getReligionBadge = (religion, religiousType) => {
   };
 };
 
-const getDisplayValue = (value) => value || 'উল্লেখ করা হয়নি';
+const getDisplayValue = (value) => value || "উল্লেখ করা হয়নি";
 
 const BioData = ({ biodata }) => {
-  const navigate = useNavigate();
   const [showViewer, setShowViewer] = useState(false);
 
   const hasMalePhotos =
-    biodata?.gender !== 'মহিলা' &&
+    biodata?.gender !== "মহিলা" &&
     Array.isArray(biodata?.photos) &&
     biodata.photos.length > 0;
   const profileImage =
-    biodata?.gender === 'মহিলা'
-      ? '/assets/icons/female.svg'
+    biodata?.gender === "মহিলা"
+      ? "/assets/icons/female.svg"
       : hasMalePhotos
         ? biodata.photos[0]
-        : '/assets/icons/male.svg';
+        : "/assets/icons/male.svg";
   const biodataNumber = biodata?.is_unverified
     ? biodata?.bio_id
     : biodata?.user_id;
-  const profileImageAlt = `বায়োডাটা BID-${biodataNumber || ''} এর প্রোফাইল`;
+  const profileImageAlt = `বায়োডাটা BID-${biodataNumber || ""} এর প্রোফাইল`;
   const viewCount = Number(biodata?.views_count) || 0;
-  const canReact = !biodata?.is_unverified && Boolean(biodata?.user);
+  // const canReact = !biodata?.is_unverified && Boolean(biodata?.user);
+
   const religionBadge = getReligionBadge(
     biodata?.religion,
     biodata?.religious_type
@@ -94,43 +94,41 @@ const BioData = ({ biodata }) => {
 
   const details = [
     {
-      label: 'বয়স',
-      value: ageInfo?.age ? `${ageInfo.age} বছর` : 'উল্লেখ করা হয়নি',
+      label: "বয়স",
+      value: ageInfo?.age ? `${ageInfo.age} বছর` : "উল্লেখ করা হয়নি",
       secondary: birthYear ? `জন্মসন ${birthYear}` : null,
       Icon: CalendarDaysIcon,
     },
     {
-      label: 'উচ্চতা',
+      label: "উচ্চতা",
       value: biodata?.height
         ? convertHeightToBengali(biodata.height)
-        : 'উল্লেখ করা হয়নি',
+        : "উল্লেখ করা হয়নি",
       Icon: ArrowsPointingOutIcon,
     },
     {
-      label: 'গাত্রবর্ণ',
+      label: "গাত্রবর্ণ",
       value: getDisplayValue(biodata?.screen_color),
       Icon: SparklesIcon,
     },
     {
-      label: 'উপজেলা',
+      label: "উপজেলা",
       value: getDisplayValue(biodata?.upzilla),
       Icon: MapPinIcon,
     },
   ];
+
+  const profilePath = biodata?.is_unverified
+    ? `/biodata/unverified/${biodata?._id}`
+    : `/biodata/${biodata?.user_id}`;
 
   const bioDataHandler = async () => {
     if (biodata?._id) {
       try {
         await GeneralInfoServices.updateWatchOfBioData(biodata._id);
       } catch (error) {
-        console.error('Error incrementing view count', error);
+        console.error("Error incrementing view count", error);
       }
-    }
-
-    if (biodata?.is_unverified) {
-      navigate(`/biodata/unverified/${biodata?._id}`);
-    } else {
-      navigate(`/biodata/${biodata?.user_id}`);
     }
   };
 
@@ -145,7 +143,7 @@ const BioData = ({ biodata }) => {
             aria-label={`${viewCount} বার দেখা হয়েছে`}
           >
             <FaEye className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
-            {viewCount.toLocaleString('bn-BD')}
+            {viewCount.toLocaleString("bn-BD")}
           </div>
 
           <span
@@ -199,7 +197,7 @@ const BioData = ({ biodata }) => {
             />
           )}
           <h2 className="text-xl font-bold tracking-wide">
-            BID-{biodataNumber || '—'}
+            BID-{biodataNumber || "—"}
           </h2>
         </div>
       </header>
@@ -232,7 +230,7 @@ const BioData = ({ biodata }) => {
         </dl>
       </div>
 
-      {canReact && (
+      {/* {canReact && (
         <div className="mx-4 rounded-xl border border-gray-100 bg-gray-50">
           <ReactionButton
             bioUserId={biodata.user}
@@ -247,11 +245,11 @@ const BioData = ({ biodata }) => {
             showCommentButton={false}
           />
         </div>
-      )}
+      )} */}
 
       <div className="p-4">
-        <button
-          type="button"
+        <Link
+          to={profilePath}
           onClick={bioDataHandler}
           className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand-900 px-4 py-3 text-sm font-bold text-white transition-colors duration-200 hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2"
         >
@@ -260,7 +258,7 @@ const BioData = ({ biodata }) => {
             className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transform-none"
             aria-hidden="true"
           />
-        </button>
+        </Link>
       </div>
 
       {hasMalePhotos && (

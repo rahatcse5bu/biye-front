@@ -1,65 +1,74 @@
-'use client';
+"use client";
 
-import FeaturedBioDataGrid from '../../../components/FeaturedBioDataGrid/FeaturedBioDataGrid';
-import HadithSlider from '../../../components/HadithSlider/HadithSlider';
-import { useContext } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from '@/lib/navigation';
+import FeaturedBioDataGrid from "../../../components/FeaturedBioDataGrid/FeaturedBioDataGrid";
+import HadithSlider from "../../../components/HadithSlider/HadithSlider";
+import { useContext } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "@/lib/navigation";
 import {
   DocumentTextIcon,
   MagnifyingGlassIcon,
   ShieldCheckIcon,
   SparklesIcon,
-} from '@heroicons/react/24/outline';
-import { GeneralInfoServices } from '../../../services/generalInfo';
-import BioStats from '../../../components/Home/BioStats/BioStats';
-import IslamicQuote from '../../../components/Home/IslamicQuote/IslamicQuote';
-import HomeBanner from '../../../components/Home/HomeBanner/HomeBanner';
-import HomeFilter from '../../../components/Home/HomeFilter/HomeFilter';
-import AboutFeature from '../../../components/Home/AboutFeature/AboutFeature';
-import PromptFilter from '../../../components/PromptFilter/PromptFilter';
-import ChatAgent from '../../../components/ChatAgent/ChatAgent';
-import BioContext from '../../../contexts/BioContext';
-import { getReligionInfo } from '../../../utils/localStorage';
+} from "@heroicons/react/24/outline";
+import { GeneralInfoServices } from "../../../services/generalInfo";
+import BioStats from "../../../components/Home/BioStats/BioStats";
+import IslamicQuote from "../../../components/Home/IslamicQuote/IslamicQuote";
+import HomeBanner from "../../../components/Home/HomeBanner/HomeBanner";
+import HomeFilter from "../../../components/Home/HomeFilter/HomeFilter";
+import AboutFeature from "../../../components/Home/AboutFeature/AboutFeature";
+import PromptFilter from "../../../components/PromptFilter/PromptFilter";
+import ChatAgent from "../../../components/ChatAgent/ChatAgent";
+import BioContext from "../../../contexts/BioContext";
+import { useReligionPreference } from "@/contexts/ReligionPreferenceContext";
+import { convertToQuery } from "@/utils/query";
 import {
   getContentForReligion,
   religionToApiKey,
-} from '../../../constants/religionContent';
+} from "../../../constants/religionContent";
 
 const trustFeatures = [
   {
-    title: 'সহজ বায়োডাটা',
+    title: "সহজ বায়োডাটা",
     description:
-      'প্রয়োজনীয় তথ্য সুন্দরভাবে সাজানো থাকায় তুলনা ও সিদ্ধান্ত নেওয়া সহজ।',
+      "প্রয়োজনীয় তথ্য সুন্দরভাবে সাজানো থাকায় তুলনা ও সিদ্ধান্ত নেওয়া সহজ।",
     icon: DocumentTextIcon,
   },
   {
-    title: 'স্মার্ট অনুসন্ধান',
+    title: "স্মার্ট অনুসন্ধান",
     description:
-      'এলাকা, বৈবাহিক অবস্থা ও পছন্দ অনুযায়ী দ্রুত বায়োডাটা খুঁজুন।',
+      "এলাকা, বৈবাহিক অবস্থা ও পছন্দ অনুযায়ী দ্রুত বায়োডাটা খুঁজুন।",
     icon: MagnifyingGlassIcon,
   },
   {
-    title: 'তথ্যের নিয়ন্ত্রণ',
+    title: "তথ্যের নিয়ন্ত্রণ",
     description:
-      'নিজের তথ্য ও যোগাযোগের অনুরোধ আপনার অ্যাকাউন্ট থেকেই পরিচালনা করুন।',
+      "নিজের তথ্য ও যোগাযোগের অনুরোধ আপনার অ্যাকাউন্ট থেকেই পরিচালনা করুন।",
     icon: ShieldCheckIcon,
   },
 ];
 
-const Home = () => {
-  const { religion } = getReligionInfo();
-  const content = getContentForReligion(religion);
-  const apiReligion = religionToApiKey[religion] || null;
+const Home = ({ initialReligion }) => {
+  const { religion, ready } = useReligionPreference();
+  const activeReligion = religion ?? initialReligion;
+  const content = getContentForReligion(activeReligion);
+  const apiReligion = religionToApiKey[activeReligion] || null;
   const { setQuery, setFilterFields } = useContext(BioContext);
   const navigate = useNavigate();
 
   const handlePromptApply = (filters) => {
     const userStatus =
-      process.env.NODE_ENV === 'development' ? 'in review' : 'active';
-    setQuery({ page: 1, limit: 12, user_status: userStatus, ...filters });
-    setFilterFields({ user_status: userStatus, ...filters });
-    navigate('/biodatas');
+      process.env.NODE_ENV === "development" ? "in review" : "active";
+    const nextQuery = {
+      page: 1,
+      limit: 12,
+      user_status: userStatus,
+      ...(apiReligion && { religion: apiReligion }),
+      ...filters,
+    };
+    setQuery(nextQuery);
+    setFilterFields(nextQuery);
+    navigate(`/biodatas?${convertToQuery(nextQuery)}`);
   };
 
   const featuredQuery = { isFeatured: true };
@@ -67,9 +76,11 @@ const Home = () => {
     featuredQuery.religion = apiReligion;
   }
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['general-info', 'featured', religion],
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['general-info', 'featured', activeReligion],
     queryFn: async () => GeneralInfoServices.getALLGeneralInfo(featuredQuery),
+    enabled: ready,
+    retry: false,
   });
 
   return (
@@ -131,8 +142,20 @@ const Home = () => {
                 ফিচারড বায়োডাটা লোড হচ্ছে...
               </span>
             </div>
+          ) : isError ? (
+            <p
+              role="alert"
+              className="rounded-2xl border border-gray-200 bg-white p-8 text-center text-gray-600"
+            >
+              ফিচারড বায়োডাটা লোড করা যায়নি। কিছুক্ষণ পরে আবার চেষ্টা করুন।
+            </p>
+          ) : data?.data?.length ? (
+            <FeaturedBioDataGrid data={data.data} />
           ) : (
-            <FeaturedBioDataGrid data={data?.data || []} />
+            <p className="rounded-2xl border border-gray-200 bg-white p-8 text-center text-gray-600">
+              এই পছন্দে এখনো ফিচারড বায়োডাটা নেই। উপরের অনুসন্ধান থেকে সকল
+              উপলভ্য বায়োডাটা দেখতে পারেন।
+            </p>
           )}
         </section>
 
@@ -164,7 +187,7 @@ const Home = () => {
               </article>
             ))}
           </div>
-          <AboutFeature />
+          <AboutFeature content={content.about} />
         </section>
 
         <BioStats />

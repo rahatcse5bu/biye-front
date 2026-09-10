@@ -1,33 +1,36 @@
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { convertToQuery } from '../../../utils/query';
-import { useNavigate } from '@/lib/navigation';
-import { useBio } from '../../../contexts/useBio';
-import { useQuery } from '@tanstack/react-query';
-import { BioDataServices } from '../../../services/bioData';
-import Select from 'react-select';
-import { useFilter } from '../../../contexts/useFilter';
-import { usePrimary } from '../../../contexts/userPrimary';
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { convertToQuery } from "../../../utils/query";
+import { useNavigate } from "@/lib/navigation";
+import { useBio } from "../../../contexts/useBio";
+import { useQuery } from "@tanstack/react-query";
+import { BioDataServices } from "../../../services/bioData";
+import Select from "react-select";
+import { useFilter } from "../../../contexts/useFilter";
+import { usePrimary } from "../../../contexts/userPrimary";
+import { useReligionPreference } from "@/contexts/ReligionPreferenceContext";
+import { setReligionCookie } from "@/utils/cookies";
 
 const selectClassNames = {
   control: ({ isFocused }) =>
     `!min-h-12 !rounded-xl !border-gray-200 !bg-gray-50 !shadow-none hover:!border-brand-900/40 ${
-      isFocused ? '!border-brand-900 !ring-2 !ring-brand-900/10' : ''
+      isFocused ? "!border-brand-900 !ring-2 !ring-brand-900/10" : ""
     }`,
-  valueContainer: () => '!px-3 !py-1',
-  placeholder: () => '!text-gray-400',
-  input: () => '!text-gray-900',
-  multiValue: () => '!rounded-lg !bg-brand-900/10',
-  multiValueLabel: () => '!px-2 !py-1 !text-brand-900',
-  multiValueRemove: () => '!rounded-r-lg hover:!bg-brand-900 hover:!text-white',
+  valueContainer: () => "!px-3 !py-1",
+  placeholder: () => "!text-gray-400",
+  input: () => "!text-gray-900",
+  multiValue: () => "!rounded-lg !bg-brand-900/10",
+  multiValueLabel: () => "!px-2 !py-1 !text-brand-900",
+  multiValueRemove: () => "!rounded-r-lg hover:!bg-brand-900 hover:!text-white",
   menu: () =>
-    '!z-30 !overflow-hidden !rounded-xl !border !border-gray-100 !shadow-xl',
+    "!z-30 !overflow-hidden !rounded-xl !border !border-gray-100 !shadow-xl",
   option: ({ isFocused, isSelected }) =>
-    `!cursor-pointer ${isSelected ? '!bg-brand-900' : isFocused ? '!bg-brand-900/10 !text-brand-900' : ''}`,
+    `!cursor-pointer ${isSelected ? "!bg-brand-900" : isFocused ? "!bg-brand-900/10 !text-brand-900" : ""}`,
 };
 
 const HomeFilter = () => {
   const navigate = useNavigate();
-  const { setQuery, query, setFilterFields } = useBio();
+  const { setQuery, query, filterFields, setFilterFields } = useBio();
+  const { religion, ready, chooseReligion } = useReligionPreference();
   const { setBioType, setMaritalStatus } = usePrimary();
   const {
     selectedDivisions,
@@ -37,11 +40,11 @@ const HomeFilter = () => {
   } = useFilter();
 
   const { data: divisionOptions = [] } = useQuery({
-    queryKey: ['divisions'],
+    queryKey: ["divisions"],
     queryFn: async () => {
       const divisions = await BioDataServices.getAllDivisions();
       return [
-        { value: 'All Divisions', label: 'সকল বিভাগ' },
+        { value: "All Divisions", label: "সকল বিভাগ" },
         ...divisions.map((division) => ({
           value: division.value,
           label: division.value,
@@ -51,16 +54,16 @@ const HomeFilter = () => {
   });
 
   const { data: districtOptions = [] } = useQuery(
-    ['districts', selectedDivisions],
+    ["districts", selectedDivisions],
     async () => {
       const selectedDivisionValues = selectedDivisions.map(
         (division) => division.value
       );
 
-      if (selectedDivisionValues.includes('All Divisions')) {
+      if (selectedDivisionValues.includes("All Divisions")) {
         const allDistricts = await BioDataServices.getAllDistricts(null);
         return [
-          { value: 'All Districts', label: 'সকল জেলা' },
+          { value: "All Districts", label: "সকল জেলা" },
           ...allDistricts.map((district) => ({
             value: district.value,
             label: district.label,
@@ -69,7 +72,7 @@ const HomeFilter = () => {
       }
 
       if (selectedDivisionValues.length === 0) {
-        return [{ value: 'All Districts', label: 'সকল জেলা' }];
+        return [{ value: "All Districts", label: "সকল জেলা" }];
       }
 
       const districtPromises = selectedDivisionValues.map((divisionValue) =>
@@ -85,7 +88,7 @@ const HomeFilter = () => {
       );
 
       return [
-        { value: 'All Districts', label: 'সকল জেলা' },
+        { value: "All Districts", label: "সকল জেলা" },
         ...formattedDistrictOptions,
       ];
     }
@@ -95,13 +98,15 @@ const HomeFilter = () => {
     const options = selectedOptions || [];
     setSelectedDivisions(options);
 
-    if (options.some((option) => option.value === 'All Divisions')) {
-      setSelectedDistricts([{ value: 'All Districts', label: 'সকল জেলা' }]);
+    if (options.some((option) => option.value === "All Divisions")) {
+      setSelectedDistricts([{ value: "All Districts", label: "সকল জেলা" }]);
     }
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
+    if (!ready) return;
+
     const form = event.currentTarget;
     const marital_status = form.marital_status.value;
     const bio_type = form.bio_type.value;
@@ -109,11 +114,11 @@ const HomeFilter = () => {
     let divisionValues = selectedDivisions.map((division) => division.value);
     const districtValues = selectedDistricts.map((district) => district.value);
 
-    if (divisionValues.includes('All Divisions')) {
-      divisionValues = ['all'];
+    if (divisionValues.includes("All Divisions")) {
+      divisionValues = ["all"];
     }
 
-    if (districtValues.includes('All Districts')) {
+    if (districtValues.includes("All Districts")) {
       districtValues.splice(0, districtValues.length);
       const selectedDivisionValues = selectedDivisions.map(
         (division) => division.value
@@ -128,12 +133,15 @@ const HomeFilter = () => {
 
     const filterQuery = {
       ...query,
+      ...filterFields,
+      page: 1,
+      religion,
       marital_status,
       bio_type,
-      zilla: districtValues.join(','),
-      division: divisionValues.join(','),
+      zilla: districtValues.join(","),
+      division: divisionValues.join(","),
       user_status:
-        process.env.NODE_ENV === 'development' ? 'in review' : 'active',
+        process.env.NODE_ENV === "development" ? "in review" : "active",
     };
 
     setBioType(bio_type);
@@ -148,7 +156,34 @@ const HomeFilter = () => {
       onSubmit={submitHandler}
       className="rounded-3xl border border-gray-200 bg-white p-4 shadow-sm sm:p-6"
     >
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+        <div>
+          <label
+            className="mb-2 block text-sm font-bold text-gray-700"
+            htmlFor="home-religion"
+          >
+            ধর্ম
+          </label>
+          <select
+            id="home-religion"
+            name="religion"
+            value={religion ?? ""}
+            onChange={(event) => {
+              const value = event.target.value || null;
+              chooseReligion(value);
+              setReligionCookie(value);
+            }}
+            disabled={!ready}
+            suppressHydrationWarning
+            className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-gray-800 outline-none transition-colors duration-200 hover:border-brand-900/40 focus:border-brand-900 focus:ring-2 focus:ring-brand-900/10 disabled:cursor-wait disabled:opacity-60"
+          >
+            <option value="">সকল ধর্ম</option>
+            <option value="islam">ইসলাম</option>
+            <option value="hinduism">হিন্দু</option>
+            <option value="christianity">খ্রিস্টান</option>
+          </select>
+        </div>
+
         <div>
           <label
             className="mb-2 block text-sm font-bold text-gray-700"
@@ -159,7 +194,7 @@ const HomeFilter = () => {
           <select
             id="home-bio-type"
             name="bio_type"
-            defaultValue=""
+            defaultValue={filterFields?.bio_type ?? query?.bio_type ?? ""}
             className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-gray-800 outline-none transition-colors duration-200 hover:border-brand-900/40 focus:border-brand-900 focus:ring-2 focus:ring-brand-900/10"
           >
             <option value="">সকল বায়োডাটা</option>
@@ -178,7 +213,9 @@ const HomeFilter = () => {
           <select
             id="home-marital-status"
             name="marital_status"
-            defaultValue=""
+            defaultValue={
+              filterFields?.marital_status ?? query?.marital_status ?? ""
+            }
             className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-gray-800 outline-none transition-colors duration-200 hover:border-brand-900/40 focus:border-brand-900 focus:ring-2 focus:ring-brand-900/10"
           >
             <option value="">সকল অবস্থা</option>
@@ -204,7 +241,7 @@ const HomeFilter = () => {
             onChange={handleDivisionChange}
             value={selectedDivisions}
             placeholder="বিভাগ নির্বাচন করুন"
-            noOptionsMessage={() => 'কোনো বিভাগ পাওয়া যায়নি'}
+            noOptionsMessage={() => "কোনো বিভাগ পাওয়া যায়নি"}
             classNames={selectClassNames}
             isMulti
           />
@@ -224,7 +261,7 @@ const HomeFilter = () => {
             onChange={(options) => setSelectedDistricts(options || [])}
             value={selectedDistricts}
             placeholder="জেলা নির্বাচন করুন"
-            noOptionsMessage={() => 'কোনো জেলা পাওয়া যায়নি'}
+            noOptionsMessage={() => "কোনো জেলা পাওয়া যায়নি"}
             classNames={selectClassNames}
             isMulti
           />
@@ -233,8 +270,10 @@ const HomeFilter = () => {
 
       <div className="mt-5 flex justify-end">
         <button
-          className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-900 px-6 py-3 font-bold text-white transition-colors duration-200 hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2 motion-reduce:transition-none sm:w-auto"
+          className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-900 px-6 py-3 font-bold text-white transition-colors duration-200 hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2 motion-reduce:transition-none disabled:cursor-wait disabled:opacity-60 sm:w-auto"
           type="submit"
+          disabled={!ready}
+          suppressHydrationWarning
         >
           <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
           বায়োডাটা খুঁজুন
