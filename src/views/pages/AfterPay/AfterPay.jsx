@@ -1,99 +1,79 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useRef } from "react";
 import { useNavigate, useSearchParams } from "@/lib/navigation";
+import { ShieldCheckIcon } from "@heroicons/react/24/outline";
 import { BkashCallAfterPay } from "../../../services/bkash";
-import LoadingCircle from "../../../components/LoadingCircle/LoadingCircle";
 import UserContext from "../../../contexts/UserContext";
 import { getErrorMessage } from "../../../utils/error";
+import { PayResultShell, Spinner, buildUrl, cleanParam } from "../PayResult/PayResult";
 
 const AfterPay = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const status = searchParams.get("status");
-  const bio_user = searchParams.get("bio_user");
-  const purpose = searchParams.get("purpose");
+  const bio_user = cleanParam(searchParams.get("bio_user"));
+  const purpose = cleanParam(searchParams.get("purpose"));
   const paymentID = searchParams.get("paymentID");
-  const pathname = searchParams.get("pathname");
-
+  const pathname = cleanParam(searchParams.get("pathname"));
   const { user } = useContext(UserContext);
-
-  // console.log(searchParams);
-  // console.log(status);
-  // console.log(paymentID);
+  // TODO: run once even if React re-runs the effect (dev strict mode, context updates).
+  const started = useRef(false);
 
   useEffect(() => {
-    async function fetchData() {
+    if (started.current) return;
+
+    const fail = (message) =>
+      navigate(buildUrl("/pay/fail", { status, message, pathname }), { replace: true });
+
+    if (status !== "success" || !paymentID) {
+      started.current = true;
+      fail();
+      return;
+    }
+    if (!user?.email) return;
+    started.current = true;
+
+    (async () => {
       try {
         const response = await BkashCallAfterPay({
           paymentID,
-          email: user?.email,
-          purpose: purpose,
+          email: user.email,
+          purpose,
         });
         if (response?.success) {
           navigate(
-            `/pay/success?message=${response?.statusMessage}&trxID=${
-              response?.trxID
-            }&paymentId=${paymentID}&amount=${response?.amount}&status=${
-              response?.transactionStatus
-            }&payment_create_time=${
-              response?.paymentCreateTime || response?.paymentExecuteTime
-            }&bio_user=${bio_user}&pathname=${pathname}&purpose=${purpose}`
+            buildUrl("/pay/success", {
+              trxID: response.trxID,
+              amount: response.amount,
+              points: response.points,
+              time: response.payment_create_time,
+              bio_user,
+              purpose,
+              pathname,
+            }),
+            { replace: true }
           );
         } else {
-          navigate(
-            `/pay/fail?message=${response.message}&pathname=${pathname}`
-          );
+          fail(response?.message);
         }
       } catch (error) {
         console.error("An error occurred:", error);
-        const msg = getErrorMessage(error);
-        navigate(`/pay/fail?message=${msg}&pathname=${pathname}`);
+        fail(getErrorMessage(error));
       }
-    }
-    // async function fetchData() {
-    // 	try {
-    // 		//? execute payment
-    // 		let response = await BkashExecutePaymentAPICall(paymentID);
-
-    // 		// ? payment
-    // 		if (response?.message) {
-    // 			response = await BkashQueryPaymentAPICall(paymentID);
-    // 		}
-
-    // 		if (response?.statusCode && response.statusCode === "0000") {
-    // 			console.log("Success", response?.statusMessage);
-    // 			navigate(
-    // 				`/pay/success?message=${response?.statusMessage}&trxID=${
-    // 					response?.trxID
-    // 				}&paymentId=${paymentID}&amount=${response?.amount}&status=${
-    // 					response?.transactionStatus
-    // 				}&payment_create_time=${
-    // 					response?.paymentCreateTime || response?.paymentExecuteTime
-    // 				}${bioId > 0 ? `&bioId=${bioId}` : ""}`
-    // 			);
-    // 		} else {
-    // 			console.log("Failure", response?.statusMessage);
-    // 			navigate(
-    // 				`/pay/fail?message=${response?.statusMessage}${
-    // 					bioId > 0 ? `&bioId=${bioId}` : ""
-    // 				}`
-    // 			);
-    // 		}
-    // 	} catch (error) {
-    // 		console.error("An error occurred:", error);
-    // 	}
-    // }
-
-    if (status && status === "success" && user?.email) {
-      fetchData();
-    } else {
-      navigate(`/pay/fail?pathname=${pathname}`);
-    }
+    })();
   }, [status, paymentID, navigate, user?.email, bio_user, purpose, pathname]);
 
   return (
-    <div className="my-10">
-      <LoadingCircle />
-    </div>
+    <PayResultShell
+      tone="info"
+      icon={<Spinner />}
+      title="পেমেন্ট যাচাই করা হচ্ছে"
+      subtitle="বিকাশ থেকে আপনার পেমেন্ট নিশ্চিত করা হচ্ছে। অনুগ্রহ করে পেজটি বন্ধ বা রিফ্রেশ করবেন না।"
+    >
+      <p className="mt-6 inline-flex items-center gap-1.5 text-xs text-gray-400">
+        <ShieldCheckIcon className="h-4 w-4" aria-hidden="true" />
+        নিরাপদ বিকাশ পেমেন্ট
+      </p>
+    </PayResultShell>
   );
 };
 
