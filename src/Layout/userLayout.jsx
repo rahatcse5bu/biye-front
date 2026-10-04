@@ -1,51 +1,30 @@
 'use client';
 
 import UserSidebar from '../components/UserSiderbar/UserSidebar';
-// import { useState } from 'react';
-import { FaArrowLeftLong, FaArrowRightLong } from 'react-icons/fa6';
 import { useFilter } from '../contexts/useFilter';
+
 const UserLayout = ({ children }) => {
-  // const [openSidebar, setOpenSidebar] = useState(true);
   const { openSidebar, setOpenSidebar } = useFilter();
 
   return (
-    <div className="relative flex flex-row w-full ">
+    <div className="relative flex w-full flex-row">
       <div
-        className={`   ${
-          openSidebar
-            ? 'lg:w-[22%] w-[60%] '
-            : 'transform w-0  -translate-x-full'
-        } transition-transform z-30 lg:z-1  duration-500 ease-in-out lg:relative absolute`}
+        className={`fixed inset-y-0 left-0 z-[1400] w-[85%] max-w-xs transform transition-transform duration-300 ease-in-out lg:static lg:z-auto lg:w-[22%] lg:max-w-none lg:translate-x-0 lg:transition-none ${
+          openSidebar ? 'translate-x-0' : '-translate-x-full'
+        }`}
       >
-        <UserSidebar
-          openSidebar={openSidebar}
-          setOpenSidebar={setOpenSidebar}
-        />
-
-        <button
-          onClick={() => setOpenSidebar((prev) => !prev)}
-          className="absolute rounded-r-full bg-purple-900 flex justify-center items-center w-14 h-8 cursor-pointer top-0 -right-[55px]"
-        >
-          {openSidebar ? (
-            <FaArrowLeftLong className="text-lg text-white" />
-          ) : (
-            <FaArrowRightLong className="text-lg text-white" />
-          )}
-        </button>
+        <UserSidebar setOpenSidebar={setOpenSidebar} />
       </div>
+
       {openSidebar && (
         <button
-          className="fixed top-0 bottom-0 left-0 right-0 z-20 block lg:hidden "
-          style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
-          onClick={() => setOpenSidebar((prev) => !prev)}
+          className="fixed inset-0 z-[1350] block bg-black/50 backdrop-blur-sm lg:hidden"
+          onClick={() => setOpenSidebar(false)}
+          aria-label="মেনু বন্ধ করুন"
         ></button>
       )}
 
-      <div
-        className={`min-h-screen ${
-          openSidebar ? 'lg:w-[78%] w-full' : 'w-[100vw] '
-        }  lg:px-5 px-3  pt-2 pb-8`}
-      >
+      <div className="min-h-screen w-full px-3 pb-8 pt-2 lg:w-[78%] lg:px-5">
         {children}
       </div>
     </div>

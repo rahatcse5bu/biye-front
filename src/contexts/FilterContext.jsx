@@ -3,7 +3,7 @@ import { createContext, useState } from 'react';
 export const FilterContext = createContext();
 
 const FilterProvider = ({ children }) => {
-  const [openSidebar, setOpenSidebar] = useState(true);
+  const [openSidebar, setOpenSidebar] = useState(false);
   const [sideBarDisplay, setSideBarDisplay] = useState(false);
   const [addressFilterOpen, setAddressFilterOpen] = useState(false);
   const [primaryFilterOpen, setPrimaryFilterOpen] = useState(false);

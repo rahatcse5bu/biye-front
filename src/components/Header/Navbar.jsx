@@ -34,6 +34,7 @@ import { useBio } from "../../contexts/useBio.jsx";
 
 import { useReligionPreference } from '../../contexts/ReligionPreferenceContext';
 import { setReligionCookie } from '../../utils/cookies';
+import { useFilter } from '../../contexts/useFilter';
 
 export default function NavBar() {
   const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
@@ -45,6 +46,7 @@ export default function NavBar() {
 
   const { religion, chooseReligion } = useReligionPreference();
   const selectedReligion = religion || "";
+  const { setOpenSidebar: setAccountSidebarOpen } = useFilter();
 
   const handleReligionChange = (e) => {
     const value = e.target.value;
@@ -272,6 +274,8 @@ export default function NavBar() {
   const isActiveRoute = (path) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
 
+  const isAccountSection = pathname?.startsWith("/user/account");
+
   return (
     <>
       <Navbar className="sticky top-0 z-[1000] box-border !min-h-[60px] !w-full !min-w-full !overflow-visible !rounded-none !border-0 !border-b !border-white/10 !bg-brand-900 !p-0 text-white !shadow-[0_4px_16px_rgba(4,69,72,0.18)] lg:!min-h-[68px]">
@@ -280,9 +284,22 @@ export default function NavBar() {
         </div>
 
         <div className="relative z-[1003] mx-auto flex min-h-[60px] w-full max-w-lg items-center justify-between bg-brand-900 px-3 pt-[env(safe-area-inset-top)] lg:hidden">
+          {isAccountSection && (
+            <button
+              type="button"
+              onClick={() => setAccountSidebarOpen(true)}
+              aria-label="অ্যাকাউন্ট মেনু খুলুন"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-white transition-colors duration-200 hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transition-none"
+            >
+              <Bars3Icon className="h-7 w-7" aria-hidden="true" />
+            </button>
+          )}
+
           <Link
             to="/"
-            className="rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-900"
+            className={`rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-900 ${
+              isAccountSection ? "absolute left-1/2 -translate-x-1/2" : ""
+            }`}
             aria-label="বিয়ে হোম পেজ"
           >
             <img
@@ -295,33 +312,37 @@ export default function NavBar() {
           </Link>
 
           <div className="flex items-center gap-1">
-            <select
-              value={selectedReligion}
-              onChange={handleReligionChange}
-              className="h-10 max-w-[76px] cursor-pointer rounded-xl border border-white/25 bg-white/10 px-2 text-xs font-semibold text-white outline-none transition-colors duration-200 hover:bg-white/15 focus-visible:border-white/70 focus-visible:ring-2 focus-visible:ring-white/40 [&>option]:text-gray-900"
-              aria-label="ধর্ম নির্বাচন করুন"
-            >
-              <option value="">সকল</option>
-              <option value="islam">ইসলাম</option>
-              <option value="hinduism">হিন্দু</option>
-              <option value="christianity">খ্রিষ্টান</option>
-            </select>
+            {!isAccountSection && (
+              <select
+                value={selectedReligion}
+                onChange={handleReligionChange}
+                className="h-10 max-w-[76px] cursor-pointer rounded-xl border border-white/25 bg-white/10 px-2 text-xs font-semibold text-white outline-none transition-colors duration-200 hover:bg-white/15 focus-visible:border-white/70 focus-visible:ring-2 focus-visible:ring-white/40 [&>option]:text-gray-900"
+                aria-label="ধর্ম নির্বাচন করুন"
+              >
+                <option value="">সকল</option>
+                <option value="islam">ইসলাম</option>
+                <option value="hinduism">হিন্দু</option>
+                <option value="christianity">খ্রিষ্টান</option>
+              </select>
+            )}
 
-            <Link
-              to={user ? "/user/account/dashboard" : "/login"}
-              className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl text-white transition-colors duration-200 hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transition-none"
-              aria-label={user ? "আমার অ্যাকাউন্ট" : "লগইন করুন"}
-            >
-              <UserCircleIcon className="h-7 w-7" aria-hidden="true" />
-              <span className="sr-only">
-                {user ? "আমার অ্যাকাউন্ট" : "লগইন করুন"}
-              </span>
-              {userInfo?.data?.points > 0 && (
-                <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-[#E85D75] ring-2 ring-brand-900">
-                  <span className="sr-only">অ্যাকাউন্টে পয়েন্ট আছে</span>
+            {!isAccountSection && (
+              <Link
+                to={user ? "/user/account/dashboard" : "/login"}
+                className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl text-white transition-colors duration-200 hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transition-none"
+                aria-label={user ? "আমার অ্যাকাউন্ট" : "লগইন করুন"}
+              >
+                <UserCircleIcon className="h-7 w-7" aria-hidden="true" />
+                <span className="sr-only">
+                  {user ? "আমার অ্যাকাউন্ট" : "লগইন করুন"}
                 </span>
-              )}
-            </Link>
+                {userInfo?.data?.points > 0 && (
+                  <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-[#E85D75] ring-2 ring-brand-900">
+                    <span className="sr-only">অ্যাকাউন্টে পয়েন্ট আছে</span>
+                  </span>
+                )}
+              </Link>
+            )}
 
             <button
               type="button"

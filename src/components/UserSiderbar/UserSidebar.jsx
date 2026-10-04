@@ -12,10 +12,10 @@ import {
   getProfilePhoto,
   clearUserLocalStorage,
 } from '../../utils/localStorage';
-import { FiLogOut } from 'react-icons/fi';
+import { FiLogOut, FiX } from 'react-icons/fi';
 import { removeToken } from '../../utils/cookies';
 
-const UserSidebar = ({ openSidebar, setOpenSidebar }) => {
+const UserSidebar = ({ setOpenSidebar }) => {
   const navigate = useNavigate();
   const gender = getGender();
   const profilePhoto = getProfilePhoto();
@@ -34,13 +34,16 @@ const UserSidebar = ({ openSidebar, setOpenSidebar }) => {
   };
 
   return (
-    <div
-      className={`min-h-screen w-full bg-white shadow-xl rounded-b-lg border-l-2 border-gray-400 flex flex-col relative ${
-        !openSidebar && 'hidden'
-      }`}
-    >
+    <div className="flex h-full w-full flex-col rounded-r-3xl bg-white shadow-2xl lg:rounded-none lg:border-r lg:border-gray-100 lg:shadow-none">
       {/* Profile section */}
-      <div className="flex flex-col items-center pt-4 pb-3 border-b border-gray-100 px-3">
+      <div className="relative flex flex-col items-center border-b border-gray-100 px-3 pb-3 pt-4">
+        <button
+          onClick={() => setOpenSidebar(false)}
+          aria-label="মেনু বন্ধ করুন"
+          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500 lg:hidden"
+        >
+          <FiX className="h-4 w-4" />
+        </button>
         <div className="w-16 h-16 sm:w-20 sm:h-20 mb-2 shrink-0">
           <img
             className="w-full h-full rounded-full object-cover"
