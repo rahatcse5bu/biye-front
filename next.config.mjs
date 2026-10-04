@@ -69,20 +69,20 @@ const nextConfig = {
     return [
       {
         source: "/:path*",
-        has: [{ type: "host", value: "biye.info" }],
-        destination: "https://www.biye.info/:path*",
+        has: [{ type: "host", value: "bibaho.org" }],
+        destination: "https://www.bibaho.org/:path*",
         permanent: true,
       },
       {
         source: "/:path*",
         has: [{ type: "host", value: "pncnikah.com" }],
-        destination: "https://www.biye.info/:path*",
+        destination: "https://www.bibaho.org/:path*",
         permanent: true,
       },
       {
         source: "/:path*",
         has: [{ type: "host", value: "www.pncnikah.com" }],
-        destination: "https://www.biye.info/:path*",
+        destination: "https://www.bibaho.org/:path*",
         permanent: true,
       },
     ];
