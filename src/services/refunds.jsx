@@ -18,8 +18,20 @@ const updateRefundRequest = async (data, token) => {
   return response.data;
 };
 
+const requestRefund = async (paymentId, reason) => {
+  const response = await axios.post('/refund-requests', { payment_id: paymentId, reason });
+  return response.data;
+};
+
+const getMyRefundRequests = async () => {
+  const response = await axios.get('/refund-requests/me');
+  return response.data?.data || [];
+};
+
 export const refundServices = {
   addRefundRequest: addRefundRequest,
   getRefundRequest: getRefundRequest,
   updateRefundRequest: updateRefundRequest,
+  requestRefund,
+  getMyRefundRequests,
 };
