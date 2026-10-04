@@ -8,6 +8,7 @@ import { Toast } from "../../utils/toast";
 import { useLocation } from "@/lib/navigation";
 import { pointsPackageService } from "../../services/pointsPackages";
 import { convertToBengaliDigits } from "../../utils/language";
+import CustomPointsCard from "./CustomPointsCard";
 
 const toBn = (value) => convertToBengaliDigits(String(value));
 
@@ -21,6 +22,10 @@ function Payments() {
   } = useQuery({
     queryKey: ["points-packages"],
     queryFn: pointsPackageService.list,
+  });
+  const { data: customSettings } = useQuery({
+    queryKey: ["points-packages", "custom-settings"],
+    queryFn: pointsPackageService.customSettings,
   });
 
   // console.log("userInfo", userInfo);
@@ -118,6 +123,13 @@ function Payments() {
           </div>
         ))}
       </div>
+      {customSettings?.enabled && (
+        <CustomPointsCard
+          settings={customSettings}
+          packages={packages}
+          onBuy={buyWithBkashHandler}
+        />
+      )}
     </div>
   );
 }

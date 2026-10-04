@@ -5,4 +5,9 @@ export const pointsPackageService = {
     const response = await api.get('/points-packages');
     return response.data?.data || [];
   },
+
+  customSettings: async () => {
+    const response = await api.get('/points-packages/custom-settings');
+    return response.data?.data || null;
+  },
 };
