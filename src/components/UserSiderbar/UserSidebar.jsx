@@ -5,20 +5,13 @@ import { useContext } from 'react';
 import UserContext from '../../contexts/UserContext';
 import { Colors } from '../../constants/colors';
 import OptionCart from '../OptionCart/OptionCart';
-import female from '../../assets/icons/female.svg';
-import male from '../../assets/icons/male.svg';
-import {
-  getGender,
-  getProfilePhoto,
-  clearUserLocalStorage,
-} from '../../utils/localStorage';
+import ProfileAvatar from '../ProfileAvatar/ProfileAvatar';
+import { clearUserLocalStorage } from '../../utils/localStorage';
 import { FiLogOut, FiX } from 'react-icons/fi';
 import { removeToken } from '../../utils/cookies';
 
 const UserSidebar = ({ setOpenSidebar }) => {
   const navigate = useNavigate();
-  const gender = getGender();
-  const profilePhoto = getProfilePhoto();
   const { userInfo, logOut } = useContext(UserContext);
   const myBioDataHandler = () => {
     setOpenSidebar(false);
@@ -45,12 +38,9 @@ const UserSidebar = ({ setOpenSidebar }) => {
           <FiX className="h-4 w-4" />
         </button>
         <div className="w-16 h-16 sm:w-20 sm:h-20 mb-2 shrink-0">
-          <img
+          <ProfileAvatar
             className="w-full h-full rounded-full object-cover"
-            src={gender === 'মহিলা' ? female : profilePhoto || male}
-            alt="ব্যবহারকারীর প্রোফাইল"
-            width="80"
-            height="80"
+            iconClassName="w-full h-full text-gray-300"
           />
         </div>
         <h3

@@ -120,18 +120,18 @@ export default function Notifications() {
         onClick={() => void toggle()}
         aria-label={`নোটিফিকেশন${unreadCount ? `, ${unreadCount} unread` : ''}`}
         aria-expanded={open}
-        className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl text-white transition-colors duration-200 hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+        className={`relative inline-flex h-10 w-10 items-center justify-center rounded-[10px] border text-white transition-colors duration-200 hover:border-white/45 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 motion-reduce:transition-none ${open ? 'border-white/45 bg-white/20' : 'border-white/25 bg-white/[0.13]'}`}
       >
-        <BellIcon className="h-6 w-6" aria-hidden="true" />
+        <BellIcon className="h-5 w-5" aria-hidden="true" />
         {unreadCount > 0 && (
-          <span className="absolute right-1 top-1 min-w-4 rounded-full bg-[#E85D75] px-1 text-center text-[10px] font-bold leading-4 text-white">
+          <span className="absolute -right-1.5 -top-1.5 min-w-[18px] rounded-full bg-[#E85D75] px-1 text-center text-[10px] font-bold leading-[18px] text-white ring-2 ring-brand-900">
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 top-12 z-[1200] w-[min(22rem,calc(100vw-1.5rem))] overflow-hidden rounded-xl border border-gray-200 bg-white text-left shadow-xl">
+        <div className="fixed inset-x-3 top-[calc(60px+env(safe-area-inset-top))] z-[1200] lg:absolute lg:inset-x-auto lg:right-0 lg:top-full lg:mt-2 lg:w-[22rem] overflow-hidden rounded-xl border border-gray-200 bg-white text-left shadow-xl">
           <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
             <div>
               <h2 className="text-sm font-semibold text-gray-900">নোটিফিকেশন</h2>

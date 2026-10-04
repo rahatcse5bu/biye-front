@@ -18,13 +18,10 @@ import UserContext from "../../contexts/UserContext";
 const navLogo = "/assets/logo/biye-logo.svg";
 import { getToken, removeToken } from "../../utils/cookies";
 import {
-  getGender,
-  getProfilePhoto,
-  setReligionToLocal,
+  clearUserLocalStorage,
   getReligionInfo,
 } from "../../utils/localStorage";
-import female from "../../assets/icons/female.svg";
-import male from "../../assets/icons/male.svg";
+import ProfileAvatar from "../ProfileAvatar/ProfileAvatar";
 import { useQuery } from "@tanstack/react-query";
 import { userServices } from "../../services/user";
 
@@ -46,8 +43,6 @@ export default function NavBar() {
   const filteredNavData = navData;
   const [openNav, setOpenNav] = useState(false);
   const { query } = useBio();
-  const gender = getGender();
-  const profilePhoto = getProfilePhoto();
 
   const { religion, chooseReligion } = useReligionPreference();
   const selectedReligion = religion || "";
@@ -60,6 +55,16 @@ export default function NavBar() {
   };
 
   const { pathname } = useLocation();
+
+  // TODO: one bell per breakpoint so only one realtime client connects.
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 960px)");
+    const update = () => setIsDesktop(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     setOpenNav(false);
@@ -97,8 +102,7 @@ export default function NavBar() {
   const logoutHandler = async () => {
     await logOut();
     removeToken();
-    // Clear religion from localStorage on logout
-    setReligionToLocal(null, null);
+    clearUserLocalStorage();
     // navigate("/");
     window.location.href = "/";
   };
@@ -213,6 +217,7 @@ export default function NavBar() {
             খ্রিষ্টান
           </option>
         </select>
+        {isDesktop && <Notifications />}
         {!user ? (
           <Typography
             as="div"
@@ -234,12 +239,9 @@ export default function NavBar() {
               className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-2 py-1.5 text-white transition-colors duration-200 hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
               aria-label="আমার অ্যাকাউন্টে যান"
             >
-              <img
+              <ProfileAvatar
                 className="h-8 w-8 rounded-lg border border-white/50 bg-white/10 object-cover"
-                src={gender === "মহিলা" ? female : profilePhoto || male}
-                alt="ব্যবহারকারীর প্রোফাইল"
-                width="32"
-                height="32"
+                iconClassName="h-8 w-8 text-white/90"
               />
               <span className="hidden text-sm font-bold xl:inline">
                 অ্যাকাউন্ট
@@ -331,6 +333,8 @@ export default function NavBar() {
               </select>
             )}
 
+            {!isDesktop && <Notifications />}
+
             {!isAccountSection && (
               <Link
                 to={user ? "/user/account/dashboard" : "/login"}
@@ -383,9 +387,6 @@ export default function NavBar() {
             </div>
           </>
         )}
-        <div className="absolute right-14 top-2 z-[1101] lg:right-64 lg:top-3">
-          <Notifications />
-        </div>
       </Navbar>
 
       <nav
