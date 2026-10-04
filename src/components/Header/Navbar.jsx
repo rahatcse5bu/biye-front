@@ -32,9 +32,14 @@ import { UserInfoServices } from "../../services/userInfo";
 import { Toast } from "../../utils/toast";
 import { useBio } from "../../contexts/useBio.jsx";
 
-import { useReligionPreference } from '../../contexts/ReligionPreferenceContext';
-import { setReligionCookie } from '../../utils/cookies';
-import { useFilter } from '../../contexts/useFilter';
+import { useReligionPreference } from "../../contexts/ReligionPreferenceContext";
+import { setReligionCookie } from "../../utils/cookies";
+import { useFilter } from "../../contexts/useFilter";
+import dynamic from "next/dynamic";
+
+const Notifications = dynamic(() => import("../Notifications/Notifications"), {
+  ssr: false,
+});
 
 export default function NavBar() {
   const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
@@ -185,7 +190,7 @@ export default function NavBar() {
                 {_navDataItem.title}
               </Link>
             </Typography>
-          )
+          ),
         )}
       </ul>
       <div className="hidden shrink-0 items-center gap-2.5 lg:flex">
@@ -378,6 +383,9 @@ export default function NavBar() {
             </div>
           </>
         )}
+        <div className="absolute right-14 top-2 z-[1101] lg:right-64 lg:top-3">
+          <Notifications />
+        </div>
       </Navbar>
 
       <nav
