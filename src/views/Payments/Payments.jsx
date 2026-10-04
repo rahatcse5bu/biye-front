@@ -1,15 +1,27 @@
 // import React from 'react';
 import { Colors } from "../../constants/colors";
-import { packages } from "./payment.constant";
 import BkashCreatePaymentAPICall from "../../services/bkash";
 import { useContext } from "react";
+import { useQuery } from "@tanstack/react-query";
 import UserContext from "../../contexts/UserContext";
 import { Toast } from "../../utils/toast";
 import { useLocation } from "@/lib/navigation";
+import { pointsPackageService } from "../../services/pointsPackages";
+import { convertToBengaliDigits } from "../../utils/language";
+
+const toBn = (value) => convertToBengaliDigits(String(value));
 
 function Payments() {
   const { user } = useContext(UserContext);
   const location = useLocation();
+  const {
+    data: packages = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["points-packages"],
+    queryFn: pointsPackageService.list,
+  });
 
   // console.log("userInfo", userInfo);
   // console.log("user", user);
@@ -45,10 +57,23 @@ function Payments() {
       <h4 className="text-sm text-gray-500 font-bold text-center mb-8">
         [বিকাশ , নগদ , রকেট দিয়ে পেমেন্ট করতে পারবেন]
       </h4>
+      {isLoading && (
+        <p className="text-center text-gray-500">প্যাকেজ লোড হচ্ছে...</p>
+      )}
+      {isError && (
+        <p className="text-center text-red-600">
+          প্যাকেজ লোড করা যায়নি। পরে আবার চেষ্টা করুন।
+        </p>
+      )}
+      {!isLoading && !isError && packages.length === 0 && (
+        <p className="text-center text-gray-500">
+          এই মুহূর্তে কোনো প্যাকেজ নেই।
+        </p>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {packages.map((packageItem, index) => (
+        {packages.map((packageItem) => (
           <div
-            key={index}
+            key={packageItem._id}
             className="bg-white p-6 rounded-lg shadow-md border"
             style={{ borderColor: Colors.titleText }}
           >
@@ -58,9 +83,9 @@ function Payments() {
             >
               {packageItem.name}
             </h2>
-            <p className="text-gray-600 mb-4">{packageItem.price}</p>
+            <p className="text-gray-600 mb-4">{toBn(packageItem.price)} টাকা</p>
             <ul className="text-gray-700 mb-4">
-              {packageItem.features.map((feature, featureIndex) => (
+              {[`${toBn(packageItem.points)} পয়েন্ট`, ...packageItem.features].map((feature, featureIndex) => (
                 <li
                   key={featureIndex}
                   className="flex items-center justify-center"
@@ -86,7 +111,7 @@ function Payments() {
               style={{
                 background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
               }}
-              onClick={() => buyWithBkashHandler(packageItem.value)}
+              onClick={() => buyWithBkashHandler(packageItem.price)}
             >
               Buy With Bkash
             </button>
