@@ -1,7 +1,7 @@
 // import React from 'react';
 import { Colors } from "../../constants/colors";
 import BkashCreatePaymentAPICall from "../../services/bkash";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import UserContext from "../../contexts/UserContext";
 import { Toast } from "../../utils/toast";
@@ -9,6 +9,7 @@ import { useLocation } from "@/lib/navigation";
 import { pointsPackageService } from "../../services/pointsPackages";
 import { convertToBengaliDigits } from "../../utils/language";
 import CustomPointsCard from "./CustomPointsCard";
+import ButtonSpinner from "./ButtonSpinner";
 
 const toBn = (value) => convertToBengaliDigits(String(value));
 
@@ -27,24 +28,32 @@ function Payments() {
     queryKey: ["points-packages", "custom-settings"],
     queryFn: pointsPackageService.customSettings,
   });
+  // TODO: id of the package (or "custom") whose bKash checkout is starting.
+  const [loadingKey, setLoadingKey] = useState(null);
+
+  useEffect(() => {
+    // TODO: Back from bKash can restore this page from cache with a button still spinning.
+    const reset = (event) => event.persisted && setLoadingKey(null);
+    window.addEventListener("pageshow", reset);
+    return () => window.removeEventListener("pageshow", reset);
+  }, []);
 
   // console.log("userInfo", userInfo);
   // console.log("user", user);
-  const buyWithBkashHandler = async (value) => {
+  const buyWithBkashHandler = async (value, key) => {
     if (!user?.email) {
       Toast.errorToast("Please Login");
       return;
     }
-    // console.log("location", location.pathname);
-    if (+value >= 1) {
-      // console.log("value", +value);
-      BkashCreatePaymentAPICall(
-        process.env.NODE_ENV === "development" ? 1 : +value,
-        "",
-        "buy_package",
-        location.pathname
-      );
-    }
+    if (loadingKey || +value < 1) return;
+    setLoadingKey(key);
+    const redirecting = await BkashCreatePaymentAPICall(
+      process.env.NODE_ENV === "development" ? 1 : +value,
+      "",
+      "buy_package",
+      location.pathname
+    );
+    if (!redirecting) setLoadingKey(null);
   };
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -112,13 +121,21 @@ function Payments() {
               ))}
             </ul>
             <button
-              className=" hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="inline-flex min-w-[10rem] items-center justify-center text-white font-bold py-2 px-4 rounded hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
               style={{
                 background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight} )`,
               }}
-              onClick={() => buyWithBkashHandler(packageItem.price)}
+              onClick={() => buyWithBkashHandler(packageItem.price, packageItem._id)}
+              disabled={Boolean(loadingKey)}
+              aria-busy={loadingKey === packageItem._id}
             >
-              Buy With Bkash
+              {loadingKey === packageItem._id ? (
+                <span className="inline-flex items-center gap-2">
+                  <ButtonSpinner /> অপেক্ষা করুন...
+                </span>
+              ) : (
+                "Buy With Bkash"
+              )}
             </button>
           </div>
         ))}
@@ -127,7 +144,9 @@ function Payments() {
         <CustomPointsCard
           settings={customSettings}
           packages={packages}
-          onBuy={buyWithBkashHandler}
+          onBuy={(amount) => buyWithBkashHandler(amount, "custom")}
+          loading={loadingKey === "custom"}
+          disabled={Boolean(loadingKey)}
         />
       )}
     </div>

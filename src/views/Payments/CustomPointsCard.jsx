@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Colors } from "../../constants/colors";
 import { convertToBengaliDigits } from "../../utils/language";
+import ButtonSpinner from "./ButtonSpinner";
 
 const toBn = (value) => convertToBengaliDigits(String(value));
 
@@ -11,7 +12,7 @@ const previewPoints = (amount, settings, packages) => {
   return Math.floor(amount * settings.points_per_taka + 1e-9);
 };
 
-export default function CustomPointsCard({ settings, packages, onBuy }) {
+export default function CustomPointsCard({ settings, packages, onBuy, loading = false, disabled = false }) {
   const [value, setValue] = useState("");
   const amount = Number(value);
   const isWhole = value !== "" && Number.isInteger(amount);
@@ -26,7 +27,7 @@ export default function CustomPointsCard({ settings, packages, onBuy }) {
 
   const submit = (event) => {
     event.preventDefault();
-    if (isValid) onBuy(amount);
+    if (isValid && !disabled) onBuy(amount);
   };
 
   return (
@@ -81,13 +82,20 @@ export default function CustomPointsCard({ settings, packages, onBuy }) {
 
       <button
         type="submit"
-        disabled={!isValid}
+        disabled={!isValid || disabled}
+        aria-busy={loading}
         className="mt-4 w-full rounded py-2.5 font-bold text-white disabled:cursor-not-allowed disabled:opacity-50"
         style={{
           background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
         }}
       >
-        Buy With Bkash
+        {loading ? (
+          <span className="inline-flex items-center justify-center gap-2">
+            <ButtonSpinner /> অপেক্ষা করুন...
+          </span>
+        ) : (
+          "Buy With Bkash"
+        )}
       </button>
     </form>
   );

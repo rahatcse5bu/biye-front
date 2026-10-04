@@ -1,36 +1,53 @@
 import { SITE_URL } from '@/lib/seo';
+import Swal from 'sweetalert2';
 import axiosInstance from '../utils/axios';
+import { Toast } from '../utils/toast';
 
-export default function BkashCreatePaymentAPICall(
+// TODO: resolves true while redirecting to bKash, false (after an error toast) if it couldn't start.
+export default async function BkashCreatePaymentAPICall(
   amount,
   bio_user = '',
   purpose = 'buy_package',
-  pathname = '/'
+  pathname = '/',
+  { overlay = false } = {}
 ) {
-  console.log('Button Clicked !!');
   let url = `${SITE_URL}/pay${
     bio_user
       ? `?bio_user=${bio_user}&purpose=${purpose}&pathname=${pathname}`
       : `?purpose=${purpose}&pathname=${pathname}`
   }`;
-  // console.log(url, bioId);
-  axiosInstance
-    .post('/bkash/create', {
+
+  // TODO: overlay is for flows with no button left on screen to show a spinner.
+  if (overlay) {
+    Swal.fire({
+      title: 'বিকাশ পেমেন্ট পেজে নেওয়া হচ্ছে...',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      didOpen: () => Swal.showLoading(),
+    });
+  }
+
+  try {
+    const response = await axiosInstance.post('/bkash/create', {
       amount: amount,
       callbackURL: url,
-    })
-    .then((response) => {
-      // console.log("Data was successfully sent.", response);
-      // console.log(response);
-      if (response?.data?.bkashURL) {
-        window.location.href = response?.data?.bkashURL;
-      } else {
-        // window.location.href = "/";
-      }
-    })
-    .catch((error) => {
-      console.log('An error occurred:', error);
     });
+    if (response?.data?.bkashURL) {
+      // TODO: Back from bKash can restore this page from cache with the overlay still open.
+      if (overlay) {
+        window.addEventListener('pageshow', (event) => event.persisted && Swal.close(), { once: true });
+      }
+      window.location.href = response.data.bkashURL;
+      return true;
+    }
+  } catch (error) {
+    console.log('An error occurred:', error);
+  }
+
+  if (overlay) Swal.close();
+  Toast.errorToast('বিকাশ পেমেন্ট শুরু করা যায়নি। আবার চেষ্টা করুন।');
+  return false;
 }
 export function BkashExecutePaymentAPICall(paymentID) {
   return new Promise((resolve, reject) => {

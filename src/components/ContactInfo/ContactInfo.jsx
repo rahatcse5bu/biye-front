@@ -24,6 +24,7 @@ import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 import CustomButton from '../CustomButton/CustomButton';
 import CustomModal from '../CustomModal/CustomModal';
+import ButtonSpinner from '../../views/Payments/ButtonSpinner';
 
 const ContactInfo = ({ status }) => {
   const [displayText, setDisplayText] = useState(false);
@@ -36,6 +37,14 @@ const ContactInfo = ({ status }) => {
   const location = useLocation();
   const [isFirstStepDone, setFirstStepDone] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [payLoading, setPayLoading] = useState(false);
+
+  useEffect(() => {
+    // TODO: Back from bKash can restore this page from cache with the button still spinning.
+    const reset = (event) => event.persisted && setPayLoading(false);
+    window.addEventListener('pageshow', reset);
+    return () => window.removeEventListener('pageshow', reset);
+  }, []);
   const [isFirstStepModalOpen, setIsFirstStepModalOpen] = useState(false);
   const [isSecondStepModalOpen, setIsSecondStepModalOpen] = useState(false);
 
@@ -102,12 +111,9 @@ const ContactInfo = ({ status }) => {
           setLoading(false);
         }
       } else {
-        buyWithBkashHandler(
-          70 - points,
-          bio_user,
-          'second_step',
-          location.pathname
-        );
+        buyWithBkashHandler(70 - points, bio_user, 'second_step', {
+          overlay: true,
+        });
       }
     });
   };
@@ -193,13 +199,19 @@ const ContactInfo = ({ status }) => {
     });
   };
 
-  const buyWithBkashHandler = async (value, bioId, purpose) => {
-    if (!user?.email) {
+  const buyWithBkashHandler = async (value, bioId, purpose, { overlay = false } = {}) => {
+    if (!user?.email || payLoading || +value <= 0) {
       return;
     }
-    if (+value > 0) {
-      BkashCreatePaymentAPICall(+value, bioId, purpose, location.pathname);
-    }
+    setPayLoading(true);
+    const redirecting = await BkashCreatePaymentAPICall(
+      +value,
+      bioId,
+      purpose,
+      location.pathname,
+      { overlay }
+    );
+    if (!redirecting) setPayLoading(false);
   };
 
   const unverifiedPurchaseHandler = () => {
@@ -242,7 +254,8 @@ const ContactInfo = ({ status }) => {
           requiredPoints - points,
           biodataId,
           'unverified_purchase',
-          location.pathname
+          location.pathname,
+          { overlay: true }
         );
       } else {
         // Proceed with purchase
@@ -362,23 +375,16 @@ const ContactInfo = ({ status }) => {
           </h2>
           <div className="flex flex-col items-center justify-center ">
             {displayText ? (
-              <div
-                onClick={() =>
-                  buyWithBkashHandler(
-                    30 - points,
-                    bio?.generalInfo?.user,
-                    'first_Step'
-                  )
-                }
-                className="pb-5"
-              >
+              <div className="pb-5">
                 <p className="mb-2 text-xl">
                   আপনার একাউন্টে কোনো{' '}
                   {convertToBengaliNumerals(points.toFixed(2).toString())}{' '}
                   পয়েন্ট আছে!
                 </p>
                 <button
-                  className="px-2 py-2 text-white bg-green-800 rounded-md hover:bg-green-900"
+                  className="inline-flex items-center justify-center gap-2 px-2 py-2 text-white bg-green-800 rounded-md hover:bg-green-900 disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled={payLoading}
+                  aria-busy={payLoading}
                   onClick={() =>
                     buyWithBkashHandler(
                       30 - points,
@@ -387,10 +393,18 @@ const ContactInfo = ({ status }) => {
                     )
                   }
                 >
-                  {convertToBengaliNumerals(
-                    (30 - points).toFixed(2).toString()
-                  )}{' '}
-                  পয়েন্ট কিনুন
+                  {payLoading ? (
+                    <>
+                      <ButtonSpinner /> অপেক্ষা করুন...
+                    </>
+                  ) : (
+                    <>
+                      {convertToBengaliNumerals(
+                        (30 - points).toFixed(2).toString()
+                      )}{' '}
+                      পয়েন্ট কিনুন
+                    </>
+                  )}
                 </button>
               </div>
             ) : checkMsg ? (

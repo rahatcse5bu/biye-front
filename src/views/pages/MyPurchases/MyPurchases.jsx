@@ -60,7 +60,8 @@ const FirstStepCard = ({
         +value,
         bio_user,
         'second_step',
-        location.pathname
+        location.pathname,
+        { overlay: true }
       );
     }
   };
