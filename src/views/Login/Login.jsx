@@ -323,7 +323,11 @@ export function Login() {
             <p className="mt-7 text-center text-sm leading-6 text-gray-500">
               নতুন সদস্য?{' '}
               <Link
-                to="/signup"
+                to={
+                  requestedPath === from
+                    ? `/signup?from=${encodeURIComponent(from)}`
+                    : '/signup'
+                }
                 className="rounded font-bold text-brand-900 underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900"
               >
                 অ্যাকাউন্ট তৈরি করুন

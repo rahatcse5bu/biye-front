@@ -15,7 +15,7 @@ import { navData } from "./navigation_data";
 import SubLinks from "./Sublinks.jsx";
 import UserContext from "../../contexts/UserContext";
 
-const navLogo = "/assets/logo/biye-logo.svg";
+const navLogo = "/logo.png";
 import { getToken, removeToken } from "../../utils/cookies";
 import {
   clearUserLocalStorage,
@@ -145,11 +145,11 @@ export default function NavBar() {
       <div className="hidden shrink-0 lg:block">
         <Link to="/" aria-label="হোম পেজ">
           <img
-            className="block h-auto w-[118px] xl:w-[136px]"
+            className="block h-10 w-auto xl:h-11"
             src={navLogo}
-            alt="বিয়ে ম্যাট্রিমনি"
-            width="220"
-            height="70"
+            alt="Bibaho"
+            width="600"
+            height="231"
           />
         </Link>
       </div>
@@ -266,7 +266,7 @@ export default function NavBar() {
     { label: "বায়োডাটা", path: "/biodatas", icon: UsersIcon },
     {
       label: "তৈরি করুন",
-      path: "/biodata-submit",
+      path: "/user/account/edit-biodata",
       icon: DocumentPlusIcon,
       primary: true,
     },
@@ -310,11 +310,11 @@ export default function NavBar() {
             aria-label="বিয়ে হোম পেজ"
           >
             <img
-              className="block h-auto w-[102px]"
+              className="block h-9 w-auto"
               src={navLogo}
-              alt="বিয়ে ম্যাট্রিমনি"
-              width="220"
-              height="70"
+              alt="Bibaho"
+              width="600"
+              height="231"
             />
           </Link>
 

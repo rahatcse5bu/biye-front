@@ -127,7 +127,7 @@ export default async function BioDataPage({ params }) {
           </div>
 
           <Link
-            to="/biodata-submit"
+            to="/user/account/edit-biodata"
             className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl bg-brand-900 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2 md:self-center"
           >
             নিজের বায়োডাটা তৈরি করুন

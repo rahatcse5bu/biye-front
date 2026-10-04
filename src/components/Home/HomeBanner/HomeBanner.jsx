@@ -48,7 +48,7 @@ const HomeBanner = ({ content }) => {
               বায়োডাটা খুঁজুন
             </Link>
             <Link
-              to="/biodata-submit"
+              to="/user/account/edit-biodata"
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/35 bg-white/10 px-5 py-3 font-bold text-white transition-colors duration-200 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transition-none"
             >
               <PencilSquareIcon className="h-5 w-5" aria-hidden="true" />

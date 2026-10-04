@@ -10,7 +10,7 @@ import {
   UserPlusIcon,
 } from '@heroicons/react/24/outline';
 import { useContext, useState } from 'react';
-import { Link, useNavigate } from '@/lib/navigation';
+import { Link, useNavigate, useSearchParams } from '@/lib/navigation';
 import UserContext from '../../contexts/UserContext';
 import { userServices } from '../../services/user';
 import { setToken } from '../../utils/cookies';
@@ -39,6 +39,13 @@ export function Signup() {
   const { setTokenInfo, setUser, setUserInfo, setUserLoading } =
     useContext(UserContext);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  // TODO: same-site paths only, matching Login, so signup returns users where they started.
+  const requestedPath = searchParams.get('from');
+  const from =
+    requestedPath?.startsWith('/') && !requestedPath.startsWith('//')
+      ? requestedPath
+      : '/user/account/dashboard';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -65,7 +72,7 @@ export function Signup() {
     setUser(authenticatedUser);
     setUserInfo(response);
     setUserLoading(false);
-    navigate('/user/account/dashboard');
+    navigate(from, { replace: true });
   };
 
   const googleSignup = async (credentialResponse) => {
@@ -431,7 +438,11 @@ export function Signup() {
             <p className="mt-7 text-center text-sm leading-6 text-gray-500">
               ইতোমধ্যে অ্যাকাউন্ট আছে?{' '}
               <Link
-                to="/login"
+                to={
+                  requestedPath === from
+                    ? `/login?from=${encodeURIComponent(from)}`
+                    : '/login'
+                }
                 className="rounded font-bold text-brand-900 underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900"
               >
                 লগইন করুন

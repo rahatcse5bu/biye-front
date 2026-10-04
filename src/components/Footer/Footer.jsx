@@ -11,7 +11,7 @@ import { HiOutlineChevronRight, HiOutlineLocationMarker } from 'react-icons/hi';
 
 const biodataLinks = [
   { label: 'সকল বায়োডাটা', to: '/biodatas' },
-  { label: 'বায়োডাটা তৈরি করুন', to: '/biodata-submit' },
+  { label: 'বায়োডাটা তৈরি করুন', to: '/user/account/edit-biodata' },
   { label: 'নিবন্ধন করুন', to: '/signup' },
   { label: 'পয়েন্ট প্যাকেজ', to: '/points-package' },
 ];
