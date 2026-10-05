@@ -164,7 +164,11 @@ const Favorite = () => {
                 </thead>
                 <tbody>
                   {favoritesByWhoLoading ? (
-                    <LoadingCircle />
+                    <tr>
+                      <td colSpan={9} className="py-4">
+                        <LoadingCircle />
+                      </td>
+                    </tr>
                   ) : (
                     favoritesByWho?.data?.map((item, index) => {
                       return (

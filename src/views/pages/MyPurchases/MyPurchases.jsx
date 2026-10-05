@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@material-tailwind/react';
 import { useQuery } from '@tanstack/react-query';
-import { FaEye, FaTrash, FaInfo } from 'react-icons/fa';
+import { FaEye, FaInfo } from 'react-icons/fa';
 import { BioChoiceDataServices } from '../../../services/bioChoiceData';
 import { getToken } from '../../../utils/cookies';
 import { FaYoutube } from 'react-icons/fa';
@@ -30,6 +30,48 @@ import { formatDateAndCalculateAge } from '../../../utils/date';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import CustomModal from '../../../components/CustomModal/CustomModal';
 import YouTubeEmbed from '../../../components/YouTubeEmbed/YouTubeEmbed';
+import { HiOutlineLocationMarker, HiOutlinePhone, HiOutlineMail } from 'react-icons/hi';
+
+const statusMeta = {
+  pending: { label: 'অপেক্ষমাণ', className: 'bg-amber-50 text-amber-700 ring-amber-200' },
+  approved: { label: 'গৃহীত', className: 'bg-emerald-50 text-emerald-700 ring-emerald-200' },
+  rejected: { label: 'প্রত্যাখ্যাত', className: 'bg-rose-50 text-rose-700 ring-rose-200' },
+};
+
+const StatusPill = ({ status }) => {
+  const meta = statusMeta[status] || { label: status || '—', className: 'bg-gray-100 text-gray-700 ring-gray-200' };
+  return (
+    <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ${meta.className}`}>
+      {meta.label}
+    </span>
+  );
+};
+
+// TODO: the biodata owner's track record, shown compactly on mobile cards.
+const StatsLine = ({ results }) =>
+  results ? (
+    <div className="grid grid-cols-3 divide-x divide-gray-100 rounded-xl bg-gray-50 py-2 text-center">
+      <div>
+        <p className="text-sm font-bold text-emerald-700">{convertToBengaliNumerals(String(results.approvedPercentage ?? 0))}%</p>
+        <p className="text-[11px] text-gray-500">গ্রহণের হার</p>
+      </div>
+      <div>
+        <p className="text-sm font-bold text-rose-600">{convertToBengaliNumerals(String(results.rejectedPercentage ?? 0))}%</p>
+        <p className="text-[11px] text-gray-500">প্রত্যাখ্যানের হার</p>
+      </div>
+      <div>
+        <p className="text-sm font-bold text-amber-600">{convertToBengaliNumerals(String(results.pending ?? 0))}</p>
+        <p className="text-[11px] text-gray-500">অপেক্ষমাণ</p>
+      </div>
+    </div>
+  ) : null;
+
+const cardButton =
+  'inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0D7377]/40';
+
+const EmptyState = ({ text }) => (
+  <p className="rounded-xl border border-dashed border-gray-200 px-4 py-8 text-center text-sm text-gray-500">{text}</p>
+);
 
 const FirstStepCard = ({
   item,
@@ -41,6 +83,7 @@ const FirstStepCard = ({
   setPayBioDetailsModal,
   bioChoiceFirstStepRefetch,
   bioChoiceSecondStepRefetch,
+  variant = 'row',
 }) => {
   const location = useLocation();
   const { userInfo } = useContext(UserContext);
@@ -136,6 +179,59 @@ const FirstStepCard = ({
     navigate(`/biodata/${bioId}`);
   };
 
+  if (variant === 'card') {
+    return (
+      <article className="space-y-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-xs text-gray-500">বায়োডাটা নং</p>
+            <p className="text-lg font-bold text-gray-900">{item?.bio_id}</p>
+          </div>
+          <StatusPill status={item?.status} />
+        </div>
+        {(item?.city || item?.division) && (
+          <p className="flex items-center gap-1.5 text-sm text-gray-600">
+            <HiOutlineLocationMarker className="h-4 w-4 shrink-0 text-gray-400" aria-hidden="true" />
+            {[item?.city, item?.division].filter(Boolean).join(', ')}
+          </p>
+        )}
+        <StatsLine results={data?.results} />
+        <div className="flex gap-2">
+          <button type="button" onClick={() => viewBioIdHandler(item?.bio_id)} className={cardButton}>
+            <FaEye aria-hidden="true" /> বায়োডাটা
+          </button>
+          <button type="button" onClick={() => bioDetailsOpenModalHandler(item?.bio_details)} className={cardButton}>
+            <FaInfo aria-hidden="true" /> প্রশ্নোত্তর
+          </button>
+          <button type="button" onClick={() => feedbackDetailsModalHandler(item?.feedback)} className={cardButton}>
+            <MdFeedback aria-hidden="true" /> ফিডব্যাক
+          </button>
+        </div>
+        {item?.status === 'approved' && (
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => payButtonHandler(item?.bio_user)}
+              disabled={loading}
+              className="inline-flex flex-1 items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
+              style={{ background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})` }}
+            >
+              {loading ? 'অপেক্ষা করুন...' : 'যোগাযোগ তথ্য নিন (৭০ পয়েন্ট)'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setPayBioDetailsModal(true)}
+              className="rounded-xl p-2 text-amber-600 hover:bg-amber-50"
+              aria-label="যোগাযোগ তথ্য নেওয়ার নিয়ম"
+            >
+              <AiFillQuestionCircle className="h-6 w-6" />
+            </button>
+          </div>
+        )}
+      </article>
+    );
+  }
+
   return (
     <tr className="border-b">
       <td className="px-4 py-2 text-center border-l w-1/10">{index + 1}</td>
@@ -212,7 +308,7 @@ const FirstStepCard = ({
   );
 };
 
-const SecondStepCard = ({ item, index }) => {
+const SecondStepCard = ({ item, index, variant = 'row' }) => {
   const navigate = useNavigate();
   const { data } = useQuery({
     queryKey: ['bio-data', 'stat', item?.bio_user],
@@ -228,7 +324,65 @@ const SecondStepCard = ({ item, index }) => {
   const viewBioIdHandler = (bioId) => {
     navigate(`/biodata/${bioId}`);
   };
-  // console.log("data~", data);
+  if (variant === 'card') {
+    const details = [
+      ['জন্ম তারিখ', formatDateAndCalculateAge(item?.date_of_birth)?.formattedDate],
+      ['স্থায়ী ঠিকানা', item?.permanent_area],
+      ['বর্তমান ঠিকানা', item?.present_area],
+    ].filter(([, value]) => value);
+    return (
+      <article className="space-y-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-xs text-gray-500">বায়োডাটা নং</p>
+            <p className="text-lg font-bold text-gray-900">{item?.bio_id}</p>
+          </div>
+          <span className="shrink-0 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200">
+            কেনা হয়েছে
+          </span>
+        </div>
+
+        <div className="rounded-xl border border-[#0D7377]/15 bg-[#0D7377]/[0.04] p-3">
+          <p className="text-xs text-gray-500">অভিভাবক</p>
+          <p className="font-semibold text-gray-900">
+            {item?.full_name}
+            {item?.relation && <span className="font-normal text-gray-500"> ({item.relation})</span>}
+          </p>
+          <div className="mt-2 flex flex-col gap-1.5 text-sm">
+            {item?.family_number && (
+              <a href={`tel:${item.family_number}`} className="flex items-center gap-2 font-semibold text-[#0D7377]">
+                <HiOutlinePhone className="h-4 w-4 shrink-0" aria-hidden="true" />
+                {item.family_number}
+              </a>
+            )}
+            {item?.bio_receiving_email && (
+              <a href={`mailto:${item.bio_receiving_email}`} className="flex min-w-0 items-center gap-2 text-[#0D7377]">
+                <HiOutlineMail className="h-4 w-4 shrink-0" aria-hidden="true" />
+                <span className="truncate">{item.bio_receiving_email}</span>
+              </a>
+            )}
+          </div>
+        </div>
+
+        {details.length > 0 && (
+          <dl className="space-y-1 text-sm">
+            {details.map(([label, value]) => (
+              <div key={label} className="flex justify-between gap-3">
+                <dt className="text-gray-500">{label}</dt>
+                <dd className="text-right font-medium text-gray-900">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+
+        <StatsLine results={data?.results} />
+        <button type="button" onClick={() => viewBioIdHandler(item?.bio_id)} className={`${cardButton} w-full`}>
+          <FaEye aria-hidden="true" /> বায়োডাটা দেখুন
+        </button>
+      </article>
+    );
+  }
+
   return (
     <tr className="border-b">
       <td className="px-4 py-2 text-center border-l w-1/10">{index + 1}</td>
@@ -269,12 +423,8 @@ const SecondStepCard = ({ item, index }) => {
           color="green"
           size="xs"
           onClick={() => viewBioIdHandler(item?.bio_id)}
-          className="mr-2"
         >
           <FaEye size={12} />
-        </Button>
-        <Button color="red" size="xs">
-          <FaTrash size={12} />
         </Button>
       </td>
     </tr>
@@ -321,19 +471,44 @@ const MyPurchases = () => {
 
   return (
     <>
-      <div className="py-12 mx-auto ">
+      <div className="mx-auto py-6 md:py-12">
         <div className="">
           {/*<!-- End of Left Sidebar -->*/}
           <div className="col right-sidebar-main my-favs">
             <div className="w-auto border-t-2 rounded shadow my-favs-info">
-              <h5 className="mt-3 text-2xl text-center card-title">
+              <h5 className="mt-3 px-3 text-xl text-center card-title md:text-2xl">
                 আমার শেয়ার করা বায়োডাটার অবস্থা (অনুরোধ পাঠান)
               </h5>
-              <h6 className="py-4 text-xs">
+              <h6 className="px-3 py-4 text-center text-xs text-gray-500">
                 আপনার নিজের বায়োডাটা যেসকল পাত্র/পাত্রীর সাথে শেয়ার
                 করেছেন তাদের তালিকা, ফিডব্যাক ও অবস্থা
               </h6>
-              <div className="overflow-x-auto">
+              {bioChoiceFirstStepLoading ? (
+                <div className="py-8"><LoadingCircle /></div>
+              ) : !(bioChoiceFirstStep?.data?.length > 0) ? (
+                <div className="px-3 pb-4">
+                  <EmptyState text="আপনি এখনো কাউকে প্রস্তাব পাঠাননি। পছন্দের বায়োডাটা থেকে প্রস্তাব পাঠান।" />
+                </div>
+              ) : (
+              <>
+              <div className="space-y-3 px-3 pb-4 md:hidden">
+                {bioChoiceFirstStep.data.map((item, index) => (
+                  <FirstStepCard
+                    variant="card"
+                    item={item}
+                    key={item?._id || index}
+                    index={index}
+                    setQa={setQa}
+                    setFeedback={setFeedback}
+                    setIsFeedbackDialogOpen={setIsFeedbackDialogOpen}
+                    setBioDetailsModal={setBioDetailsModal}
+                    setPayBioDetailsModal={setPayBioDetailsModal}
+                    bioChoiceFirstStepRefetch={bioChoiceFirstStepRefetch}
+                    bioChoiceSecondStepRefetch={bioChoiceSecondStepRefetch}
+                  />
+                ))}
+              </div>
+              <div className="hidden overflow-x-auto md:block">
                 <table className="w-full table-auto">
                   <thead>
                     <tr className="border-t border-b">
@@ -364,15 +539,11 @@ const MyPurchases = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {bioChoiceFirstStepLoading ? (
-                      <LoadingCircle />
-                    ) : (
-                      bioChoiceFirstStep?.data?.length > 0 &&
-                      bioChoiceFirstStep?.data?.map((item, index) => {
+                    {bioChoiceFirstStep.data.map((item, index) => {
                         return (
                           <FirstStepCard
                             item={item}
-                            key={index}
+                            key={item?._id || index}
                             index={index}
                             setQa={setQa}
                             setFeedback={setFeedback}
@@ -387,11 +558,12 @@ const MyPurchases = () => {
                             }
                           />
                         );
-                      })
-                    )}
+                      })}
                   </tbody>
                 </table>
               </div>
+              </>
+              )}
             </div>
           </div>
 
@@ -404,7 +576,7 @@ const MyPurchases = () => {
             >
               <FaYoutube className="mb-0 pb-0 mr-2 text-red-500 w-12 h-6  rounded-full bg-white" />{' '}
               <span
-                className="md:text-xl text-xl"
+                className="text-base md:text-xl"
                 style={{
                   color: Colors.titleText,
                 }}
@@ -420,7 +592,7 @@ const MyPurchases = () => {
             >
               <FaYoutube className="mb-0 pb-0 mr-2 text-red-500 w-12 h-6  rounded-full bg-white" />{' '}
               <span
-                className="md:text-xl text-xl"
+                className="text-base md:text-xl"
                 style={{
                   color: Colors.titleText,
                 }}
@@ -451,14 +623,27 @@ const MyPurchases = () => {
           </CustomModal>
           <div className="col right-sidebar-main overflow-hidden my-favs">
             <div className="w-auto overflow-hidden border-t-2 rounded shadow my-favs-info">
-              <h5 className="mt-3 text-2xl text-center card-title">
+              <h5 className="mt-3 px-3 text-xl text-center card-title md:text-2xl">
                 আমার ফাইনাল বায়োডাটা ক্রয়সমূহ (যোগাযোগ তথ্য অনুরোধ)
               </h5>
-              <h6 className="py-4 text-xs">
+              <h6 className="px-3 py-4 text-center text-xs text-gray-500">
                 আপনার অনুরোধ পাঠিয়ে আপ্রুভাল পাওয়ার পর যেসকল
                 অভিভাবকের কনটাক্ট নাম্বার পেয়েছেন, তাদের তালিকা
               </h6>
-              <div className="overflow-x-auto">
+              {bioChoiceSecondStepLoading ? (
+                <div className="py-8"><LoadingCircle /></div>
+              ) : !(bioChoiceSecondStep?.data?.length > 0) ? (
+                <div className="px-3 pb-4">
+                  <EmptyState text="এখনো কোনো যোগাযোগ তথ্য কেনা হয়নি। প্রস্তাব গৃহীত হলে এখান থেকে অভিভাবকের তথ্য পাবেন।" />
+                </div>
+              ) : (
+              <>
+              <div className="space-y-3 px-3 pb-4 md:hidden">
+                {bioChoiceSecondStep.data.map((item, index) => (
+                  <SecondStepCard variant="card" key={item?._id || index} index={index} item={item} />
+                ))}
+              </div>
+              <div className="hidden overflow-x-auto md:block">
                 <table className="w-full table-auto">
                   <thead>
                     <tr className="border-t border-b">
@@ -497,23 +682,14 @@ const MyPurchases = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {bioChoiceSecondStepLoading ? (
-                      <LoadingCircle />
-                    ) : (
-                      bioChoiceSecondStep?.data?.length > 0 &&
-                      bioChoiceSecondStep?.data?.map((item, index) => {
-                        return (
-                          <SecondStepCard
-                            key={index}
-                            index={index}
-                            item={item}
-                          />
-                        );
-                      })
-                    )}
+                    {bioChoiceSecondStep.data.map((item, index) => (
+                      <SecondStepCard key={item?._id || index} index={index} item={item} />
+                    ))}
                   </tbody>
                 </table>
               </div>
+              </>
+              )}
             </div>
           </div>
         </div>

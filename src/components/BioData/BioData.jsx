@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   ArrowRightIcon,
   ArrowsPointingOutIcon,
   CalendarDaysIcon,
   CheckBadgeIcon,
   MapPinIcon,
+  ShareIcon,
   SparklesIcon,
 } from "@heroicons/react/24/outline";
 import { FaEye } from "react-icons/fa";
@@ -20,6 +21,8 @@ import { GeneralInfoServices } from "../../services/generalInfo";
 import { religionToApiKey } from "../../constants/religionContent";
 import BiodataTypeBadge from "../BiodataTypeBadge/BiodataTypeBadge";
 import PhotoViewer from "../PhotoViewer/PhotoViewer";
+import ShareModal from "../ShareModal/ShareModal";
+import { SITE_URL } from "@/lib/seo";
 // import ReactionButton from "../ReactionButton/ReactionButton";
 
 const RELIGION_LABELS = {
@@ -63,6 +66,8 @@ const getDisplayValue = (value) => value || "উল্লেখ করা হয়
 
 const BioData = ({ biodata }) => {
   const [showViewer, setShowViewer] = useState(false);
+  const [showShare, setShowShare] = useState(false);
+  const closeShare = useCallback(() => setShowShare(false), []);
 
   const hasMalePhotos =
     biodata?.gender !== "মহিলা" &&
@@ -247,11 +252,11 @@ const BioData = ({ biodata }) => {
         </div>
       )} */}
 
-      <div className="p-4">
+      <div className="flex gap-2 p-4">
         <Link
           to={profilePath}
           onClick={bioDataHandler}
-          className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand-900 px-4 py-3 text-sm font-bold text-white transition-colors duration-200 hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2"
+          className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-brand-900 px-4 py-3 text-sm font-bold text-white transition-colors duration-200 hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2"
         >
           সম্পূর্ণ বায়োডাটা দেখুন
           <ArrowRightIcon
@@ -259,7 +264,24 @@ const BioData = ({ biodata }) => {
             aria-hidden="true"
           />
         </Link>
+        <button
+          type="button"
+          onClick={() => setShowShare(true)}
+          className="inline-flex min-h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-brand-900/20 bg-white text-brand-900 transition-colors duration-200 hover:bg-brand-900/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2"
+          aria-label={`বায়োডাটা BID-${biodataNumber || ""} শেয়ার করুন`}
+          title="শেয়ার করুন"
+        >
+          <ShareIcon className="h-5 w-5" aria-hidden="true" />
+        </button>
       </div>
+
+      <ShareModal
+        isOpen={showShare}
+        onClose={closeShare}
+        url={`${SITE_URL}${profilePath}`}
+        title={`বায়োডাটা BID-${biodataNumber || ""}`}
+        text={`বিবাহ ম্যাট্রিমনিতে এই বায়োডাটাটি দেখুন: BID-${biodataNumber || ""}${ageInfo?.age ? ` (${ageInfo.age} বছর${biodata?.upzilla ? `, ${biodata.upzilla}` : ""})` : ""}`}
+      />
 
       {hasMalePhotos && (
         <PhotoViewer

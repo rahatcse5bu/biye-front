@@ -134,8 +134,8 @@ const ContactInfo = ({ status }) => {
   }, [displayText]);
 
   useEffect(() => {
-    if (checkFirst) {
-      const status = checkFirst?.data?.status;
+    if (checkFirst?.data) {
+      const status = checkFirst.data.status;
       let msg = '';
       if (status) {
         // console.log({ status });
@@ -313,7 +313,7 @@ const ContactInfo = ({ status }) => {
             )}
           </div>
         </div>
-      ) : contactInfo ? (
+      ) : contactInfo?.data ? (
         <>
           <h5 className="my-3 text-2xl text-center card-title">যোগাযোগ</h5>
           <div className="paid-contact-info">

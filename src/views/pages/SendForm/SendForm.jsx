@@ -1,4 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import UserContext from '../../../contexts/UserContext';
+import { GeneralInfoServices } from '../../../services/generalInfo';
+import { SITE_URL } from '@/lib/seo';
 import { Colors } from '../../../constants/colors';
 import Textarea from '../../../components/Textarea/Textarea';
 import { BioChoiceDataServices } from '../../../services/bioChoiceData';
@@ -21,6 +25,28 @@ function SendForm() {
   const [fetchingQuestions, setFetchingQuestions] = useState(true);
   const [goTo, setGoto] = useState(false);
   const [isHasBio, setIsHasBio] = useState(false);
+  const { userInfo } = useContext(UserContext);
+  const { data: dashboard } = useQuery({
+    queryKey: ['general-info', 'dash-board'],
+    queryFn: GeneralInfoServices.getDashBoardData,
+    retry: false,
+  });
+  const myUserId = userInfo?.data?.user_id;
+  const myBioLink =
+    dashboard?.data?.has_biodata && myUserId ? `${SITE_URL}/biodata/${myUserId}` : '';
+  // TODO: fill the link once per tick of the checkbox, so a cleared field isn't refilled.
+  const autoFilled = useRef(false);
+
+  useEffect(() => {
+    if (!isHasBio) {
+      autoFilled.current = false;
+      return;
+    }
+    if (myBioLink && !autoFilled.current) {
+      autoFilled.current = true;
+      setBioInput((current) => current.trim() || myBioLink);
+    }
+  }, [isHasBio, myBioLink]);
   const [formData, setFormData] = useState({
     upzilla: '',
     zilla: '',
@@ -264,12 +290,27 @@ function SendForm() {
                 {!isHasBio ? (
                   <SendMyBio formData={formData} setFormData={setFormData} />
                 ) : (
-                  <Textarea
-                    value={bioInput}
-                    setValue={setBioInput}
-                    required={true}
-                    title="আপনার নিজের বায়োডাটা লিখুন অথবা বায়োডাটার লিঙ্ক শেয়ার করুন"
-                  />
+                  <div>
+                    <Textarea
+                      value={bioInput}
+                      setValue={setBioInput}
+                      required={true}
+                      title="আপনার নিজের বায়োডাটা লিখুন অথবা বায়োডাটার লিঙ্ক শেয়ার করুন"
+                    />
+                    {myBioLink && bioInput.trim() === myBioLink ? (
+                      <p className="mt-1 flex items-start gap-1.5 text-xs text-teal-700">
+                        <HiInformationCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                        আপনার বায়োডাটার লিংক স্বয়ংক্রিয়ভাবে যুক্ত করা হয়েছে। চাইলে পরিবর্তন করতে পারেন।
+                      </p>
+                    ) : (
+                      dashboard?.data?.has_biodata === false && (
+                        <p className="mt-1 flex items-start gap-1.5 text-xs text-gray-500">
+                          <HiInformationCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                          আপনার এখনো কোনো বায়োডাটা তৈরি করা নেই। আপনার তথ্য বা অন্য কোনো বায়োডাটার লিংক লিখুন।
+                        </p>
+                      )
+                    )}
+                  </div>
                 )}
               </>
             )}

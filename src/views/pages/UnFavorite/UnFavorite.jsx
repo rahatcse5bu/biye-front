@@ -167,7 +167,11 @@ const UnFavorite = () => {
                 </thead>
                 <tbody>
                   {unFavoritesByWhoLoading ? (
-                    <LoadingCircle />
+                    <tr>
+                      <td colSpan={9} className="py-4">
+                        <LoadingCircle />
+                      </td>
+                    </tr>
                   ) : (
                     unFavoritesByUser?.data?.map((item, index) => {
                       return (

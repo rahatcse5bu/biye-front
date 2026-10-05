@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 import { sidebarDetails } from '../../constants/Sidebardata';
-import { useNavigate } from '@/lib/navigation';
-import { useContext } from 'react';
+import { useNavigate, useLocation } from '@/lib/navigation';
+import { useContext, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { AccountServices } from '../../services/account';
 import UserContext from '../../contexts/UserContext';
 import { Colors } from '../../constants/colors';
 import OptionCart from '../OptionCart/OptionCart';
@@ -13,6 +15,35 @@ import { removeToken } from '../../utils/cookies';
 const UserSidebar = ({ setOpenSidebar }) => {
   const navigate = useNavigate();
   const { userInfo, logOut } = useContext(UserContext);
+  const { pathname } = useLocation();
+  const { data: counts = {}, refetch: refetchCounts } = useQuery({
+    queryKey: ['sidebar-counts'],
+    queryFn: AccountServices.getSidebarCounts,
+    enabled: Boolean(userInfo?.data?._id),
+    refetchInterval: 60_000,
+    refetchOnWindowFocus: true,
+    retry: false,
+  });
+
+  // TODO: refresh after moving between account pages, where most counts change.
+  useEffect(() => {
+    if (userInfo?.data?._id) refetchCounts();
+  }, [pathname, userInfo?.data?._id, refetchCounts]);
+
+  // TODO: path → [count, highlight]; bio-requests shows pending proposals waiting for a decision.
+  const badgeFor = (path) => {
+    const map = {
+      '/user/account/reactions': [counts.reactions],
+      '/user/account/likes': [counts.likes],
+      '/user/account/dislikes': [counts.dislikes],
+      '/user/account/shortlist': [counts.shortlist],
+      '/user/account/purchases': [counts.purchases],
+      '/user/account/bio-requests': [counts.bio_requests_pending, true],
+      '/user/account/payment-and-refund': [counts.payments],
+    };
+    const [count, highlight] = map[path] || [];
+    return { count, highlight };
+  };
   const myBioDataHandler = () => {
     setOpenSidebar(false);
     navigate(`/user/account/preview-biodata/${userInfo?.data?.user_id}`);
@@ -74,6 +105,7 @@ const UserSidebar = ({ setOpenSidebar }) => {
             icon={data.icon}
             title={data.title}
             path={data.path}
+            {...badgeFor(data.path)}
           />
         ))}
         <button
