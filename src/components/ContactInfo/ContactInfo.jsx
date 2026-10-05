@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { useNavigate, useLocation } from '@/lib/navigation';
 import Swal from 'sweetalert2';
-import { FaYoutube } from 'react-icons/fa';
 import UserContext from '../../contexts/UserContext';
 import { Toast } from '../../utils/toast';
 import BkashCreatePaymentAPICall from '../../services/bkash';
@@ -22,20 +21,17 @@ import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswerCard';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
-import CustomButton from '../CustomButton/CustomButton';
 import CustomModal from '../CustomModal/CustomModal';
-import ButtonSpinner from '../../views/Payments/ButtonSpinner';
+import RequestFlow from './RequestFlow';
 
 const ContactInfo = ({ status }) => {
   const [displayText, setDisplayText] = useState(false);
-  const [checkMsg, setCheckMsg] = useState('');
   const { bio } = useContext(BioContext);
   const { userInfo, user } = useContext(UserContext);
   const generalInfo = bio?.generalInfo || null;
   const points = Number(userInfo?.data?.points);
-  const [isRejected, setIsRejected] = useState(false);
+  const safePoints = Number.isFinite(points) ? points : 0;
   const location = useLocation();
-  const [isFirstStepDone, setFirstStepDone] = useState(false);
   const [loading, setLoading] = useState(false);
   const [payLoading, setPayLoading] = useState(false);
 
@@ -133,37 +129,6 @@ const ContactInfo = ({ status }) => {
     }
   }, [displayText]);
 
-  useEffect(() => {
-    if (checkFirst?.data) {
-      const status = checkFirst.data.status;
-      let msg = '';
-      if (status) {
-        // console.log({ status });
-        if (status === 'approved' || status === 'accepted') {
-          msg = 'আপনার অনুরোধ পাঠানো সম্পূর্ন হয়েছে।';
-          setFirstStepDone(true);
-          // Toast.successToast(msg);
-          setCheckMsg(msg);
-        } else if (status === 'rejected') {
-          setIsRejected(true);
-          msg = 'দুঃখিত ,আপনি Rejected হয়েছেন এই বায়োডাটা  থেকে।';
-          // Toast.successToast(msg);
-          setCheckMsg(msg);
-          setFirstStepDone(false);
-        } else if (status === 'pending') {
-          setIsRejected(false);
-          msg = 'দুঃখিত ,আপনি পেন্ডিং  আছেন এই বায়োডাটা  থেকে।';
-          // Toast.successToast(msg);
-          setCheckMsg(msg);
-          setFirstStepDone(false);
-        }
-      }
-    } else {
-      setCheckMsg('');
-      setFirstStepDone(false);
-      setIsRejected(false);
-    }
-  }, [checkFirst]);
 
   const comHandler = () => {
     if (!userInfo?.data?._id) {
@@ -358,148 +323,33 @@ const ContactInfo = ({ status }) => {
           </h4>
         </div>
       ) : (
-        <div className="ask-contact-info p-5">
-          <h4 className="my-4 text-center">
-            সতর্কতা - বিয়ের সিদ্ধান্ত নেয়ার পূর্বে স্থানীয়ভাবে খোঁজ নিয়ে
-            বায়োডাটার সমস্ত তথ্য যাচাই করবেন।
-          </h4>
-          <h2 className="my-5 text-2xl text-center">
-            {isFirstStepDone
-              ? 'যোগাযোগ তথ্য অনুরোধ করতে আপনার '
-              : 'অনুরোধ পাঠাতে আপনার '}
-            {isFirstStepDone
-              ? convertToBengaliNumerals('70')
-              : convertToBengaliNumerals('30')}
-            টি পয়েন্ট খরচ হবে। আপনার একাউন্টে{' '}
-            {convertToBengaliNumerals(points.toFixed(2).toString())} পয়েন্ট আছে!
-          </h2>
-          <div className="flex flex-col items-center justify-center ">
-            {displayText ? (
-              <div className="pb-5">
-                <p className="mb-2 text-xl">
-                  আপনার একাউন্টে কোনো{' '}
-                  {convertToBengaliNumerals(points.toFixed(2).toString())}{' '}
-                  পয়েন্ট আছে!
-                </p>
-                <button
-                  className="inline-flex items-center justify-center gap-2 px-2 py-2 text-white bg-green-800 rounded-md hover:bg-green-900 disabled:cursor-not-allowed disabled:opacity-60"
-                  disabled={payLoading}
-                  aria-busy={payLoading}
-                  onClick={() =>
-                    buyWithBkashHandler(
-                      30 - points,
-                      bio?.generalInfo?.user,
-                      'first_Step'
-                    )
-                  }
-                >
-                  {payLoading ? (
-                    <>
-                      <ButtonSpinner /> অপেক্ষা করুন...
-                    </>
-                  ) : (
-                    <>
-                      {convertToBengaliNumerals(
-                        (30 - points).toFixed(2).toString()
-                      )}{' '}
-                      পয়েন্ট কিনুন
-                    </>
-                  )}
-                </button>
-              </div>
-            ) : checkMsg ? (
-              !isRejected && isFirstStepDone ? (
-                <div>
-                  <p className="px-5 py-5 mb-5 text-green-900 bg-green-200 border-2 border-green-600 rounded-lg">
-                    {checkMsg}
-                  </p>{' '}
-                  <button
-                    onClick={() => payButtonHandler(bio?.generalInfo?.user)}
-                    className="px-4 py-2 rounded-lg border  text-white"
-                    style={{
-                      backgroundColor: Colors.pncPrimaryColor,
-                    }}
-                  >
-                    {loading ? <LoadingCircle /> : 'Pay Now for 2nd Step'}
-                  </button>
-                </div>
-              ) : (
-                <p className="px-5 py-1 mb-5 text-green-900 bg-green-200 border-2 border-green-600 rounded-lg">
-                  {checkMsg}
-                </p>
-              )
-            ) : (
-              <button
-                onClick={comHandler}
-                className="px-4 py-2 mb-5 text-white bg-blue-500 rounded contact-bio-btn w-93"
-              >
-                Send Request
-              </button>
-            )}
-          </div>
-
-          <div className="my-5">
-            <h3 className="font-semibold text-green-700 md:text-2xl text-xl">
-              যোগাযোগ তথ্য কিভাবে দেখবেন জানতে ভিডিও দেখেন
-            </h3>
-
-            <div className="flex md:flex-row flex-col gap-5 items-center my-5 ">
-              <CustomButton
-                onClick={() => {
-                  setIsFirstStepModalOpen(true);
-                }}
-                className=" flex w-full md:w-[50%] items-center justify-center border hover:bg-transparent border-indigo-700 rounded-full py-2 bg-white"
-              >
-                <FaYoutube className="mb-0 pb-0 mr-2 text-red-500 w-12 h-6  rounded-full bg-white" />{' '}
-                <span
-                  className="md:text-xl text-xl"
-                  style={{
-                    color: Colors.titleText,
-                  }}
-                >
-                  অনুরোধ পাঠান টিউটোরিয়াল
-                </span>
-              </CustomButton>
-              <CustomButton
-                onClick={() => {
-                  setIsSecondStepModalOpen(true);
-                }}
-                className=" flex w-full md:w-[50%] items-center justify-center border hover:bg-transparent border-indigo-700 rounded-full py-2 bg-white"
-              >
-                <FaYoutube className="mb-0 pb-0 mr-2 text-red-500 w-12 h-6  rounded-full bg-white" />{' '}
-                <span
-                  className="md:text-xl text-xl"
-                  style={{
-                    color: Colors.titleText,
-                  }}
-                >
-                  যোগাযোগ তথ্য অনুরোধ টিউটোরিয়াল
-                </span>
-              </CustomButton>
-            </div>
-            <CustomModal
-              onClose={() => setIsFirstStepModalOpen(false)}
-              isOpen={isFirstStepModalOpen}
-              title="অনুরোধ পাঠানোর নিয়ম"
-            >
-              <LiteYouTubeEmbed
-                id="X6sjWCZjiuQ"
-                title="Send Request || অনুরোধ পাঠান || PNC NIkah"
-              />
-            </CustomModal>
-            <CustomModal
-              onClose={() => setIsSecondStepModalOpen(false)}
-              isOpen={isSecondStepModalOpen}
-              title="যোগাযোগ তথ্য অনুরোধের নিয়ম"
-            >
-              <LiteYouTubeEmbed
-                id="x0-RXTR0DfQ"
-                title="Contact Info Request || যোগাযোগ তথ্য অনুরোধ || PNC NIkah"
-              />
-            </CustomModal>
-          </div>
-        </div>
+        <RequestFlow
+          firstStatus={checkFirst?.data?.status}
+          points={safePoints}
+          needsTopUp={displayText}
+          loading={loading}
+          payLoading={payLoading}
+          onSendProposal={comHandler}
+          onBuyContact={() => payButtonHandler(bio?.generalInfo?.user)}
+          onTopUp={() => buyWithBkashHandler(30 - safePoints, bio?.generalInfo?.user, 'first_Step')}
+          onOpenFirstVideo={() => setIsFirstStepModalOpen(true)}
+          onOpenSecondVideo={() => setIsSecondStepModalOpen(true)}
+        />
       )}
+      <CustomModal
+        onClose={() => setIsFirstStepModalOpen(false)}
+        isOpen={isFirstStepModalOpen}
+        title="অনুরোধ পাঠানোর নিয়ম"
+      >
+        <LiteYouTubeEmbed id="X6sjWCZjiuQ" title="Send Request || অনুরোধ পাঠান" />
+      </CustomModal>
+      <CustomModal
+        onClose={() => setIsSecondStepModalOpen(false)}
+        isOpen={isSecondStepModalOpen}
+        title="যোগাযোগ তথ্য অনুরোধের নিয়ম"
+      >
+        <LiteYouTubeEmbed id="x0-RXTR0DfQ" title="Contact Info Request || যোগাযোগ তথ্য অনুরোধ" />
+      </CustomModal>
     </div>
   );
 };
