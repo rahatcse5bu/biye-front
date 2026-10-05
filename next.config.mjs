@@ -57,6 +57,11 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+  // TODO: production builds drop console.log/info/debug (they printed user and payment data); errors and warnings stay.
+  compiler: {
+    removeConsole: isDevelopment ? false : { exclude: ["error", "warn"] },
+  },
+
   webpack(config) {
     config.resolve.alias.ably = path.join(
       path.dirname(require.resolve("ably")),
