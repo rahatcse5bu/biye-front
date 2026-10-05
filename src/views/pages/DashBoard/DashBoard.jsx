@@ -1,3 +1,4 @@
+import { Link } from "@/lib/navigation";
 import { useContext } from "react";
 import { Colors } from "../../../constants/colors"; // Adjust the import path as needed
 import UserContext from "../../../contexts/UserContext";
@@ -45,6 +46,20 @@ const DashBoard = () => {
       >
         Dashboard
       </h1>
+      {dashBoard?.data?.has_biodata === false && (
+        <div className="mb-5 flex flex-col items-start justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 sm:flex-row sm:items-center">
+          <div>
+            <p className="font-semibold text-amber-900">আপনার বায়োডাটা এখনো তৈরি হয়নি</p>
+            <p className="text-sm text-amber-800">বায়োডাটা তৈরি করলে অন্যরা আপনাকে দেখতে ও প্রস্তাব পাঠাতে পারবেন।</p>
+          </div>
+          <Link
+            to="/user/account/edit-biodata"
+            className="shrink-0 rounded-lg bg-[#0D7377] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0D7377]/40"
+          >
+            বায়োডাটা তৈরি করুন
+          </Link>
+        </div>
+      )}
       <div className=" grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         <div
           className="rounded-lg bg-white shadow-md border  p-4"

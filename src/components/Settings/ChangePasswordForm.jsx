@@ -1,6 +1,50 @@
-// ChangePasswordForm.js
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import useChangePassword from '../../hooks/useChangePassword';
+import { convertToBengaliDigits } from '../../utils/language';
+
+const MIN_LENGTH = 6;
+
+const PasswordField = ({ id, label, value, onChange, autoComplete, hint, invalid }) => {
+  const [visible, setVisible] = useState(false);
+  return (
+    <div>
+      <label htmlFor={id} className="mb-1 block text-sm font-medium text-gray-700">
+        {label}
+      </label>
+      <div
+        className={`flex items-center rounded-xl border bg-white focus-within:ring-2 ${
+          invalid ? 'border-rose-300 focus-within:ring-rose-200' : 'border-gray-200 focus-within:border-[#0D7377] focus-within:ring-[#0D7377]/20'
+        }`}
+      >
+        <input
+          id={id}
+          type={visible ? 'text' : 'password'}
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          autoComplete={autoComplete}
+          required
+          className="w-full rounded-xl border-0 bg-transparent px-3 py-2.5 text-sm text-gray-900 outline-none focus:ring-0"
+          aria-invalid={invalid || undefined}
+          aria-describedby={hint ? `${id}-hint` : undefined}
+        />
+        <button
+          type="button"
+          onClick={() => setVisible((value) => !value)}
+          className="mr-1 rounded-lg p-2 text-gray-400 hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0D7377]/40"
+          aria-label={visible ? 'পাসওয়ার্ড লুকান' : 'পাসওয়ার্ড দেখুন'}
+        >
+          {visible ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
+        </button>
+      </div>
+      {hint && (
+        <p id={`${id}-hint`} className={`mt-1 text-xs ${invalid ? 'text-rose-600' : 'text-gray-500'}`}>
+          {hint}
+        </p>
+      )}
+    </div>
+  );
+};
 
 const ChangePasswordForm = () => {
   const { changePassword, loading, error, success } = useChangePassword();
@@ -8,15 +52,10 @@ const ChangePasswordForm = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      alert('New passwords do not match.');
-      return;
-    }
-
-    await changePassword(currentPassword, newPassword);
-  };
+  const tooShort = newPassword.length > 0 && newPassword.length < MIN_LENGTH;
+  const mismatch = confirmPassword.length > 0 && confirmPassword !== newPassword;
+  const sameAsOld = newPassword.length > 0 && newPassword === currentPassword;
+  const canSubmit = currentPassword && newPassword.length >= MIN_LENGTH && !mismatch && confirmPassword && !sameAsOld;
 
   useEffect(() => {
     if (success) {
@@ -26,74 +65,56 @@ const ChangePasswordForm = () => {
     }
   }, [success]);
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (canSubmit) await changePassword(currentPassword, newPassword);
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="w-full text-left mx-auto p-4">
-      <h2 className="text-xl font-bold mb-4">Change Password</h2>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <PasswordField
+        id="currentPassword"
+        label="বর্তমান পাসওয়ার্ড"
+        value={currentPassword}
+        onChange={setCurrentPassword}
+        autoComplete="current-password"
+      />
+      <PasswordField
+        id="newPassword"
+        label="নতুন পাসওয়ার্ড"
+        value={newPassword}
+        onChange={setNewPassword}
+        autoComplete="new-password"
+        invalid={tooShort || sameAsOld}
+        hint={sameAsOld ? 'নতুন পাসওয়ার্ড বর্তমানটির থেকে আলাদা হতে হবে' : `কমপক্ষে ${convertToBengaliDigits(String(MIN_LENGTH))} অক্ষর`}
+      />
+      <PasswordField
+        id="confirmPassword"
+        label="নতুন পাসওয়ার্ড নিশ্চিত করুন"
+        value={confirmPassword}
+        onChange={setConfirmPassword}
+        autoComplete="new-password"
+        invalid={mismatch}
+        hint={mismatch ? 'পাসওয়ার্ড দুটি মিলছে না' : undefined}
+      />
 
-      <div className="mb-4">
-        <label
-          htmlFor="currentPassword"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Current Password
-        </label>
-        <input
-          type="password"
-          id="currentPassword"
-          value={currentPassword}
-          onChange={(e) => setCurrentPassword(e.target.value)}
-          className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-          required
-        />
-      </div>
-
-      <div className="mb-4">
-        <label
-          htmlFor="newPassword"
-          className="block text-sm font-medium text-gray-700"
-        >
-          New Password
-        </label>
-        <input
-          type="password"
-          id="newPassword"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-          required
-        />
-      </div>
-
-      <div className="mb-4">
-        <label
-          htmlFor="confirmPassword"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Confirm New Password
-        </label>
-        <input
-          type="password"
-          id="confirmPassword"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-          required
-        />
-      </div>
-
-      {error && <div className="text-red-500 mb-4">{error}</div>}
+      {error && (
+        <p className="rounded-xl border border-rose-100 bg-rose-50 px-3 py-2 text-sm text-rose-700" role="alert">
+          {error}
+        </p>
+      )}
       {success && (
-        <div className="text-green-500 mb-4">
-          Password changed successfully!
-        </div>
+        <p className="rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2 text-sm text-emerald-700" role="status">
+          পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে।
+        </p>
       )}
 
       <button
         type="submit"
-        className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition"
-        disabled={loading}
+        disabled={!canSubmit || loading}
+        className="w-full rounded-xl bg-[#0D7377] py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0D7377]/40 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {loading ? 'Changing...' : 'Change Password'}
+        {loading ? 'পরিবর্তন করা হচ্ছে...' : 'পাসওয়ার্ড পরিবর্তন করুন'}
       </button>
     </form>
   );

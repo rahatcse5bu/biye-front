@@ -1,6 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, useEffect } from 'react';
-import { Colors } from '../../constants/colors';
 import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
 import { useUser } from '../../contexts/useUser';
 import { Toast } from '../../utils/toast';
@@ -50,74 +48,58 @@ const ActiveDeleteButton = () => {
     setIsDialogOpen(false);
   };
 
-  if (
-    userInfo?.data?.user_status &&
-    ['pending', 'in review', 'banned'].includes(userInfo?.data?.user_status)
-  ) {
+  const lockedStatus = ['pending', 'in review', 'banned', 'ban'].includes(userInfo?.data?.user_status);
+  const lockedLabels = { pending: 'অপেক্ষমাণ', 'in review': 'পর্যালোচনাধীন', banned: 'নিষিদ্ধ', ban: 'নিষিদ্ধ' };
+
+  if (lockedStatus) {
     return (
-      <div>
-        <h4 className="font-semibold text-green-500">
-          Your bio data is now{' '}
-          <span className="font-bold text-indigo-800">
-            {userInfo?.data?.user_status}
-          </span>
-        </h4>
-      </div>
+      <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-800">
+        আপনার বায়োডাটা এখন <strong>{lockedLabels[userInfo.data.user_status]}</strong> অবস্থায় আছে, তাই এই মুহূর্তে দৃশ্যমানতা পরিবর্তন করা যাবে না।
+      </p>
     );
   }
 
   return (
-    <div className="mb-5">
-      <h2
-        className="font-semibold text-left text-sm md:text-xl lg:text-xl"
-        style={{ color: Colors.titleText }}
-      >
-        Active & Inactive Biodata :
-      </h2>
-      <div className="mt-2 flex items-center">
-        <div className="mr-3">
-          {isActive ? (
-            <span className="text-green-700 font-semibold text-base">
-              Active
-            </span>
-          ) : (
-            <span className="text-red-700 font-semibold text-base">
-              Inactive
-            </span>
-          )}
+    <div>
+      <div className="flex items-center justify-between gap-4 rounded-xl border border-gray-100 bg-gray-50/60 px-4 py-3">
+        <div>
+          <p className="text-sm font-semibold text-gray-900">
+            {isActive ? 'বায়োডাটা দৃশ্যমান' : 'বায়োডাটা লুকানো'}
+          </p>
+          <p className="mt-0.5 text-xs text-gray-500">
+            {isActive
+              ? 'অন্য সদস্যরা আপনার বায়োডাটা দেখতে ও প্রস্তাব পাঠাতে পারবেন।'
+              : 'আপনার বায়োডাটা কেউ দেখতে পাবে না।'}
+          </p>
         </div>
-        <label className="switch" htmlFor="biodata-toggle">
-          <input
-            id="biodata-toggle"
-            type="checkbox"
-            checked={isActive}
-            onChange={handleToggle}
-            disabled={['pending', 'in review', 'banned'].includes(
-              userInfo?.data?.user_status
-            )}
-            className="disabled:cursor-not-allowed"
-          />
-          <span className="slider round"></span>
-        </label>
-      </div>
-
-      {/* Conditionally render content based on toggle state */}
-
-      <div className="mt-4">
-        <p
-          className={`text-left  font-medium ${isActive ? 'text-green-600' : 'text-red-600'} `}
+        <button
+          type="button"
+          role="switch"
+          aria-checked={isActive}
+          aria-label="বায়োডাটার দৃশ্যমানতা"
+          onClick={handleToggle}
+          disabled={loading}
+          className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0D7377]/40 focus-visible:ring-offset-2 disabled:opacity-60 ${
+            isActive ? 'bg-[#0D7377]' : 'bg-gray-300'
+          }`}
         >
-          {isActive
-            ? 'This is the active biodata content that is now visible.'
-            : 'This is the Inactive biodata content that is now Invisible.'}
-        </p>
+          <span
+            className={`inline-block h-5 w-5 rounded-full bg-white shadow transition-transform motion-reduce:transition-none ${
+              isActive ? 'translate-x-6' : 'translate-x-1'
+            }`}
+          />
+        </button>
       </div>
-      {/* Confirmation Dialog */}
+
       <ConfirmationDialog
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         onConfirm={handleConfirm}
-        message={`Are you sure you want to ${isActive ? 'inactive' : 'active'} this bio data?`}
+        message={
+          isActive
+            ? 'আপনি কি বায়োডাটা লুকাতে চান? লুকালে কেউ আপনার বায়োডাটা দেখতে পাবে না।'
+            : 'আপনি কি বায়োডাটা আবার দৃশ্যমান করতে চান?'
+        }
         loading={loading}
       />
     </div>
