@@ -4,6 +4,17 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { religionToApiKey } from "@/constants/religionContent";
 import { getReligionCookie, setReligionCookie } from "@/utils/cookies";
+import UserContext from "./UserContext";
+import { UserInfoServices } from "@/services/userInfo";
+
+const SAVABLE = new Set(["islam", "hinduism", "christianity", "all"]);
+
+const saveToAccount = (value) => {
+  if (!SAVABLE.has(value)) return;
+  UserInfoServices.updateMyPreferences(value).catch((error) =>
+    console.error("Saving religion preference failed:", error)
+  );
+};
 
 const ReligionPreferenceContext = createContext(null);
 
@@ -221,6 +232,11 @@ export function ReligionPreferenceProvider({ children }) {
   const [ready, setReady] = useState(false);
   const [showChooser, setShowChooser] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const { userInfo } = useContext(UserContext) || {};
+  const userId = userInfo?.data?._id;
+  const savedPreference = userInfo?.data?.preferred_religion;
+  // TODO: sync once per logged-in account; later changes go up through chooseReligion only.
+  const syncedFor = useRef(null);
   // Legal information must remain readable without choosing a browsing preference.
   const canShowChooser = showChooser && pathname != null &&
     !LEGAL_PAGE_PATHS.has(pathname.replace(/\/+$/, "") || "/");
@@ -247,11 +263,25 @@ export function ReligionPreferenceProvider({ children }) {
     setReady(true);
   }, []);
 
+  useEffect(() => {
+    if (!ready || !userId || syncedFor.current === userId) return;
+    syncedFor.current = userId;
+    if (SAVABLE.has(savedPreference)) {
+      // TODO: the account's saved choice wins, so it follows the user to any device.
+      setReligion(savedPreference === "all" ? null : savedPreference);
+      setReligionCookie(savedPreference);
+      setShowChooser(false);
+    } else {
+      saveToAccount(getReligionCookie());
+    }
+  }, [ready, userId, savedPreference]);
+
   const chooseReligion = (value) => {
     const canonical = religionToApiKey[value] || null;
     setReligion(canonical);
     setReligionCookie(canonical || "all");
     setShowChooser(false);
+    if (userId) saveToAccount(canonical || "all");
   };
 
   return (

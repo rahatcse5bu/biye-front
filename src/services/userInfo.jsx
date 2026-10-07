@@ -54,7 +54,16 @@ const updateUserStatusByUser = async (data, token) => {
   return response.data;
 };
 
+// TODO: saves the header religion filter on the logged-in account.
+const updateMyPreferences = async (preferredReligion) => {
+  const response = await axios.patch('/user-info/me/preferences', {
+    preferred_religion: preferredReligion,
+  });
+  return response.data;
+};
+
 export const UserInfoServices = {
+  updateMyPreferences,
   getUserInfoStatus,
   updateUserInfo,
   verifyTokenByUser,
