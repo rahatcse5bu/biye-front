@@ -5,11 +5,17 @@ import { getToken } from '../../utils/cookies';
 import { Toast } from '../../utils/toast';
 import { FaPlus, FaTrash, FaSave } from 'react-icons/fa';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
+import Swal from 'sweetalert2';
+
+const RELIGION_LABELS = { islam: 'ইসলাম', hinduism: 'হিন্দু', christianity: 'খ্রিষ্টান' };
 
 const BioQuestions = () => {
   const [questions, setQuestions] = useState(['']);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const [isCustom, setIsCustom] = useState(false);
+  const [religion, setReligion] = useState('');
+  const [resetting, setResetting] = useState(false);
 
   useEffect(() => {
     fetchQuestions();
@@ -19,19 +25,10 @@ const BioQuestions = () => {
     try {
       setFetching(true);
       const data = await BioQuestionServices.getMyQuestions(getToken()?.token);
-      if (data?.data?.questions) {
-        setQuestions(data.data.questions);
-      } else {
-        // Set default questions if none exist
-        setQuestions([
-          'মেয়েদের চোখ ঢাকা নিকাব পড়াকে অনেকে বাড়াবাড়ি মনে করে। ইসলাম তো সহজ, আপনি এব্যাপারে কি মনে করেন?',
-          'প্রচন্ড বৃষ্টি হচ্ছে, মসজিদ যদিও কাছে মোটামুটি। হয়ত ছাতাও আছে যাওয়ার। কিন্তু ইসলাম তো সহজ, এখানে তো রুখসত আছে। কিন্তু অনেক অতি উৎসাহী আছে যারা এসব ঝড়-বৃষ্টি উপেক্ষা করেও যায় মসজিদে। এরকম বাড়াবাড়ি যারা করে তাদের ব্যাপারে আপনার মন্তব্য কি??',
-          'ছেলেদের ইউনিভার্সিটিতে পড়াশুনা করার ব্যাপারে আপনার মতামত কি?',
-          'অনেক দ্বীনদার মেয়ে ভার্সিটিতে পড়াশুনা করতে চায় এজন্য তাদের দ্বিনি পরিবেশ খুঁজে|শুরুতে জেনেশুনে মেয়েদের জন্য ভার্সিটিতে পড়তে চাওয়ার বিষয়ে আপনি কি মনে করেন??',
-          'পর্দা করে অনলাইনে হিজাব নিকাবের ব্যাবসা তো হালাল।ভিডিও(মডেলিং) বানিয়ে তা দিয়ে একটা আউটসোর্সিং বা ব্যবসা করতে চাইলে আপনার থেকে কোনো হেল্প পেতে পারি? বা পারমিশন পেতে পারি?',
-          'অমুক তার ছেলেকে ভার্সিটিতে ভর্তি হতে দিতে চায় না কারন ইসলামী পরিবেশ পাবে না। এরকম বাড়াবাড়ির ব্যাপারে আপনার মতামত কি?',
-        ]);
-      }
+      // TODO: with no own set, the API returns the admin's defaults for the user's religion.
+      setQuestions(data?.data?.questions?.length ? data.data.questions : ['']);
+      setIsCustom(data?.data?.isCustom === true);
+      setReligion(data?.data?.religion || '');
     } catch (error) {
       console.error('Error fetching questions:', error);
     } finally {
@@ -80,6 +77,7 @@ const BioQuestions = () => {
       );
       if (data?.success) {
         Toast.successToast('প্রশ্নগুলো সফলভাবে সংরক্ষিত হয়েছে');
+        setIsCustom(true);
       }
     } catch (error) {
       const msg =
@@ -89,6 +87,29 @@ const BioQuestions = () => {
       Toast.errorToast(msg);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const restoreDefaults = async () => {
+    const result = await Swal.fire({
+      title: 'ডিফল্ট প্রশ্নে ফিরে যাবেন?',
+      text: 'আপনার নিজের প্রশ্নগুলো মুছে যাবে এবং অ্যাডমিন নির্ধারিত ডিফল্ট প্রশ্ন ব্যবহার হবে।',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'হ্যাঁ, ফিরে যান',
+      cancelButtonText: 'বাতিল',
+      confirmButtonColor: '#0D7377',
+    });
+    if (!result.isConfirmed) return;
+    try {
+      setResetting(true);
+      await BioQuestionServices.deleteQuestions(getToken()?.token);
+      Toast.successToast('ডিফল্ট প্রশ্ন চালু হয়েছে');
+      await fetchQuestions();
+    } catch (error) {
+      Toast.errorToast(error?.response?.data?.message || 'ডিফল্ট প্রশ্নে ফেরানো যায়নি');
+    } finally {
+      setResetting(false);
     }
   };
 
@@ -108,6 +129,24 @@ const BioQuestions = () => {
         যারা আপনার বায়োডাটা কিনতে চাইবে তাদের এই প্রশ্নগুলোর উত্তর দিতে হবে। আপনি
         সর্বোচ্চ ১০টি প্রশ্ন যোগ করতে পারবেন।
       </p>
+
+      {isCustom ? (
+        <div className="mb-6 flex flex-col items-start justify-between gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 sm:flex-row sm:items-center">
+          <p className="text-sm text-gray-700">আপনি নিজের প্রশ্ন ব্যবহার করছেন।</p>
+          <button
+            type="button"
+            onClick={restoreDefaults}
+            disabled={resetting}
+            className="shrink-0 rounded-lg border border-[#0D7377]/30 bg-white px-3 py-1.5 text-sm font-semibold text-[#0D7377] hover:bg-[#0D7377]/5 disabled:opacity-60"
+          >
+            {resetting ? 'অপেক্ষা করুন...' : 'ডিফল্ট প্রশ্নে ফিরে যান'}
+          </button>
+        </div>
+      ) : (
+        <p className="mb-6 rounded-xl border border-[#0D7377]/20 bg-[#0D7377]/5 px-4 py-3 text-sm text-[#0D7377]">
+          আপনার ধর্ম অনুযায়ী{religion && RELIGION_LABELS[religion] ? ` (${RELIGION_LABELS[religion]})` : ''} অ্যাডমিন নির্ধারিত ডিফল্ট প্রশ্নগুলো দেখানো হচ্ছে। চাইলে পরিবর্তন করে সংরক্ষণ করুন।
+        </p>
+      )}
 
       <form onSubmit={handleSubmit}>
         {questions.map((question, index) => (
