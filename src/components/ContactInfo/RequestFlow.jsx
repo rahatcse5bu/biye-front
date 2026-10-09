@@ -11,6 +11,7 @@ import { convertToBengaliNumerals } from '../../utils/weight';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import ButtonSpinner from '../../views/Payments/ButtonSpinner';
 import { takaForPoints } from '../../utils/topUp';
+import ReminderEmail from './ReminderEmail';
 
 const PROPOSAL_COST = 30;
 const CONTACT_COST = 70;
@@ -70,6 +71,8 @@ const Panel = ({ tone, Icon, title, children }) => {
 // TODO: the two-step contact flow for verified biodatas: send a proposal, then buy the contact once accepted.
 export default function RequestFlow({
   firstStatus,
+  reminders,
+  bioUser,
   points,
   needsTopUp,
   loading,
@@ -106,6 +109,7 @@ export default function RequestFlow({
     panel = (
       <Panel tone="amber" Icon={ClockIcon} title="প্রস্তাব পাঠানো হয়েছে — উত্তরের অপেক্ষায়">
         পাত্র/পাত্রী আপনার প্রস্তাব গ্রহণ করলে আপনাকে নোটিফিকেশন ও ইমেইলে জানানো হবে। তারপর যোগাযোগ তথ্য নিতে পারবেন।
+        <ReminderEmail bioUser={bioUser} reminders={reminders} />
       </Panel>
     );
   } else if (rejected) {

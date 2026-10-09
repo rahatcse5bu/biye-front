@@ -22,8 +22,16 @@ const primaryButtonClass =
 const linkClass =
   'rounded font-bold text-brand-900 underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900';
 
+const statusMessages = {
+  429: 'অনেকবার চেষ্টা করা হয়েছে, কিছুক্ষণ পর আবার চেষ্টা করুন',
+  503: 'এই মুহূর্তে ইমেইল পাঠানো যায়নি, কয়েক মিনিট পর আবার চেষ্টা করুন',
+};
+
 const getErrorMessage = (error, fallback) =>
-  error?.response?.data?.message || error?.message || fallback;
+  statusMessages[error?.response?.status] ||
+  error?.response?.data?.message ||
+  error?.message ||
+  fallback;
 
 const Spinner = () => (
   <span

@@ -47,6 +47,10 @@ const checkBioChoiceDataFirstStep = async (bioId, token) => {
   );
   return response.data;
 };
+const sendReminderEmail = async (bioId) => {
+  const response = await axios.post(`/bio-choice-data/remind/${bioId}`);
+  return response.data;
+};
 const getBioChoiceShare = async (token) => {
   if (!token) {
     return null;
@@ -63,4 +67,5 @@ export const BioChoiceDataServices = {
   checkBioChoiceDataFirstStep,
   getBioChoiceShare,
   updateBioChoiceData,
+  sendReminderEmail,
 };

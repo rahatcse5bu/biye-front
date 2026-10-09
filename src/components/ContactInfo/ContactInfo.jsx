@@ -311,6 +311,8 @@ const ContactInfo = ({ status }) => {
       ) : (
         <RequestFlow
           firstStatus={checkFirst?.data?.status}
+          reminders={checkFirst?.data?.reminders}
+          bioUser={generalInfo?.user}
           points={safePoints}
           needsTopUp={displayText}
           loading={loading}

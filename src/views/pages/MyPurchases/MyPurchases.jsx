@@ -4,6 +4,7 @@ import { Button } from '@material-tailwind/react';
 import { useQuery } from '@tanstack/react-query';
 import { FaEye, FaInfo } from 'react-icons/fa';
 import { BioChoiceDataServices } from '../../../services/bioChoiceData';
+import ReminderEmail from '../../../components/ContactInfo/ReminderEmail';
 import { getToken } from '../../../utils/cookies';
 import { FaYoutube } from 'react-icons/fa';
 
@@ -212,6 +213,9 @@ const FirstStepCard = ({
             <MdFeedback aria-hidden="true" /> ফিডব্যাক
           </button>
         </div>
+        {item?.status === 'pending' && (
+          <ReminderEmail compact bioUser={item?.bio_user} reminders={item?.reminders} />
+        )}
         {item?.status === 'approved' && (
           <div className="flex items-center gap-2">
             <button
@@ -282,6 +286,9 @@ const FirstStepCard = ({
         {data?.results.pending}
       </td>
       <td className="flex items-center px-4 py-2 text-center border-l w-1/10">
+        {item?.status === 'pending' && (
+          <ReminderEmail inline bioUser={item?.bio_user} reminders={item?.reminders} />
+        )}
         {item?.status === 'approved' && (
           <>
             <Button
