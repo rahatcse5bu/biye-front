@@ -30,6 +30,10 @@ export default function Notifications({ sheet = false }) {
   const seenIds = useRef(new Set());
 
   useEffect(() => {
+    // TODO: drop the previous account's list right away so a failed refresh never leaves it on screen.
+    setItems([]);
+    setUnreadCount(0);
+    seenIds.current = new Set();
     if (!user?._id) return undefined;
 
     let active = true;
