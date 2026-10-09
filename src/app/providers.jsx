@@ -11,6 +11,7 @@ import { ReligionPreferenceProvider } from "@/contexts/ReligionPreferenceContext
 import FilterProvider from "@/contexts/FilterContext";
 import PrimaryFilterProvider from "@/contexts/PrimaryFilterContext";
 import { Toast } from "@/utils/toast";
+import CookieConsent from "@/components/CookieConsent/CookieConsent";
 import { unregisterServiceWorkers } from "@/utils/unregisterServiceWorker";
 
 export default function Providers({ children }) {
@@ -48,6 +49,7 @@ export default function Providers({ children }) {
                 <PrimaryFilterProvider>
                   {children}
                   <Toaster />
+                  <CookieConsent />
                 </PrimaryFilterProvider>
               </FilterProvider>
             </BioProvider>

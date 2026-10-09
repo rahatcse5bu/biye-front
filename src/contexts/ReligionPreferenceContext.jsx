@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { religionToApiKey } from "@/constants/religionContent";
-import { getReligionCookie, setReligionCookie } from "@/utils/cookies";
+import { CONSENT_EVENT, getConsent, getReligionCookie, setReligionCookie } from "@/utils/cookies";
 import UserContext from "./UserContext";
 import { UserInfoServices } from "@/services/userInfo";
 
@@ -231,6 +231,9 @@ export function ReligionPreferenceProvider({ children }) {
   const [religion, setReligion] = useState(null);
   const [ready, setReady] = useState(false);
   const [showChooser, setShowChooser] = useState(false);
+  const [suppressCount, setSuppressCount] = useState(0);
+  // TODO: chooser waits for the cookie decision and only auto-opens when its choice can be remembered.
+  const [allowsPreferences, setAllowsPreferences] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const { userInfo } = useContext(UserContext) || {};
   const userId = userInfo?.data?._id;
@@ -238,7 +241,7 @@ export function ReligionPreferenceProvider({ children }) {
   // TODO: sync once per logged-in account; later changes go up through chooseReligion only.
   const syncedFor = useRef(null);
   // Legal information must remain readable without choosing a browsing preference.
-  const canShowChooser = showChooser && pathname != null &&
+  const canShowChooser = showChooser && allowsPreferences && suppressCount === 0 && pathname != null &&
     !LEGAL_PAGE_PATHS.has(pathname.replace(/\/+$/, "") || "/");
 
   useEffect(() => {
@@ -247,6 +250,13 @@ export function ReligionPreferenceProvider({ children }) {
     const handler = (e) => setIsMobile(e.matches);
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  useEffect(() => {
+    setAllowsPreferences(Boolean(getConsent()?.preferences));
+    const sync = (event) => setAllowsPreferences(Boolean(event.detail?.preferences));
+    window.addEventListener(CONSENT_EVENT, sync);
+    return () => window.removeEventListener(CONSENT_EVENT, sync);
   }, []);
 
   useEffect(() => {
@@ -285,7 +295,7 @@ export function ReligionPreferenceProvider({ children }) {
   };
 
   return (
-    <ReligionPreferenceContext.Provider value={{ religion, ready, chooseReligion }}>
+    <ReligionPreferenceContext.Provider value={{ religion, ready, chooseReligion, setSuppressCount }}>
       {children}
       {canShowChooser && !isMobile && (
         <DialogModal
@@ -304,3 +314,13 @@ export function ReligionPreferenceProvider({ children }) {
 }
 
 export const useReligionPreference = () => useContext(ReligionPreferenceContext);
+
+// TODO: hides the first-visit chooser while the calling page is mounted, for pages with no fixed path like 404.
+export function useSuppressReligionChooser() {
+  const setSuppressCount = useContext(ReligionPreferenceContext)?.setSuppressCount;
+  useEffect(() => {
+    if (!setSuppressCount) return;
+    setSuppressCount((count) => count + 1);
+    return () => setSuppressCount((count) => count - 1);
+  }, [setSuppressCount]);
+}

@@ -6,7 +6,7 @@ import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 const YouTubeEmbed = ({ videoId, title }) => {
   return (
     <div className="youtube-container my-10">
-      <LiteYouTubeEmbed id={videoId} title={title} />
+      <LiteYouTubeEmbed noCookie id={videoId} title={title} />
     </div>
   );
 };

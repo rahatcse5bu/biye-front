@@ -409,7 +409,7 @@ const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved, generalInf
               isOpen={isModelForBioDate}
               title="যেভাবে জন্ম তারিখ সিলেক্ট করবেন"
             >
-              <LiteYouTubeEmbed
+              <LiteYouTubeEmbed noCookie
                 id="Gc5WmS1K9D8"
                 title="কীভাবে বিয়েতে জন্ম তারিখ সেট করতে হয় - PNC Nikah"
               />

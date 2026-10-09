@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { Link } from '@/lib/navigation';
+import { openCookieSettings } from '@/utils/cookies';
 import {
   BiLogoFacebook,
   BiLogoGmail,
@@ -246,6 +247,11 @@ const Footer = () => {
                 <Link to="/refund-policy" className={contactLinkClass}>
                   রিফান্ড নীতি
                 </Link>
+              </li>
+              <li>
+                <button type="button" onClick={openCookieSettings} className={contactLinkClass}>
+                  কুকি সেটিংস
+                </button>
               </li>
             </ul>
           </nav>

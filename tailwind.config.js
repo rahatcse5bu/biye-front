@@ -12,6 +12,16 @@ export default withMT({
   ],
   theme: {
     extend: {
+      // TODO: steps Tailwind 3.4 added; without them classes like text-white/85 silently don't compile.
+      opacity: {
+        15: '0.15',
+        35: '0.35',
+        45: '0.45',
+        55: '0.55',
+        65: '0.65',
+        85: '0.85',
+        95: '0.95',
+      },
       colors: {
         brand: {
           900: Colors.primary900,

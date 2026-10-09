@@ -35,7 +35,7 @@ const AboutFeature = ({ content }) => {
         isOpen={openModal}
         title="বিয়ের ব্যতিক্রমী ফিচারসমূহ"
       >
-        <LiteYouTubeEmbed
+        <LiteYouTubeEmbed noCookie
           id="czYI7NaHymg"
           title="বিয়ের ব্যতিক্রমী ফিচারসমূহ"
         />

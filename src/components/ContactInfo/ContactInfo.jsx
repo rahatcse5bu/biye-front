@@ -328,14 +328,14 @@ const ContactInfo = ({ status }) => {
         isOpen={isFirstStepModalOpen}
         title="অনুরোধ পাঠানোর নিয়ম"
       >
-        <LiteYouTubeEmbed id="X6sjWCZjiuQ" title="Send Request || অনুরোধ পাঠান" />
+        <LiteYouTubeEmbed noCookie id="X6sjWCZjiuQ" title="Send Request || অনুরোধ পাঠান" />
       </CustomModal>
       <CustomModal
         onClose={() => setIsSecondStepModalOpen(false)}
         isOpen={isSecondStepModalOpen}
         title="যোগাযোগ তথ্য অনুরোধের নিয়ম"
       >
-        <LiteYouTubeEmbed id="x0-RXTR0DfQ" title="Contact Info Request || যোগাযোগ তথ্য অনুরোধ" />
+        <LiteYouTubeEmbed noCookie id="x0-RXTR0DfQ" title="Contact Info Request || যোগাযোগ তথ্য অনুরোধ" />
       </CustomModal>
     </div>
   );

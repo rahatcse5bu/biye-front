@@ -1,12 +1,17 @@
+'use client';
+
 import { HomeIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Link } from '@/lib/navigation';
+import { useSuppressReligionChooser } from '@/contexts/ReligionPreferenceContext';
 
 const NotFound = () => {
+  useSuppressReligionChooser();
+
   return (
     <main className="flex min-h-[70dvh] items-center justify-center bg-white px-4 py-16 sm:py-24">
       <div className="w-full max-w-lg text-center">
         <p
-          className="select-none text-[7rem] font-extrabold leading-tight tracking-tight text-[rgba(13,115,119,0.14)] sm:text-[9rem]"
+          className="select-none text-[7rem] font-extrabold leading-tight tracking-tight text-brand-900/15 sm:text-[9rem]"
           aria-hidden="true"
         >
           ৪০৪

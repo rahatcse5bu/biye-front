@@ -333,7 +333,7 @@ export default function NavBar() {
               </select>
             )}
 
-            {!isDesktop && <Notifications />}
+            {!isDesktop && <Notifications sheet />}
 
             {!isAccountSection && (
               <Link
