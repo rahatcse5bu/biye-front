@@ -1,100 +1,52 @@
-/* eslint-disable no-unused-vars */
 import {
-	BiSolidDashboard,
-	BiEdit,
-	BiListCheck,
-	BiListUl,
-	BiSolidAddToQueue,
-} from "react-icons/bi";
+  BookmarkIcon,
+  Cog6ToothIcon,
+  CreditCardIcon,
+  FaceSmileIcon,
+  HandThumbDownIcon,
+  HeartIcon,
+  InboxArrowDownIcon,
+  LifebuoyIcon,
+  PencilSquareIcon,
+  QuestionMarkCircleIcon,
+  ShoppingBagIcon,
+  Squares2X2Icon,
+} from '@heroicons/react/24/outline';
 
-import { BsFlag, BsEmojiSmile } from "react-icons/bs";
-import { FaQuestionCircle } from "react-icons/fa";
-
-import { FiSettings, FiLogOut } from "react-icons/fi";
-
-const sidebarDetails = [
-	{
-		icon: (
-			<BiSolidDashboard className="h-6 w-6 p-1 bg-gray-100 rounded-md" />
-		),
-		title: "ড্যাশবোর্ড",
-		path: "/user/account/dashboard",
-	},
-	{
-		icon: (
-			<BiEdit className="h-6 w-6 p-1 bg-gray-100 rounded-md" />
-		),
-		title: "বায়োডাটা এডিট করুন",
-		path: "/user/account/edit-biodata",
-	},
-	{
-		icon: (			<FaQuestionCircle className="h-6 w-6 p-1 bg-gray-100 rounded-md" />
-		),
-		title: "আমার প্রশ্ন সেট করুন",
-		path: "/user/account/bio-questions",
-	},
-	{
-		icon: (
-			<BsEmojiSmile className="h-6 w-6 p-1 bg-gray-100 rounded-md" />
-		),
-		title: "আমার রিঅ্যাকশনসমূহ",
-		path: "/user/account/reactions",
-	},
-	{
-		icon: (			<BiListCheck className="h-6 w-6 p-1 bg-gray-100 rounded-md" />
-		),
-		title: "পছন্দের তালিকা ",
-		path: "/user/account/likes",
-	},
-	{
-		icon: (
-			<BiListUl className="h-6 w-6 p-1 bg-gray-100 rounded-md" />
-		),
-		title: "অপছন্দের তালিকা ",
-		path: "/user/account/dislikes",
-	},
-	{
-		icon: (
-			<BiListCheck className="h-6 w-6 p-1 bg-gray-100 rounded-md" />
-		),
-		title: "আমার শর্টলিস্ট",
-		path: "/user/account/shortlist",
-	},
-	{
-		icon: (
-			<BiSolidAddToQueue className="h-6 w-6 p-1 bg-gray-100 rounded-md" />
-		),
-		title: "আমার বায়োডাটা ক্রয়সমূহ",
-		path: "/user/account/purchases",
-	},
-	{
-		icon: (
-			<BiSolidAddToQueue className="h-6 w-6 p-1 bg-gray-100 rounded-md" />
-		),
-		title: "আমার বায়োডাটা অনুরোধসমূহ",
-		path: "/user/account/bio-requests",
-	},
-	{
-		icon: (
-			<BiSolidAddToQueue className="h-6 w-6 p-1 bg-gray-100 rounded-md" />
-		),
-		title: "পেমেন্ট এবং রিফান্ড ",
-		path: "/user/account/payment-and-refund",
-	},
-	{
-		icon: (
-			<BsFlag className="h-6 w-6 p-1 bg-gray-100 rounded-md" />
-		),
-		title: "সাপোর্ট & রিপোর্ট ",
-		path: "/user/account/myreports",
-	},
-	{
-		icon: (
-			<FiSettings className="h-6 w-6 p-1 bg-gray-100 rounded-md" />
-		),
-		title: "সেটিংস ",
-		path: "/user/account/settings",
-	},
+// TODO: grouped account menu; Icon is a component so the sidebar can colour it for the active page.
+const sidebarSections = [
+  {
+    title: 'বায়োডাটা',
+    items: [
+      { Icon: Squares2X2Icon, title: 'ড্যাশবোর্ড', path: '/user/account/dashboard' },
+      { Icon: PencilSquareIcon, title: 'বায়োডাটা এডিট করুন', path: '/user/account/edit-biodata' },
+      { Icon: QuestionMarkCircleIcon, title: 'আমার প্রশ্ন সেট করুন', path: '/user/account/bio-questions' },
+    ],
+  },
+  {
+    title: 'আমার তালিকা',
+    items: [
+      { Icon: FaceSmileIcon, title: 'আমার রিঅ্যাকশনসমূহ', path: '/user/account/reactions' },
+      { Icon: HeartIcon, title: 'পছন্দের তালিকা', path: '/user/account/likes' },
+      { Icon: HandThumbDownIcon, title: 'অপছন্দের তালিকা', path: '/user/account/dislikes' },
+      { Icon: BookmarkIcon, title: 'আমার শর্টলিস্ট', path: '/user/account/shortlist' },
+    ],
+  },
+  {
+    title: 'প্রস্তাব ও পেমেন্ট',
+    items: [
+      { Icon: ShoppingBagIcon, title: 'আমার বায়োডাটা ক্রয়সমূহ', path: '/user/account/purchases' },
+      { Icon: InboxArrowDownIcon, title: 'আমার বায়োডাটা অনুরোধসমূহ', path: '/user/account/bio-requests' },
+      { Icon: CreditCardIcon, title: 'পেমেন্ট এবং রিফান্ড', path: '/user/account/payment-and-refund' },
+    ],
+  },
+  {
+    title: 'সহায়তা',
+    items: [
+      { Icon: LifebuoyIcon, title: 'সাপোর্ট ও রিপোর্ট', path: '/user/account/myreports' },
+      { Icon: Cog6ToothIcon, title: 'সেটিংস', path: '/user/account/settings' },
+    ],
+  },
 ];
 
-export { sidebarDetails };
+export { sidebarSections };

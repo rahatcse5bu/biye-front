@@ -1,7 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "@/lib/navigation";
-import LogoImage from "./logoImage.jpg";
+import logoImport from "./logoImage.jpg";
+
+// TODO: Next.js image imports are objects, so take the URL from .src.
+const LogoImage = logoImport?.src ?? logoImport;
 import {
   BiLogoFacebook,
   BiLogoLinkedin,

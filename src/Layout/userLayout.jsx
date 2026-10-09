@@ -9,7 +9,7 @@ const UserLayout = ({ children }) => {
   return (
     <div className="relative flex w-full flex-row">
       <div
-        className={`fixed inset-y-0 left-0 z-[1400] w-[85%] max-w-xs transform transition-transform duration-300 ease-in-out lg:static lg:z-auto lg:w-[22%] lg:max-w-none lg:translate-x-0 lg:transition-none ${
+        className={`fixed inset-y-0 left-0 z-[1400] w-[85%] max-w-xs transform transition-transform duration-300 ease-in-out lg:sticky lg:top-[68px] lg:z-auto lg:h-[calc(100dvh-68px)] lg:w-72 lg:max-w-none lg:shrink-0 lg:translate-x-0 lg:self-start lg:transition-none xl:w-80 ${
           openSidebar ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -24,7 +24,7 @@ const UserLayout = ({ children }) => {
         ></button>
       )}
 
-      <div className="min-h-screen w-full px-3 pb-8 pt-2 lg:w-[78%] lg:px-5">
+      <div className="min-h-screen w-full min-w-0 px-3 pb-8 pt-2 lg:flex-1 lg:px-6">
         {children}
       </div>
     </div>

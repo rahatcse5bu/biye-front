@@ -1,12 +1,16 @@
 /* eslint-disable react/prop-types */
 import { useContext, useState } from "react";
-import female from "../../assets/icons/female.svg";
-import male from "../../assets/icons/male.svg";
+import femaleIcon from "../../assets/icons/female.svg";
+import maleIcon from "../../assets/icons/male.svg";
 import { Colors } from "../../constants/colors";
 import BioContext from "../../contexts/BioContext";
 import { getDateMonthYear } from "../../utils/date";
 import { convertHeightToBengali } from "../../utils/height";
 import PhotoViewer from "../PhotoViewer/PhotoViewer";
+
+// TODO: Next.js image imports are objects ({ src, width, height }), not URL strings like in Vite.
+const female = femaleIcon?.src ?? femaleIcon;
+const male = maleIcon?.src ?? maleIcon;
 import { religionToApiKey } from "../../constants/religionContent";
 
 const RELIGION_META = {
@@ -64,19 +68,24 @@ function BioInfo({ id }) {
         className={`relative w-24 mx-auto ${hasMalePhotos ? 'cursor-pointer group' : ''}`}
         onClick={() => openViewer(0)}
       >
-        <img
-          className="rounded-full py-2 h-24 w-24 mx-auto object-cover"
-          src={
-            generalInfo?.gender === "মহিলা"
-              ? female
-              : hasMalePhotos
-              ? generalInfo.photos[0]
-              : male
-          }
-          alt="বায়োডাটা প্রোফাইল"
-          width="96"
-          height="96"
-        />
+        {/* TODO: neutral circle until the biodata loads, so a female profile never flashes the male icon. */}
+        {generalInfo ? (
+          <img
+            className="rounded-full py-2 h-24 w-24 mx-auto object-cover"
+            src={
+              generalInfo.gender === "মহিলা"
+                ? female
+                : hasMalePhotos
+                ? generalInfo.photos[0]
+                : male
+            }
+            alt="বায়োডাটা প্রোফাইল"
+            width="96"
+            height="96"
+          />
+        ) : (
+          <span className="mx-auto my-2 block h-20 w-20 rounded-full bg-white/20" aria-hidden="true" />
+        )}
         {hasMalePhotos && (
           <span className="absolute bottom-0 left-1/2 -translate-x-1/2 bg-black/60 text-white text-[10px] px-2 py-[2px] rounded-full transition-opacity">
             দেখুন
