@@ -10,6 +10,7 @@ import {
 import { convertToBengaliNumerals } from '../../utils/weight';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import ButtonSpinner from '../../views/Payments/ButtonSpinner';
+import { takaForPoints } from '../../utils/topUp';
 
 const PROPOSAL_COST = 30;
 const CONTACT_COST = 70;
@@ -78,11 +79,13 @@ export default function RequestFlow({
   onTopUp,
   onOpenFirstVideo,
   onOpenSecondVideo,
+  rate = 1.2,
 }) {
   const approved = firstStatus === 'approved' || firstStatus === 'accepted';
   const pending = firstStatus === 'pending';
   const rejected = firstStatus === 'rejected';
   const shortfall = Math.max(0, (approved ? CONTACT_COST : PROPOSAL_COST) - points);
+  const topUpTaka = convertToBengaliNumerals(String(takaForPoints(shortfall, rate)));
 
   let panel;
   if (approved) {
@@ -91,7 +94,7 @@ export default function RequestFlow({
         <p>এখন অভিভাবকের যোগাযোগ তথ্য নিতে পারবেন।</p>
         <p className="mt-1 text-xs text-gray-500">
           {shortfall > 0
-            ? `আরও ${bnPoints(shortfall)} পয়েন্ট প্রয়োজন — বাকিটা বিকাশে পরিশোধ করতে পারবেন।`
+            ? `আরও ${bnPoints(shortfall)} পয়েন্ট প্রয়োজন — বিকাশে ৳${topUpTaka} পরিশোধ করে নিতে পারবেন।`
             : `কেনার পর আপনার ${bnPoints(points - CONTACT_COST)} পয়েন্ট থাকবে।`}
         </p>
         <button type="button" onClick={onBuyContact} disabled={loading} className={`${primaryButton} mt-4`}>
@@ -121,7 +124,7 @@ export default function RequestFlow({
               <ButtonSpinner /> অপেক্ষা করুন...
             </>
           ) : (
-            `${bnPoints(shortfall)} পয়েন্ট কিনুন`
+            `৳${topUpTaka} দিয়ে ${bnPoints(shortfall)} পয়েন্ট কিনুন`
           )}
         </button>
       </Panel>

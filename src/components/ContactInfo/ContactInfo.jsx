@@ -23,6 +23,18 @@ import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 import CustomModal from '../CustomModal/CustomModal';
 import RequestFlow from './RequestFlow';
+import { getErrorMessage } from '../../utils/error';
+import { takaForPoints, useTopUpRate } from '../../utils/topUp';
+
+const bnPoints = (value) => convertToBengaliNumerals(String(Number(Number(value || 0).toFixed(2))));
+
+// TODO: popup line for a purchase: points left after it, or the bKash amount that covers the shortfall.
+const costLine = (points, cost, rate) => {
+  if (points >= cost) return `কেনার পর ${bnPoints(points - cost)} পয়েন্ট অবশিষ্ট থাকবে।`;
+  const shortfall = cost - points;
+  const taka = takaForPoints(shortfall, rate);
+  return `আরও ${bnPoints(shortfall)} পয়েন্ট লাগবে। বিকাশে ৳${convertToBengaliNumerals(String(taka))} পরিশোধ করলে ${bnPoints(taka * rate)} পয়েন্ট পাবেন।`;
+};
 
 const ContactInfo = ({ status }) => {
   const [displayText, setDisplayText] = useState(false);
@@ -31,6 +43,7 @@ const ContactInfo = ({ status }) => {
   const generalInfo = bio?.generalInfo || null;
   const points = Number(userInfo?.data?.points);
   const safePoints = Number.isFinite(points) ? points : 0;
+  const rate = useTopUpRate();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [payLoading, setPayLoading] = useState(false);
@@ -63,17 +76,10 @@ const ContactInfo = ({ status }) => {
     retry: false,
   });
   const payButtonHandler = (bio_user) => {
-    const points = userInfo?.data?.points;
+    const points = safePoints;
     Swal.fire({
       title: 'যোগাযোগ তথ্য অনুরোধ করতে চান?',
-      text: `যোগাযোগ তথ্য অনুরোধ করতে আপনার ৭০ পয়েন্ট খরচ হবে | ${
-        points >= 70
-          ? convertToBengaliNumerals((points - 70).toString()) +
-            ' অবশিষ্ট থাকবে'
-          : 'আপনার আরও ' +
-            convertToBengaliNumerals((70 - points).toString()) +
-            ' পয়েন্ট লাগবে'
-      }`,
+      text: `যোগাযোগ তথ্য অনুরোধ করতে আপনার ৭০ পয়েন্ট খরচ হবে। ${costLine(safePoints, 70, rate)}`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -101,13 +107,12 @@ const ContactInfo = ({ status }) => {
             window.location.reload();
           }
         } catch (error) {
-          let msg = error;
-          Toast.errorToast(msg);
+          Toast.errorToast(getErrorMessage(error));
         } finally {
           setLoading(false);
         }
       } else {
-        buyWithBkashHandler(70 - points, bio_user, 'second_step', {
+        buyWithBkashHandler(takaForPoints(70 - points, rate), bio_user, 'second_step', {
           overlay: true,
         });
       }
@@ -138,14 +143,7 @@ const ContactInfo = ({ status }) => {
 
     Swal.fire({
       title: 'অনুরোধ পাঠাতে চান?',
-      text: `অনুরোধ পাঠাতে আপনার ৩০ পয়েন্ট খরচ হবে | ${
-        points >= 30
-          ? convertToBengaliNumerals((points - 30).toFixed(2).toString()) +
-            ' অবশিষ্ট থাকবে'
-          : 'আপনার আরও ' +
-            convertToBengaliNumerals((30 - points).toFixed(2).toString()) +
-            ' পয়েন্ট লাগবে'
-      }`,
+      text: `অনুরোধ পাঠাতে আপনার ৩০ পয়েন্ট খরচ হবে। ${costLine(safePoints, 30, rate)}`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -156,7 +154,7 @@ const ContactInfo = ({ status }) => {
         return;
       }
 
-      if (result.isConfirmed && points < 30) {
+      if (result.isConfirmed && safePoints < 30) {
         setDisplayText(true);
       } else if (result.isConfirmed) {
         navigate(`/send-form/${bio?.generalInfo?.user}`);
@@ -190,19 +188,7 @@ const ContactInfo = ({ status }) => {
 
     Swal.fire({
       title: 'যোগাযোগ তথ্য কিনতে চান?',
-      text: `এই বায়োডাটার যোগাযোগ তথ্য পেতে আপনার ${convertToBengaliNumerals(
-        requiredPoints.toString()
-      )} পয়েন্ট খরচ হবে | ${
-        points >= requiredPoints
-          ? convertToBengaliNumerals(
-              (points - requiredPoints).toFixed(2).toString()
-            ) + ' অবশিষ্ট থাকবে'
-          : 'আপনার আরও ' +
-            convertToBengaliNumerals(
-              (requiredPoints - points).toFixed(2).toString()
-            ) +
-            ' পয়েন্ট লাগবে'
-      }`,
+      text: `এই বায়োডাটার যোগাযোগ তথ্য পেতে আপনার ৫০ পয়েন্ট খরচ হবে। ${costLine(safePoints, requiredPoints, rate)}`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -213,10 +199,10 @@ const ContactInfo = ({ status }) => {
         return;
       }
 
-      if (points < requiredPoints) {
+      if (safePoints < requiredPoints) {
         // Need to buy more points
         BkashCreatePaymentAPICall(
-          requiredPoints - points,
+          takaForPoints(requiredPoints - safePoints, rate),
           biodataId,
           'unverified_purchase',
           location.pathname,
@@ -331,7 +317,8 @@ const ContactInfo = ({ status }) => {
           payLoading={payLoading}
           onSendProposal={comHandler}
           onBuyContact={() => payButtonHandler(bio?.generalInfo?.user)}
-          onTopUp={() => buyWithBkashHandler(30 - safePoints, bio?.generalInfo?.user, 'first_Step')}
+          onTopUp={() => buyWithBkashHandler(takaForPoints(30 - safePoints, rate), bio?.generalInfo?.user, 'first_Step')}
+          rate={rate}
           onOpenFirstVideo={() => setIsFirstStepModalOpen(true)}
           onOpenSecondVideo={() => setIsSecondStepModalOpen(true)}
         />

@@ -73,11 +73,22 @@ export const BioProvider = ({
     setFilterResetKey((previous) => previous + 1);
   };
 
+  // TODO: drops applied filters (e.g. one chip), keeps the rest, and remounts the panel so it shows no stale ticks.
+  const removeFilters = (keys) => {
+    const next = { ...query, page: 1 };
+    keys.forEach((key) => delete next[key]);
+    setQuery(next);
+    setFilterFields(next);
+    setFilterResetKey((previous) => previous + 1);
+    return next;
+  };
+
   //! get all bio datas
   const {
     data: bios,
     error: bioError,
     isLoading,
+    isFetching,
   } = useQuery({
     queryKey: ["bioData", "generalInfo", query],
     queryFn: async () => {
@@ -91,6 +102,8 @@ export const BioProvider = ({
         ? initialData
         : undefined,
     staleTime: serverQuery ? 30000 : 0,
+    // TODO: keep showing the current results while a new filter loads, instead of blanking the page.
+    keepPreviousData: true,
     retry: false,
     refetchInterval: 300000, //every five minutes
   });
@@ -108,7 +121,9 @@ export const BioProvider = ({
     page: bios?.page ?? 1,
     size: bios?.size,
     bioLoading: serverQuery ? isLoading : bioLoading,
+    bioFetching: isFetching && !isLoading,
     bioError,
+    removeFilters,
     setQuery,
     query,
     setFilterFields,

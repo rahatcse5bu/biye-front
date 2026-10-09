@@ -4,11 +4,13 @@ import { CheckIcon, ClipboardDocumentIcon, ClipboardDocumentCheckIcon } from '@h
 import { Toast } from '../../../utils/toast';
 import { getErrorMessage } from '../../../utils/error';
 import { ContactPurchaseDataServices } from '../../../services/contactPurchaseData';
+import { UnverifiedContactPurchaseService } from '../../../services/unverifiedContactPurchase';
 import { getToken } from '../../../utils/cookies';
 import {
   PayResultShell,
   Spinner,
   cleanParam,
+  safePath,
   primaryButton,
   secondaryButton,
   toBn,
@@ -27,6 +29,9 @@ const formatTime = (value) => {
 
 // TODO: where the user goes next, matching the purpose that started the payment.
 const nextStep = (purpose, bioUser) => {
+  if (bioUser && purpose === 'unverified_purchase') {
+    return { label: 'যোগাযোগ তথ্য নিন', note: 'যোগাযোগ তথ্য কেনা সম্পন্ন করা হবে', buyUnverified: true };
+  }
   if (bioUser && purpose === 'second_step') {
     return { label: 'যোগাযোগ তথ্য কিনুন', note: 'যোগাযোগ তথ্য কেনা সম্পন্ন করা হবে', buyContact: true };
   }
@@ -45,6 +50,7 @@ const PaySuccess = () => {
   const time = cleanParam(searchParams.get('time'));
   const bioUser = cleanParam(searchParams.get('bio_user'));
   const purpose = cleanParam(searchParams.get('purpose'));
+  const returnPath = safePath(cleanParam(searchParams.get('pathname')), '/user/account/dashboard');
 
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -52,11 +58,27 @@ const PaySuccess = () => {
 
   const continueNow = useCallback(async () => {
     if (busy) return;
-    if (!step.buyContact) {
+    if (!step.buyContact && !step.buyUnverified) {
       navigate(step.path, { replace: true });
       return;
     }
     setBusy(true);
+    if (step.buyUnverified) {
+      // TODO: finish the unverified-biodata contact purchase the top-up was for, then go back to that biodata.
+      try {
+        const data = await UnverifiedContactPurchaseService.purchaseContact(bioUser, getToken().token);
+        if (data?.success) {
+          Toast.successToast('যোগাযোগ তথ্য সফলভাবে ক্রয় হয়েছে।');
+          navigate(returnPath, { replace: true });
+          return;
+        }
+        Toast.errorToast(data?.message || 'যোগাযোগ তথ্য কেনা যায়নি');
+      } catch (error) {
+        Toast.errorToast(getErrorMessage(error));
+      }
+      setBusy(false);
+      return;
+    }
     try {
       const data = await ContactPurchaseDataServices.createContactPurchaseData(
         { bio_user: bioUser },
@@ -71,7 +93,7 @@ const PaySuccess = () => {
       Toast.errorToast(getErrorMessage(error));
     }
     setBusy(false);
-  }, [busy, step, bioUser, navigate]);
+  }, [busy, step, bioUser, navigate, returnPath]);
 
   const secondsLeft = useCountdown(REDIRECT_SECONDS, continueNow, !busy);
 

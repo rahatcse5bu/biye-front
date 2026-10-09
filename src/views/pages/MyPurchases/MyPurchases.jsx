@@ -31,6 +31,17 @@ import CustomButton from '../../../components/CustomButton/CustomButton';
 import CustomModal from '../../../components/CustomModal/CustomModal';
 import YouTubeEmbed from '../../../components/YouTubeEmbed/YouTubeEmbed';
 import { HiOutlineLocationMarker, HiOutlinePhone, HiOutlineMail } from 'react-icons/hi';
+import { takaForPoints, useTopUpRate } from '../../../utils/topUp';
+
+const bnPoints = (value) => convertToBengaliNumerals(String(Number(Number(value || 0).toFixed(2))));
+
+// TODO: popup line for the contact purchase: points left after it, or the bKash amount that covers the shortfall.
+const costLine = (points, cost, rate) => {
+  if (points >= cost) return `কেনার পর ${bnPoints(points - cost)} পয়েন্ট অবশিষ্ট থাকবে।`;
+  const shortfall = cost - points;
+  const taka = takaForPoints(shortfall, rate);
+  return `আরও ${bnPoints(shortfall)} পয়েন্ট লাগবে। বিকাশে ৳${convertToBengaliNumerals(String(taka))} পরিশোধ করলে ${bnPoints(taka * rate)} পয়েন্ট পাবেন।`;
+};
 
 const statusMeta = {
   pending: { label: 'অপেক্ষমাণ', className: 'bg-amber-50 text-amber-700 ring-amber-200' },
@@ -87,6 +98,7 @@ const FirstStepCard = ({
 }) => {
   const location = useLocation();
   const { userInfo } = useContext(UserContext);
+  const rate = useTopUpRate();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { data } = useQuery({
@@ -145,17 +157,10 @@ const FirstStepCard = ({
   };
 
   const payButtonHandler = (bio_user) => {
-    const points = userInfo?.data?.points;
+    const points = Number(userInfo?.data?.points) || 0;
     Swal.fire({
       title: 'যোগাযোগ তথ্য অনুরোধ করতে চান?',
-      text: `যোগাযোগ তথ্য অনুরোধ করতে আপনার ৭০ পয়েন্ট খরচ হবে | ${
-        points >= 70
-          ? convertToBengaliNumerals((points - 70).toString()) +
-            ' অবশিষ্ট থাকবে'
-          : 'আপনার আরও ' +
-            convertToBengaliNumerals((70 - points).toString()) +
-            ' পয়েন্ট লাগবে'
-      }`,
+      text: `যোগাযোগ তথ্য অনুরোধ করতে আপনার ৭০ পয়েন্ট খরচ হবে। ${costLine(points, 70, rate)}`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -170,7 +175,7 @@ const FirstStepCard = ({
         // console.log("clicked button");
         buyContact(bio_user);
       } else {
-        buyWithBkashHandler(70 - points, bio_user);
+        buyWithBkashHandler(takaForPoints(70 - points, rate), bio_user);
       }
     });
   };
