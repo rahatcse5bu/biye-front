@@ -4,10 +4,7 @@ import BioData from "@/views/pages/BioData/BioData";
 import { Link } from "@/lib/navigation";
 import { createPageMetadata } from "@/lib/seo";
 
-const API_BASE_URL =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5000/api/v1"
-    : "https://biye-backend.vercel.app/api/v1";
+import { baseUrl as API_BASE_URL } from "@/utils/url";
 
 const getBiodata = cache(async (id) => {
   if (!/^\d+$/.test(id)) return null;
