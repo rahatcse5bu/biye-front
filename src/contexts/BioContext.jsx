@@ -89,6 +89,7 @@ export const BioProvider = ({
     error: bioError,
     isLoading,
     isFetching,
+    isPreviousData,
   } = useQuery({
     queryKey: ["bioData", "generalInfo", query],
     queryFn: async () => {
@@ -121,7 +122,8 @@ export const BioProvider = ({
     page: bios?.page ?? 1,
     size: bios?.size,
     bioLoading: serverQuery ? isLoading : bioLoading,
-    bioFetching: isFetching && !isLoading,
+    // TODO: true only while a changed filter/page loads; the silent 5-minute refresh doesn't count.
+    bioFetching: isFetching && isPreviousData,
     bioError,
     removeFilters,
     setQuery,

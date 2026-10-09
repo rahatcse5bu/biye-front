@@ -5,7 +5,7 @@ import { SideBar } from "../../../components/SideBar/SideBar";
 import { Suspense, useContext, useEffect, useRef } from "react";
 import BioContext, { BioProvider } from "../../../contexts/BioContext";
 import { FaXmark } from "react-icons/fa6";
-import LoadingCircle from "../../../components/LoadingCircle/LoadingCircle";
+import BioDataSkeleton from "../../../components/BioDatasGrid/BioDataSkeleton";
 import { useFilter } from "../../../contexts/useFilter";
 import { usePrimary } from "../../../contexts/userPrimary";
 import { useNavigate, useSearchParams } from "@/lib/navigation";
@@ -264,7 +264,9 @@ const BioDatas = () => {
 
         <section className="min-w-0 flex-1" aria-label="বায়োডাটা তালিকা">
           {bioLoading ? (
-            <LoadingCircle classes="min-h-[60dvh] flex items-center" />
+            <div className="px-3 pb-6 pt-3 sm:px-4 sm:pt-4 lg:px-0 lg:py-0">
+              <BioDataSkeleton />
+            </div>
           ) : (
             <BioDatasGrid setSideBarDisplay={setSideBarDisplay} />
           )}

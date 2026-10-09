@@ -15,6 +15,16 @@ const login = async (payload) => {
   return data;
 };
 
+const forgotPassword = async (payload) => {
+  const { data } = await axios.post('/user-info/forgot-password', payload);
+  return data;
+};
+
+const resetPassword = async (payload) => {
+  const { data } = await axios.post('/user-info/reset-password', payload);
+  return data;
+};
+
 const changePassword = async (payload, token) => {
   const { data } = await axios.patch('/user-info/change-password', payload, {
     headers: {
@@ -373,6 +383,8 @@ export const userServices = {
   googleAuth,
   register,
   login,
+  forgotPassword,
+  resetPassword,
   changePassword,
   getCurrentUser,
   createUserInfo,

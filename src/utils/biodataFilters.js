@@ -80,6 +80,13 @@ export const activeFilterChips = (query = {}) => {
   return chips;
 };
 
+// TODO: lists and their comma-joined URL form compare equal ("a,b" === ["a", "b"]).
+const comparable = (value) =>
+  (Array.isArray(value) ? value : String(value).split(','))
+    .map((item) => String(item).trim())
+    .filter(Boolean)
+    .join(',');
+
 // TODO: compares the panel's ticked filters with the applied ones, ignoring paging and empty values.
 const normalize = (fields = {}) =>
   JSON.stringify(
@@ -87,7 +94,7 @@ const normalize = (fields = {}) =>
       .filter((key) => !NON_FILTER_KEYS.has(key) || key === 'religion')
       .filter((key) => !isEmpty(fields[key]))
       .sort()
-      .map((key) => [key, asText(fields[key])])
+      .map((key) => [key, comparable(fields[key])])
   );
 
 export const hasPendingChanges = (filterFields, query) => normalize(filterFields) !== normalize(query);

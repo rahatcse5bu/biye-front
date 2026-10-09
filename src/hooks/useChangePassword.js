@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import UserContext from '../contexts/UserContext';
 import { userServices } from '../services/user';
-import { getToken } from '../utils/cookies';
+import { getToken, setToken } from '../utils/cookies';
 
 const useChangePassword = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const { setTokenInfo } = useContext(UserContext);
 
   const changePassword = async (currentPassword, newPassword) => {
     setLoading(true);
@@ -18,10 +20,16 @@ const useChangePassword = () => {
         throw new Error('User not authenticated.');
       }
 
-      await userServices.changePassword(
+      const response = await userServices.changePassword(
         { currentPassword, newPassword },
         token
       );
+      // TODO: the old token is revoked by the password change, so swap in the new one.
+      const nextToken = response?.data?.token;
+      if (nextToken) {
+        setToken({ token: nextToken });
+        setTokenInfo({ token: nextToken });
+      }
       setSuccess(true);
     } catch (err) {
       setError(

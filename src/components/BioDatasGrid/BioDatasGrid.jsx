@@ -13,6 +13,7 @@ import { convertToQuery } from "../../utils/query";
 import { Toast } from "../../utils/toast";
 import { convertToBengaliDigits } from "../../utils/language";
 import { BioDataServices } from "../../services/bioData";
+import ActiveFilters, { useFilterActions } from "./ActiveFilters";
 
 const LIMIT = 12;
 const UNVERIFIED_FILTER_KEYS = new Set([
@@ -41,7 +42,8 @@ const BioDatasGrid = ({ setSideBarDisplay }) => {
   const [sortOrder, setSortOrder] = useState("desc");
   const [activeTab, setActiveTab] = useState("verified");
   const [unverifiedPage, setUnverifiedPage] = useState(1);
-  const { setQuery, query, bios, size, bioError } = useBio();
+  const { setQuery, query, bios, size, bioError, bioFetching } = useBio();
+  const { chips, clearAll } = useFilterActions();
   const navigate = useNavigate();
 
   const unverifiedFilters = Object.fromEntries(
@@ -106,7 +108,9 @@ const BioDatasGrid = ({ setSideBarDisplay }) => {
               আপনার পছন্দের মানুষ খুঁজুন
             </h2>
             <p className="mt-1 text-sm text-gray-500" aria-live="polite">
-              {convertToBengaliDigits(visibleTotal)} টি বায়োডাটা পাওয়া গেছে
+              {bioFetching && activeTab === "verified"
+                ? "খোঁজা হচ্ছে..."
+                : `${convertToBengaliDigits(visibleTotal)} টি বায়োডাটা পাওয়া গেছে`}
             </p>
           </div>
           <button
@@ -117,6 +121,11 @@ const BioDatasGrid = ({ setSideBarDisplay }) => {
           >
             <AdjustmentsHorizontalIcon className="h-5 w-5" aria-hidden="true" />
             <span>ফিল্টার</span>
+            {chips.length > 0 && (
+              <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-white px-1.5 text-xs font-bold leading-5 text-brand-900">
+                {convertToBengaliDigits(String(chips.length))}
+              </span>
+            )}
           </button>
         </div>
 
@@ -176,8 +185,19 @@ const BioDatasGrid = ({ setSideBarDisplay }) => {
         )}
       </div>
 
+      <ActiveFilters />
+
       {activeTab === "verified" && (
-        <>
+        <div className="relative" aria-busy={bioFetching}>
+          {bioFetching && (
+            <div className="pointer-events-none absolute inset-x-0 -top-2 z-10 flex justify-center" role="status">
+              <span className="inline-flex items-center gap-2 rounded-full bg-brand-900 px-3 py-1.5 text-xs font-semibold text-white shadow-md">
+                <span className="h-3 w-3 animate-spin rounded-full border-2 border-white/40 border-t-white" aria-hidden="true" />
+                ফলাফল আপডেট হচ্ছে...
+              </span>
+            </div>
+          )}
+          <div className={`transition-opacity duration-200 ${bioFetching ? "pointer-events-none opacity-50" : ""}`}>
           {bioError ? (
             <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-10 text-center text-sm font-semibold text-red-700">
               বায়োডাটা লোড করা যায়নি। কিছুক্ষণ পরে আবার চেষ্টা করুন।
@@ -189,12 +209,29 @@ const BioDatasGrid = ({ setSideBarDisplay }) => {
               ))}
             </div>
           ) : (
-            <div className="rounded-2xl border border-gray-200 bg-white px-4 py-12 text-center text-sm font-semibold text-gray-500">
-              আপনার নির্বাচিত ফিল্টারে কোনো বায়োডাটা পাওয়া যায়নি।
+            <div className="rounded-2xl border border-gray-200 bg-white px-4 py-12 text-center">
+              <p className="text-sm font-semibold text-gray-600">
+                {chips.length
+                  ? "আপনার নির্বাচিত ফিল্টারে কোনো বায়োডাটা পাওয়া যায়নি।"
+                  : "এখনো কোনো বায়োডাটা পাওয়া যায়নি।"}
+              </p>
+              {chips.length > 0 && (
+                <>
+                  <p className="mt-1 text-xs text-gray-500">কিছু ফিল্টার সরিয়ে আবার দেখুন।</p>
+                  <button
+                    type="button"
+                    onClick={clearAll}
+                    className="mt-4 inline-flex min-h-10 items-center justify-center rounded-xl border border-brand-900/20 px-4 py-2 text-sm font-bold text-brand-900 transition-colors hover:bg-brand-900/5"
+                  >
+                    সব ফিল্টার মুছুন
+                  </button>
+                </>
+              )}
             </div>
           )}
           <Pagination />
-        </>
+          </div>
+        </div>
       )}
 
       {activeTab === "unverified" && (
