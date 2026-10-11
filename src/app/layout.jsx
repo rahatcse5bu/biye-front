@@ -47,7 +47,7 @@ const organizationSchema = {
   },
   description:
     'বিয়ে একটি বাংলাদেশী ম্যাট্রিমনি প্ল্যাটফর্ম, যেখানে পাত্র-পাত্রীরা বায়োডাটা তৈরি করতে এবং পছন্দের জীবনসঙ্গী খুঁজতে পারেন।',
-  email: 'mailto:pnc.nikah@gmail.com',
+  email: 'mailto:bibahosupport@gmail.com',
   telephone: '+8801793278360',
   areaServed: {
     '@type': 'Country',

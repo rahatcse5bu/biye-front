@@ -170,10 +170,10 @@ const Footer = () => {
                   <div className="min-w-0">
                     <span className="block text-xs text-white/55">ইমেইল</span>
                     <a
-                      href="mailto:pnc.nikah@gmail.com"
+                      href="mailto:bibahosupport@gmail.com"
                       className={`${contactLinkClass} break-all`}
                     >
-                      pnc.nikah@gmail.com
+                      bibahosupport@gmail.com
                     </a>
                   </div>
                 </li>
