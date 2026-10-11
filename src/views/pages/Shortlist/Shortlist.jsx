@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { Button } from '@material-tailwind/react';
-import { useQuery } from '@tanstack/react-query';
-import { FaEye } from 'react-icons/fa';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { EyeIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Toast } from '../../../utils/toast';
 import { ShortlistServices } from '../../../services/shortlist';
 import { getToken } from '../../../utils/cookies';
 import LoadingCircle from '../../../components/LoadingCircle/LoadingCircle';
@@ -12,7 +12,8 @@ import { BioDataServices } from '../../../services/bioData';
 import { useContext } from 'react';
 import UserContext from '../../../contexts/UserContext';
 
-const ShortlistItem = ({ item, index }) => {
+// TODO: removable only in "my shortlist"; the same row also lists people who shortlisted me.
+const ShortlistItem = ({ item, index, removable = false }) => {
   const navigate = useNavigate();
   const { logOut } = useContext(UserContext);
 
@@ -39,6 +40,20 @@ const ShortlistItem = ({ item, index }) => {
     navigate(`/biodata/${item.bio_id}`);
   };
 
+  const queryClient = useQueryClient();
+  // TODO: the shortlist endpoint toggles, so posting an already-shortlisted biodata removes it.
+  const removeMutation = useMutation({
+    mutationFn: () => ShortlistServices.toggleShortlist({ bio_user: item.bio_user }, getToken()?.token),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['my-shortlist'] });
+      queryClient.invalidateQueries({ queryKey: ['shortlist-check', item.bio_user] });
+      Toast.successToast('শর্টলিস্ট থেকে সরানো হয়েছে');
+    },
+    onError: (error) => {
+      Toast.errorToast(error?.response?.data?.message || 'সরানো যায়নি, আবার চেষ্টা করুন');
+    },
+  });
+
   return (
     <tr className="border-b hover:bg-gray-50">
       <td className="px-4 py-2 text-center border-l w-1/9">{index + 1}</td>
@@ -60,9 +75,29 @@ const ShortlistItem = ({ item, index }) => {
         {data?.results?.pending || 0}
       </td>
       <td className="px-4 py-2 text-center border-l w-1/9">
-        <Button onClick={viewButtonHandler} color="green" className="mr-2">
-          <FaEye size={12} />
-        </Button>
+        <div className="flex items-center justify-center gap-2">
+          <button
+            type="button"
+            onClick={viewButtonHandler}
+            title="বায়োডাটা দেখুন"
+            aria-label={`বায়োডাটা ${item?.bio_id} দেখুন`}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-brand-900 text-white transition-colors hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2"
+          >
+            <EyeIcon className="h-4 w-4" aria-hidden="true" />
+          </button>
+          {removable && (
+          <button
+            type="button"
+            onClick={() => removeMutation.mutate()}
+            disabled={removeMutation.isPending}
+            title="শর্টলিস্ট থেকে সরান"
+            aria-label={`বায়োডাটা ${item?.bio_id} শর্টলিস্ট থেকে সরান`}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-rose-200 bg-white text-rose-700 transition-colors hover:border-rose-300 hover:bg-rose-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <XMarkIcon className="h-4 w-4" aria-hidden="true" />
+          </button>
+          )}
+        </div>
       </td>
     </tr>
   );
@@ -123,7 +158,7 @@ const Shortlist = () => {
                 <tbody>
                   {data?.data?.length > 0 ? (
                     data?.data?.map((item, index) => (
-                      <ShortlistItem item={item} index={index} key={index} />
+                      <ShortlistItem item={item} index={index} key={index} removable />
                     ))
                   ) : (
                     <tr>
