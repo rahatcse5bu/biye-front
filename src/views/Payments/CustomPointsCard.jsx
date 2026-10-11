@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Colors } from "../../constants/colors";
+import { CalculatorIcon } from "@heroicons/react/24/outline";
 import { convertToBengaliDigits } from "../../utils/language";
 import ButtonSpinner from "./ButtonSpinner";
 
@@ -30,73 +30,72 @@ export default function CustomPointsCard({ settings, packages, onBuy, loading = 
     if (isValid && !disabled) onBuy(amount);
   };
 
+  const points = isValid ? previewPoints(amount, settings, packages) : 0;
+  const invalid = value !== "" && !isValid;
+
   return (
     <form
       onSubmit={submit}
-      className="mx-auto mt-8 max-w-xl rounded-lg border bg-white p-6 shadow-md"
-      style={{ borderColor: Colors.titleText }}
+      className="mt-8 grid gap-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm md:grid-cols-[1fr_1.1fr] md:items-center md:gap-10 md:p-8"
     >
-      <h2
-        className="text-xl font-semibold text-center"
-        style={{ color: Colors.titleText }}
-      >
-        কাস্টম পয়েন্ট কিনুন
-      </h2>
-      <p className="mt-1 text-center text-sm text-gray-500">
-        প্রতি ১ টাকায় {toBn(settings.points_per_taka)} পয়েন্ট — আপনার প্রয়োজন মতো পরিমাণ লিখুন
-      </p>
-
-      <label htmlFor="custom-points-amount" className="mt-5 block text-sm font-medium text-gray-700">
-        টাকার পরিমাণ
-      </label>
-      <div className="mt-1 flex items-center rounded-lg border border-gray-300 focus-within:border-transparent focus-within:ring-2 focus-within:ring-[#0D7377]">
-        <span className="pl-3 text-gray-500">৳</span>
-        <input
-          id="custom-points-amount"
-          type="number"
-          inputMode="numeric"
-          min={settings.min_amount}
-          max={settings.max_amount}
-          step={1}
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-          placeholder={String(settings.min_amount)}
-          className="w-full rounded-lg border-0 bg-transparent px-2 py-2.5 text-gray-900 outline-none focus:ring-0"
-          aria-describedby="custom-points-hint"
-        />
-      </div>
-      <p
-        id="custom-points-hint"
-        className={`mt-1 text-xs ${value !== "" && !isValid ? "text-red-600" : "text-gray-500"}`}
-      >
-        {hint}
-      </p>
-
-      <div className="mt-4 rounded-lg bg-gray-50 px-4 py-3 text-center">
-        <span className="text-sm text-gray-500">আপনি পাবেন </span>
-        <span className="text-2xl font-bold" style={{ color: Colors.titleText }}>
-          {toBn(isValid ? previewPoints(amount, settings, packages) : 0)}
+      <div>
+        <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-900/10 text-brand-900">
+          <CalculatorIcon className="h-6 w-6" aria-hidden="true" />
         </span>
-        <span className="text-sm text-gray-500"> পয়েন্ট</span>
+        <h2 className="mt-4 text-xl font-bold text-gray-900">নিজের পরিমাণে পয়েন্ট কিনুন</h2>
+        <p className="mt-2 text-sm leading-6 text-gray-600">
+          প্যাকেজ না নিয়ে প্রয়োজন মতো টাকার পরিমাণ লিখুন। প্রতি ১ টাকায়{" "}
+          <b className="text-gray-900">{toBn(settings.points_per_taka)} পয়েন্ট</b>।
+        </p>
       </div>
 
-      <button
-        type="submit"
-        disabled={!isValid || disabled}
-        aria-busy={loading}
-        className="mt-4 w-full rounded py-2.5 font-bold text-white disabled:cursor-not-allowed disabled:opacity-50"
-        style={{
-          background: `linear-gradient(to right,${Colors.lnLeft},${Colors.lnRight})`,
-        }}
-      >
-        {loading ? (
-          <span className="inline-flex items-center justify-center gap-2">
-            <ButtonSpinner /> অপেক্ষা করুন...
+      <div>
+        <label htmlFor="custom-points-amount" className="block text-sm font-semibold text-gray-700">
+          টাকার পরিমাণ
+        </label>
+        <div
+          className={`mt-1.5 flex items-center rounded-xl border bg-white transition-colors focus-within:ring-2 ${
+            invalid ? "border-red-300 focus-within:ring-red-200" : "border-gray-200 focus-within:border-brand-900 focus-within:ring-brand-900/15"
+          }`}
+        >
+          <span className="pl-4 text-lg font-semibold text-gray-400">৳</span>
+          <input
+            id="custom-points-amount"
+            type="number"
+            inputMode="numeric"
+            min={settings.min_amount}
+            max={settings.max_amount}
+            step={1}
+            value={value}
+            onChange={(event) => setValue(event.target.value)}
+            placeholder={String(settings.min_amount)}
+            className="w-full rounded-xl border-0 bg-transparent px-2 py-3 text-lg font-semibold text-gray-900 outline-none focus:ring-0"
+            aria-invalid={invalid || undefined}
+            aria-describedby="custom-points-hint"
+          />
+          <span className="whitespace-nowrap pr-4 text-sm text-gray-500" aria-live="polite">
+            = <b className="text-brand-900">{toBn(points)}</b> পয়েন্ট
           </span>
-        ) : (
-          "Buy With Bkash"
-        )}
-      </button>
+        </div>
+        <p id="custom-points-hint" className={`mt-1.5 text-xs ${invalid ? "text-red-600" : "text-gray-500"}`}>
+          {hint}
+        </p>
+
+        <button
+          type="submit"
+          disabled={!isValid || disabled}
+          aria-busy={loading}
+          className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-900 px-4 py-3 text-sm font-bold text-white transition-colors duration-200 hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none"
+        >
+          {loading ? (
+            <>
+              <ButtonSpinner /> অপেক্ষা করুন...
+            </>
+          ) : (
+            "বিকাশ দিয়ে কিনুন"
+          )}
+        </button>
+      </div>
     </form>
   );
 }
