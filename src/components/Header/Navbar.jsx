@@ -33,13 +33,16 @@ import { useReligionPreference } from "../../contexts/ReligionPreferenceContext"
 import { setReligionCookie } from "../../utils/cookies";
 import { useFilter } from "../../contexts/useFilter";
 import dynamic from "next/dynamic";
+import { useHydrated } from "../../hooks/useHydrated";
 
 const Notifications = dynamic(() => import("../Notifications/Notifications"), {
   ssr: false,
 });
 
 export default function NavBar() {
-  const { userInfo, user, logOut, setUserInfo } = useContext(UserContext);
+  const { userInfo, user: sessionUser, logOut, setUserInfo } = useContext(UserContext);
+  // TODO: the session can restore before this boundary hydrates; render logged-out until hydration so markup matches the server.
+  const user = useHydrated() ? sessionUser : null;
   const filteredNavData = navData;
   const [openNav, setOpenNav] = useState(false);
   const { query } = useBio();
