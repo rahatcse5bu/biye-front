@@ -33,6 +33,18 @@ jobs:
       - name: Pull Vercel environment information
         run: vercel pull --yes --environment=$VERCEL_ENV --token=${{ secrets.VERCEL_TOKEN }}
 
+      # TODO: Vercel "Sensitive" vars can't be read outside Vercel's builders and arrive as "[SENSITIVE]".
+      - name: Check pulled environment variables
+        run: |
+          bad=$(grep -oE '^[A-Z0-9_]+="?\[SENSITIVE\]' ".vercel/.env.$VERCEL_ENV.local" | cut -d= -f1 || true)
+          if [ -n "$bad" ]; then
+            echo "::warning::Marked Sensitive in Vercel, unreadable in this build: $(echo $bad)"
+            if echo "$bad" | grep -q '^NEXT_PUBLIC_'; then
+              echo "::error::NEXT_PUBLIC_* values are compiled into the browser bundle; un-mark them as Sensitive in Vercel and re-add them."
+              exit 1
+            fi
+          fi
+
       - name: Build project artifacts
         run: vercel build ${{ env.VERCEL_ENV == 'production' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
 
