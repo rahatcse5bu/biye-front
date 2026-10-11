@@ -12,6 +12,7 @@ import { convertHeightToBengali } from '../../../utils/height';
 import { convertToBengaliNumerals } from '../../../utils/weight';
 import { Toast } from '../../../utils/toast';
 import LoadingCircle from '../../../components/LoadingCircle/LoadingCircle';
+import BioDetailsSkeleton from '../../../components/BioDetailsSkeleton/BioDetailsSkeleton';
 import ScrollToTop from '../../../components/ScrollTop/ScrollTop';
 import GridQuestionAnswerCard from '../../../components/GridQuestionAnswerCard/GridQuestionAnswerCard';
 import AdditionalInfoSection from '../../../components/AdditionalInfoSection/AdditionalInfoSection';
@@ -151,7 +152,7 @@ const UnverifiedBioData = () => {
       </div>
 
       {isLoading ? (
-        <LoadingCircle classes="my-10 h-[500px]" />
+        <BioDetailsSkeleton />
       ) : isError || !biodata ? (
         <div className="bg-red-50 p-10 rounded-sm border border-red-300 m-5">
           <h4 className="text-red-900 font-semibold">বায়োডাটা পাওয়া যায়নি</h4>

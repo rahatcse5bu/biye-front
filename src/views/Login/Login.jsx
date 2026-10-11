@@ -37,7 +37,7 @@ export function Login() {
   const [searchParams] = useSearchParams();
   const requestedPath = searchParams.get('from');
   const from =
-    requestedPath?.startsWith('/') && !requestedPath.startsWith('//')
+    /^\/(?![/\\])[^\s\\]*$/.test(requestedPath || '')
       ? requestedPath
       : '/user/account/dashboard';
   const navigate = useNavigate();

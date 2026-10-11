@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useMemo, useState } from 'react';
 
 export const FilterContext = createContext();
 
@@ -12,7 +12,8 @@ const FilterProvider = ({ children }) => {
   const [selectedPresentDivisions, setSelectedPresentDivisions] = useState([]);
   const [selectedPresentDistricts, setSelectedPresentDistricts] = useState([]);
 
-  const value = {
+  // TODO: memoized on the state values; setters are stable.
+  const value = useMemo(() => ({
     openSidebar,
     setOpenSidebar,
     sideBarDisplay,
@@ -29,7 +30,16 @@ const FilterProvider = ({ children }) => {
     setSelectedDistricts,
     setSelectedPresentDivisions,
     setSelectedPresentDistricts,
-  };
+  }), [
+    openSidebar,
+    sideBarDisplay,
+    addressFilterOpen,
+    primaryFilterOpen,
+    selectedDivisions,
+    selectedDistricts,
+    selectedPresentDivisions,
+    selectedPresentDistricts,
+  ]);
   return (
     <FilterContext.Provider value={value}>{children}</FilterContext.Provider>
   );

@@ -43,7 +43,7 @@ export function Signup() {
   // TODO: same-site paths only, matching Login, so signup returns users where they started.
   const requestedPath = searchParams.get('from');
   const from =
-    requestedPath?.startsWith('/') && !requestedPath.startsWith('//')
+    /^\/(?![/\\])[^\s\\]*$/.test(requestedPath || '')
       ? requestedPath
       : '/user/account/dashboard';
   const [email, setEmail] = useState('');

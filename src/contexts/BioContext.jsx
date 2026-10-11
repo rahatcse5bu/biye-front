@@ -1,5 +1,5 @@
 // src/contexts/BioContext.js
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect, createContext, useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { BioDataServices } from "../services/bioData";
 import { religionToApiKey } from "../constants/religionContent";
@@ -55,7 +55,7 @@ export const BioProvider = ({
     });
   }, [apiReligion, ready, serverQuery, setFilterFields, setQuery]);
 
-  const resetAllFilters = () => {
+  const resetAllFilters = useCallback(() => {
     const userStatus =
       process.env.NODE_ENV === "development" ? "in review" : "active";
     const defaultQuery = {
@@ -71,17 +71,17 @@ export const BioProvider = ({
       ...(apiReligion && { religion: apiReligion }),
     });
     setFilterResetKey((previous) => previous + 1);
-  };
+  }, [apiReligion]);
 
   // TODO: drops applied filters (e.g. one chip), keeps the rest, and remounts the panel so it shows no stale ticks.
-  const removeFilters = (keys) => {
+  const removeFilters = useCallback((keys) => {
     const next = { ...query, page: 1 };
     keys.forEach((key) => delete next[key]);
     setQuery(next);
     setFilterFields(next);
     setFilterResetKey((previous) => previous + 1);
     return next;
-  };
+  }, [query]);
 
   //! get all bio datas
   const {
@@ -114,16 +114,19 @@ export const BioProvider = ({
   }, [isLoading]);
 
   // console.log("bios~~", bios);
-  const value = {
+  const bioFetching = isFetching && isPreviousData;
+  const effectiveLoading = serverQuery ? isLoading : bioLoading;
+  // TODO: memoized so the 5-minute background refetch or unrelated renders don't re-render every biodata consumer.
+  const value = useMemo(() => ({
     bio,
     setBio,
     bios: bios?.data,
     limit: bios?.limit ?? 12,
     page: bios?.page ?? 1,
     size: bios?.size,
-    bioLoading: serverQuery ? isLoading : bioLoading,
+    bioLoading: effectiveLoading,
     // TODO: true only while a changed filter/page loads; the silent 5-minute refresh doesn't count.
-    bioFetching: isFetching && isPreviousData,
+    bioFetching,
     bioError,
     removeFilters,
     setQuery,
@@ -133,7 +136,19 @@ export const BioProvider = ({
     filterResetKey,
     resetAllFilters,
     defaultReligion: apiReligion,
-  };
+  }), [
+    bio,
+    bios,
+    effectiveLoading,
+    bioFetching,
+    bioError,
+    removeFilters,
+    query,
+    filterFields,
+    filterResetKey,
+    resetAllFilters,
+    apiReligion,
+  ]);
   // console.log("Bios-from-db~", bios);
   // console.log("Size-from-db~", bios?.size);
   // console.log("Limit-from-db~", bios?.limit);

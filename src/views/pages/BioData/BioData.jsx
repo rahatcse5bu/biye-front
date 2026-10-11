@@ -23,7 +23,7 @@ import { getToken } from "../../../utils/cookies";
 import { useContext, useEffect } from "react";
 import BioContext from "../../../contexts/BioContext";
 import UserContext from "../../../contexts/UserContext";
-import LoadingCircle from "../../../components/LoadingCircle/LoadingCircle";
+import BioDetailsSkeleton from "../../../components/BioDetailsSkeleton/BioDetailsSkeleton";
 import { useNavigate } from "@/lib/navigation";
 import ScrollToTop from "../../../components/ScrollTop/ScrollTop";
 
@@ -41,6 +41,8 @@ const BioData = ({ initialData = null }) => {
       return await BioDataServices.getBioData(id);
     },
     initialData,
+    // TODO: the server already sent this biodata; without a staleTime it is fetched a second time on mount.
+    staleTime: 60_000,
     retry: false,
     enabled: !!id,
   });
@@ -80,7 +82,7 @@ const BioData = ({ initialData = null }) => {
     <div className="w-full py-2">
       <ScrollToTop />
       {isLoading ? (
-        <LoadingCircle classes="my-10 h-[500px]" />
+        <BioDetailsSkeleton />
       ) : isError ? (
         <div className="bg-red-50 p-10 rounded-sm border border-red-300 m-5">
           <h4 className="text-red-900 font-semibold">Not found</h4>

@@ -14,7 +14,7 @@ const AfterPay = () => {
   const purpose = cleanParam(searchParams.get("purpose"));
   const paymentID = searchParams.get("paymentID");
   const pathname = cleanParam(searchParams.get("pathname"));
-  const { user } = useContext(UserContext);
+  const { user, setUser, setUserInfo } = useContext(UserContext);
   // TODO: run once even if React re-runs the effect (dev strict mode, context updates).
   const started = useRef(false);
 
@@ -40,6 +40,17 @@ const AfterPay = () => {
           purpose,
         });
         if (response?.success) {
+          // TODO: put the new balance straight into the shared user state, so every points display updates without a refetch.
+          const balance = Number(response.points_balance);
+          if (Number.isFinite(balance)) {
+            // TODO: return the same object when the balance is unchanged so React skips the re-render.
+            setUserInfo((current) =>
+              current?.data && current.data.points !== balance
+                ? { ...current, data: { ...current.data, points: balance } }
+                : current
+            );
+            setUser((current) => (current && current.points !== balance ? { ...current, points: balance } : current));
+          }
           navigate(
             buildUrl("/pay/success", {
               trxID: response.trxID,
@@ -60,7 +71,7 @@ const AfterPay = () => {
         fail(getErrorMessage(error));
       }
     })();
-  }, [status, paymentID, navigate, user?.email, bio_user, purpose, pathname]);
+  }, [status, paymentID, navigate, user?.email, bio_user, purpose, pathname, setUser, setUserInfo]);
 
   return (
     <PayResultShell

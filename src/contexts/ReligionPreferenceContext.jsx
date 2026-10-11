@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { religionToApiKey } from "@/constants/religionContent";
 import { CONSENT_EVENT, getConsent, getReligionCookie, setReligionCookie } from "@/utils/cookies";
@@ -286,16 +286,22 @@ export function ReligionPreferenceProvider({ children }) {
     }
   }, [ready, userId, savedPreference]);
 
-  const chooseReligion = (value) => {
+  const chooseReligion = useCallback((value) => {
     const canonical = religionToApiKey[value] || null;
     setReligion(canonical);
     setReligionCookie(canonical || "all");
     setShowChooser(false);
     if (userId) saveToAccount(canonical || "all");
-  };
+  }, [userId]);
+
+  // TODO: memoized so the chooser's own state (mobile, suppress count) doesn't re-render every consumer.
+  const contextValue = useMemo(
+    () => ({ religion, ready, chooseReligion, setSuppressCount }),
+    [religion, ready, chooseReligion],
+  );
 
   return (
-    <ReligionPreferenceContext.Provider value={{ religion, ready, chooseReligion, setSuppressCount }}>
+    <ReligionPreferenceContext.Provider value={contextValue}>
       {children}
       {canShowChooser && !isMobile && (
         <DialogModal

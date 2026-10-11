@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState, useCallback, useMemo } from 'react';
 import { userServices } from '../services/user';
 import { getToken, removeToken } from '../utils/cookies';
 
@@ -62,7 +62,7 @@ export const UserProvider = ({ children }) => {
     };
   }, [queryClient]);
 
-  const logOut = async () => {
+  const logOut = useCallback(async () => {
     setUserLoading(true);
     removeToken();
     setUser(null);
@@ -70,22 +70,26 @@ export const UserProvider = ({ children }) => {
     setTokenInfo(null);
     queryClient.clear();
     setUserLoading(false);
-  };
+  }, [queryClient]);
+
+  // TODO: memoized so consumers re-render only when user state actually changes; setters are stable.
+  const value = useMemo(
+    () => ({
+      user,
+      logOut,
+      userLoading,
+      setUserLoading,
+      setUser,
+      userInfo,
+      tokenInfo,
+      setTokenInfo,
+      setUserInfo,
+    }),
+    [user, logOut, userLoading, userInfo, tokenInfo],
+  );
 
   return (
-    <UserContext.Provider
-      value={{
-        user,
-        logOut,
-        userLoading,
-        setUserLoading,
-        setUser,
-        userInfo,
-        tokenInfo,
-        setTokenInfo,
-        setUserInfo,
-      }}
-    >
+    <UserContext.Provider value={value}>
       {children}
     </UserContext.Provider>
   );

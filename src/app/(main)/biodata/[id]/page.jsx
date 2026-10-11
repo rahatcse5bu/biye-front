@@ -4,7 +4,7 @@ import BioData from "@/views/pages/BioData/BioData";
 import { Link } from "@/lib/navigation";
 import { createPageMetadata } from "@/lib/seo";
 
-import { baseUrl as API_BASE_URL } from "@/utils/url";
+import { backendUrl as API_BASE_URL } from "@/lib/backendUrl";
 
 const getBiodata = cache(async (id) => {
   if (!/^\d+$/.test(id)) return null;

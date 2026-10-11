@@ -1,6 +1,6 @@
 import { ServerSeededBioDatas } from "@/views/pages/BioDatas/BioDatas";
 import { convertToQuery, parseBiodataFilters } from "@/utils/query";
-import { baseUrl } from "@/utils/url";
+import { backendUrl as baseUrl } from "@/lib/backendUrl";
 
 export default async function BioDatasPage({ searchParams }) {
   const params = await searchParams;

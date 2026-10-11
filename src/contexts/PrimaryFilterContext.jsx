@@ -1,4 +1,4 @@
-import { useState, createContext, useEffect } from "react";
+import { useState, createContext, useEffect, useCallback, useMemo } from "react";
 import { useReligionPreference } from "./ReligionPreferenceContext";
 
 // Create a new context instance
@@ -28,16 +28,17 @@ const PrimaryFilterProvider = ({ children }) => {
     setReligiousType("");
   }, [preferredReligion, ready]);
 
-  const resetPrimaryFilters = (defaultReligion = "") => {
+  const resetPrimaryFilters = useCallback((defaultReligion = "") => {
     setHeight({ min: 4.5, max: 7.0 });
     setAge({ min: 18, max: 60 });
     setBioType("");
     setMaritalStatus("");
     setReligion(defaultReligion);
     setReligiousType("");
-  };
+  }, []);
 
-  const value = {
+  // TODO: memoized on the state values; setters and resetPrimaryFilters are stable.
+  const value = useMemo(() => ({
     height,
     setHeight,
     age,
@@ -51,7 +52,7 @@ const PrimaryFilterProvider = ({ children }) => {
     religiousType,
     setReligiousType,
     resetPrimaryFilters,
-  };
+  }), [height, age, bioType, maritalStatus, religion, religiousType, resetPrimaryFilters]);
   return (
     <PrimaryFilterContext.Provider value={value}>
       {children}

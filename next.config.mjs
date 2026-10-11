@@ -1,5 +1,6 @@
 import { createRequire } from "module";
 import path from "path";
+import { backendUrl } from "./src/lib/backendUrl.js";
 
 const require = createRequire(import.meta.url);
 
@@ -89,6 +90,14 @@ const nextConfig = {
         has: [{ type: "host", value: "www.pncnikah.com" }],
         destination: "https://www.bibaho.org/:path*",
         permanent: true,
+      },
+    ];
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/api/v1/:path*",
+        destination: `${backendUrl}/:path*`,
       },
     ];
   },
