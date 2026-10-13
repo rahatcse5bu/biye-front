@@ -8,6 +8,7 @@ import Numbering from '../../../components/Numbering/Numbering';
 import { useContext } from 'react';
 import UserContext from '../../../contexts/UserContext';
 import { StepperLine } from '../../../components/Stepper/Stepper';
+import RevisionStatus from '../../../components/RevisionStatus/RevisionStatus';
 
 const TOTAL_STEPS = 12; // 11 data-entry steps + review step
 
@@ -41,6 +42,7 @@ const EditBiodata = () => {
         </div>
       </div>
       <div className="lg:w-[70%] w-full">
+        {userForm !== TOTAL_STEPS && <RevisionStatus />}
         <Form setUserForm={setUserForm} userForm={userForm} />
       </div>
       <ScrollToTop />
