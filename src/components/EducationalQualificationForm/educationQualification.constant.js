@@ -61,6 +61,7 @@ export const LEVEL_BLOCKS = {
 
 // TODO: fields added with the running/professional levels; kept in one state object in the form.
 export const EXTRA_EDU_FIELDS = [
+  'ssc_inst', 'after_ssc_inst',
   'ssc_exam_year',
   'msc_running_year',
   'phd_running_year',

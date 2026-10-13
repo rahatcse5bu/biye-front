@@ -14,7 +14,6 @@ import {
   hscOptions,
   qawmiEducationOptions,
   qawmiResult,
-  result,
 } from './educationQualification.constant';
 import Textarea from '../Textarea/Textarea';
 import { Colors } from '../../constants/colors';
@@ -340,7 +339,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm, religion = 'islam
         required={requireYear}
       />
       <Select title="বিভাগ" value={sscGroup} setValue={setSscGroup} options={group} required />
-      <Select title="ফলাফল" value={sscResult} setValue={setSscResult} options={result} required />
+      <Input title="ফলাফল (GPA)" value={sscResult} setValue={setSscResult} type="number" min="0" max="5" step="0.01" placeholder="4.50" subtitle="৫.০০-এর মধ্যে প্রাপ্ত GPA লিখুন" required />
     </>
   );
 
@@ -354,7 +353,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm, religion = 'islam
         required={requireYear}
       />
       <Select title="বিভাগ" value={hscGroup} setValue={setHscGroup} options={group} required />
-      <Select title="ফলাফল" value={hscResult} setValue={setHscResult} options={result} required />
+      <Input title="ফলাফল (GPA)" value={hscResult} setValue={setHscResult} type="number" min="0" max="5" step="0.01" placeholder="4.50" subtitle="৫.০০-এর মধ্যে প্রাপ্ত GPA লিখুন" required />
     </>
   );
 
@@ -408,6 +407,12 @@ const EducationalQualificationForm = ({ setUserForm, userForm, religion = 'islam
 
   const renderGeneralLevel = () => (
     <>
+      {(hasBlock('ssc') || hasBlock('sscRunning')) && (
+        <Input title="স্কুল / মাদ্রাসার নাম" {...extraProps('ssc_inst')} required />
+      )}
+      {(hasBlock('hsc') || hasBlock('hscRunning') || (hasBlock('afterSsc') && afterSsc === 'HSC')) && (
+        <Input title="কলেজ / মাদ্রাসার নাম" {...extraProps('after_ssc_inst')} required />
+      )}
       {hasBlock('belowSsc') && (
         <Select
           title="আপনি কোন ক্লাস পর্যন্ত পড়াশুনা করেছেন?"
@@ -500,13 +505,13 @@ const EducationalQualificationForm = ({ setUserForm, userForm, religion = 'islam
       running
         ? { diploma_sub: diplomaSub, diploma_inst: diplomaInst, diploma_running_year: diplomaYear }
         : { diploma_sub: diplomaSub, diploma_inst: diplomaInst, diploma_pass_year: diplomaPassYear };
-    const hscPayload = { after_ssc_year: hscPassYear, after_ssc_group: hscGroup, after_ssc_result: hscResult };
+    const hscPayload = { ...pick('after_ssc_inst'), after_ssc_year: hscPassYear, after_ssc_group: hscGroup, after_ssc_result: hscResult };
     const payloads = {
       belowSsc: { before_ssc: selectedClass },
-      sscRunning: { ...pick('ssc_exam_year'), ssc_group: sscGroup },
-      ssc: { ssc_year: sscPassYear, ssc_group: sscGroup, ssc_result: sscResult },
+      sscRunning: { ...pick('ssc_exam_year', 'ssc_inst'), ssc_group: sscGroup },
+      ssc: { ...pick('ssc_inst'), ssc_year: sscPassYear, ssc_group: sscGroup, ssc_result: sscResult },
       sscNext: { after_ssc_running: hscRunning },
-      hscRunning: { after_ssc_running: hscRunning, after_ssc_group: hscGroup },
+      hscRunning: { ...pick('after_ssc_inst'), after_ssc_running: hscRunning, after_ssc_group: hscGroup },
       hsc: hscPayload,
       diplomaRunning: diplomaPayload(true),
       diploma: diplomaPayload(false),

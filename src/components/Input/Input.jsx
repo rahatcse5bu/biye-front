@@ -10,6 +10,9 @@ const Input = ({
 	setValue,
 	placeholder = "",
 	subtitle,
+	min,
+	max,
+	step,
 }) => {
 	return (
 		<div className="my-2">
@@ -21,6 +24,9 @@ const Input = ({
 
 			<input
 				type={type}
+				min={min}
+				max={max}
+				step={step}
 				required={required}
 				value={value}
 				onChange={(e) => setValue(e.target.value)}

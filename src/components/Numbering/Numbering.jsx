@@ -59,9 +59,9 @@ const Numbering = ({ setUserForm, userForm }) => {
     }
   }, []);
 
-  const { savedSteps, isDone, isReachable } = useStepProgress();
-  const total = stepTitles.length;
-  const percent = Math.round((savedSteps / total) * 100);
+  const { savedSteps, total, isDone, isReachable } = useStepProgress(userForm);
+  const stepCount = stepTitles.length;
+  const percent = Math.min(100, Math.round((savedSteps / total) * 100));
 
   return (
     <nav
@@ -87,7 +87,7 @@ const Numbering = ({ setUserForm, userForm }) => {
           const current = step === userForm;
           const done = isDone(step) && !current;
           const reachable = isReachable(step);
-          const lineFilled = isDone(step) && step < total;
+          const lineFilled = isDone(step) && step < stepCount;
           const status = current
             ? 'এখন পূরণ করছেন'
             : done
@@ -98,7 +98,7 @@ const Numbering = ({ setUserForm, userForm }) => {
 
           return (
             <li key={title} className="relative">
-              {step < total && (
+              {step < stepCount && (
                 <span
                   aria-hidden="true"
                   className={`absolute left-[27px] top-11 h-[calc(100%-28px)] w-0.5 rounded-full ${

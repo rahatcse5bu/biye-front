@@ -161,7 +161,7 @@ const Home = ({ initialReligion }) => {
 
         <section className="pb-12 sm:pb-16" aria-labelledby="why-biye-heading">
           <div className="mb-7 text-center">
-            <p className="text-sm font-bold text-brand-900">কেন বিয়ে</p>
+            <p className="text-sm font-bold text-brand-900">কেন বিবাহ?</p>
             <h2
               id="why-biye-heading"
               className="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl"

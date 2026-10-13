@@ -1,3 +1,4 @@
+import { educationOptions } from '../EducationalQualificationForm/educationQualification.constant';
 export const screenColorOptions = [
   { value: 'কালো' },
   { value: 'শ্যামলা' },
@@ -14,47 +15,10 @@ export const screenColorOptionsMultiple = [
   { value: 'উজ্জল ফর্সা', label: 'উজ্জল ফর্সা' },
 ];
 
+// TODO: same values as the education step's levels (plus হাফেজ), so preferences match what members select.
 export const educationOptionsMultiple = [
-  {
-    value: 'হাফেজ',
-    label: 'হাফেজ',
-  },
-  {
-    value: "এস.এস.সি'র নিচে",
-    label: "এস.এস.সি'র নিচে",
-  },
-  {
-    value: 'এস.এস.সি',
-    label: 'এস.এস.সি',
-  },
-  {
-    value: 'এইচ.এস.সি',
-    label: 'এইচ.এস.সি',
-  },
-  {
-    value: 'ডিপ্লোমা চলমান',
-    label: 'ডিপ্লোমা চলমান',
-  },
-  {
-    value: 'ডিপ্লোমা',
-    label: 'ডিপ্লোমা',
-  },
-  {
-    value: 'স্নাতক চলমান',
-    label: 'স্নাতক চলমান',
-  },
-  {
-    value: 'স্নাতক',
-    label: 'স্নাতক',
-  },
-  {
-    value: 'স্নাতকোত্তর',
-    label: 'স্নাতকোত্তর',
-  },
-  {
-    value: 'ডক্টরেট',
-    label: 'ডক্টরেট',
-  },
+  { value: 'হাফেজ', label: 'হাফেজ' },
+  ...educationOptions.map(({ value, label }) => ({ value, label: label || value })),
 ];
 
 export const maritalStatusMultiple = [

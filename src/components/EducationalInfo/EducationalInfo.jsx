@@ -49,6 +49,12 @@ function EducationInfo() {
           />
         )}
 
+        {educationInfo?.ssc_inst && (
+          <GridQuestionAnswerCard question="স্কুল / মাদ্রাসার নাম" answer={educationInfo.ssc_inst} />
+        )}
+        {educationInfo?.after_ssc_inst && (
+          <GridQuestionAnswerCard question="কলেজ / মাদ্রাসার নাম" answer={educationInfo.after_ssc_inst} />
+        )}
         {educationInfo?.before_ssc && (
           <GridQuestionAnswerCard
             question="আপনি কোন ক্লাস পর্যন্ত পড়াশুনা করেছেন?"
@@ -206,7 +212,7 @@ function EducationInfo() {
         {educationInfo?.ssc_result && (
           <GridQuestionAnswerCard
             question="ফলাফল"
-            answer={educationInfo?.ssc_result}
+            answer={Number.isFinite(Number(educationInfo.ssc_result)) ? `GPA ${Number(educationInfo.ssc_result).toFixed(2)}` : educationInfo.ssc_result}
           />
         )}
 
@@ -262,7 +268,7 @@ function EducationInfo() {
         {educationInfo?.after_ssc_result && (
           <GridQuestionAnswerCard
             question="ফলাফল"
-            answer={educationInfo?.after_ssc_result}
+            answer={Number.isFinite(Number(educationInfo.after_ssc_result)) ? `GPA ${Number(educationInfo.after_ssc_result).toFixed(2)}` : educationInfo.after_ssc_result}
           />
         )}
 

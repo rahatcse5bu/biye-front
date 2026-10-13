@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import axios from '../../utils/axios';
 import UserContext from '../../contexts/UserContext';
 import { convertToBengaliNumerals } from '../../utils/weight';
 
@@ -18,19 +20,38 @@ export const stepTitles = [
   'পর্যালোচনা',
 ];
 
-// TODO: edited_timeline_index is the highest saved step (backend default 1); one step past it can be opened.
-export const useStepProgress = () => {
+// TODO: the last step is the review, which has no data of its own.
+export const DATA_STEPS = stepTitles.length - 1;
+
+// TODO: progress comes from the sections actually saved; refetched whenever the step changes (i.e. after each save).
+export const useStepProgress = (userForm) => {
   const { userInfo } = useContext(UserContext);
-  const savedSteps = Math.min(userInfo?.data?.edited_timeline_index || 1, stepTitles.length);
+  const userId = userInfo?.data?._id;
+  const { data, refetch } = useQuery({
+    queryKey: ['biodata-progress', userId],
+    queryFn: async () => (await axios.get('/account/biodata-progress')).data?.data,
+    enabled: Boolean(userId),
+  });
+
+  useEffect(() => {
+    if (userId) refetch();
+  }, [userForm, userId, refetch]);
+
+  const done = new Set(data?.completed || []);
+  const firstMissing = Array.from({ length: DATA_STEPS }, (_, i) => i + 1).find((step) => !done.has(step)) ?? DATA_STEPS + 1;
+  // TODO: until progress loads, fall back to the old rule so steps don't flash locked.
+  const fallbackReach = (userInfo?.data?.edited_timeline_index || 1) + 1;
+
   return {
-    savedSteps,
-    isDone: (step) => step <= savedSteps,
-    isReachable: (step) => step <= savedSteps + 1,
+    savedSteps: done.size,
+    total: DATA_STEPS,
+    isDone: (step) => done.has(step),
+    isReachable: (step) => (data ? done.has(step) || step <= firstMissing : step <= fallbackReach),
   };
 };
 
 export function StepperLine({ userForm, setUserForm }) {
-  const { savedSteps, isDone, isReachable } = useStepProgress();
+  const { savedSteps, total, isDone, isReachable } = useStepProgress(userForm);
   const nextTitle = stepTitles[userForm];
 
   return (
@@ -46,7 +67,7 @@ export function StepperLine({ userForm, setUserForm }) {
           <p className="truncate text-base font-bold text-gray-900">{stepTitles[userForm - 1]}</p>
         </div>
         <span className="shrink-0 rounded-full bg-brand-900/10 px-2.5 py-1 text-xs font-bold text-brand-900">
-          {convertToBengaliNumerals(savedSteps)} সম্পন্ন
+          {convertToBengaliNumerals(savedSteps)}/{convertToBengaliNumerals(total)} সম্পন্ন
         </span>
       </div>
 
