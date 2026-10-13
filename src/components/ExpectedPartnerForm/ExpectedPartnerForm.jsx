@@ -29,7 +29,9 @@ import { BioDataServices } from '../../services/bioData';
 import Textarea from '../Textarea/Textarea';
 import { Colors } from '../../constants/colors';
 import {
+  dataToMultiple,
   dataToMultipleExpectedPartner,
+  getDataFromMultipleInput,
   getDataFromMultipleInputExpectedPartner,
 } from '../../utils/form';
 import { useContext } from 'react';
@@ -71,7 +73,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
   const [partnerSubCastePreference, setPartnerSubCastePreference] = useState(
     []
   );
-  const [partnerGotraPreference, setPartnerGotraPreference] = useState('');
+  const [partnerGotraPreference, setPartnerGotraPreference] = useState([]);
   const [partnerSampradayPreference, setPartnerSampradayPreference] = useState(
     []
   );
@@ -182,7 +184,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
         );
       }
       if (partner_gotra_preference) {
-        setPartnerGotraPreference(partner_gotra_preference);
+        setPartnerGotraPreference(dataToMultiple(partner_gotra_preference));
       }
       if (partner_sampraday_preference) {
         setPartnerSampradayPreference(
@@ -255,7 +257,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
         getDataFromMultipleInputExpectedPartner(partnerCastePreference);
       expectedPartnerInfoData.partner_sub_caste_preference =
         getDataFromMultipleInputExpectedPartner(partnerSubCastePreference);
-      expectedPartnerInfoData.partner_gotra_preference = partnerGotraPreference;
+      expectedPartnerInfoData.partner_gotra_preference = getDataFromMultipleInput(partnerGotraPreference);
       expectedPartnerInfoData.partner_sampraday_preference =
         getDataFromMultipleInputExpectedPartner(partnerSampradayPreference);
       expectedPartnerInfoData.partner_mangalik_preference =
@@ -450,13 +452,14 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
                 />
                 <br />
 
-                <Select
+                <MultipleSelect
                   title="প্রত্যাশিত গোত্র"
-                  subtitle="সাধারণত নিজের গোত্র বাদে যেকোনো গোত্রে বিবাহ হয়"
+                  subtitle="একাধিক নির্বাচন করতে পারবেন। সাধারণত নিজের গোত্র বাদে যেকোনো গোত্রে বিবাহ হয়"
                   value={partnerGotraPreference}
                   setValue={setPartnerGotraPreference}
                   options={hinduGotraOptionsMultiple}
                   placeholder="গোত্র নির্বাচন করুন"
+                  classes="z-[4]"
                 />
                 <br />
 

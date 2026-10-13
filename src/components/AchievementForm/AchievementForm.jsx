@@ -102,7 +102,7 @@ const AchievementForm = ({ userForm, setUserForm }) => {
         <form onSubmit={submitHandler}>
           <div className="mt-4 mb-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold text-gray-700">অর্জনসমূহ</h3>
+              <h3 className="text-xl font-semibold text-gray-700">অর্জনসমূহ (ঐচ্ছিক)</h3>
               <button
                 type="button"
                 onClick={addAchievement}
@@ -138,7 +138,7 @@ const AchievementForm = ({ userForm, setUserForm }) => {
                       htmlFor={`title-${index}`}
                       className="block mb-1 text-sm font-medium text-gray-700"
                     >
-                      শিরোনাম <span className="text-red-500">*</span>
+                      শিরোনাম (ঐচ্ছিক)
                     </label>
                     <input
                       id={`title-${index}`}
@@ -147,7 +147,6 @@ const AchievementForm = ({ userForm, setUserForm }) => {
                       onChange={(e) =>
                         updateAchievement(index, 'title', e.target.value)
                       }
-                      required
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                       placeholder="যেমন: বোর্ড বৃত্তি, চ্যাম্পিয়নশিপ, পুরস্কার..."
                     />
