@@ -24,6 +24,8 @@ const Form = ({ userForm, setUserForm }) => {
 	const [generalInfoData, setGeneralInfoData] = useState(null);
 	const [generalInfoLoading, setGeneralInfoLoading] = useState(true);
 	const [religion, setReligion] = useState("islam");
+	// TODO: "general_muslim" (non-practicing) hides practicing-only questions in later steps.
+	const [religiousType, setReligiousType] = useState("");
 	const [gender, setGender] = useState("");
 	const [maritalStatus, setMaritalStatus] = useState("");
 
@@ -42,6 +44,7 @@ const Form = ({ userForm, setUserForm }) => {
 				setGeneralInfoData(res || null);
 				if (res?.data) {
 					setReligion(res.data.religion || "islam");
+					setReligiousType(res.data.religious_type || "");
 					setGender(res.data.gender || "");
 					setMaritalStatus(res.data.marital_status || "");
 					// Store religion for homepage content
@@ -63,6 +66,7 @@ const Form = ({ userForm, setUserForm }) => {
 	// When GeneralInfoForm saves, directly update local state — no cache involved
 	const handleGeneralInfoSaved = useCallback((savedFormData) => {
 		setReligion(savedFormData.religion || "islam");
+		setReligiousType(savedFormData.religious_type || "");
 		setGender(savedFormData.gender || "");
 		setMaritalStatus(savedFormData.marital_status || "");
 		// Store religion for homepage content
@@ -100,18 +104,21 @@ const Form = ({ userForm, setUserForm }) => {
 					setUserForm={setUserForm}
 					userForm={userForm}
 					religion={religion}
+					religiousType={religiousType}
 				/>
 			) : userForm === 4 ? (
 				<FamilyInfoForm
 					setUserForm={setUserForm}
 					userForm={userForm}
 					religion={religion}
+					religiousType={religiousType}
 				/>
 			) : userForm === 5 ? (
 				<PersonalInfoForm
 					setUserForm={setUserForm}
 					userForm={userForm}
 					religion={religion}
+					religiousType={religiousType}
 					gender={gender}
 				/>
 			) : userForm === 6 ? (

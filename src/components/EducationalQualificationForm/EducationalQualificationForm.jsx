@@ -3,6 +3,8 @@ import { useState } from 'react';
 import Select from '../Select/Select';
 import Input from '../Input/Input';
 import {
+  EXTRA_EDU_FIELDS,
+  LEVEL_BLOCKS,
   afterSscOptions,
   classType,
   deenStatusOptions,
@@ -32,7 +34,9 @@ import { Toast } from '../../utils/toast';
 import { EducationalQualificationInfoServices } from '../../services/educationalQualification';
 import { getToken } from '../../utils/cookies';
 
-const EducationalQualificationForm = ({ setUserForm, userForm, religion = 'islam' }) => {
+const EducationalQualificationForm = ({ setUserForm, userForm, religion = 'islam', religiousType = '' }) => {
+	// TODO: non-practicing (general) Muslims don't get the deeni-education question.
+	const showDeeni = religion === 'islam' && religiousType !== 'general_muslim';
   const [eduType, setEduType] = useState('');
   const [status, setStatus] = useState([]);
   const [maxEdu, setMaxEdu] = useState('');
@@ -82,6 +86,12 @@ const EducationalQualificationForm = ({ setUserForm, userForm, religion = 'islam
   const { userInfo } = useContext(UserContext);
   // const navigate = useNavigate();
 
+  // TODO: fields of the newer running/professional levels live in one object instead of a useState each.
+  const [extra, setExtra] = useState({});
+  const extraProps = (key) => ({
+    value: extra[key] || '',
+    setValue: (value) => setExtra((current) => ({ ...current, [key]: value })),
+  });
   const [loading, setLoading] = useState(false);
 
   const { data: educationalQualification = null, isLoading } = useQuery({
@@ -306,8 +316,218 @@ const EducationalQualificationForm = ({ setUserForm, userForm, religion = 'islam
       if (Array.isArray(status)) {
         setStatus(dataToMultipleExpectedPartner(status));
       }
+      setExtra(
+        Object.fromEntries(
+          EXTRA_EDU_FIELDS.filter((key) => educationalQualification.data[key]).map((key) => [
+            key,
+            educationalQualification.data[key],
+          ])
+        )
+      );
     }
   }, [educationalQualification?.data]);
+
+  const blocks = LEVEL_BLOCKS[maxEdu] || [];
+  const hasBlock = (name) => blocks.includes(name);
+
+  const sscFields = (requireYear) => (
+    <>
+      <Input
+        title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
+        value={sscPassYear}
+        setValue={setSscPassYear}
+        type="number"
+        required={requireYear}
+      />
+      <Select title="বিভাগ" value={sscGroup} setValue={setSscGroup} options={group} required />
+      <Select title="ফলাফল" value={sscResult} setValue={setSscResult} options={result} required />
+    </>
+  );
+
+  const hscFields = (requireYear) => (
+    <>
+      <Input
+        title="এইচ.এস.সি / আলিম / সমমান পাসের সন "
+        value={hscPassYear}
+        setValue={setHscPassYear}
+        type="number"
+        required={requireYear}
+      />
+      <Select title="বিভাগ" value={hscGroup} setValue={setHscGroup} options={group} required />
+      <Select title="ফলাফল" value={hscResult} setValue={setHscResult} options={result} required />
+    </>
+  );
+
+  const diplomaFields = (running, required) => (
+    <>
+      <Input
+        title="ডিপ্লোমা কোন বিষয়ে পড়েছেন?"
+        value={diplomaSub}
+        setValue={setDiplomaSub}
+        placeholder="ডিপ্লোমা ইন টেক্সটাইল ইঞ্জিনিয়ারিং"
+        required={required}
+      />
+      <Input
+        title="শিক্ষাপ্রতিষ্ঠানের নাম"
+        value={diplomaInst}
+        setValue={setDiplomaInst}
+        placeholder="ঢাকা পলিটেকনিক ইনস্টিটিউট"
+        required={required}
+      />
+      {running ? (
+        <Input title="এখন কোন বর্ষে পড়ছেন?" value={diplomaYear} setValue={setDiplomaYear} />
+      ) : (
+        <Input
+          title="পাসের বছর "
+          value={diplomaPassYear}
+          setValue={setDiplomaPassYear}
+          placeholder="2016"
+          type="number"
+          required={required}
+        />
+      )}
+    </>
+  );
+
+  // TODO: one block per stage; "running" asks the current year/semester instead of the pass year.
+  const degreeFields = ({ label, sub, inst, running, year, required = true }) => (
+    <>
+      {sub && (
+        <Input title={`${label} পড়াশোনার বিষয়`} value={sub.value} setValue={sub.setValue} required={required} />
+      )}
+      <Input title={`${label} শিক্ষাপ্রতিষ্ঠানের নাম`} value={inst.value} setValue={inst.setValue} required={required} />
+      {running ? (
+        <Input title={`${label} কোন বর্ষে / সেমিস্টারে পড়ছেন?`} value={year.value} setValue={year.setValue} required={required} />
+      ) : (
+        <Input title={`${label} পাসের সন`} value={year.value} setValue={year.setValue} type="number" required={required} />
+      )}
+    </>
+  );
+
+  const field = (value, setValue) => ({ value, setValue });
+
+  const renderGeneralLevel = () => (
+    <>
+      {hasBlock('belowSsc') && (
+        <Select
+          title="আপনি কোন ক্লাস পর্যন্ত পড়াশুনা করেছেন?"
+          value={selectedClass}
+          setValue={setSelectedClass}
+          options={classType}
+          required
+        />
+      )}
+      {hasBlock('sscRunning') && (
+        <>
+          <Input
+            title="এস.এস.সি / দাখিল / সমমান পরীক্ষার সম্ভাব্য সন"
+            type="number"
+            required
+            {...extraProps('ssc_exam_year')}
+          />
+          <Select title="বিভাগ" value={sscGroup} setValue={setSscGroup} options={group} required />
+        </>
+      )}
+      {hasBlock('ssc') && sscFields(blocks.length > 2 || hasBlock('afterSsc'))}
+      {hasBlock('sscNext') && (
+        <Select
+          title=" এইচ.এস.সি / আলিম / সমমান কোন বর্ষে পড়ছেন ?"
+          value={hscRunning}
+          setValue={setHscRunning}
+          options={hscOptions}
+        />
+      )}
+      {hasBlock('hscRunning') && (
+        <>
+          <Select
+            title="এইচ.এস.সি / আলিম / সমমান কোন বর্ষে পড়ছেন?"
+            value={hscRunning}
+            setValue={setHscRunning}
+            options={hscOptions.slice(0, 3)}
+            required
+          />
+          <Select title="বিভাগ" value={hscGroup} setValue={setHscGroup} options={group} required />
+        </>
+      )}
+      {hasBlock('hsc') && hscFields(false)}
+      {hasBlock('diplomaRunning') && diplomaFields(true, false)}
+      {hasBlock('diploma') && diplomaFields(false, false)}
+      {hasBlock('afterSsc') && (
+        <>
+          <Select
+            title="SSC পরে কোন মাধ্যমে পড়াশুনা করেছেন? "
+            value={afterSsc}
+            setValue={setAfterSsc}
+            options={afterSscOptions}
+            required
+          />
+          {afterSsc === 'ডিপ্লোমা' ? diplomaFields(false, true) : hscFields(true)}
+        </>
+      )}
+      {hasBlock('honsRunning') &&
+        degreeFields({ label: 'স্নাতক (অনার্স) / ফাজিল', sub: field(bscSub, setBscSub), inst: field(bscInst, setBscInst), running: true, year: field(bscYear, setBscYear) })}
+      {hasBlock('hons') &&
+        degreeFields({ label: 'স্নাতক (অনার্স) / ফাজিল', sub: field(bscSub, setBscSub), inst: field(bscInst, setBscInst), year: field(bscPassYear, setBscPassYear) })}
+      {hasBlock('mscRunning') &&
+        degreeFields({ label: 'স্নাতকোত্তর (মাস্টার্স) / কামিল', sub: field(mscSub, setMscSub), inst: field(mscInst, setMscInst), running: true, year: extraProps('msc_running_year') })}
+      {hasBlock('msc') &&
+        degreeFields({ label: 'স্নাতকোত্তর (মাস্টার্স) / কামিল', sub: field(mscSub, setMscSub), inst: field(mscInst, setMscInst), year: field(mscPassYear, setMscPassYear), required: maxEdu === 'স্নাতকোত্তর' })}
+      {hasBlock('phdRunning') &&
+        degreeFields({ label: 'পিএইচডি', sub: field(phdSub, setPhdSub), inst: field(phdInst, setPhdInst), running: true, year: extraProps('phd_running_year') })}
+      {hasBlock('phd') &&
+        degreeFields({ label: 'পিএইচডি / ডক্টরেট', sub: field(phdSub, setPhdSub), inst: field(phdInst, setPhdInst), year: field(phdPassYear, setPhdPassYear) })}
+      {hasBlock('bedRunning') &&
+        degreeFields({ label: 'বিএড', inst: extraProps('bed_inst'), running: true, year: extraProps('bed_running_year') })}
+      {hasBlock('bed') && degreeFields({ label: 'বিএড', inst: extraProps('bed_inst'), year: extraProps('bed_pass_year') })}
+      {hasBlock('medRunning') &&
+        degreeFields({ label: 'এমএড', inst: extraProps('med_inst'), running: true, year: extraProps('med_running_year') })}
+      {hasBlock('med') && degreeFields({ label: 'এমএড', inst: extraProps('med_inst'), year: extraProps('med_pass_year') })}
+      {hasBlock('mphilRunning') &&
+        degreeFields({ label: 'এমফিল', sub: extraProps('mphil_sub'), inst: extraProps('mphil_inst'), running: true, year: extraProps('mphil_running_year') })}
+      {hasBlock('mphil') &&
+        degreeFields({ label: 'এমফিল', sub: extraProps('mphil_sub'), inst: extraProps('mphil_inst'), year: extraProps('mphil_pass_year') })}
+      {hasBlock('postdocRunning') &&
+        degreeFields({ label: 'পোস্ট ডক', sub: extraProps('postdoc_sub'), inst: extraProps('postdoc_inst'), running: true, year: extraProps('postdoc_running_year') })}
+      {hasBlock('postdoc') &&
+        degreeFields({ label: 'পোস্ট ডক', sub: extraProps('postdoc_sub'), inst: extraProps('postdoc_inst'), year: extraProps('postdoc_pass_year') })}
+    </>
+  );
+
+  // TODO: mirrors renderGeneralLevel: each visible block contributes its own fields.
+  const generalLevelPayload = () => {
+    const pick = (...keys) => Object.fromEntries(keys.map((key) => [key, extra[key] || '']));
+    const diplomaPayload = (running) =>
+      running
+        ? { diploma_sub: diplomaSub, diploma_inst: diplomaInst, diploma_running_year: diplomaYear }
+        : { diploma_sub: diplomaSub, diploma_inst: diplomaInst, diploma_pass_year: diplomaPassYear };
+    const hscPayload = { after_ssc_year: hscPassYear, after_ssc_group: hscGroup, after_ssc_result: hscResult };
+    const payloads = {
+      belowSsc: { before_ssc: selectedClass },
+      sscRunning: { ...pick('ssc_exam_year'), ssc_group: sscGroup },
+      ssc: { ssc_year: sscPassYear, ssc_group: sscGroup, ssc_result: sscResult },
+      sscNext: { after_ssc_running: hscRunning },
+      hscRunning: { after_ssc_running: hscRunning, after_ssc_group: hscGroup },
+      hsc: hscPayload,
+      diplomaRunning: diplomaPayload(true),
+      diploma: diplomaPayload(false),
+      afterSsc: { after_ssc_medium: afterSsc, ...(afterSsc === 'ডিপ্লোমা' ? diplomaPayload(false) : hscPayload) },
+      honsRunning: { hons_sub: bscSub, hons_inst: bscInst, hons_year: bscYear },
+      hons: { hons_sub: bscSub, hons_inst: bscInst, hons_pass_year: bscPassYear },
+      mscRunning: { msc_sub: mscSub, msc_inst: mscInst, ...pick('msc_running_year') },
+      msc: { msc_sub: mscSub, msc_inst: mscInst, msc_pass_year: mscPassYear },
+      phdRunning: { phd_sub: phdSub, phd_inst: phdInst, ...pick('phd_running_year') },
+      phd: { phd_sub: phdSub, phd_inst: phdInst, phd_pass_year: phdPassYear },
+      bedRunning: pick('bed_inst', 'bed_running_year'),
+      bed: pick('bed_inst', 'bed_pass_year'),
+      medRunning: pick('med_inst', 'med_running_year'),
+      med: pick('med_inst', 'med_pass_year'),
+      mphilRunning: pick('mphil_sub', 'mphil_inst', 'mphil_running_year'),
+      mphil: pick('mphil_sub', 'mphil_inst', 'mphil_pass_year'),
+      postdocRunning: pick('postdoc_sub', 'postdoc_inst', 'postdoc_running_year'),
+      postdoc: pick('postdoc_sub', 'postdoc_inst', 'postdoc_pass_year'),
+    };
+    return Object.assign({}, ...blocks.map((name) => payloads[name] || {}));
+  };
 
   const backButtonHandler = () => {
     if (userForm > 1) {
@@ -322,226 +542,11 @@ const EducationalQualificationForm = ({ setUserForm, userForm, religion = 'islam
       others_edu: othersEdu,
       deeni_edu: getDataFromMultipleInputExpectedPartner(status),
     };
-    // জেনারেল  এস.এস.সি'র নিচে
-    if (
-      maxEdu === "এস.এস.সি'র নিচে" &&
-      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
-    ) {
+    // TODO: general/alia levels save exactly the fields of the blocks their form showed.
+    if (eduType === 'জেনারেল' || eduType === 'আলিয়া') {
       educationQualificationData = {
         ...educationQualificationData,
-        before_ssc: selectedClass,
-      };
-    } else if (
-      maxEdu === 'এস.এস.সি' &&
-      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
-    ) {
-      educationQualificationData = {
-        ...educationQualificationData,
-        ssc_year: sscPassYear,
-        ssc_group: sscGroup,
-        ssc_result: sscResult,
-        after_ssc_running: hscRunning,
-      };
-    } else if (
-      maxEdu === 'এইচ.এস.সি' &&
-      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
-    ) {
-      educationQualificationData = {
-        ...educationQualificationData,
-        ssc_year: sscPassYear,
-        ssc_group: sscGroup,
-        ssc_result: sscResult,
-        after_ssc_result: hscResult,
-        after_ssc_year: hscPassYear,
-        after_ssc_group: hscGroup,
-      };
-    } else if (
-      maxEdu === 'ডিপ্লোমা চলমান' &&
-      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
-    ) {
-      educationQualificationData = {
-        ...educationQualificationData,
-        ssc_year: sscPassYear,
-        ssc_group: sscGroup,
-        ssc_result: sscResult,
-        diploma_running_year: diplomaYear,
-        diploma_inst: diplomaInst,
-        diploma_sub: diplomaSub,
-      };
-    } else if (
-      maxEdu === 'ডিপ্লোমা' &&
-      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
-    ) {
-      educationQualificationData = {
-        ...educationQualificationData,
-        ssc_year: sscPassYear,
-        ssc_group: sscGroup,
-        ssc_result: sscResult,
-        diploma_pass_year: diplomaPassYear,
-        diploma_inst: diplomaInst,
-        diploma_sub: diplomaSub,
-      };
-    } else if (
-      maxEdu === 'স্নাতক চলমান' &&
-      afterSsc === 'HSC' &&
-      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
-    ) {
-      educationQualificationData = {
-        ...educationQualificationData,
-        ssc_year: sscPassYear,
-        ssc_group: sscGroup,
-        ssc_result: sscResult,
-        after_ssc_result: hscResult,
-        after_ssc_year: hscPassYear,
-        after_ssc_group: hscGroup,
-        hons_inst: bscInst,
-        hons_sub: bscSub,
-        hons_year: bscYear,
-        after_ssc_medium: afterSsc,
-      };
-    } else if (
-      maxEdu === 'স্নাতক চলমান' &&
-      afterSsc === 'ডিপ্লোমা' &&
-      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
-    ) {
-      educationQualificationData = {
-        ...educationQualificationData,
-        ssc_year: sscPassYear,
-        ssc_group: sscGroup,
-        ssc_result: sscResult,
-        diploma_pass_year: diplomaPassYear,
-        diploma_inst: diplomaInst,
-        diploma_sub: diplomaSub,
-        hons_inst: bscInst,
-        hons_sub: bscSub,
-        hons_year: bscYear,
-        after_ssc_medium: afterSsc,
-      };
-    } else if (
-      maxEdu === 'স্নাতক' &&
-      afterSsc === 'ডিপ্লোমা' &&
-      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
-    ) {
-      educationQualificationData = {
-        ...educationQualificationData,
-        ssc_year: sscPassYear,
-        ssc_group: sscGroup,
-        ssc_result: sscResult,
-        after_ssc_medium: afterSsc,
-        diploma_pass_year: diplomaPassYear,
-        diploma_inst: diplomaInst,
-        diploma_sub: diplomaSub,
-        hons_inst: bscInst,
-        hons_sub: bscSub,
-        hons_pass_year: bscPassYear,
-      };
-    } else if (
-      maxEdu === 'স্নাতক' &&
-      afterSsc === 'HSC' &&
-      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
-    ) {
-      educationQualificationData = {
-        ...educationQualificationData,
-        ssc_year: sscPassYear,
-        ssc_group: sscGroup,
-        ssc_result: sscResult,
-        after_ssc_medium: afterSsc,
-        after_ssc_result: hscResult,
-        after_ssc_year: hscPassYear,
-        after_ssc_group: hscGroup,
-        hons_inst: bscInst,
-        hons_sub: bscSub,
-        hons_pass_year: bscPassYear,
-      };
-    } else if (
-      maxEdu === 'স্নাতকোত্তর' &&
-      afterSsc === 'HSC' &&
-      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
-    ) {
-      educationQualificationData = {
-        ...educationQualificationData,
-        ssc_year: sscPassYear,
-        ssc_group: sscGroup,
-        ssc_result: sscResult,
-        after_ssc_medium: afterSsc,
-        after_ssc_result: hscResult,
-        after_ssc_year: hscPassYear,
-        after_ssc_group: hscGroup,
-        hons_inst: bscInst,
-        hons_sub: bscSub,
-        hons_pass_year: bscPassYear,
-        msc_inst: mscInst,
-        msc_pass_year: mscPassYear,
-        msc_sub: mscSub,
-      };
-    } else if (
-      maxEdu === 'স্নাতকোত্তর' &&
-      afterSsc === 'ডিপ্লোমা' &&
-      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
-    ) {
-      educationQualificationData = {
-        ...educationQualificationData,
-        ssc_year: sscPassYear,
-        ssc_group: sscGroup,
-        ssc_result: sscResult,
-        after_ssc_medium: afterSsc,
-        diploma_pass_year: diplomaPassYear,
-        diploma_inst: diplomaInst,
-        diploma_sub: diplomaSub,
-        hons_inst: bscInst,
-        hons_sub: bscSub,
-        hons_pass_year: bscPassYear,
-        msc_inst: mscInst,
-        msc_pass_year: mscPassYear,
-        msc_sub: mscSub,
-      };
-    } else if (
-      maxEdu === 'ডক্টরেট' &&
-      afterSsc === 'ডিপ্লোমা' &&
-      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
-    ) {
-      educationQualificationData = {
-        ...educationQualificationData,
-        ssc_year: sscPassYear,
-        ssc_group: sscGroup,
-        ssc_result: sscResult,
-        after_ssc_medium: afterSsc,
-        diploma_pass_year: diplomaPassYear,
-        diploma_inst: diplomaInst,
-        diploma_sub: diplomaSub,
-        hons_inst: bscInst,
-        hons_sub: bscSub,
-        hons_pass_year: bscPassYear,
-        msc_inst: mscInst,
-        msc_pass_year: mscPassYear,
-        msc_sub: mscSub,
-        phd_pass_year: phdPassYear,
-        phd_inst: phdInst,
-        phd_sub: phdSub,
-      };
-    } else if (
-      maxEdu === 'ডক্টরেট' &&
-      afterSsc === 'HSC' &&
-      (eduType === 'জেনারেল' || eduType === 'আলিয়া')
-    ) {
-      educationQualificationData = {
-        ...educationQualificationData,
-        ssc_year: sscPassYear,
-        ssc_group: sscGroup,
-        ssc_result: sscResult,
-        after_ssc_medium: afterSsc,
-        after_ssc_result: hscResult,
-        after_ssc_year: hscPassYear,
-        after_ssc_group: hscGroup,
-        hons_inst: bscInst,
-        hons_sub: bscSub,
-        hons_pass_year: bscPassYear,
-        msc_inst: mscInst,
-        msc_pass_year: mscPassYear,
-        msc_sub: mscSub,
-        phd_pass_year: phdPassYear,
-        phd_inst: phdInst,
-        phd_sub: phdSub,
+        ...generalLevelPayload(),
       };
     } else if (maxEdu === 'ইবতিদাইয়্যাহ' && eduType === 'কওমি') {
       educationQualificationData = {
@@ -660,670 +665,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm, religion = 'islam
                 required
               />
 
-              {maxEdu === "এস.এস.সি'র নিচে" ? (
-                <Select
-                  title="আপনি কোন ক্লাস পর্যন্ত পড়াশুনা করেছেন?"
-                  value={selectedClass}
-                  setValue={setSelectedClass}
-                  options={classType}
-                  required
-                />
-              ) : maxEdu === 'এস.এস.সি' ? (
-                <>
-                  {' '}
-                  <Input
-                    title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
-                    value={sscPassYear}
-                    setValue={setSscPassYear}
-                    type="number"
-                  />
-                  <Select
-                    title="বিভাগ"
-                    value={sscGroup}
-                    setValue={setSscGroup}
-                    options={group}
-                    required
-                  />
-                  <Select
-                    title="ফলাফল"
-                    value={sscResult}
-                    setValue={setSscResult}
-                    options={result}
-                    required
-                  />
-                  <Select
-                    title=" এইচ.এস.সি / আলিম / সমমান কোন বর্ষে পড়ছেন ?"
-                    value={hscRunning}
-                    setValue={setHscRunning}
-                    options={hscOptions}
-                  />
-                </>
-              ) : maxEdu === 'এইচ.এস.সি' ? (
-                <>
-                  {' '}
-                  <Input
-                    title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
-                    value={sscPassYear}
-                    setValue={setSscPassYear}
-                    type="number"
-                  />
-                  <Select
-                    title="বিভাগ"
-                    value={sscGroup}
-                    setValue={setSscGroup}
-                    options={group}
-                    required
-                  />
-                  <Select
-                    title="ফলাফল"
-                    value={sscResult}
-                    setValue={setSscResult}
-                    options={result}
-                    required
-                  />
-                  <Input
-                    title="এইচ.এস.সি / আলিম / সমমান পাসের সন "
-                    value={hscPassYear}
-                    setValue={setHscPassYear}
-                    type="number"
-                  />
-                  <Select
-                    title="বিভাগ"
-                    value={hscGroup}
-                    setValue={setHscGroup}
-                    options={group}
-                    required
-                  />
-                  <Select
-                    title="ফলাফল"
-                    value={hscResult}
-                    setValue={setHscResult}
-                    options={result}
-                    required
-                  />
-                </>
-              ) : maxEdu === 'ডিপ্লোমা চলমান' ? (
-                <>
-                  <Input
-                    title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
-                    value={sscPassYear}
-                    setValue={setSscPassYear}
-                    type="number"
-                  />
-                  <Select
-                    title="বিভাগ"
-                    value={sscGroup}
-                    setValue={setSscGroup}
-                    options={group}
-                    required
-                  />
-                  <Select
-                    title="ফলাফল"
-                    value={sscResult}
-                    setValue={setSscResult}
-                    options={result}
-                    required
-                  />
-
-                  <Input
-                    title="ডিপ্লোমা কোন বিষয়ে পড়েছেন?"
-                    value={diplomaSub}
-                    setValue={setDiplomaSub}
-                    placeholder="ডিপ্লোমা ইন টেক্সটাইল ইঞ্জিনিয়ারিং"
-                  />
-
-                  <Input
-                    title="শিক্ষাপ্রতিষ্ঠানের নাম"
-                    value={diplomaInst}
-                    setValue={setDiplomaInst}
-                    placeholder="ঢাকা পলিটেকনিক ইনস্টিটিউট"
-                  />
-                  <Input
-                    title="  এখন কোন বর্ষে পড়ছেন?"
-                    value={diplomaYear}
-                    setValue={setDiplomaYear}
-                    placeholder=""
-                  />
-                </>
-              ) : maxEdu === 'ডিপ্লোমা' ? (
-                <>
-                  <Input
-                    title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
-                    value={sscPassYear}
-                    setValue={setSscPassYear}
-                    type="number"
-                  />
-                  <Select
-                    title="বিভাগ"
-                    value={sscGroup}
-                    setValue={setSscGroup}
-                    options={group}
-                    required
-                  />
-                  <Select
-                    title="ফলাফল"
-                    value={sscResult}
-                    setValue={setSscResult}
-                    options={result}
-                    required
-                  />
-
-                  <Input
-                    title="ডিপ্লোমা কোন বিষয়ে পড়েছেন?"
-                    value={diplomaSub}
-                    setValue={setDiplomaSub}
-                    placeholder="ডিপ্লোমা ইন টেক্সটাইল ইঞ্জিনিয়ারিং"
-                  />
-
-                  <Input
-                    title="শিক্ষাপ্রতিষ্ঠানের নাম"
-                    value={diplomaInst}
-                    setValue={setDiplomaInst}
-                    placeholder="ঢাকা পলিটেকনিক ইনস্টিটিউট"
-                  />
-                  <Input
-                    title="পাসের বছর "
-                    value={diplomaPassYear}
-                    setValue={setDiplomaPassYear}
-                    placeholder="2016"
-                    type="number"
-                  />
-                </>
-              ) : maxEdu === 'স্নাতক চলমান' ? (
-                <>
-                  <Input
-                    title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
-                    value={sscPassYear}
-                    setValue={setSscPassYear}
-                    type="number"
-                    required
-                  />
-                  <Select
-                    title="বিভাগ"
-                    value={sscGroup}
-                    setValue={setSscGroup}
-                    options={group}
-                    required
-                  />
-                  <Select
-                    title="ফলাফল"
-                    value={sscResult}
-                    setValue={setSscResult}
-                    options={result}
-                    required
-                  />
-                  <Select
-                    title="SSC পরে কোন মাধ্যমে পড়াশুনা করেছেন? "
-                    value={afterSsc}
-                    setValue={setAfterSsc}
-                    options={afterSscOptions}
-                    required
-                  />
-
-                  {afterSsc === 'ডিপ্লোমা' ? (
-                    <>
-                      <Input
-                        title="ডিপ্লোমা কোন বিষয়ে পড়েছেন?"
-                        value={diplomaSub}
-                        setValue={setDiplomaSub}
-                        placeholder="বিএসসি ইন টেক্সটাইল ইঞ্জিনিয়ারিং"
-                        required
-                      />
-                      <Input
-                        title=" শিক্ষাপ্রতিষ্ঠানের নাম"
-                        value={diplomaInst}
-                        setValue={setDiplomaInst}
-                        placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
-                        required
-                      />
-                      <Input
-                        title=" পাসের বছর  "
-                        value={diplomaPassYear}
-                        setValue={setDiplomaPassYear}
-                        placeholder="2000"
-                        type="number"
-                        required
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <Input
-                        title="এইচ.এস.সি / আলিম / সমমান পাসের সন "
-                        value={hscPassYear}
-                        setValue={setHscPassYear}
-                        type="number"
-                        required
-                      />
-                      <Select
-                        title="বিভাগ"
-                        value={hscGroup}
-                        setValue={setHscGroup}
-                        options={group}
-                        required
-                      />
-                      <Select
-                        title="ফলাফল"
-                        value={hscResult}
-                        setValue={setHscResult}
-                        options={result}
-                        required
-                      />{' '}
-                    </>
-                  )}
-                  <Input
-                    title=" স্নাতক / স্নাতক (সম্মান) / ফাজিল পড়াশোনার বিষয়"
-                    value={bscSub}
-                    setValue={setBscSub}
-                    placeholder="বিএসসি ইন টেক্সটাইল ইঞ্জিনিয়ারিং"
-                    required
-                  />
-                  <Input
-                    title=" শিক্ষাপ্রতিষ্ঠানের নাম"
-                    value={bscInst}
-                    setValue={setBscInst}
-                    placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
-                    required
-                  />
-                  <Input
-                    title="কোন বর্ষে পড়ছেন? "
-                    value={bscYear}
-                    setValue={setBscYear}
-                    placeholder=""
-                    required
-                  />
-                </>
-              ) : maxEdu === 'স্নাতক' ? (
-                <>
-                  <Input
-                    title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
-                    value={sscPassYear}
-                    setValue={setSscPassYear}
-                    type="number"
-                    required
-                  />
-                  <Select
-                    title="বিভাগ"
-                    value={sscGroup}
-                    setValue={setSscGroup}
-                    options={group}
-                    required
-                  />
-                  <Select
-                    title="ফলাফল"
-                    value={sscResult}
-                    setValue={setSscResult}
-                    options={result}
-                    required
-                  />
-                  <Select
-                    title="SSC পরে কোন মাধ্যমে পড়াশুনা করেছেন? "
-                    value={afterSsc}
-                    setValue={setAfterSsc}
-                    options={afterSscOptions}
-                    required
-                  />
-
-                  {afterSsc === 'ডিপ্লোমা' ? (
-                    <>
-                      <Input
-                        title="ডিপ্লোমা কোন বিষয়ে পড়েছেন?"
-                        value={diplomaSub}
-                        setValue={setDiplomaSub}
-                        placeholder="বিএসসি ইন টেক্সটাইল ইঞ্জিনিয়ারিং"
-                        required
-                      />
-                      <Input
-                        title=" শিক্ষাপ্রতিষ্ঠানের নাম"
-                        value={diplomaInst}
-                        setValue={setDiplomaInst}
-                        placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
-                        required
-                      />
-                      <Input
-                        title=" পাসের বছর  "
-                        value={diplomaPassYear}
-                        setValue={setDiplomaPassYear}
-                        placeholder="2015"
-                        type="number"
-                        required
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <Input
-                        title="এইচ.এস.সি / আলিম / সমমান পাসের সন "
-                        value={hscPassYear}
-                        setValue={setHscPassYear}
-                        type="number"
-                        required
-                      />
-                      <Select
-                        title="বিভাগ"
-                        value={hscGroup}
-                        setValue={setHscGroup}
-                        options={group}
-                        required
-                      />
-                      <Select
-                        title="ফলাফল"
-                        value={hscResult}
-                        setValue={setHscResult}
-                        options={result}
-                        required
-                      />{' '}
-                    </>
-                  )}
-                  <Input
-                    title=" স্নাতক / স্নাতক (সম্মান) / ফাজিল পড়াশোনার বিষয়"
-                    value={bscSub}
-                    setValue={setBscSub}
-                    placeholder="বিএসসি ইন টেক্সটাইল ইঞ্জিনিয়ারিং"
-                    required
-                  />
-                  <Input
-                    title=" শিক্ষাপ্রতিষ্ঠানের নাম"
-                    value={bscInst}
-                    setValue={setBscInst}
-                    placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
-                    required
-                  />
-                  <Input
-                    title="পাসের সন "
-                    value={bscPassYear}
-                    setValue={setBscPassYear}
-                    placeholder="2016"
-                    type="number"
-                    required
-                  />
-                </>
-              ) : maxEdu === 'স্নাতকোত্তর' ? (
-                <>
-                  <Input
-                    title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
-                    value={sscPassYear}
-                    setValue={setSscPassYear}
-                    type="number"
-                    required
-                  />
-                  <Select
-                    title="বিভাগ"
-                    value={sscGroup}
-                    setValue={setSscGroup}
-                    options={group}
-                    required
-                  />
-                  <Select
-                    title="ফলাফল"
-                    value={sscResult}
-                    setValue={setSscResult}
-                    options={result}
-                    required
-                  />
-                  <Select
-                    title="SSC পরে কোন মাধ্যমে পড়াশুনা করেছেন? "
-                    value={afterSsc}
-                    setValue={setAfterSsc}
-                    options={afterSscOptions}
-                    required
-                  />
-
-                  {afterSsc === 'ডিপ্লোমা' ? (
-                    <>
-                      <Input
-                        title="ডিপ্লোমা কোন বিষয়ে পড়েছেন?"
-                        value={diplomaSub}
-                        setValue={setDiplomaSub}
-                        placeholder="বিএসসি ইন টেক্সটাইল ইঞ্জিনিয়ারিং"
-                        required
-                      />
-                      <Input
-                        title=" শিক্ষাপ্রতিষ্ঠানের নাম"
-                        value={diplomaInst}
-                        setValue={setDiplomaInst}
-                        placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
-                        required
-                      />
-                      <Input
-                        title=" পাসের বছর  "
-                        value={diplomaPassYear}
-                        setValue={setDiplomaPassYear}
-                        placeholder=""
-                        required
-                        type="number"
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <Input
-                        title="এইচ.এস.সি / আলিম / সমমান পাসের সন "
-                        value={hscPassYear}
-                        setValue={setHscPassYear}
-                        type="number"
-                        required
-                      />
-                      <Select
-                        title="বিভাগ"
-                        value={hscGroup}
-                        setValue={setHscGroup}
-                        options={group}
-                        required
-                      />
-                      <Select
-                        title="ফলাফল"
-                        value={hscResult}
-                        setValue={setHscResult}
-                        options={result}
-                        required
-                      />{' '}
-                    </>
-                  )}
-                  <Input
-                    title=" স্নাতক / স্নাতক (সম্মান) / ফাজিল পড়াশোনার বিষয়"
-                    value={bscSub}
-                    setValue={setBscSub}
-                    placeholder="বিএসসি ইন টেক্সটাইল ইঞ্জিনিয়ারিং"
-                    required
-                  />
-                  <Input
-                    title=" শিক্ষাপ্রতিষ্ঠানের নাম"
-                    value={bscInst}
-                    setValue={setBscInst}
-                    placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
-                    required
-                  />
-                  <Input
-                    title="পাসের সন "
-                    value={bscPassYear}
-                    setValue={setBscPassYear}
-                    placeholder="2016"
-                    type="number"
-                    required
-                  />
-
-                  <Input
-                    title="স্নাতকোত্তর / কামিল পড়াশোনার বিষয়"
-                    value={mscSub}
-                    setValue={setMscSub}
-                    placeholder="এমএসসি ইন টেক্সটাইল ইঞ্জিনিয়ারিং"
-                    // required
-                  />
-
-                  <Input
-                    title="শিক্ষাপ্রতিষ্ঠানের নাম"
-                    value={mscInst}
-                    setValue={setMscInst}
-                    placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
-                    // required
-                  />
-
-                  <Input
-                    title="পাসের সন"
-                    value={mscPassYear}
-                    setValue={setMscPassYear}
-                    placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
-                    type="number"
-
-                    // required
-                  />
-                </>
-              ) : (
-                maxEdu === 'ডক্টরেট' && (
-                  <>
-                    <Input
-                      title=" এস.এস.সি / দাখিল / সমমান পাসের সন "
-                      value={sscPassYear}
-                      setValue={setSscPassYear}
-                      type="number"
-                      required
-                    />
-                    <Select
-                      title="বিভাগ"
-                      value={sscGroup}
-                      setValue={setSscGroup}
-                      options={group}
-                      required
-                    />
-                    <Select
-                      title="ফলাফল"
-                      value={sscResult}
-                      setValue={setSscResult}
-                      options={result}
-                      required
-                    />
-                    <Select
-                      title="SSC পরে কোন মাধ্যমে পড়াশুনা করেছেন? "
-                      value={afterSsc}
-                      setValue={setAfterSsc}
-                      options={afterSscOptions}
-                      required
-                    />
-
-                    {afterSsc === 'ডিপ্লোমা' ? (
-                      <>
-                        <Input
-                          title="ডিপ্লোমা কোন বিষয়ে পড়েছেন?"
-                          value={diplomaSub}
-                          setValue={setDiplomaSub}
-                          placeholder="বিএসসি ইন টেক্সটাইল ইঞ্জিনিয়ারিং"
-                          required
-                        />
-                        <Input
-                          title=" শিক্ষাপ্রতিষ্ঠানের নাম"
-                          value={diplomaInst}
-                          setValue={setDiplomaInst}
-                          placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
-                          required
-                        />
-                        <Input
-                          title=" পাসের বছর  "
-                          value={diplomaPassYear}
-                          setValue={setDiplomaPassYear}
-                          placeholder=""
-                          type="number"
-                          required
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <Input
-                          title="এইচ.এস.সি / আলিম / সমমান পাসের সন "
-                          value={hscPassYear}
-                          setValue={setHscPassYear}
-                          type="number"
-                          required
-                        />
-                        <Select
-                          title="বিভাগ"
-                          value={hscGroup}
-                          setValue={setHscGroup}
-                          options={group}
-                          required
-                        />
-                        <Select
-                          title="ফলাফল"
-                          value={hscResult}
-                          setValue={setHscResult}
-                          options={result}
-                          required
-                        />{' '}
-                      </>
-                    )}
-                    <Input
-                      title=" স্নাতক / স্নাতক (সম্মান) / ফাজিল পড়াশোনার বিষয়"
-                      value={bscSub}
-                      setValue={setBscSub}
-                      placeholder="বিএসসি ইন টেক্সটাইল ইঞ্জিনিয়ারিং"
-                      required
-                    />
-                    <Input
-                      title=" শিক্ষাপ্রতিষ্ঠানের নাম"
-                      value={bscInst}
-                      setValue={setBscInst}
-                      placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
-                      required
-                    />
-                    <Input
-                      title="পাসের সন "
-                      value={bscPassYear}
-                      setValue={setBscPassYear}
-                      placeholder="2016"
-                      type="number"
-                      required
-                    />
-
-                    <Input
-                      title="স্নাতকোত্তর / কামিল পড়াশোনার বিষয়"
-                      value={mscSub}
-                      setValue={setMscSub}
-                      placeholder="এমএসসি ইন টেক্সটাইল ইঞ্জিনিয়ারিং"
-                      // required
-                    />
-
-                    <Input
-                      title="শিক্ষাপ্রতিষ্ঠানের নাম"
-                      value={mscInst}
-                      setValue={setMscInst}
-                      placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
-                      // required
-                    />
-
-                    <Input
-                      title="পাসের সন"
-                      value={mscPassYear}
-                      setValue={setMscPassYear}
-                      placeholder="বাংলাদেশ টেক্সটাইল বিশ্ববিদ্যালয়"
-                      type="number"
-
-                      // required
-                    />
-
-                    <Input
-                      title="ডক্টরেট অধ্যয়নের বিষয়"
-                      value={phdSub}
-                      setValue={setPhdSub}
-                      placeholder=""
-                      required
-                    />
-
-                    <Input
-                      title="শিক্ষাপ্রতিষ্ঠানের নাম"
-                      value={phdInst}
-                      setValue={setPhdInst}
-                      placeholder=""
-                      required
-                    />
-
-                    <Input
-                      title="পাসের সন"
-                      value={phdPassYear}
-                      setValue={setPhdPassYear}
-                      placeholder=""
-                      type="number"
-                      required
-                    />
-                  </>
-                )
-              )}
+              {renderGeneralLevel()}
             </>
           ) : eduType === 'কওমি' ? (
             <>
@@ -1526,7 +868,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm, religion = 'islam
 				setValue={setStatus}
 				options={deenStatusOptions}
 			/> */}
-          {religion === 'islam' && (
+          {showDeeni && (
             <MultipleSelect
               title="দ্বীনি শিক্ষাগত পদ্ববীসমূহ"
               options={deenStatusOptions}

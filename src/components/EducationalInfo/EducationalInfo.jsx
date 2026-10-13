@@ -1,6 +1,31 @@
 import { useContext } from 'react';
 import BioContext from '../../contexts/BioContext';
 import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswerCard';
+import { educationOptions } from '../EducationalQualificationForm/educationQualification.constant';
+
+// TODO: stored values stay short (e.g. "এস.এস.সি"); show the labelled form ("... সম্পন্ন" / "... চলমান").
+const levelLabel = (value) => educationOptions.find((o) => o.value === value)?.label || value;
+
+// TODO: fields added with the running/professional levels, shown only when filled in.
+const EXTRA_ROWS = [
+  ['ssc_exam_year', 'এস.এস.সি / দাখিল পরীক্ষার সম্ভাব্য সন'],
+  ['msc_running_year', 'স্নাতকোত্তর / কামিল: কোন বর্ষে পড়ছেন'],
+  ['phd_running_year', 'পিএইচডি: কোন বর্ষে পড়ছেন'],
+  ['bed_inst', 'বিএড শিক্ষাপ্রতিষ্ঠান'],
+  ['bed_running_year', 'বিএড: কোন বর্ষে পড়ছেন'],
+  ['bed_pass_year', 'বিএড পাসের সন'],
+  ['med_inst', 'এমএড শিক্ষাপ্রতিষ্ঠান'],
+  ['med_running_year', 'এমএড: কোন বর্ষে পড়ছেন'],
+  ['med_pass_year', 'এমএড পাসের সন'],
+  ['mphil_sub', 'এমফিল বিষয়'],
+  ['mphil_inst', 'এমফিল শিক্ষাপ্রতিষ্ঠান'],
+  ['mphil_running_year', 'এমফিল: কোন বর্ষে পড়ছেন'],
+  ['mphil_pass_year', 'এমফিল পাসের সন'],
+  ['postdoc_sub', 'পোস্ট ডক গবেষণার বিষয়'],
+  ['postdoc_inst', 'পোস্ট ডক প্রতিষ্ঠান'],
+  ['postdoc_running_year', 'পোস্ট ডক: কোন বর্ষে চলছে'],
+  ['postdoc_pass_year', 'পোস্ট ডক সম্পন্নের সন'],
+];
 
 function EducationInfo() {
   const { bio } = useContext(BioContext);
@@ -20,7 +45,7 @@ function EducationInfo() {
         {educationInfo?.highest_edu_level && (
           <GridQuestionAnswerCard
             question="সর্বোচ্চ শিক্ষাগত যোগ্যতা"
-            answer={educationInfo?.highest_edu_level}
+            answer={levelLabel(educationInfo?.highest_edu_level)}
           />
         )}
 
@@ -310,6 +335,9 @@ function EducationInfo() {
             answer={educationInfo?.phd_pass_year}
           />
         )}
+        {EXTRA_ROWS.filter(([key]) => educationInfo?.[key]).map(([key, question]) => (
+          <GridQuestionAnswerCard key={key} question={question} answer={educationInfo[key]} />
+        ))}
 
         {educationInfo?.others_edu && (
           <GridQuestionAnswerCard
@@ -319,7 +347,7 @@ function EducationInfo() {
         )}
 
         {/* Islamic-specific question - only for Muslims */}
-        {religion === 'islam' && educationInfo?.deeni_edu && (
+        {religion === 'islam' && generalInfo?.religious_type !== 'general_muslim' && educationInfo?.deeni_edu && (
           <GridQuestionAnswerCard
             question="কোনো দ্বীনি শিক্ষাগত যোগ্যতা"
             answer={

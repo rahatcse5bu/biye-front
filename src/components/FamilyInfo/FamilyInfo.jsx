@@ -77,7 +77,7 @@ const FamilyInfo = () => {
             answer={familyStatus?.family_assets}
           />
 
-          {religion === 'islam' && (
+          {religion === 'islam' && generalInfo?.religious_type !== 'general_muslim' && (
             <GridQuestionAnswerCard
               question="পারিবারিক দ্বীনি পরিবেশ কেমন?"
               answer={familyStatus?.family_deeni_info}

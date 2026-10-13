@@ -7,6 +7,8 @@ const PersonalInfo = () => {
   const personalInfo = bio?.personalInfo || null;
   const generalInfo = bio?.generalInfo || null;
   const religion = generalInfo?.religion || 'islam';
+  // TODO: matches the edit form: non-practicing (general) Muslims aren't asked practicing-only questions.
+  const isPracticing = generalInfo?.religious_type !== 'general_muslim';
 
   // Helper function to render Islamic fields
   const renderIslamicFields = () => (
@@ -18,10 +20,12 @@ const PersonalInfo = () => {
             question="ঘরের বাহিরে সাধারণত কি ধরণের পোষাক পরেন?"
             answer={personalInfo?.outside_clothings}
           />
-          <GridQuestionAnswerCard
-            question="কবে থেকে নিকাব সহ পর্দা করছেন?"
-            answer={personalInfo?.porda_with_niqab_from}
-          />
+          {isPracticing && (
+            <GridQuestionAnswerCard
+              question="কবে থেকে নিকাব সহ পর্দা করছেন?"
+              answer={personalInfo?.from_when_nikhab || personalInfo?.porda_with_niqab_from}
+            />
+          )}
         </>
       ) : (
         <>
@@ -48,14 +52,18 @@ const PersonalInfo = () => {
         question="প্রতিদিন পাঁচ ওয়াক্ত নামাজ পড়েন কি?"
         answer={personalInfo?.isDailyFive}
       />
-      <GridQuestionAnswerCard
-        question="সাধারণত সপ্তাহে কত ওয়াক্ত নামায আপনার কাযা হয়?"
-        answer={personalInfo?.qadha_weekly}
-      />
-      <GridQuestionAnswerCard
-        question="মাহরাম/নন-মাহরাম(অনলাইন-অফলাইন) মেনে চলেন কি?"
-        answer={personalInfo?.mahram_non_mahram}
-      />
+      {isPracticing && (
+        <GridQuestionAnswerCard
+          question="সাধারণত সপ্তাহে কত ওয়াক্ত নামায আপনার কাযা হয়?"
+          answer={personalInfo?.qadha_weekly}
+        />
+      )}
+      {isPracticing && (
+        <GridQuestionAnswerCard
+          question="মাহরাম/নন-মাহরাম(অনলাইন-অফলাইন) মেনে চলেন কি?"
+          answer={personalInfo?.mahram_non_mahram}
+        />
+      )}
       <GridQuestionAnswerCard
         question="শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?"
         answer={personalInfo?.quran_tilawat}
@@ -70,26 +78,34 @@ const PersonalInfo = () => {
           answer={personalInfo?.aqidah}
         />
       )}
+      {isPracticing && (
+        <GridQuestionAnswerCard
+          question="নাটক / সিনেমা / সিরিয়াল / গান এসব দেখেন বা শুনেন?"
+          answer={personalInfo?.natok_cinema}
+        />
+      )}
+      {isPracticing && (
+        <GridQuestionAnswerCard
+          question="দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন?"
+          answer={personalInfo?.special_deeni_mehnot}
+        />
+      )}
+      {isPracticing && (
+        <GridQuestionAnswerCard
+          question="মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি?"
+          answer={personalInfo?.mazar}
+        />
+      )}
       <GridQuestionAnswerCard
-        question="নাটক / সিনেমা / সিরিয়াল / গান এসব দেখেন বা শুনেন?"
-        answer={personalInfo?.natok_cinema}
-      />
-      <GridQuestionAnswerCard
-        question="দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন?"
-        answer={personalInfo?.special_deeni_mehnot}
-      />
-      <GridQuestionAnswerCard
-        question="মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি?"
-        answer={personalInfo?.mazar}
-      />
-      <GridQuestionAnswerCard
-        question="আপনার পছন্দের অন্তত ৩ টি ইসলামি বই এর নাম লিখুন"
+        question={isPracticing ? 'আপনার পছন্দের অন্তত ৩ টি ইসলামি বই এর নাম লিখুন' : 'আপনার পড়া অন্তত ৩ টি বই এর নাম'}
         answer={personalInfo?.islamic_books}
       />
-      <GridQuestionAnswerCard
-        question="আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন"
-        answer={personalInfo?.islamic_scholars}
-      />
+      {isPracticing && (
+        <GridQuestionAnswerCard
+          question="আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন"
+          answer={personalInfo?.islamic_scholars}
+        />
+      )}
       <GridQuestionAnswerCard
         question="মিলাদ ও কিয়াম সম্পর্কে আপনার ধারনা কি?"
         answer={personalInfo?.about_milad_qiyam}

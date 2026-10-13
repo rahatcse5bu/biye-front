@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "@/lib/navigation";
 
 const BioDataInput = () => {
@@ -30,18 +29,10 @@ const BioDataInput = () => {
         className="min-h-12 w-full rounded-xl border border-gray-200 bg-white px-3 py-3 text-base text-gray-900 outline-none focus:border-brand-900 focus:ring-2 focus:ring-brand-900/10"
       />
 
-      <div className="mt-4 grid grid-cols-2 gap-2">
+      <div className="mt-4">
         <button
           type="button"
-          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-3 text-sm font-bold text-red-700 hover:bg-red-100"
-          onClick={() => setBioId("")}
-        >
-          <FaTrash className="h-4 w-4" aria-hidden="true" />
-          মুছুন
-        </button>
-        <button
-          type="button"
-          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-brand-900 px-3 py-3 text-sm font-bold text-white hover:bg-[#0F8287] disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-900 px-3 py-3 text-sm font-bold text-white hover:bg-[#0F8287] disabled:cursor-not-allowed disabled:opacity-50"
           onClick={navigateHandler}
           disabled={Number(bioId) < 2000}
         >

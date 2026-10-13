@@ -36,7 +36,10 @@ import { PersonalInfoInfoServices } from '../../services/personalInfo';
 import { getErrorMessage } from '../../utils/error';
 import { Toast } from '../../utils/toast';
 
-const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', gender: genderProp = '' }) => {
+const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', religiousType = '', gender: genderProp = '' }) => {
+  // TODO: non-practicing (general) Muslims skip practicing-only questions; a few others become optional.
+  const isGeneralMuslim = religion === 'islam' && religiousType === 'general_muslim';
+  const isPracticingMuslim = religion === 'islam' && !isGeneralMuslim;
   // Common states
   const [cloth, setCloth] = useState('');
   const [personalCategory, setPersonalCategory] = useState([]);
@@ -335,7 +338,7 @@ const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', gender: g
           />
 
           {/* ============ ISLAMIC FORM ============ */}
-          {religion === 'islam' && gender && gender === 'মহিলা' && (
+          {isPracticingMuslim && gender && gender === 'মহিলা' && (
             <Textarea
               title=" কবে থেকে নিকাব সহ পর্দা করছেন?"
               value={fromWhenNikhab}
@@ -440,7 +443,7 @@ const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', gender: g
             </>
           )}
 
-          {religion === 'islam' && (
+          {isPracticingMuslim && (
             <Textarea
               title="সাধারণত সপ্তাহে কত ওয়াক্ত নামায আপনার কাযা হয়?"
               value={salatKaza}
@@ -449,7 +452,7 @@ const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', gender: g
               rows={2}
             />
           )}
-          {religion === 'islam' && (
+          {isPracticingMuslim && (
             <Textarea
               title=" মাহরাম/নন-মাহরাম মেনে চলেন কি?"
               value={isMahram}
@@ -464,7 +467,7 @@ const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', gender: g
               title="শুদ্ধভাবে কুরআন তিলওয়াত করতে পারেন?"
               value={isPureRecite}
               setValue={setIsPureRecite}
-              required
+              required={!isGeneralMuslim}
             />
           )}
           {religion === 'islam' && (
@@ -476,7 +479,7 @@ const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', gender: g
             />
           )}
 
-          {religion === 'islam' && (
+          {isPracticingMuslim && (
             <Textarea
               title="নাটক / সিনেমা / সিরিয়াল / গান এসব দেখেন বা শুনেন?"
               value={isNatok}
@@ -486,7 +489,7 @@ const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', gender: g
             />
           )}
 
-          {religion === 'islam' && (
+          {isPracticingMuslim && (
             <Textarea
               title="দ্বীনের কোন বিশেষ মেহনতে যুক্ত আছেন? "
               value={isDeenContribution}
@@ -495,7 +498,7 @@ const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', gender: g
               required
             />
           )}
-          {religion === 'islam' && (
+          {isPracticingMuslim && (
             <Textarea
               title="মাজার সম্পর্কে আপনার ধারণা বা বিশ্বাস কি? "
               value={mazar}
@@ -506,7 +509,7 @@ const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', gender: g
           )}
           {religion === 'islam' && (
             <Textarea
-              title="আপনার পড়া হয়েছে এমন অন্তত ৩ টি ইসলামি বই এর নাম লিখুন "
+              title={isGeneralMuslim ? 'আপনার পড়া হয়েছে এমন অন্তত ৩ টি বই এর নাম লিখুন ' : 'আপনার পড়া হয়েছে এমন অন্তত ৩ টি ইসলামি বই এর নাম লিখুন '}
               value={books}
               setValue={setBooks}
               rows={2}
@@ -514,7 +517,7 @@ const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', gender: g
             />
           )}
 
-          {religion === 'islam' && (
+          {isPracticingMuslim && (
             <Textarea
               title="আপনার পছন্দের অন্তত ৩ জন আলেমের নাম লিখুন"
               value={scholars}

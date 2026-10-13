@@ -19,7 +19,9 @@ import { FamilyStatusInfoServices } from "../../services/familyStatus";
 import { getErrorMessage } from "../../utils/error";
 import { Toast } from "../../utils/toast";
 
-const FamilyInfoForm = ({ setUserForm, userForm, religion = 'islam' }) => {
+const FamilyInfoForm = ({ setUserForm, userForm, religion = 'islam', religiousType = '' }) => {
+  // TODO: non-practicing (general) Muslims don't get the family deeni-environment question.
+  const showFamilyDeeni = religion === 'islam' && religiousType !== 'general_muslim';
   const [fatherName, setFatherName] = useState("");
   const [motherName, setMotherName] = useState("");
   const [isFatherAlive, setIsFatherAlive] = useState("");
@@ -284,7 +286,7 @@ const FamilyInfoForm = ({ setUserForm, userForm, religion = 'islam' }) => {
             value={familyAssets}
             setValue={setFamilyAssets}
           />
-          {religion === 'islam' && (
+          {showFamilyDeeni && (
             <Textarea
               title="পারিবারিক দ্বীনি পরিবেশ কেমন?"
               value={familyDeen}
