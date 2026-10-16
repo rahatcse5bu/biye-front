@@ -1,3 +1,4 @@
+import { trackEvent } from "@/utils/analytics";
 import { useState, useRef, useEffect } from 'react';
 import { BiodataAgent } from '../../services/biodataAgent';
 
@@ -153,6 +154,7 @@ const ChatAgent = ({ onApply }) => {
       if (appliedFilters && Object.keys(appliedFilters).length > 0) {
         agentMsg.appliedFilters = appliedFilters;
         // Apply to the biodata list
+        trackEvent('ai_search', { filters: Object.keys(appliedFilters).length });
         onApply(appliedFilters);
       }
 

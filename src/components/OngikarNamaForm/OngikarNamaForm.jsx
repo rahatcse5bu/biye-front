@@ -13,6 +13,7 @@ import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import { OngikarNamaServices } from '../../services/ongikarNama';
 import { getErrorMessage } from '../../utils/error';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { SITE_HOST } from '@/lib/seo';
 
 const OngikarNamaForm = ({ userForm, setUserForm, religion = 'islam' }) => {
@@ -76,6 +77,7 @@ const OngikarNamaForm = ({ userForm, setUserForm, religion = 'islam' }) => {
         );
       }
       if (data.success) {
+        trackEvent('biodata_section_saved', { section: 'ongikar_nama' });
         Toast.successToast('আপনার তথ্য সেভ করা হয়েছে ');
         setUserForm((prev) => prev + 1);
       }

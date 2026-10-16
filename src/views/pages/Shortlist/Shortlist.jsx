@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { EyeIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Toast } from '../../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { ShortlistServices } from '../../../services/shortlist';
 import { getToken } from '../../../utils/cookies';
 import LoadingCircle from '../../../components/LoadingCircle/LoadingCircle';
@@ -47,6 +48,7 @@ const ShortlistItem = ({ item, index, removable = false }) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['my-shortlist'] });
       queryClient.invalidateQueries({ queryKey: ['shortlist-check', item.bio_user] });
+      trackEvent('remove_from_shortlist');
       Toast.successToast('শর্টলিস্ট থেকে সরানো হয়েছে');
     },
     onError: (error) => {

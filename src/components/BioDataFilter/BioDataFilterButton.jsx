@@ -1,3 +1,4 @@
+import { trackEvent } from "@/utils/analytics";
 import { AiOutlineDelete, AiOutlineSearch } from "react-icons/ai";
 import { useBio } from "../../contexts/useBio";
 import { useNavigate } from "@/lib/navigation";
@@ -35,9 +36,11 @@ const BioDataFilterButton = () => {
         page: 1,
         limit: query?.limit || 12,
       };
+      trackEvent('search', { filters: activeFilterChips(nextQuery).length });
       setQuery(nextQuery);
       navigate(`/biodatas?${convertToQuery(nextQuery)}`);
     } else if (type === "delete") {
+      trackEvent('filters_cleared');
       resetAllFilters();
       setSelectedDivisions([]);
       setSelectedDistricts([]);

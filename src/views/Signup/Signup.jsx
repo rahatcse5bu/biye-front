@@ -1,4 +1,5 @@
 import { GoogleLogin } from '@react-oauth/google';
+import { trackAuth } from '@/utils/analytics';
 import {
   CheckCircleIcon,
   EnvelopeIcon,
@@ -55,7 +56,7 @@ export function Signup() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
-  const completeSignup = (response) => {
+  const completeSignup = (response, method) => {
     const authenticatedUser = response?.data;
 
     if (
@@ -72,6 +73,7 @@ export function Signup() {
     setUser(authenticatedUser);
     setUserInfo(response);
     setUserLoading(false);
+    trackAuth(authenticatedUser, method);
     navigate(from, { replace: true });
   };
 
@@ -93,7 +95,7 @@ export function Signup() {
     try {
       setGoogleLoading(true);
       const response = await userServices.googleAuth(payload);
-      completeSignup(response);
+      completeSignup(response, 'google');
     } catch (error) {
       Toast.errorToast(
         getAuthErrorMessage(error, 'Google দিয়ে নিবন্ধন করা যায়নি')
@@ -136,7 +138,7 @@ export function Signup() {
         username: trimmedUsername,
         gender,
       });
-      completeSignup(response);
+      completeSignup(response, 'email');
     } catch (error) {
       Toast.errorToast(
         getAuthErrorMessage(error, 'নিবন্ধন সম্পন্ন করা যায়নি')

@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "@/lib/navigation";
+import { trackEvent } from "@/utils/analytics";
 import { XMarkIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 import {
   PayResultShell,
@@ -37,6 +39,10 @@ const PayFail = () => {
 
   const retry = () => navigate(retryPath, { replace: true });
   const secondsLeft = useCountdown(REDIRECT_SECONDS, retry);
+
+  useEffect(() => {
+    trackEvent("payment_failed", { status });
+  }, [status]);
 
   return (
     <PayResultShell

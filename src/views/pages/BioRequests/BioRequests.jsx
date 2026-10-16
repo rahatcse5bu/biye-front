@@ -11,6 +11,7 @@ import { useNavigate } from '@/lib/navigation';
 import { getErrorMessage } from '../../../utils/error';
 import { FaYoutube } from 'react-icons/fa';
 import { Toast } from '../../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { useState } from 'react';
 import { BioDetailsModal } from '../../../components/BioDetailsModal/BioDetailsModal';
 import { FeedbackModal } from '../../../components/FeedbackModal/FeedbackModal';
@@ -126,6 +127,7 @@ const MyBioRequests = () => {
         'status'
       );
       if (response?.success === true) {
+        trackEvent('proposal_response', { response: status });
         Toast.successToast('আপনার রিয়াকশন সেভ করা হয়েছে।');
         await refetch();
       }

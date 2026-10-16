@@ -6,6 +6,7 @@ import { EnvelopeIcon, CheckCircleIcon, ClockIcon } from '@heroicons/react/24/ou
 import { BioChoiceDataServices } from '../../services/bioChoiceData';
 import { convertToBengaliNumerals } from '../../utils/weight';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { getErrorMessage } from '../../utils/error';
 import ButtonSpinner from '../../views/Payments/ButtonSpinner';
 
@@ -49,6 +50,7 @@ export default function ReminderEmail({ bioUser, reminders, compact = false, inl
     try {
       const response = await BioChoiceDataServices.sendReminderEmail(bioUser);
       setStatus(response?.data);
+      trackEvent('reminder_sent');
       Toast.successToast('রিমাইন্ডার ইমেইল পাঠানো হয়েছে।');
     } catch (error) {
       const latest = error?.response?.data?.data;

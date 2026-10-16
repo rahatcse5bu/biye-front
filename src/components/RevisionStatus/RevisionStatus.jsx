@@ -13,6 +13,7 @@ import { BiodataRevisionServices } from '../../services/biodataRevision';
 import { BIODATA_STAGED_EVENT } from '../../utils/axios';
 import { getToken } from '../../utils/cookies';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { getErrorMessage } from '../../utils/error';
 
 const QUERY_KEY = ['biodata-revision', 'me'];
@@ -56,13 +57,17 @@ const RevisionStatus = ({ full = false }) => {
 
   const submitMutation = useMutation({
     mutationFn: BiodataRevisionServices.submit,
-    onSuccess: (result) => onDone(result, 'পরিবর্তনগুলো অনুমোদনের জন্য জমা দেওয়া হয়েছে'),
+    onSuccess: (result) => {
+      trackEvent('revision_submitted');
+      onDone(result, 'পরিবর্তনগুলো অনুমোদনের জন্য জমা দেওয়া হয়েছে');
+    },
     onError: (error) => Toast.errorToast(getErrorMessage(error)),
   });
 
   const withdrawMutation = useMutation({
     mutationFn: BiodataRevisionServices.withdraw,
     onSuccess: (result) => {
+      trackEvent('revision_withdrawn');
       onDone(result, 'পরিবর্তনগুলো বাতিল করা হয়েছে');
       // TODO: forms show staged values, so drop their cache to show the published biodata again.
       queryClient.invalidateQueries();

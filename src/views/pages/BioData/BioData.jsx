@@ -20,6 +20,7 @@ import { BioDataServices } from "../../../services/bioData";
 import { ContactServices } from "../../../services/contact";
 import { UserInfoServices } from "../../../services/userInfo";
 import { getToken } from "../../../utils/cookies";
+import { trackEvent } from "../../../utils/analytics";
 import { useContext, useEffect } from "react";
 import BioContext from "../../../contexts/BioContext";
 import UserContext from "../../../contexts/UserContext";
@@ -77,6 +78,11 @@ const BioData = ({ initialData = null }) => {
       setBio(null);
     };
   }, [data, setBio, id]);
+
+  const found = Boolean(data?.data);
+  useEffect(() => {
+    if (found) trackEvent("view_item", { content_ids: [String(id)], content_type: "product" });
+  }, [found, id]);
 
   return (
     <div className="w-full py-2">

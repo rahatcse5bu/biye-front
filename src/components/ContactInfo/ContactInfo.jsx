@@ -10,6 +10,7 @@ import { useNavigate, useLocation } from '@/lib/navigation';
 import Swal from 'sweetalert2';
 import UserContext from '../../contexts/UserContext';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import BkashCreatePaymentAPICall from '../../services/bkash';
 import { convertToBengaliNumerals } from '../../utils/weight';
 import { getToken } from '../../utils/cookies';
@@ -103,6 +104,7 @@ const ContactInfo = ({ status }) => {
             );
 
           if (data.success) {
+            trackEvent('contact_purchased', { biodata_type: 'verified' });
             Toast.successToast('আপনার বায়োডাটা ক্রয় সম্পূর্ন  হয়েছে।');
             window.location.reload();
           }
@@ -219,6 +221,7 @@ const ContactInfo = ({ status }) => {
             );
 
           if (response.success) {
+            trackEvent('contact_purchased', { biodata_type: 'unverified' });
             Toast.successToast('যোগাযোগ তথ্য সফলভাবে ক্রয় হয়েছে।');
             window.location.reload();
           } else {

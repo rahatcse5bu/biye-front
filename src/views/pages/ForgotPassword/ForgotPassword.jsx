@@ -10,6 +10,7 @@ import {
 import { Link, useNavigate, useSearchParams } from '@/lib/navigation';
 import { userServices } from '../../../services/user';
 import { Toast } from '../../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 
 const MIN_LENGTH = 6;
 
@@ -191,6 +192,7 @@ function ResetPasswordForm({ token }) {
     try {
       setLoading(true);
       await userServices.resetPassword({ token, password });
+      trackEvent('password_reset');
       Toast.successToast('পাসওয়ার্ড পরিবর্তন হয়েছে, এখন লগইন করুন');
       navigate('/login', { replace: true });
     } catch (error) {

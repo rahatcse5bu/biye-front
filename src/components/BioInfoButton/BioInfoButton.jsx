@@ -7,6 +7,7 @@ import { ShortlistServices } from '../../services/shortlist';
 import { DisLikesServices } from '../../services/unfavorites';
 import { getToken } from '../../utils/cookies';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import BioContext from '../../contexts/BioContext';
 import UserContext from '../../contexts/UserContext';
 import { useNavigate } from '@/lib/navigation';
@@ -58,6 +59,7 @@ const BioInfoButton = () => {
       setIsShortlisted(shortlisted);
       queryClient.invalidateQueries({ queryKey: ['shortlist-check', bioUserId] });
       queryClient.invalidateQueries({ queryKey: ['my-shortlist'] });
+      trackEvent(shortlisted ? 'add_to_wishlist' : 'remove_from_shortlist', { content_ids: [String(bioUserId)] });
       Toast.successToast(shortlisted ? 'শর্টলিস্টে যোগ করা হয়েছে' : 'শর্টলিস্ট থেকে সরানো হয়েছে');
     },
     onError: (error) => {
@@ -73,6 +75,7 @@ const BioInfoButton = () => {
       setIsIgnored(ignored);
       queryClient.invalidateQueries({ queryKey: ['dislike-check', bioUserId] });
       queryClient.invalidateQueries({ queryKey: ['my-dis-likes'] });
+      trackEvent(ignored ? 'biodata_ignored' : 'biodata_unignored');
       Toast.successToast(ignored ? 'অপছন্দের তালিকায় যোগ করা হয়েছে' : 'অপছন্দের তালিকা থেকে সরানো হয়েছে');
     },
     onError: (error) => {

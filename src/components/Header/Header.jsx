@@ -8,6 +8,7 @@ import { useEffect, useContext } from 'react';
 import { getToken, removeToken } from '../../utils/cookies';
 import UserContext from '../../contexts/UserContext';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { UserInfoServices } from '../../services/userInfo';
 import { useQuery } from '@tanstack/react-query';
 
@@ -33,6 +34,7 @@ const Header = () => {
 
   const logoutHandler = async () => {
     await logOut();
+    trackEvent('logout');
     removeToken();
     // navigate('/');
     window.location.href = '/';

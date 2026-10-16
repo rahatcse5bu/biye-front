@@ -12,6 +12,7 @@ import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import { ContactServices } from "../../services/contact";
 import { getErrorMessage } from "../../utils/error";
 import { Toast } from "../../utils/toast";
+import { trackEvent } from "@/utils/analytics";
 
 const ContactInfoForm = ({ userForm, setUserForm, gender = '' }) => {
   const [fullName, setFullName] = useState("");
@@ -88,6 +89,7 @@ const ContactInfoForm = ({ userForm, setUserForm, gender = '' }) => {
       }
 
       if (data.success) {
+        trackEvent('biodata_section_saved', { section: 'contact' });
         Toast.successToast("আপনার তথ্য সেভ করা হয়েছে ");
         setUserForm((prev) => prev + 1);
       }

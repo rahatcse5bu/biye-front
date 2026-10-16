@@ -8,6 +8,7 @@ import Textarea from '../../../components/Textarea/Textarea';
 import { BioChoiceDataServices } from '../../../services/bioChoiceData';
 import { BioQuestionServices } from '../../../services/bioQuestions';
 import { getToken } from '../../../utils/cookies';
+import { trackEvent } from '../../../utils/analytics';
 import { useNavigate, useParams } from '@/lib/navigation';
 import { Toast } from '../../../utils/toast';
 import LoadingCircle from '../../../components/LoadingCircle/LoadingCircle';
@@ -162,6 +163,7 @@ function SendForm() {
       );
       if (response?.success) {
         Toast.successToast('আপনার বায়োডাটা পাঠানো হয়েছে');
+        trackEvent('proposal_sent');
         navigate('/user/account/purchases');
       }
       setGoto(true);

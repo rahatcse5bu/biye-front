@@ -30,6 +30,7 @@ import {
 } from '../../utils/form';
 import { getErrorMessage } from '../../utils/error';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { EducationalQualificationInfoServices } from '../../services/educationalQualification';
 import { getToken } from '../../utils/cookies';
 
@@ -621,6 +622,7 @@ const EducationalQualificationForm = ({ setUserForm, userForm, religion = 'islam
       }
 
       if (data.success) {
+        trackEvent('biodata_section_saved', { section: 'education' });
         Toast.successToast('আপনার তথ্য আপডেট  করা হয়েছে ');
         setUserForm((prev) => prev + 1);
       }

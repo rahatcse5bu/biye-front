@@ -11,6 +11,7 @@ import { formatDate, formatDateAndCalculateAge, getDateMonthYear } from '../../.
 import { convertHeightToBengali } from '../../../utils/height';
 import { convertToBengaliNumerals } from '../../../utils/weight';
 import { Toast } from '../../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import LoadingCircle from '../../../components/LoadingCircle/LoadingCircle';
 import BioDetailsSkeleton from '../../../components/BioDetailsSkeleton/BioDetailsSkeleton';
 import ScrollToTop from '../../../components/ScrollTop/ScrollTop';
@@ -76,6 +77,7 @@ const UnverifiedBioData = () => {
     onSuccess: (data) => {
       setIsShortlisted(data?.data?.shortlisted);
       queryClient.invalidateQueries({ queryKey: ['unverified-shortlist-check', id] });
+      trackEvent(data?.data?.shortlisted ? 'add_to_wishlist' : 'remove_from_shortlist', { content_ids: [String(id)], biodata_type: 'unverified' });
       Toast.successToast(data?.message || 'Shortlist updated');
     },
     onError: () => Toast.errorToast('Failed to update shortlist'),
@@ -129,6 +131,7 @@ const UnverifiedBioData = () => {
         const res = await UnverifiedBioDataServices.purchaseContact(id, getToken()?.token);
         if (res.success) {
           setContactData(res.data);
+          trackEvent('contact_purchased', { biodata_type: 'unverified' });
           Toast.successToast('যোগাযোগ তথ্য সফলভাবে পাওয়া গেছে!');
         }
       } catch (err) {

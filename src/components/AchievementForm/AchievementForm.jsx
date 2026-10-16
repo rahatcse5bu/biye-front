@@ -9,6 +9,7 @@ import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import { AchievementServices } from '../../services/achievement';
 import { getErrorMessage } from '../../utils/error';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { FaPlus, FaTrash } from 'react-icons/fa';
 
 const emptyAchievement = {
@@ -83,6 +84,7 @@ const AchievementForm = ({ userForm, setUserForm }) => {
         );
       }
       if (data.success) {
+        trackEvent('biodata_section_saved', { section: 'achievement' });
         Toast.successToast('আপনার তথ্য সেভ করা হয়েছে');
         setUserForm((prev) => prev + 1);
       }

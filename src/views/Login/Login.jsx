@@ -1,4 +1,5 @@
 import { GoogleLogin } from '@react-oauth/google';
+import { trackAuth } from '@/utils/analytics';
 import {
   CheckCircleIcon,
   EnvelopeIcon,
@@ -42,7 +43,7 @@ export function Login() {
       : '/user/account/dashboard';
   const navigate = useNavigate();
 
-  const completeLogin = (response) => {
+  const completeLogin = (response, method) => {
     const authenticatedUser = response?.data;
 
     if (
@@ -59,6 +60,7 @@ export function Login() {
     setUser(authenticatedUser);
     setUserInfo(response);
     setUserLoading(false);
+    trackAuth(authenticatedUser, method);
     navigate(from, { replace: true });
   };
 
@@ -73,7 +75,7 @@ export function Login() {
       const response = await userServices.googleAuth({
         credential: credentialResponse.credential,
       });
-      completeLogin(response);
+      completeLogin(response, 'google');
     } catch (error) {
       Toast.errorToast(
         getAuthErrorMessage(error, 'Google দিয়ে লগইন করা যায়নি')
@@ -97,7 +99,7 @@ export function Login() {
         email: email.trim(),
         password,
       });
-      completeLogin(response);
+      completeLogin(response, 'email');
     } catch (error) {
       Toast.errorToast(
         getAuthErrorMessage(error, 'ইমেইল অথবা পাসওয়ার্ড সঠিক নয়')

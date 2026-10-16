@@ -41,6 +41,7 @@ import { getToken } from '../../utils/cookies';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import { getErrorMessage } from '../../utils/error';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { ExpectedPartnerServices } from '../../services/expectedPartner';
 import { getReligionInfo } from '../../utils/localStorage';
 import Select from '../Select/Select';
@@ -308,6 +309,7 @@ const ExpectedPartnerForm = ({ userForm, setUserForm }) => {
         );
       }
       if (data.success) {
+        trackEvent('biodata_section_saved', { section: 'expected_partner' });
         Toast.successToast('আপনার তথ্য সেভ করা হয়েছে ');
         setUserForm((prev) => prev + 1);
       }

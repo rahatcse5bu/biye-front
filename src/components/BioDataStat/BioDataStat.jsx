@@ -7,6 +7,7 @@ import { BioDataServices } from "../../services/bioData";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import clipboardCopy from "clipboard-copy";
 import { Toast } from "../../utils/toast";
+import { trackEvent } from "@/utils/analytics";
 import ReactionButton from "../ReactionButton/ReactionButton";
 
 const BioDataStat = ({ id }) => {
@@ -44,6 +45,7 @@ const BioDataStat = ({ id }) => {
     try {
       await clipboardCopy(currentLink);
       //   alert('Link copied to clipboard!');
+      trackEvent('share', { method: 'copy_link', content_type: 'biodata' });
       Toast.successToast("Link copied to clipboard!");
     } catch (error) {
       console.error("Copy failed: ", error);

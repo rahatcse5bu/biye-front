@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, useRef } from 'react';
 import { ReactionsServices } from '../../services/reactions';
 import { getToken } from '../../utils/cookies';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import UserContext from '../../contexts/UserContext';
 import { FaRegComment } from 'react-icons/fa';
 import { BiLike } from 'react-icons/bi';
@@ -123,6 +124,7 @@ const ReactionButton = ({
       );
 
       if (response?.success) {
+        trackEvent('biodata_reaction', { reaction: reactionType });
         Toast.successToast(
           response.message || 'আপনার রিয়াকশন যুক্ত করা হয়েছে'
         );

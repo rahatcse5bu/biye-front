@@ -17,6 +17,7 @@ import {
 import { ProfessionalInfoServices } from '../../services/professionalInfo';
 import { getErrorMessage } from '../../utils/error';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { FaPlus, FaTrash } from 'react-icons/fa';
 
 // Empty working history template
@@ -129,6 +130,7 @@ const ProfessionInfoForm = ({ userForm, setUserForm }) => {
         );
       }
       if (data.success) {
+        trackEvent('biodata_section_saved', { section: 'profession' });
         Toast.successToast('আপনার তথ্য সেভ করা হয়েছে ');
         setUserForm((prev) => prev + 1);
       }

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from '@/lib/navigation';
 import { CheckIcon, ClipboardDocumentIcon, ClipboardDocumentCheckIcon } from '@heroicons/react/24/outline';
 import { Toast } from '../../../utils/toast';
@@ -6,6 +6,7 @@ import { getErrorMessage } from '../../../utils/error';
 import { ContactPurchaseDataServices } from '../../../services/contactPurchaseData';
 import { UnverifiedContactPurchaseService } from '../../../services/unverifiedContactPurchase';
 import { getToken } from '../../../utils/cookies';
+import { trackEvent } from '../../../utils/analytics';
 import {
   PayResultShell,
   Spinner,
@@ -56,6 +57,17 @@ const PaySuccess = () => {
   const [copied, setCopied] = useState(false);
   const step = nextStep(purpose, bioUser);
 
+  // TODO: sessionStorage guard stops a refresh of this page from counting the same payment twice.
+  useEffect(() => {
+    if (!trxID) return;
+    const key = `biye_tracked_${trxID}`;
+    try {
+      if (sessionStorage.getItem(key)) return;
+      sessionStorage.setItem(key, '1');
+    } catch {}
+    trackEvent('purchase', { value: Number(amount) || 0, currency: 'BDT', transaction_id: trxID, purpose });
+  }, [trxID, amount, purpose]);
+
   const continueNow = useCallback(async () => {
     if (busy) return;
     if (!step.buyContact && !step.buyUnverified) {
@@ -68,6 +80,7 @@ const PaySuccess = () => {
       try {
         const data = await UnverifiedContactPurchaseService.purchaseContact(bioUser, getToken().token);
         if (data?.success) {
+          trackEvent('contact_purchased', { biodata_type: 'unverified' });
           Toast.successToast('যোগাযোগ তথ্য সফলভাবে ক্রয় হয়েছে।');
           navigate(returnPath, { replace: true });
           return;
@@ -85,6 +98,7 @@ const PaySuccess = () => {
         getToken().token
       );
       if (data.success) {
+        trackEvent('contact_purchased', { biodata_type: 'verified' });
         Toast.successToast('আপনার বায়োডাটা ক্রয় সম্পূর্ন হয়েছে।');
         navigate('/user/account/purchases', { replace: true });
         return;

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { BioChoiceDataServices } from '../../services/bioChoiceData';
 import { getToken } from '../../utils/cookies';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { getErrorMessage } from '../../utils/error';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import { Colors } from '../../constants/colors';
@@ -38,6 +39,7 @@ export function FeedbackModal({
         'feedback'
       );
       if (response?.success === true) {
+        trackEvent('feedback_submitted');
         Toast.successToast('আপনার ফিডব্যাক সেভ করা হয়েছে।');
         await refetch();
       }

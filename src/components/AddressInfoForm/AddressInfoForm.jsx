@@ -13,6 +13,7 @@ import { useEffect } from 'react';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import { AddressInfoServices } from '../../services/addressInfo';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { getErrorMessage } from '../../utils/error';
 import Textarea from '../Textarea/Textarea';
 
@@ -173,6 +174,7 @@ const AddressInfoForm = ({ userForm, setUserForm }) => {
       }
 
       if (data.success) {
+        trackEvent('biodata_section_saved', { section: 'address' });
         toast.success('আপনার তথ্য সেভ করা হয়েছে ', {
           position: 'bottom-right',
           duration: 3000,

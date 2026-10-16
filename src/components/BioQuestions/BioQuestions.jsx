@@ -3,6 +3,7 @@ import { Colors } from '../../constants/colors';
 import { BioQuestionServices } from '../../services/bioQuestions';
 import { getToken } from '../../utils/cookies';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { FaPlus, FaTrash, FaSave } from 'react-icons/fa';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import Swal from 'sweetalert2';
@@ -76,6 +77,7 @@ const BioQuestions = () => {
         getToken()?.token
       );
       if (data?.success) {
+        trackEvent('bio_questions_saved');
         Toast.successToast('প্রশ্নগুলো সফলভাবে সংরক্ষিত হয়েছে');
         setIsCustom(true);
       }
@@ -104,6 +106,7 @@ const BioQuestions = () => {
     try {
       setResetting(true);
       await BioQuestionServices.deleteQuestions(getToken()?.token);
+      trackEvent('bio_questions_reset');
       Toast.successToast('ডিফল্ট প্রশ্ন চালু হয়েছে');
       await fetchQuestions();
     } catch (error) {

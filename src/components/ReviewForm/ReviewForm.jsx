@@ -6,6 +6,7 @@ import { UserInfoServices } from "../../services/userInfo";
 import { Toast } from "../../utils/toast";
 import { getErrorMessage } from "../../utils/error";
 import { getToken } from "../../utils/cookies";
+import { trackEvent } from "../../utils/analytics";
 import { useQuery } from "@tanstack/react-query";
 import UserContext from "../../contexts/UserContext";
 import RevisionStatus from "../RevisionStatus/RevisionStatus";
@@ -34,6 +35,7 @@ const ReviewForm = () => {
       );
       if (result.success) {
         Toast.successToast("Your bio data is now in review");
+        trackEvent("biodata_submitted");
         await refetch();
       }
     } catch (error) {

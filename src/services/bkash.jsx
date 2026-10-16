@@ -2,6 +2,7 @@ import { SITE_URL } from '@/lib/seo';
 import Swal from 'sweetalert2';
 import axiosInstance from '../utils/axios';
 import { Toast } from '../utils/toast';
+import { trackEvent } from '../utils/analytics';
 
 // TODO: resolves true while redirecting to bKash, false (after an error toast) if it couldn't start.
 export default async function BkashCreatePaymentAPICall(
@@ -16,6 +17,9 @@ export default async function BkashCreatePaymentAPICall(
       ? `?bio_user=${bio_user}&purpose=${purpose}&pathname=${pathname}`
       : `?purpose=${purpose}&pathname=${pathname}`
   }`;
+
+  // TODO: fired before the request so the beacon has time to leave before the bKash redirect.
+  trackEvent('begin_checkout', { value: Number(amount), currency: 'BDT', purpose });
 
   // TODO: overlay is for flows with no button left on screen to show a spinner.
   if (overlay) {

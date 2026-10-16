@@ -22,6 +22,7 @@ import Swal from 'sweetalert2';
 import { convertToBengaliNumerals } from '../../../utils/weight';
 import BkashCreatePaymentAPICall from '../../../services/bkash';
 import { Toast } from '../../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { getErrorMessage } from '../../../utils/error';
 import { ContactPurchaseDataServices } from '../../../services/contactPurchaseData';
 import classNames from 'classnames';
@@ -145,6 +146,7 @@ const FirstStepCard = ({
       );
 
       if (data.success) {
+        trackEvent('contact_purchased', { biodata_type: 'verified' });
         Toast.successToast('আপনার বায়োডাটা ক্রয় সম্পূর্ন  হয়েছে।');
         await bioChoiceFirstStepRefetch();
         await bioChoiceSecondStepRefetch();

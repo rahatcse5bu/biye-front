@@ -3,6 +3,7 @@ import { FaCamera, FaTrash, FaSpinner } from 'react-icons/fa';
 import { ImageUploadService } from '../../services/uploads';
 import { getToken } from '../../utils/cookies';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 
 const PhotoUpload = ({ photos = [], setPhotos }) => {
   const [uploading, setUploading] = useState(false);
@@ -45,6 +46,7 @@ const PhotoUpload = ({ photos = [], setPhotos }) => {
         getToken()?.token
       );
       setPhotos((prev) => [...prev, ...urls]);
+      trackEvent('photo_uploaded', { count: urls.length });
       Toast.successToast(`${urls.length}টি ছবি আপলোড হয়েছে`);
     } catch (error) {
       console.error('Upload error:', error);

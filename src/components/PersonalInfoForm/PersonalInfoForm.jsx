@@ -35,6 +35,7 @@ import {
 import { PersonalInfoInfoServices } from '../../services/personalInfo';
 import { getErrorMessage } from '../../utils/error';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 
 const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', religiousType = '', gender: genderProp = '' }) => {
   // TODO: non-practicing (general) Muslims skip practicing-only questions; a few others become optional.
@@ -299,6 +300,7 @@ const PersonalInfoForm = ({ setUserForm, userForm, religion = 'islam', religious
         );
       }
       if (data.success) {
+        trackEvent('biodata_section_saved', { section: 'personal' });
         Toast.successToast('আপনার তথ্য সেভ করা হয়েছে ');
         setUserForm((prev) => prev + 1);
       }

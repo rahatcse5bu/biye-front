@@ -27,6 +27,7 @@ import { userServices } from "../../services/user";
 
 import { UserInfoServices } from "../../services/userInfo";
 import { Toast } from "../../utils/toast";
+import { trackEvent } from "@/utils/analytics";
 import { useBio } from "../../contexts/useBio.jsx";
 
 import { useReligionPreference } from "../../contexts/ReligionPreferenceContext";
@@ -104,6 +105,7 @@ export default function NavBar() {
 
   const logoutHandler = async () => {
     await logOut();
+    trackEvent('logout');
     removeToken();
     clearUserLocalStorage();
     // navigate("/");

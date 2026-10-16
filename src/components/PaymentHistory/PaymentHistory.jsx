@@ -6,6 +6,7 @@ import { getToken } from "../../utils/cookies";
 import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import { refundServices } from "../../services/refunds";
 import { Toast } from "../../utils/toast";
+import { trackEvent } from "@/utils/analytics";
 import UserContext from "../../contexts/UserContext";
 import { convertToBengaliDigits } from "../../utils/language";
 
@@ -93,6 +94,7 @@ const PaymentHistory = () => {
     });
 
     if (result.isConfirmed) {
+      trackEvent('refund_requested');
       Toast.successToast("আপনার রিফান্ড অনুরোধ অ্যাডমিনের কাছে পাঠানো হয়েছে");
       queryClient.invalidateQueries({ queryKey: ["refund-requests", "me"] });
       queryClient.invalidateQueries({ queryKey: ["user-info"] });

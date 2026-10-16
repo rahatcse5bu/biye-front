@@ -12,6 +12,7 @@ import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import { MaritalInfoInfoServices } from "../../services/maritalInfo";
 import { getErrorMessage } from "../../utils/error";
 import { Toast } from "../../utils/toast";
+import { trackEvent } from "@/utils/analytics";
 // import { verifyToken } from "../../services/verifyToken";
 
 const MaritalInfoForm = ({ userForm, setUserForm, religion = 'islam', gender: genderProp = '', maritalStatus: maritalStatusProp = '' }) => {
@@ -149,6 +150,7 @@ const MaritalInfoForm = ({ userForm, setUserForm, religion = 'islam', gender: ge
       }
 
       if (data.success) {
+        trackEvent('biodata_section_saved', { section: 'marital' });
         Toast.successToast("আপনার তথ্য সেভ করা হয়েছে ");
         setUserForm((prev) => prev + 1);
       }

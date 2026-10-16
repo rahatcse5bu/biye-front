@@ -1,3 +1,4 @@
+import { trackEvent } from "@/utils/analytics";
 import { useContext, useEffect, useState } from 'react';
 import {
   ArrowPathIcon,
@@ -100,6 +101,7 @@ const ContactUs = () => {
     try {
       const response = await ContactServices.createContactUsByEmail(formData);
       if (!response?.success) throw new Error(response?.message);
+      trackEvent('contact_form_submitted');
       setSent(true);
       setFormData(EMPTY_FORM);
     } catch (error) {

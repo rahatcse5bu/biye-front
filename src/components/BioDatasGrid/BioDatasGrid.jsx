@@ -11,6 +11,7 @@ import { Pagination } from "../Pagination/Pagination";
 import { useBio } from "../../contexts/useBio";
 import { convertToQuery } from "../../utils/query";
 import { Toast } from "../../utils/toast";
+import { trackEvent } from "@/utils/analytics";
 import { convertToBengaliDigits } from "../../utils/language";
 import { BioDataServices } from "../../services/bioData";
 import ActiveFilters, { useFilterActions } from "./ActiveFilters";
@@ -89,6 +90,7 @@ const BioDatasGrid = ({ setSideBarDisplay }) => {
     setSortOrder(value);
     setQuery(nextQuery);
     navigate(`/biodatas?${convertToQuery(nextQuery)}`);
+    trackEvent('sort_changed', { sort_order: value });
     Toast.successToast(
       value === "desc"
         ? "নতুন বায়োডাটা আগে দেখানো হচ্ছে।"

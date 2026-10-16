@@ -32,6 +32,7 @@ import { convertToEnglishDigits } from '../../utils/weight';
 import { verifyToken } from '../../services/verifyToken';
 import { getErrorMessage } from '../../utils/error';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { GeneralInfoServices } from '../../services/generalInfo';
 import SingleSelect from '../SingleSelect/SingleSelect';
 import { UserInfoServices } from '../../services/userInfo';
@@ -274,6 +275,7 @@ const GeneralInfoForm = ({ userForm, setUserForm, onGeneralInfoSaved, generalInf
         );
       }
       if (data.success) {
+        trackEvent('biodata_section_saved', { section: 'general' });
         Toast.successToast('আপনার তথ্য আপডেট  করা হয়েছে');
         // Notify parent Form.jsx with the saved data so sibling steps get fresh religion/gender
         if (onGeneralInfoSaved) {

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
 import { useUser } from '../../contexts/useUser';
 import { Toast } from '../../utils/toast';
+import { trackEvent } from "@/utils/analytics";
 import { getErrorMessage } from '../../utils/error';
 import { UserInfoServices } from '../../services/userInfo';
 import { getToken } from '../../utils/cookies';
@@ -31,6 +32,7 @@ const ActiveDeleteButton = () => {
         getToken()?.token
       );
       if (data.success) {
+        trackEvent('biodata_status_changed', { status: isActive ? 'inactive' : 'active' });
         Toast.successToast('আপনার বায়োডাটা স্ট্যাটাস্ট আপডেট হয়েছে।');
         setIsActive(!isActive);
       } else {

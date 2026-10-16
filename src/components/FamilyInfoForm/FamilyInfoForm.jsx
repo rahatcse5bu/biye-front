@@ -18,6 +18,7 @@ import LoadingCircle from "../LoadingCircle/LoadingCircle";
 import { FamilyStatusInfoServices } from "../../services/familyStatus";
 import { getErrorMessage } from "../../utils/error";
 import { Toast } from "../../utils/toast";
+import { trackEvent } from "@/utils/analytics";
 
 const FamilyInfoForm = ({ setUserForm, userForm, religion = 'islam', religiousType = '' }) => {
   // TODO: non-practicing (general) Muslims don't get the family deeni-environment question.
@@ -146,6 +147,7 @@ const FamilyInfoForm = ({ setUserForm, userForm, religion = 'islam', religiousTy
         );
       }
       if (data.success) {
+        trackEvent('biodata_section_saved', { section: 'family' });
         Toast.successToast("আপনার তথ্য সেভ করা হয়েছে ");
         setUserForm((prev) => prev + 1);
       }
