@@ -30,7 +30,24 @@ const categories = [
       'আপনার বেছে নেওয়া ধর্ম ফিল্টার মনে রাখে, যাতে প্রতিবার নতুন করে বাছাই করতে না হয়।',
     items: [{ name: 'biye_religion', detail: 'ধর্ম ফিল্টারের পছন্দ · ১ বছর' }],
   },
+  {
+    key: 'analytics',
+    title: 'অ্যানালিটিক্স',
+    description:
+      'কোন পেজ কতজন দেখছেন তা বুঝতে সাহায্য করে, যাতে আমরা সাইটটি আরও ভালো করতে পারি।',
+    items: [{ name: '_ga, _ga_*', detail: 'Google Analytics · ২ বছর' }],
+  },
+  {
+    key: 'marketing',
+    title: 'মার্কেটিং',
+    description:
+      'Facebook-এ আমাদের বিজ্ঞাপন কতটা কাজ করছে তা মাপতে এবং প্রাসঙ্গিক বিজ্ঞাপন দেখাতে ব্যবহৃত হয়।',
+    items: [{ name: '_fbp', detail: 'Facebook Pixel · ৯০ দিন' }],
+  },
 ];
+
+const ACCEPT_ALL = { preferences: true, analytics: true, marketing: true };
+const NECESSARY_ONLY = { preferences: false, analytics: false, marketing: false };
 
 const primaryButton =
   'inline-flex min-h-11 items-center justify-center rounded-xl bg-brand-900 px-5 py-2.5 text-sm font-bold text-white transition-colors duration-200 hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2 motion-reduce:transition-none';
@@ -61,7 +78,11 @@ function Switch({ checked, disabled, onChange, labelledBy }) {
 
 function SettingsDialog({ initial, onSave, onClose }) {
   const dialogRef = useRef(null);
-  const [choices, setChoices] = useState({ preferences: Boolean(initial?.preferences) });
+  const [choices, setChoices] = useState({
+    preferences: Boolean(initial?.preferences),
+    analytics: Boolean(initial?.analytics),
+    marketing: Boolean(initial?.marketing),
+  });
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -89,8 +110,8 @@ function SettingsDialog({ initial, onSave, onClose }) {
             কুকি সেটিংস
           </h2>
           <p className="mt-1 text-sm leading-6 text-gray-500">
-            কোন ধরনের কুকি আমরা ব্যবহার করতে পারব তা বেছে নিন। বিজ্ঞাপন বা
-            ট্র্যাকিংয়ের কোনো কুকি আমরা ব্যবহার করি না।
+            কোন ধরনের কুকি আমরা ব্যবহার করতে পারব তা বেছে নিন। প্রয়োজনীয় ছাড়া
+            বাকিগুলো আপনার অনুমতি ছাড়া চালু হয় না।
           </p>
         </div>
         <button
@@ -149,7 +170,7 @@ function SettingsDialog({ initial, onSave, onClose }) {
         <button type="button" onClick={() => onSave(choices)} className={secondaryButton}>
           সেটিংস সংরক্ষণ করুন
         </button>
-        <button type="button" onClick={() => onSave({ preferences: true })} className={primaryButton}>
+        <button type="button" onClick={() => onSave(ACCEPT_ALL)} className={primaryButton}>
           সব গ্রহণ করুন
         </button>
       </div>
@@ -196,7 +217,8 @@ export default function CookieConsent() {
               </h2>
               <p className="mt-1 text-sm leading-6 text-gray-600">
                 লগইন ধরে রাখতে প্রয়োজনীয় কুকি লাগে। আপনার অনুমতি নিয়ে আমরা
-                আপনার ধর্ম ফিল্টারের পছন্দও মনে রাখি।{' '}
+                আপনার পছন্দ মনে রাখি, সাইট ব্যবহারের পরিসংখ্যান দেখি এবং
+                বিজ্ঞাপনের ফলাফল মাপি।{' '}
                 <Link
                   to="/privacy-policy"
                   className="rounded font-semibold text-brand-900 underline underline-offset-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900"
@@ -213,10 +235,10 @@ export default function CookieConsent() {
               >
                 কাস্টমাইজ
               </button>
-              <button type="button" onClick={() => save({ preferences: false })} className={secondaryButton}>
+              <button type="button" onClick={() => save(NECESSARY_ONLY)} className={secondaryButton}>
                 শুধু প্রয়োজনীয়
               </button>
-              <button type="button" onClick={() => save({ preferences: true })} className={primaryButton}>
+              <button type="button" onClick={() => save(ACCEPT_ALL)} className={primaryButton}>
                 সব গ্রহণ করুন
               </button>
             </div>

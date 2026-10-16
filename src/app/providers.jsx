@@ -12,6 +12,7 @@ import FilterProvider from "@/contexts/FilterContext";
 import PrimaryFilterProvider from "@/contexts/PrimaryFilterContext";
 import { Toast } from "@/utils/toast";
 import CookieConsent from "@/components/CookieConsent/CookieConsent";
+import Analytics from "@/components/Analytics/Analytics";
 import { unregisterServiceWorkers } from "@/utils/unregisterServiceWorker";
 
 export default function Providers({ children }) {
@@ -50,6 +51,7 @@ export default function Providers({ children }) {
                   {children}
                   <Toaster />
                   <CookieConsent />
+                  <Analytics />
                 </PrimaryFilterProvider>
               </FilterProvider>
             </BioProvider>

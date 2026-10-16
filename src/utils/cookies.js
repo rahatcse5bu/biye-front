@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 const RELIGION_COOKIE = "biye_religion";
 const CONSENT_COOKIE = "biye_consent";
 // TODO: bump when cookie categories change so everyone is asked again.
-const CONSENT_VERSION = 1;
+const CONSENT_VERSION = 2;
 export const CONSENT_EVENT = "biye:consent";
 export const OPEN_COOKIE_SETTINGS_EVENT = "biye:open-cookie-settings";
 
@@ -18,8 +18,14 @@ export const getConsent = () => {
 
 export const hasConsent = (category) => Boolean(getConsent()?.[category]);
 
-export const saveConsent = ({ preferences }) => {
-  const consent = { v: CONSENT_VERSION, preferences: Boolean(preferences), at: new Date().toISOString() };
+export const saveConsent = ({ preferences, analytics, marketing }) => {
+  const consent = {
+    v: CONSENT_VERSION,
+    preferences: Boolean(preferences),
+    analytics: Boolean(analytics),
+    marketing: Boolean(marketing),
+    at: new Date().toISOString(),
+  };
   Cookies.set(CONSENT_COOKIE, JSON.stringify(consent), { expires: 180, sameSite: "lax" });
   // TODO: withdrawing consent also deletes what that category already stored.
   if (!consent.preferences) Cookies.remove(RELIGION_COOKIE);
