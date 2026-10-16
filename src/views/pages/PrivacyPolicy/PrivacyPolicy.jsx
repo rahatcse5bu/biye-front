@@ -41,8 +41,9 @@ function PrivacyPolicy() {
 
 				<h2 id="cookies" className="text-2xl font-semibold mb-4">4. Cookies</h2>
 				<p className="text-gray-700 mb-3">
-					We use a small number of cookies and do not use advertising or
-					tracking cookies.
+					We use a small number of cookies. Only necessary cookies are set
+					by default; analytics and marketing cookies load only after you
+					allow them.
 				</p>
 				<ul className="mb-3 list-disc space-y-1 pl-6 text-gray-700">
 					<li>
@@ -56,7 +57,43 @@ function PrivacyPolicy() {
 						remembers your religion filter for 1 year. If you decline, we
 						don&apos;t store it and the filter resets on your next visit.
 					</li>
+					<li>
+						<strong>Analytics</strong> (optional): Google Analytics sets{" "}
+						<code>_ga</code> and <code>_ga_*</code> for up to 2 years to count
+						visits and see which pages are used, so we can improve the site.
+						Google receives your IP address, browser details and the pages you
+						view. See{" "}
+						<a
+							href="https://policies.google.com/privacy"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="underline underline-offset-4"
+						>
+							Google&apos;s Privacy Policy
+						</a>
+						.
+					</li>
+					<li>
+						<strong>Marketing</strong> (optional): the Meta Pixel sets{" "}
+						<code>_fbp</code> for 90 days to measure how our Facebook ads
+						perform and to show relevant ads. Meta receives your IP address,
+						browser details and the pages you view. See{" "}
+						<a
+							href="https://www.facebook.com/privacy/policy/"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="underline underline-offset-4"
+						>
+							Meta&apos;s Privacy Policy
+						</a>
+						.
+					</li>
 				</ul>
+				<p className="text-gray-700 mb-3">
+					We never send your biodata, contact details or messages to Google
+					or Meta. If you withdraw consent, we stop loading these tools and
+					delete their cookies.
+				</p>
 				<p className="text-gray-700 mb-6">
 					Videos are embedded through YouTube&apos;s privacy-enhanced mode
 					(youtube-nocookie.com) and load only when you press play. You can
