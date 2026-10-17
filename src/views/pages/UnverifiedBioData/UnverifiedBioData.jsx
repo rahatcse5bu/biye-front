@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from '@/lib/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useContext, useState, useEffect } from 'react';
+import { trackEvent } from "@/utils/analytics";
 import { FcLeft } from 'react-icons/fc';
 import { FaShieldAlt, FaPhone, FaEnvelope, FaUser } from 'react-icons/fa';
 import Swal from 'sweetalert2';
@@ -11,7 +12,6 @@ import { formatDate, formatDateAndCalculateAge, getDateMonthYear } from '../../.
 import { convertHeightToBengali } from '../../../utils/height';
 import { convertToBengaliNumerals } from '../../../utils/weight';
 import { Toast } from '../../../utils/toast';
-import { trackEvent } from "@/utils/analytics";
 import LoadingCircle from '../../../components/LoadingCircle/LoadingCircle';
 import BioDetailsSkeleton from '../../../components/BioDetailsSkeleton/BioDetailsSkeleton';
 import ScrollToTop from '../../../components/ScrollTop/ScrollTop';
@@ -44,6 +44,11 @@ const UnverifiedBioData = () => {
     retry: false,
     enabled: !!id,
   });
+
+  const found = Boolean(data) && !isError;
+  useEffect(() => {
+    if (found) trackEvent('view_item', { content_ids: [String(id)], content_type: 'product', biodata_type: 'unverified' });
+  }, [found, id]);
 
   // Check if already purchased
   const { data: purchaseStatus } = useQuery({

@@ -7,6 +7,7 @@ import {
   SparklesIcon,
 } from "@heroicons/react/24/outline";
 import BkashCreatePaymentAPICall from "../../services/bkash";
+import { trackEvent } from "@/utils/analytics";
 import { useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import UserContext from "../../contexts/UserContext";
@@ -36,6 +37,10 @@ function Payments() {
   });
   // TODO: id of the package (or "custom") whose bKash checkout is starting.
   const [loadingKey, setLoadingKey] = useState(null);
+
+  useEffect(() => {
+    trackEvent("view_item_list", { item_list_name: "points_packages" });
+  }, []);
 
   useEffect(() => {
     // TODO: Back from bKash can restore this page from cache with a button still spinning.

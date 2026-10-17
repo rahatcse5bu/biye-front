@@ -6,6 +6,7 @@ import { religionToApiKey } from "@/constants/religionContent";
 import { CONSENT_EVENT, getConsent, getReligionCookie, setReligionCookie } from "@/utils/cookies";
 import UserContext from "./UserContext";
 import { UserInfoServices } from "@/services/userInfo";
+import { trackEvent } from "@/utils/analytics";
 
 const SAVABLE = new Set(["islam", "hinduism", "christianity", "all"]);
 
@@ -290,6 +291,7 @@ export function ReligionPreferenceProvider({ children }) {
     const canonical = religionToApiKey[value] || null;
     setReligion(canonical);
     setReligionCookie(canonical || "all");
+    trackEvent("religion_selected", { religion: canonical || "all" });
     setShowChooser(false);
     if (userId) saveToAccount(canonical || "all");
   }, [userId]);

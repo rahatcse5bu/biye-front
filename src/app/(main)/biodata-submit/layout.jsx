@@ -5,6 +5,7 @@ export const metadata = createPageMetadata({
   description:
     'বিয়ে ম্যাট্রিমনিতে ধাপে ধাপে আপনার বায়োডাটা তৈরি ও জমা দিয়ে জীবনসঙ্গী খোঁজা শুরু করুন।',
   path: '/biodata-submit',
+  keywords: ['বিয়ের বায়োডাটা তৈরি', 'বায়োডাটা ফরম্যাট', 'অনলাইন বায়োডাটা', 'ম্যাট্রিমনি বায়োডাটা'],
 });
 
 export default function BiodataSubmitLayout({ children }) {

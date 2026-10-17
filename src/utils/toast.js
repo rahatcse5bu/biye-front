@@ -1,4 +1,5 @@
 import toast from 'react-hot-toast';
+import { trackEvent } from '@/utils/analytics';
 
 const successToast = (message) => {
   return toast.success(message, {
@@ -16,6 +17,7 @@ const tipsToast = (message) => {
 };
 
 const errorToast = (message) => {
+  trackEvent('error_shown', { message: String(message).slice(0, 100) });
   return toast.error(message, {
     position: 'bottom-right',
     duration: 3000,

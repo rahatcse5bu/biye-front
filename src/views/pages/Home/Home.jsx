@@ -19,6 +19,7 @@ import HomeFilter from "../../../components/Home/HomeFilter/HomeFilter";
 import AboutFeature from "../../../components/Home/AboutFeature/AboutFeature";
 import PromptFilter from "../../../components/PromptFilter/PromptFilter";
 import ChatAgent from "../../../components/ChatAgent/ChatAgent";
+import SeoContent from "../../../components/Home/SeoContent/SeoContent";
 import BioContext from "../../../contexts/BioContext";
 import { useReligionPreference } from "@/contexts/ReligionPreferenceContext";
 import { convertToQuery } from "@/utils/query";
@@ -207,6 +208,8 @@ const Home = ({ initialReligion }) => {
           </div>
           <HadithSlider slides={content.slides} />
         </section>
+
+        <SeoContent />
       </div>
 
       <ChatAgent onApply={handlePromptApply} />

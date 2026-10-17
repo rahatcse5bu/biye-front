@@ -104,6 +104,7 @@ function RequestResetForm() {
     try {
       setLoading(true);
       await userServices.forgotPassword({ email: trimmed });
+      trackEvent('password_reset_requested');
       setSentTo(trimmed);
     } catch (error) {
       Toast.errorToast(getErrorMessage(error, 'অনুরোধ পাঠানো যায়নি, আবার চেষ্টা করুন'));

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from '@/lib/navigation';
+import { trackEvent } from "@/utils/analytics";
 import {
   CONSENT_EVENT,
   OPEN_COOKIE_SETTINGS_EVENT,
@@ -197,7 +198,8 @@ export default function CookieConsent() {
   }, []);
 
   const save = (choices) => {
-    saveConsent(choices);
+    const consent = saveConsent(choices);
+    trackEvent('cookie_consent', { analytics: consent.analytics, marketing: consent.marketing, preferences: consent.preferences });
     setSettingsOpen(false);
   };
 

@@ -2,7 +2,11 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 import BioData from "@/views/pages/BioData/BioData";
 import { Link } from "@/lib/navigation";
-import { createPageMetadata } from "@/lib/seo";
+import {
+  createBreadcrumbSchema,
+  createPageMetadata,
+  toJsonLd,
+} from "@/lib/seo";
 
 import { backendUrl as API_BASE_URL } from "@/lib/backendUrl";
 
@@ -45,13 +49,14 @@ export async function generateMetadata({ params }) {
   const address = biodata.data.address;
   const biodataType = generalInfo.bio_type || "ম্যাট্রিমনি বায়োডাটা";
   const location = address?.zilla || address?.division;
-  const title = `${biodataType} BID-${id}`;
+  const title = location
+    ? `${biodataType} BID-${id} — ${location}`
+    : `${biodataType} BID-${id}`;
   const description = [
-    `BID-${id} নম্বর ${biodataType} দেখুন।`,
+    `${location ? `${location} এলাকার ` : ""}BID-${id} নম্বর ${biodataType} দেখুন।`,
     generalInfo.marital_status
       ? `বৈবাহিক অবস্থা: ${generalInfo.marital_status}।`
       : "",
-    location ? `এলাকা: ${location}।` : "",
     "বিয়ে বাংলাদেশি ম্যাট্রিমনিতে বিস্তারিত বায়োডাটা দেখুন।",
   ]
     .filter(Boolean)
@@ -60,6 +65,13 @@ export async function generateMetadata({ params }) {
     title,
     description,
     path: `/biodata/${id}`,
+    keywords: [
+      biodataType,
+      `BID-${id}`,
+      location && `${location} ${biodataType}`,
+      location && `${location} পাত্র পাত্রী`,
+      "বাংলাদেশি ম্যাট্রিমনি",
+    ].filter(Boolean),
   });
   const profilePhoto = generalInfo.photos?.[0];
 
@@ -69,12 +81,11 @@ export async function generateMetadata({ params }) {
     ...metadata,
     openGraph: {
       ...metadata.openGraph,
-      images: [
-        {
-          url: profilePhoto,
-          alt: title,
-        },
-      ],
+      images: [{ url: profilePhoto, alt: title }],
+    },
+    twitter: {
+      ...metadata.twitter,
+      images: [profilePhoto],
     },
   };
 }
@@ -93,9 +104,18 @@ export default async function BioDataPage({ params }) {
   ]
     .filter(Boolean)
     .join(" · ");
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: "হোম", path: "/" },
+    { name: "সকল বায়োডাটা", path: "/biodatas" },
+    { name: `BID-${id}`, path: `/biodata/${id}` },
+  ]);
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: toJsonLd(breadcrumbSchema) }}
+      />
       <header className="border-b border-gray-200 bg-[#F7F9F9]">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-5 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
           <div className="min-w-0">

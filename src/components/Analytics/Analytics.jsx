@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { CONSENT_EVENT, getConsent } from '@/utils/cookies';
 import { FB_PIXEL_ID, GA_ID, loadFbq, loadGtag, trackEvent } from '@/utils/analytics';
@@ -19,6 +20,7 @@ const clearCookies = (match) => {
 // TODO: both tags auto-track App Router navigations via history.pushState, so no route listener is needed.
 export default function Analytics() {
   const [consent, setConsent] = useState();
+  const pathname = usePathname();
 
   useEffect(() => {
     setConsent(getConsent());
@@ -53,6 +55,8 @@ export default function Analytics() {
   useEffect(() => {
     if (!GA_ID && !FB_PIXEL_ID) return;
     const onClick = (event) => {
+      const video = event.target.closest?.('.yt-lite:not(.lyt-activated)');
+      if (video) trackEvent('video_start', { video_title: video.dataset.title || video.getAttribute('aria-label') || '' });
       const el = event.target.closest?.('a, button, [role="button"], [data-track]');
       if (!el) return;
       const text = el.dataset.trackLabel || el.getAttribute('aria-label') || el.innerText || '';
@@ -64,6 +68,25 @@ export default function Analytics() {
     document.addEventListener('click', onClick, true);
     return () => document.removeEventListener('click', onClick, true);
   }, []);
+
+  // TODO: scroll milestones reset on every route, since App Router navigations keep the same window.
+  useEffect(() => {
+    if (!GA_ID) return;
+    const seen = new Set();
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (max <= 0) return;
+      const percent = (window.scrollY / max) * 100;
+      [25, 50, 75, 100].forEach((mark) => {
+        if (percent >= mark - 1 && !seen.has(mark)) {
+          seen.add(mark);
+          trackEvent('scroll_depth', { percent: mark });
+        }
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [pathname]);
 
   return null;
 }

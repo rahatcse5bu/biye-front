@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Navigate } from '@/lib/navigation';
+import { trackEvent } from "@/utils/analytics";
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class ErrorBoundary extends Component {
   componentDidCatch(error, errorInfo) {
     // You can also log the error to an error reporting service
     console.error('Error caught by ErrorBoundary:', error, errorInfo);
+    trackEvent('exception', { description: String(error?.message).slice(0, 100), fatal: true });
   }
 
   render() {

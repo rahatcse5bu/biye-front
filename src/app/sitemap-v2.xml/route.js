@@ -1,24 +1,23 @@
-const urls = [
-  "https://www.bibaho.org/",
-  "https://www.bibaho.org/biodatas",
-  "https://www.bibaho.org/biodata-submit",
-  "https://www.bibaho.org/points-package",
-  "https://www.bibaho.org/about-us",
-  "https://www.bibaho.org/contact-us",
-  "https://www.bibaho.org/faq",
-  "https://www.bibaho.org/privacy-policy",
-  "https://www.bibaho.org/refund-policy",
-  "https://www.bibaho.org/terms-and-condition",
-];
+import { getSitemapEntries } from "@/lib/sitemap";
 
-export const dynamic = "force-static";
+export const revalidate = 3600;
 
-export function GET() {
-  const entries = urls
-    .map(
-      (url) => `  <url>
-    <loc>${url}</loc>
-  </url>`,
+const escapeXml = (value) =>
+  String(value).replace(/[<>&'"]/g, (char) => `&#${char.charCodeAt(0)};`);
+
+export async function GET() {
+  const entries = (await getSitemapEntries())
+    .map(({ url, lastModified, changeFrequency, priority }) =>
+      [
+        "  <url>",
+        `    <loc>${escapeXml(url)}</loc>`,
+        lastModified ? `    <lastmod>${lastModified.toISOString()}</lastmod>` : "",
+        changeFrequency ? `    <changefreq>${changeFrequency}</changefreq>` : "",
+        priority ? `    <priority>${priority}</priority>` : "",
+        "  </url>",
+      ]
+        .filter(Boolean)
+        .join("\n"),
     )
     .join("\n");
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

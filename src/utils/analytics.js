@@ -51,11 +51,13 @@ export const loadFbq = () => {
   return window.fbq;
 };
 
-// TODO: GA gets every event; Meta skips generic ui_click so clicks don't drown out conversions.
+// TODO: high-volume behaviour events stay in GA so Meta only sees actions worth optimising ads for.
+const GA_ONLY = new Set(["ui_click", "scroll_depth", "video_start", "error_shown", "exception", "page_not_found"]);
+
 export const trackEvent = (name, params = {}) => {
   if (typeof window === "undefined") return;
   if (GA_ID && hasConsent("analytics")) loadGtag()("event", name, params);
-  if (FB_PIXEL_ID && hasConsent("marketing") && name !== "ui_click") {
+  if (FB_PIXEL_ID && hasConsent("marketing") && !GA_ONLY.has(name)) {
     const metaEvent = META_EVENTS[name];
     loadFbq()(metaEvent ? "track" : "trackCustom", metaEvent || name, params);
   }

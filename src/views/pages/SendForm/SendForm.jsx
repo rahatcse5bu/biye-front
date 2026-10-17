@@ -17,6 +17,10 @@ import { HiPaperAirplane, HiInformationCircle, HiCheckCircle } from 'react-icons
 
 function SendForm() {
   const { bio_user } = useParams();
+
+  useEffect(() => {
+    trackEvent('proposal_started');
+  }, []);
   const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});

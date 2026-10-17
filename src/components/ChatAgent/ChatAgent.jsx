@@ -205,7 +205,10 @@ const ChatAgent = ({ onApply }) => {
     <>
       {/* Floating button */}
       <button
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={() => {
+          if (!open) trackEvent('ai_chat_opened');
+          setOpen((prev) => !prev);
+        }}
         className="fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom))] right-4 z-30 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-900 text-white shadow-lg transition-colors duration-200 hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2 lg:bottom-6 lg:right-6"
         title="AI বায়োডাটা সহায়তা"
       >

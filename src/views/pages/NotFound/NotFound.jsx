@@ -1,11 +1,17 @@
 'use client';
 
+import { useEffect } from 'react';
 import { HomeIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Link } from '@/lib/navigation';
 import { useSuppressReligionChooser } from '@/contexts/ReligionPreferenceContext';
+import { trackEvent } from "@/utils/analytics";
 
 const NotFound = () => {
   useSuppressReligionChooser();
+
+  useEffect(() => {
+    trackEvent('page_not_found', { page_path: window.location.pathname });
+  }, []);
 
   return (
     <main className="flex min-h-[70dvh] items-center justify-center bg-white px-4 py-16 sm:py-24">
