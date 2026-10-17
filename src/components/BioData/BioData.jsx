@@ -18,49 +18,12 @@ import {
 import { ScrollToTop } from "../../constants/ScrolltoTop";
 import { convertHeightToBengali } from "../../utils/height";
 import { GeneralInfoServices } from "../../services/generalInfo";
-import { religionToApiKey } from "../../constants/religionContent";
 import BiodataTypeBadge from "../BiodataTypeBadge/BiodataTypeBadge";
 import PhotoViewer from "../PhotoViewer/PhotoViewer";
 import ShareModal from "../ShareModal/ShareModal";
 import { SITE_URL } from "@/lib/seo";
+import { getReligionCardTheme } from "./religionCardThemes";
 // import ReactionButton from "../ReactionButton/ReactionButton";
-
-const RELIGION_LABELS = {
-  islam: {
-    base: "মুসলিম",
-    practicing: "প্র্যাক্টিসিং মুসলিম",
-    color: "bg-emerald-50 text-emerald-700 ring-emerald-200",
-  },
-  hinduism: {
-    base: "হিন্দু",
-    practicing: "প্র্যাক্টিসিং হিন্দু",
-    color: "bg-orange-50 text-orange-700 ring-orange-200",
-  },
-  christianity: {
-    base: "খ্রিস্টান",
-    practicing: "প্র্যাক্টিসিং খ্রিস্টান",
-    color: "bg-blue-50 text-blue-700 ring-blue-200",
-  },
-};
-
-const PRACTICING_TYPES = new Set([
-  "practicing_muslim",
-  "practicing_hindu",
-  "practicing_christian",
-]);
-
-const getReligionKey = (religion) =>
-  religionToApiKey[religion] || religion || "islam";
-
-const getReligionBadge = (religion, religiousType) => {
-  const key = getReligionKey(religion);
-  const entry = RELIGION_LABELS[key] || RELIGION_LABELS.islam;
-
-  return {
-    label: PRACTICING_TYPES.has(religiousType) ? entry.practicing : entry.base,
-    color: entry.color,
-  };
-};
 
 const getDisplayValue = (value) => value || "উল্লেখ করা হয়নি";
 
@@ -69,16 +32,21 @@ const BioData = ({ biodata }) => {
   const [showShare, setShowShare] = useState(false);
   const closeShare = useCallback(() => setShowShare(false), []);
 
+  const theme = getReligionCardTheme(
+    biodata?.religion,
+    biodata?.religious_type
+  );
+  const { Emblem } = theme;
   const hasMalePhotos =
     biodata?.gender !== "মহিলা" &&
     Array.isArray(biodata?.photos) &&
     biodata.photos.length > 0;
   const profileImage =
     biodata?.gender === "মহিলা"
-      ? "/assets/icons/female.svg"
+      ? theme.avatar.female
       : hasMalePhotos
         ? biodata.photos[0]
-        : "/assets/icons/male.svg";
+        : theme.avatar.male;
   const biodataNumber = biodata?.is_unverified
     ? biodata?.bio_id
     : biodata?.user_id;
@@ -86,10 +54,6 @@ const BioData = ({ biodata }) => {
   const viewCount = Number(biodata?.views_count) || 0;
   // const canReact = !biodata?.is_unverified && Boolean(biodata?.user);
 
-  const religionBadge = getReligionBadge(
-    biodata?.religion,
-    biodata?.religious_type
-  );
   const ageInfo = biodata?.date_of_birth
     ? formatDateAndCalculateAge(biodata.date_of_birth)
     : null;
@@ -138,10 +102,24 @@ const BioData = ({ biodata }) => {
   };
 
   return (
-    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-200 hover:border-brand-900/25 hover:shadow-lg motion-reduce:transition-none">
+    <article
+      data-religion={theme.key}
+      className={`group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-200 hover:shadow-lg motion-reduce:transition-none ${theme.cardHover}`}
+    >
       <ScrollToTop />
 
-      <header className="relative bg-brand-900 px-4 pb-5 pt-4 text-center text-white">
+      <header
+        className={`relative isolate overflow-hidden px-4 pb-5 pt-4 text-center text-white ${theme.header}`}
+      >
+        <div
+          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.12]"
+          style={{ backgroundImage: theme.pattern }}
+          aria-hidden="true"
+        />
+        <Emblem
+          className="pointer-events-none absolute -bottom-6 -left-6 -z-10 h-28 w-28 text-white opacity-10"
+          aria-hidden="true"
+        />
         <div className="flex min-h-7 items-start justify-between gap-2">
           <div
             className="inline-flex items-center rounded-full bg-black/15 px-2.5 py-1 text-xs font-semibold text-white/90"
@@ -152,9 +130,9 @@ const BioData = ({ biodata }) => {
           </div>
 
           <span
-            className={`max-w-[65%] rounded-full px-2.5 py-1 text-[11px] font-bold leading-4 ring-1 ${religionBadge.color}`}
+            className={`max-w-[65%] rounded-full px-2.5 py-1 text-[11px] font-bold leading-4 ring-1 ${theme.badge}`}
           >
-            {religionBadge.label}
+            {theme.badgeLabel}
           </span>
         </div>
 
@@ -166,7 +144,7 @@ const BioData = ({ biodata }) => {
         {hasMalePhotos ? (
           <button
             type="button"
-            className="relative mx-auto mt-2 block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-900"
+            className={`relative mx-auto mt-2 block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 ${theme.photoRingOffset}`}
             onClick={() => setShowViewer(true)}
             aria-label="প্রোফাইলের ছবি দেখুন"
           >
@@ -177,7 +155,7 @@ const BioData = ({ biodata }) => {
               width="80"
               height="80"
             />
-            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-[10px] font-bold text-brand-900 shadow-sm">
+            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-[10px] font-bold text-gray-900 shadow-sm">
               ছবি দেখুন
             </span>
           </button>
@@ -197,7 +175,7 @@ const BioData = ({ biodata }) => {
         <div className="flex items-center justify-center gap-1.5">
           {!biodata?.is_unverified && (
             <CheckBadgeIcon
-              className="h-5 w-5 text-emerald-300"
+              className="h-5 w-5 text-[#6EE7B7]"
               aria-label="যাচাইকৃত বায়োডাটা"
             />
           )}
@@ -205,6 +183,10 @@ const BioData = ({ biodata }) => {
             BID-{biodataNumber || "—"}
           </h2>
         </div>
+        <span
+          className={`absolute inset-x-0 bottom-0 h-1 ${theme.accentBar}`}
+          aria-hidden="true"
+        />
       </header>
 
       <div className="flex-1 px-4 py-4">
@@ -214,7 +196,9 @@ const BioData = ({ biodata }) => {
               key={label}
               className="flex min-h-14 items-center gap-3 px-3 py-2.5"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-900/10 text-brand-900">
+              <span
+                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${theme.chip}`}
+              >
                 <Icon className="h-5 w-5" aria-hidden="true" />
               </span>
               <dt className="min-w-0 flex-1">
@@ -256,7 +240,7 @@ const BioData = ({ biodata }) => {
         <Link
           to={profilePath}
           onClick={bioDataHandler}
-          className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-brand-900 px-4 py-3 text-sm font-bold text-white transition-colors duration-200 hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2"
+          className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${theme.button}`}
         >
           সম্পূর্ণ বায়োডাটা দেখুন
           <ArrowRightIcon
@@ -267,7 +251,7 @@ const BioData = ({ biodata }) => {
         <button
           type="button"
           onClick={() => setShowShare(true)}
-          className="inline-flex min-h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-brand-900/20 bg-white text-brand-900 transition-colors duration-200 hover:bg-brand-900/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900 focus-visible:ring-offset-2"
+          className={`inline-flex min-h-11 w-11 shrink-0 items-center justify-center rounded-xl border bg-white transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${theme.shareButton}`}
           aria-label={`বায়োডাটা BID-${biodataNumber || ""} শেয়ার করুন`}
           title="শেয়ার করুন"
         >
