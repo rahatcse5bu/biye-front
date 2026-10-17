@@ -42,8 +42,11 @@ const categories = [
     key: 'marketing',
     title: 'মার্কেটিং',
     description:
-      'Facebook-এ আমাদের বিজ্ঞাপন কতটা কাজ করছে তা মাপতে এবং প্রাসঙ্গিক বিজ্ঞাপন দেখাতে ব্যবহৃত হয়।',
-    items: [{ name: '_fbp', detail: 'Facebook Pixel · ৯০ দিন' }],
+      'Facebook ও TikTok-এ আমাদের বিজ্ঞাপন কতটা কাজ করছে তা মাপতে এবং প্রাসঙ্গিক বিজ্ঞাপন দেখাতে ব্যবহৃত হয়।',
+    items: [
+      { name: '_fbp', detail: 'Facebook Pixel · ৯০ দিন' },
+      { name: '_ttp, ttcsid*', detail: 'TikTok Pixel' },
+    ],
   },
 ];
 

@@ -10,7 +10,7 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://accounts.google.com https://apis.google.com https://www.googletagmanager.com https://www.gstatic.com https://connect.facebook.net`,
+  `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} https://accounts.google.com https://apis.google.com https://www.googletagmanager.com https://www.gstatic.com https://connect.facebook.net https://analytics.tiktok.com`,
   "style-src 'self' 'unsafe-inline' https://accounts.google.com https://fonts.maateen.me",
   "font-src 'self' data: https://fonts.maateen.me",
   "img-src 'self' data: blob: https:",

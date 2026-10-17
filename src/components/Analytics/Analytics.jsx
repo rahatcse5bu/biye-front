@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { CONSENT_EVENT, getConsent } from '@/utils/cookies';
-import { FB_PIXEL_ID, GA_ID, loadFbq, loadGtag, trackEvent } from '@/utils/analytics';
+import { FB_PIXEL_ID, GA_ID, loadFbq, loadGtag, loadTtq, trackEvent } from '@/utils/analytics';
 
 // TODO: GA and the Pixel write cookies on the apex domain, so clear both host and apex copies.
 const clearCookies = (match) => {
@@ -32,6 +32,7 @@ export default function Analytics() {
   const loaded = consent !== undefined;
   const analytics = Boolean(GA_ID && consent?.analytics);
   const marketing = Boolean(FB_PIXEL_ID && consent?.marketing);
+  const tiktokMarketing = Boolean(consent?.marketing);
 
   // TODO: a loaded script can't be unloaded, so withdrawing consent disables it and deletes its cookies.
   useEffect(() => {
@@ -50,6 +51,19 @@ export default function Analytics() {
       clearCookies((name) => name === '_fbp');
     }
   }, [loaded, marketing]);
+
+  useEffect(() => {
+    if (!loaded) return;
+    if (tiktokMarketing) {
+      const ttq = loadTtq();
+      ttq?.enableCookie();
+      ttq?.grantConsent();
+    } else {
+      window.ttq?.revokeConsent();
+      window.ttq?.disableCookie();
+      clearCookies((name) => name === '_ttp' || name.startsWith('ttcsid'));
+    }
+  }, [loaded, tiktokMarketing]);
 
   // TODO: one capture-phase listener reports every button/link click; data-track renames it, first text line only so card details stay out.
   useEffect(() => {

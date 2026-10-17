@@ -86,12 +86,16 @@ function PrivacyPolicy() {
 						>
 							Meta&apos;s Privacy Policy
 						</a>
-						.
+						. TikTok Pixel also uses marketing cookies to measure TikTok ads
+						and receives browser and page-view information after you opt in. See{" "}
+						<a href="https://www.tiktok.com/legal/page/row/privacy-policy/en" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">
+							TikTok&apos;s Privacy Policy
+						</a>.
 					</li>
 				</ul>
 				<p className="text-gray-700 mb-3">
 					We never send your biodata, contact details or messages to Google
-					or Meta. If you withdraw consent, we stop loading these tools and
+					or Meta, or TikTok. If you withdraw consent, we stop loading these tools and
 					delete their cookies.
 				</p>
 				<p className="text-gray-700 mb-6">

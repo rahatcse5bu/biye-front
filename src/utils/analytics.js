@@ -2,6 +2,7 @@ import { hasConsent } from "@/utils/cookies";
 
 export const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 export const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
+export const TIKTOK_PIXEL_ID = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID || "7697605549373947905";
 
 // TODO: our names follow GA4; these map to Meta standard events, other names go to Meta as custom events.
 const META_EVENTS = {
@@ -49,6 +50,39 @@ export const loadFbq = () => {
     fbq("track", "PageView");
   }
   return window.fbq;
+};
+
+export const loadTtq = () => {
+  if (!hasConsent("marketing")) return;
+  if (!window.ttq) {
+    window.TiktokAnalyticsObject = "ttq";
+    const ttq = (window.ttq = []);
+    ttq.methods = ["page", "track", "identify", "instances", "debug", "on", "off", "once", "ready", "alias", "group", "enableCookie", "disableCookie", "holdConsent", "revokeConsent", "grantConsent"];
+    ttq.setAndDefer = (target, method) => {
+      target[method] = (...args) => target.push([method, ...args]);
+    };
+    ttq.methods.forEach((method) => ttq.setAndDefer(ttq, method));
+    ttq.instance = (id) => {
+      const instance = ttq._i[id] || [];
+      ttq.methods.forEach((method) => ttq.setAndDefer(instance, method));
+      return instance;
+    };
+    ttq.load = (id, options = {}) => {
+      const src = "https://analytics.tiktok.com/i18n/pixel/events.js";
+      ttq._i = ttq._i || {};
+      ttq._i[id] = [];
+      ttq._i[id]._u = src;
+      ttq._t = ttq._t || {};
+      ttq._t[id] = Date.now();
+      ttq._o = ttq._o || {};
+      ttq._o[id] = options;
+      loadScript(`${src}?sdkid=${id}&lib=ttq`);
+    };
+    ttq.load(TIKTOK_PIXEL_ID);
+    ttq.grantConsent();
+    ttq.page();
+  }
+  return window.ttq;
 };
 
 // TODO: high-volume behaviour events stay in GA so Meta only sees actions worth optimising ads for.
