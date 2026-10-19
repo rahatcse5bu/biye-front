@@ -141,6 +141,7 @@ vertical-timeline-element-icon {
   overflow-wrap: anywhere;
 }
 .blog-content > * + * { margin-top: 1.25rem; }
+.blog-content > :first-child { margin-top: 0; }
 .blog-content h2 { margin-top: 2.5rem; font-size: 1.5rem; line-height: 2rem; font-weight: 700; color: #111827; }
 .blog-content h3 { margin-top: 2rem; font-size: 1.25rem; line-height: 1.75rem; font-weight: 700; color: #111827; }
 .blog-content h4 { margin-top: 1.5rem; font-weight: 700; color: #111827; }
