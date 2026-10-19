@@ -41,7 +41,8 @@ const BioData = ({ initialData = null }) => {
     queryFn: async () => {
       return await BioDataServices.getBioData(id);
     },
-    initialData,
+    // TODO: null counts as fresh cached data in react-query, so the preview page would never fetch; only real server data seeds it.
+    initialData: initialData ?? undefined,
     // TODO: the server already sent this biodata; without a staleTime it is fetched a second time on mount.
     staleTime: 60_000,
     retry: false,
