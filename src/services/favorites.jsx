@@ -52,7 +52,13 @@ const getUserLikesByWhoList = async (token) => {
   const response = await axios.get('/favorites/likes-who');
   return response.data;
 };
+// TODO: one-time points payment to see who favourited my biodata.
+const unlockLikers = async () => {
+  const response = await axios.post('/favorites/likers/unlock');
+  return response.data;
+};
 export const LikesServices = {
+  unlockLikers,
   createLikes,
   getLikes,
   getUserLikes,

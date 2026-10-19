@@ -10,8 +10,11 @@ import LoadingCircle from "../../../components/LoadingCircle/LoadingCircle";
 import { formatDate, getDateMonthYear } from "../../../utils/date";
 import { useNavigate } from "@/lib/navigation";
 import { BioDataServices } from "../../../services/bioData";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import Swal from "sweetalert2";
 import UserContext from "../../../contexts/UserContext";
+import { convertToBengaliDigits as toBn } from "../../../utils/language";
+import { Toast } from "../../../utils/toast";
 
 const LikeItem = ({ item, index, favoriteByWho }) => {
   const navigate = useNavigate();
@@ -67,7 +70,8 @@ const LikeItem = ({ item, index, favoriteByWho }) => {
 };
 
 const Favorite = () => {
-  const { userInfo } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { userInfo, setUserInfo, setUser } = useContext(UserContext);
   const { data, isLoading } = useQuery({
     queryKey: ["my-likes", getToken()?.token],
     queryFn: async () => {
@@ -75,7 +79,11 @@ const Favorite = () => {
     },
     retry: false,
   });
-  const { data: favoritesByWho, isLoading: favoritesByWhoLoading } = useQuery({
+  const {
+    data: favoritesByWho,
+    isLoading: favoritesByWhoLoading,
+    refetch: refetchFavoritesByWho,
+  } = useQuery({
     queryKey: ["user-likes", userInfo?.data?._id],
     queryFn: async () => {
       return await LikesServices.getLikesListByUser(
@@ -85,6 +93,63 @@ const Favorite = () => {
     },
     retry: false,
   });
+  // TODO: put the new balance into shared state so every points display updates without a refetch.
+  const applyBalance = (balance) => {
+    const points = Number(balance);
+    if (!Number.isFinite(points)) return;
+    setUserInfo((current) =>
+      current?.data ? { ...current, data: { ...current.data, points } } : current
+    );
+    setUser((current) => (current ? { ...current, points } : current));
+  };
+
+  const price = favoritesByWho?.price ?? 50;
+  const unlockLikers = async () => {
+    const balance = Number(userInfo?.data?.points) || 0;
+    if (balance < price) {
+      const { isConfirmed } = await Swal.fire({
+        title: "পর্যাপ্ত পয়েন্ট নেই",
+        html: `এই তালিকা দেখতে <b>${toBn(price)} পয়েন্ট</b> প্রয়োজন। আপনার আছে <b>${toBn(balance)} পয়েন্ট</b>।`,
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "পয়েন্ট কিনুন",
+        cancelButtonText: "বাতিল",
+        confirmButtonColor: "#0D7377",
+      });
+      if (isConfirmed) navigate("/points-package");
+      return;
+    }
+    const result = await Swal.fire({
+      title: "তালিকা আনলক করবেন?",
+      html: `কারা আপনার বায়োডাটা পছন্দের তালিকায় রেখেছেন তা দেখতে <b>${toBn(price)} পয়েন্ট</b> খরচ হবে। একবার আনলক করলে তালিকাটি সবসময় দেখতে পারবেন।`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: `${toBn(price)} পয়েন্ট দিয়ে দেখুন`,
+      cancelButtonText: "বাতিল",
+      confirmButtonColor: "#0D7377",
+      showLoaderOnConfirm: true,
+      allowOutsideClick: () => !Swal.isLoading(),
+      preConfirm: async () => {
+        try {
+          return await LikesServices.unlockLikers();
+        } catch (error) {
+          Swal.showValidationMessage(error?.response?.data?.message || "আনলক করা যায়নি");
+          return false;
+        }
+      },
+    });
+    if (!result.isConfirmed || !result.value?.success) return;
+    applyBalance(result.value.points_balance);
+    Toast.successToast("তালিকা আনলক হয়েছে");
+    refetchFavoritesByWho();
+  };
+
+  // TODO: the dashboard links to #liked-by, which only exists once the page has loaded.
+  useEffect(() => {
+    if (isLoading || window.location.hash !== "#liked-by") return;
+    document.getElementById("liked-by")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [isLoading]);
+
   if (isLoading) {
     return <LoadingCircle />;
   }
@@ -132,15 +197,36 @@ const Favorite = () => {
           </div>
         </div>
         <div className="h-8"></div>
-        <div className="col right-sidebar-main my-bio-favs">
+        <div id="liked-by" className="col right-sidebar-main my-bio-favs scroll-mt-24">
           <div className="w-auto border-t-2 rounded shadow my-favs-info">
             <h5 className="mt-3 text-2xl text-center card-title">
               আমার বায়োডাটা যারা পছন্দের তালিকায় রেখেছেঃ
             </h5>
-            <h6 className="pb-4 text-xs">
-              এটি প্রিমিয়াম ফিচার! এই তথ্য দেখতে হলে আপনাকে ৫০ পয়েন্ট খরচ করতে
-              হবে!!!
-            </h6>
+            {favoritesByWho?.locked ? (
+              <div className="flex flex-col items-center gap-3 px-4 pb-8 pt-2 text-center">
+                <p className="text-gray-700">
+                  <b>{toBn(favoritesByWho.count || 0)} জন</b> আপনার বায়োডাটা পছন্দের
+                  তালিকায় রেখেছেন।
+                </p>
+                <p className="text-sm text-gray-500">
+                  তারা কারা দেখতে একবার {toBn(price)} পয়েন্ট খরচ করুন — এরপর তালিকাটি
+                  সবসময় দেখতে পারবেন।
+                </p>
+                <button
+                  type="button"
+                  onClick={unlockLikers}
+                  disabled={!favoritesByWho.count}
+                  className="rounded-full bg-[#0D7377] px-5 py-2 font-semibold text-white hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0D7377]/40 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  তালিকা দেখুন ({toBn(price)} পয়েন্ট)
+                </button>
+                {!favoritesByWho.count && (
+                  <p className="text-xs text-gray-400">
+                    এখনো কেউ আপনার বায়োডাটা পছন্দের তালিকায় রাখেননি।
+                  </p>
+                )}
+              </div>
+            ) : (
             <div className="overflow-x-auto">
               <table className="w-full table-auto">
                 <thead>
@@ -183,7 +269,13 @@ const Favorite = () => {
                   )}
                 </tbody>
               </table>
+              {!favoritesByWhoLoading && !favoritesByWho?.data?.length && (
+                <p className="py-6 text-center text-sm text-gray-500">
+                  এখনো কেউ আপনার বায়োডাটা পছন্দের তালিকায় রাখেননি।
+                </p>
+              )}
             </div>
+            )}
           </div>
         </div>
       </div>

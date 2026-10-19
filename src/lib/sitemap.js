@@ -1,5 +1,6 @@
 import { backendUrl } from '@/lib/backendUrl';
 import { SITE_URL } from '@/lib/seo';
+import { fetchBlogPosts } from '@/lib/blog';
 
 const STATIC_ROUTES = [
   { path: '', changeFrequency: 'daily', priority: 1 },
@@ -7,6 +8,7 @@ const STATIC_ROUTES = [
   { path: '/biodata-submit', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/faq', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/points-package', changeFrequency: 'monthly', priority: 0.7 },
+  { path: '/blog', changeFrequency: 'weekly', priority: 0.7 },
   { path: '/about-us', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/contact-us', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/privacy-policy', changeFrequency: 'yearly', priority: 0.3 },
@@ -54,6 +56,16 @@ const fetchBiodataEntries = async () => {
   return entries;
 };
 
+const fetchBlogEntries = async () => {
+  const { posts } = await fetchBlogPosts(1, 50);
+  return posts.map((post) => ({
+    url: `${SITE_URL}/blog/${encodeURIComponent(post.slug)}`,
+    lastModified: post.published_at ? new Date(post.published_at) : undefined,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+};
+
 export const getSitemapEntries = async () => {
   const staticEntries = STATIC_ROUTES.map(({ path, changeFrequency, priority }) => ({
     url: `${SITE_URL}${path}`,
@@ -67,5 +79,10 @@ export const getSitemapEntries = async () => {
     return [];
   });
 
-  return [...staticEntries, ...biodataEntries];
+  const blogEntries = await fetchBlogEntries().catch((error) => {
+    console.error('Sitemap blog fetch failed', error);
+    return [];
+  });
+
+  return [...staticEntries, ...blogEntries, ...biodataEntries];
 };

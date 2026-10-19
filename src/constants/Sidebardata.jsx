@@ -10,6 +10,7 @@ import {
   PencilSquareIcon,
   QuestionMarkCircleIcon,
   ShoppingBagIcon,
+  SparklesIcon,
   Squares2X2Icon,
 } from '@heroicons/react/24/outline';
 
@@ -38,6 +39,7 @@ const sidebarSections = [
       { Icon: ShoppingBagIcon, title: 'আমার বায়োডাটা ক্রয়সমূহ', path: '/user/account/purchases' },
       { Icon: InboxArrowDownIcon, title: 'আমার বায়োডাটা অনুরোধসমূহ', path: '/user/account/bio-requests' },
       { Icon: CreditCardIcon, title: 'পেমেন্ট এবং রিফান্ড', path: '/user/account/payment-and-refund' },
+      { Icon: SparklesIcon, title: 'বায়োডাটা ফিচার্ড করুন', path: '/user/account/featured' },
     ],
   },
   {

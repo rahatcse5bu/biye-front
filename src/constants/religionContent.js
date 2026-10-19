@@ -1,7 +1,11 @@
 // Religion-specific content for the homepage
-// Keys: 'islam' (default), 'hinduism', 'christianity'
+// Keys: 'all' (default, "সকল ধর্ম"), 'islam', 'hinduism', 'christianity'
 
 export const bannerContent = {
+  all: {
+    title1: "সব ধর্মের",
+    subtitle: "মুসলিম, হিন্দু ও খ্রিস্টান — সব ধর্মের পাত্রপাত্রী খুঁজুন আপনার নিজ উপজেলায় খুব সহজে",
+  },
   islam: {
     title1: "বাংলাদেশী ইসলামিক",
     subtitle: "আপনার নিজ উপজেলায় দ্বীনদার পাত্রপাত্রী খুঁজুন খুব সহজে",
@@ -17,6 +21,12 @@ export const bannerContent = {
 };
 
 export const aboutContent = {
+  all: {
+    eyebrow: "বিয়ে কীভাবে কাজ করে?",
+    title: "ফিচারগুলো এক নজরে ভিডিওতে দেখুন",
+    description:
+      "বায়োডাটা তৈরি, অনুসন্ধান এবং যোগাযোগের অনুরোধের প্রক্রিয়া সহজে বুঝে নিন।",
+  },
   islam: {
     eyebrow: "বিয়ে কীভাবে কাজ করে?",
     title: "ফিচারগুলো এক নজরে ভিডিওতে দেখুন",
@@ -38,6 +48,11 @@ export const aboutContent = {
 };
 
 export const quoteContent = {
+  all: {
+    text: "বিয়ে দুটি মানুষ ও দুটি পরিবারের বন্ধন। পারস্পরিক শ্রদ্ধা, বিশ্বাস ও দুজনের সম্মতির ভিত্তিতে গড়ে উঠুক আপনার নতুন জীবন।",
+    reference: "বিয়ে সম্পাদনা দলের পরামর্শ",
+    editorial: true,
+  },
   islam: {
     text: "যে ব্যক্তি বিয়ে করলো সে তার অর্ধেক দ্বীন পূর্ণ করে ফেললো। বাকি অর্ধেকের জন্য সে আল্লাহকে ভয় করুক।",
     reference: "(বায়হাকী, শু\u2019আবুল ঈমান - ৫৪৮৬)",
@@ -55,6 +70,7 @@ export const quoteContent = {
 };
 
 export const sliderHeading = {
+  all: "বিয়ে নিয়ে বিভিন্ন ধর্মের বাণী ও পরামর্শঃ",
   islam: "বিয়ে সম্পর্কিত কুরআনের কিছু আয়াত ও কিছু হাদিসঃ",
   hinduism: "হিন্দু পরিবারে বিবাহের প্রস্তুতি: বিয়ে সম্পাদনা দলের পরামর্শ",
   christianity: "বিয়ে সম্পর্কিত বাইবেলের কিছু বাণীঃ",
@@ -64,11 +80,11 @@ export const sliderContent = {
   islam: [
     {
       text: "হে যুব সম্প্রদায়! তোমাদের মধ্যে যারাই স্ত্রীর অধিকার আদায়ে সামর্থ্য রাখে, তারা যেন অবশ্যই বিয়ে বন্ধনে আবদ্ধ হয়।",
-      ref: "(সূরা রুম : আয়াত ২১)",
+      ref: "সহীহ - মুত্তাফাকুন 'আলাইহি (বুখারী ও মুসলিম)।",
     },
     {
       text: '"আর এক নিদর্শন এই যে, তিনি তোমাদের জন্যে তোমাদের মধ্য থেকে তোমাদের সঙ্গিনীদের সৃষ্টি করেছেন, যাতে তোমরা তাদের কাছে শান্তিতে থাক এবং তিনি তোমাদের মধ্যে পারস্পরিক সম্প্রীতি ও দয়া সৃষ্টি করেছেন।"',
-      ref: "সহীহ - মুত্তাফাকুন 'আলাইহি (বুখারী ও মুসলিম)।",
+      ref: "(সূরা রুম : আয়াত ২১)",
     },
     {
       text: "বিয়ে হলো আমার সুন্নাত যে ব্যক্তি আমার সুন্নাত তরিকা ছেড়ে চলবে সে আমার দলভুক্ত নয়।",
@@ -129,7 +145,16 @@ export const sliderContent = {
   ],
 };
 
-// Helper to get content for a religion, defaults to islam
+// TODO: "সকল ধর্ম" shows a mix from each religion instead of defaulting to one.
+sliderContent.all = [
+  sliderContent.islam[1],
+  sliderContent.christianity[1],
+  sliderContent.hinduism[0],
+  sliderContent.islam[4],
+  sliderContent.christianity[2],
+];
+
+// Helper to get content for a religion, defaults to all religions
 // Map Bengali dropdown values to English API keys
 export const religionToApiKey = {
   // English keys
@@ -148,7 +173,7 @@ export const religionToApiKey = {
 };
 
 export const getContentForReligion = (religion) => {
-  const key = religionToApiKey[religion] || "islam";
+  const key = religionToApiKey[religion] || "all";
   return {
     banner: bannerContent[key],
     about: aboutContent[key],

@@ -20,6 +20,7 @@ const biodataLinks = [
 const helpLinks = [
   { label: 'আমাদের সম্পর্কে', to: '/about-us' },
   { label: 'যোগাযোগ', to: '/contact-us' },
+  { label: 'ব্লগ', to: '/blog' },
   { label: 'সাধারণ জিজ্ঞাসা', to: '/faq' },
   { label: 'গোপনীয়তা নীতিমালা', to: '/privacy-policy' },
   { label: 'শর্তাবলি', to: '/terms-and-condition' },

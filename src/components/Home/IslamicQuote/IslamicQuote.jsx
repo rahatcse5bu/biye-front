@@ -2,7 +2,7 @@ import { ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/outline";
 import { quoteContent } from "@/constants/religionContent";
 
 const IslamicQuote = ({ content }) => {
-  const quote = content ?? quoteContent.islam;
+  const quote = content ?? quoteContent.all;
   const QuoteBody = quote.editorial ? "div" : "blockquote";
 
   return (

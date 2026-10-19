@@ -30,6 +30,9 @@ const formatTime = (value) => {
 
 // TODO: where the user goes next, matching the purpose that started the payment.
 const nextStep = (purpose, bioUser) => {
+  if (purpose === 'featured') {
+    return { label: 'অনুরোধের অবস্থা দেখুন', note: 'ফিচার্ড অনুরোধের পেজে নেওয়া হবে', path: '/user/account/featured' };
+  }
   if (bioUser && purpose === 'unverified_purchase') {
     return { label: 'যোগাযোগ তথ্য নিন', note: 'যোগাযোগ তথ্য কেনা সম্পন্ন করা হবে', buyUnverified: true };
   }
@@ -123,7 +126,7 @@ const PaySuccess = () => {
 
   const details = [
     amount && { label: 'পরিমাণ', value: `৳${toBn(amount)}` },
-    points && { label: 'যোগ হওয়া পয়েন্ট', value: `${toBn(Number(points).toFixed(0))} পয়েন্ট`, highlight: true },
+    Number(points) > 0 && { label: 'যোগ হওয়া পয়েন্ট', value: `${toBn(Number(points).toFixed(0))} পয়েন্ট`, highlight: true },
     time && { label: 'সময়', value: formatTime(time) },
   ].filter(Boolean);
 
@@ -132,7 +135,13 @@ const PaySuccess = () => {
       tone="success"
       icon={busy ? <Spinner /> : <CheckIcon className="h-10 w-10 stroke-[2.5]" aria-hidden="true" />}
       title={busy ? 'যোগাযোগ তথ্য কেনা হচ্ছে' : 'পেমেন্ট সফল হয়েছে!'}
-      subtitle={busy ? 'অনুগ্রহ করে অপেক্ষা করুন...' : 'ধন্যবাদ! আপনার পেমেন্ট সম্পন্ন হয়েছে।'}
+      subtitle={
+        busy
+          ? 'অনুগ্রহ করে অপেক্ষা করুন...'
+          : purpose === 'featured'
+            ? 'ধন্যবাদ! অ্যাডমিন অনুমোদন দিলেই আপনার বায়োডাটা ফিচার্ড হবে।'
+            : 'ধন্যবাদ! আপনার পেমেন্ট সম্পন্ন হয়েছে।'
+      }
       progress={busy ? undefined : ((REDIRECT_SECONDS - secondsLeft) / REDIRECT_SECONDS) * 100}
     >
       {(details.length > 0 || trxID) && (

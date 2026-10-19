@@ -4,7 +4,7 @@ import FeaturedBioDataGrid from "../../../components/FeaturedBioDataGrid/Feature
 import HadithSlider from "../../../components/HadithSlider/HadithSlider";
 import { useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "@/lib/navigation";
+import { Link, useNavigate } from "@/lib/navigation";
 import {
   DocumentTextIcon,
   MagnifyingGlassIcon,
@@ -158,6 +158,18 @@ const Home = ({ initialReligion }) => {
               উপলভ্য বায়োডাটা দেখতে পারেন।
             </p>
           )}
+          <div className="mt-5 flex flex-col items-center justify-between gap-3 rounded-2xl border border-brand-900/10 bg-white p-4 text-center shadow-sm sm:flex-row sm:text-left">
+            <p className="flex items-center gap-2 text-sm text-gray-700">
+              <SparklesIcon className="h-5 w-5 shrink-0 text-brand-900" aria-hidden="true" />
+              আপনার বায়োডাটাও এখানে দেখাতে চান? ফিচার্ড করে আরও বেশি সদস্যের কাছে পৌঁছান।
+            </p>
+            <Link
+              to="/user/account/featured"
+              className="shrink-0 rounded-lg bg-brand-900 px-4 py-2 text-sm font-semibold text-white hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900/40"
+            >
+              বায়োডাটা ফিচার্ড করুন
+            </Link>
+          </div>
         </section>
 
         <section className="pb-12 sm:pb-16" aria-labelledby="why-biye-heading">

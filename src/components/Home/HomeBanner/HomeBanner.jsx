@@ -13,7 +13,7 @@ const steps = [
 ];
 
 const HomeBanner = ({ content }) => {
-  const banner = { ...bannerContent.islam, ...content };
+  const banner = { ...bannerContent.all, ...content };
 
   return (
     <section
