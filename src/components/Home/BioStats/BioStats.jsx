@@ -46,7 +46,7 @@ const BioStats = () => {
       aria-labelledby="stats-heading"
     >
       <div className="mx-auto max-w-2xl text-center">
-        <p className="text-sm font-bold text-white/70">এক নজরে বিয়ে</p>
+        <p className="text-sm font-bold text-white/70">এক নজরে বিবাহ</p>
         <h2
           id="stats-heading"
           className="mt-2 text-2xl font-bold text-white sm:text-3xl"

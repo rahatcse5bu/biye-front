@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowRightIcon,
   ArrowsPointingOutIcon,
@@ -7,6 +7,7 @@ import {
   MapPinIcon,
   ShareIcon,
   SparklesIcon,
+  StarIcon,
 } from "@heroicons/react/24/outline";
 import { FaEye } from "react-icons/fa";
 import { Link } from "@/lib/navigation";
@@ -18,6 +19,7 @@ import {
 import { ScrollToTop } from "../../constants/ScrolltoTop";
 import { convertHeightToBengali } from "../../utils/height";
 import { GeneralInfoServices } from "../../services/generalInfo";
+import { FeaturedRequestServices } from "../../services/featuredRequest";
 import BiodataTypeBadge from "../BiodataTypeBadge/BiodataTypeBadge";
 import PhotoViewer from "../PhotoViewer/PhotoViewer";
 import ShareModal from "../ShareModal/ShareModal";
@@ -27,7 +29,8 @@ import { getReligionCardTheme } from "./religionCardThemes";
 
 const getDisplayValue = (value) => value || "উল্লেখ করা হয়নি";
 
-const BioData = ({ biodata }) => {
+const BioData = ({ biodata, featuredSlot = false }) => {
+  const cardRef = useRef(null);
   const [showViewer, setShowViewer] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const closeShare = useCallback(() => setShowShare(false), []);
@@ -91,7 +94,24 @@ const BioData = ({ biodata }) => {
     ? `/biodata/unverified/${biodata?._id}`
     : `/biodata/${biodata?.user_id}`;
 
+  // TODO: an impression counts once half the featured card is on screen.
+  useEffect(() => {
+    const node = cardRef.current;
+    if (!featuredSlot || !biodata?._id || !node || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        FeaturedRequestServices.trackImpression(biodata._id);
+        observer.disconnect();
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [featuredSlot, biodata?._id]);
+
   const bioDataHandler = async () => {
+    if (featuredSlot) FeaturedRequestServices.trackClick(biodata?._id);
     if (biodata?._id) {
       try {
         await GeneralInfoServices.updateWatchOfBioData(biodata._id);
@@ -103,6 +123,7 @@ const BioData = ({ biodata }) => {
 
   return (
     <article
+      ref={cardRef}
       data-religion={theme.key}
       className={`group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-200 hover:shadow-lg motion-reduce:transition-none ${theme.cardHover}`}
     >
@@ -140,6 +161,13 @@ const BioData = ({ biodata }) => {
           isUnverified={biodata?.is_unverified}
           position="top-12 right-4"
         />
+
+        {featuredSlot && (
+          <span className="absolute left-4 top-12 inline-flex items-center gap-1 rounded-full bg-amber-300 px-2 py-0.5 text-[11px] font-bold text-amber-950 shadow-sm">
+            <StarIcon className="h-3.5 w-3.5" aria-hidden="true" />
+            ফিচার্ড
+          </span>
+        )}
 
         {hasMalePhotos ? (
           <button

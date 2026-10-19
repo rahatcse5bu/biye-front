@@ -57,7 +57,7 @@ export async function generateMetadata({ params }) {
     generalInfo.marital_status
       ? `বৈবাহিক অবস্থা: ${generalInfo.marital_status}।`
       : "",
-    "বিয়ে বাংলাদেশি ম্যাট্রিমনিতে বিস্তারিত বায়োডাটা দেখুন।",
+    "বিবাহ বাংলাদেশি ম্যাট্রিমনিতে বিস্তারিত বায়োডাটা দেখুন।",
   ]
     .filter(Boolean)
     .join(" ");

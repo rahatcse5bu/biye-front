@@ -59,7 +59,7 @@ const HomeBanner = ({ content }) => {
 
         <aside
           className="rounded-3xl border border-white/15 bg-white/10 p-5 sm:p-6"
-          aria-label="বিয়ে ব্যবহারের ধাপ"
+          aria-label="বিবাহ ব্যবহারের ধাপ"
         >
           <div className="flex items-center justify-between gap-4 border-b border-white/15 pb-4">
             <div>

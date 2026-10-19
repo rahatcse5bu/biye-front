@@ -312,7 +312,7 @@ export default function NavBar() {
             className={`rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-900 ${
               isAccountSection ? "absolute left-1/2 -translate-x-1/2" : ""
             }`}
-            aria-label="বিয়ে হোম পেজ"
+            aria-label="বিবাহ হোম পেজ"
           >
             <img
               className="block h-9 w-auto"

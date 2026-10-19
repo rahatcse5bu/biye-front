@@ -27,7 +27,7 @@ export default function Tittle() {
             <img
               src={LogoImage}
               className="h-full w-full object-cover rounded-full  "
-              alt="বিয়ে ম্যাট্রিমনি"
+              alt="বিবাহ ম্যাট্রিমনি"
               width="50"
               height="50"
             />

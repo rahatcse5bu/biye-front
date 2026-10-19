@@ -68,11 +68,11 @@ const Footer = () => {
             <Link
               to="/"
               className="inline-flex rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-              aria-label="বিয়ে বাংলাদেশী ম্যাট্রিমনি হোমপেজ"
+              aria-label="বিবাহ বাংলাদেশী ম্যাট্রিমনি হোমপেজ"
             >
               <Image
                 src="/assets/logo/biye-logo.svg"
-                alt="বিয়ে বাংলাদেশী ম্যাট্রিমনি"
+                alt="বিবাহ বাংলাদেশী ম্যাট্রিমনি"
                 width={220}
                 height={70}
                 className="h-auto w-44"
@@ -80,10 +80,10 @@ const Footer = () => {
             </Link>
 
             <h2 id="footer-brand" className="sr-only">
-              বিয়ে বাংলাদেশী ম্যাট্রিমনি
+              বিবাহ বাংলাদেশী ম্যাট্রিমনি
             </h2>
             <p className="mt-5 max-w-sm text-sm leading-7 text-white/75 sm:text-base">
-              বিয়ে একটি বাংলাদেশী ম্যাট্রিমনি প্ল্যাটফর্ম, যেখানে
+              বিবাহ একটি বাংলাদেশী ম্যাট্রিমনি প্ল্যাটফর্ম, যেখানে
               পাত্র-পাত্রীরা সহজে বায়োডাটা তৈরি করতে এবং পছন্দের জীবনসঙ্গী
               খুঁজতে পারেন।
             </p>
@@ -158,7 +158,7 @@ const Footer = () => {
                     <a
                       href="tel:+8801793278360"
                       className={contactLinkClass}
-                      aria-label="বিয়ে ম্যাট্রিমনিতে ফোন করুন"
+                      aria-label="বিবাহ ম্যাট্রিমনিতে ফোন করুন"
                     >
                       +880 1793-278360
                     </a>
@@ -191,7 +191,7 @@ const Footer = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className={contactLinkClass}
-                      aria-label="WhatsApp-এ বিয়ে ম্যাট্রিমনির সঙ্গে যোগাযোগ করুন"
+                      aria-label="WhatsApp-এ বিবাহ ম্যাট্রিমনির সঙ্গে যোগাযোগ করুন"
                     >
                       বার্তা পাঠান
                     </a>
@@ -214,7 +214,7 @@ const Footer = () => {
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label={`${label}-এ বিয়ে ম্যাট্রিমনি`}
+                      aria-label={`${label}-এ বিবাহ ম্যাট্রিমনি`}
                       title={label}
                       className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition duration-200 hover:-translate-y-1 hover:border-white/40 hover:bg-white hover:text-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-reduce:transform-none motion-reduce:transition-none"
                     >
@@ -231,7 +231,7 @@ const Footer = () => {
 
       <div className="relative border-t border-white/10 bg-black/10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-5 text-center text-sm text-white/70 sm:px-8 md:flex-row md:text-left lg:px-10">
-          <p>Copyright © 2023-{currentYear} বিয়ে | সর্বস্বত্ব সংরক্ষিত</p>
+          <p>Copyright © 2023-{currentYear} বিবাহ | সর্বস্বত্ব সংরক্ষিত</p>
           <nav aria-label="আইনি নীতিমালা">
             <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 md:justify-end">
               <li>

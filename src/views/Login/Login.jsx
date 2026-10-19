@@ -122,11 +122,11 @@ export function Login() {
             <Link
               to="/"
               className="inline-flex rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-              aria-label="বিয়ে হোম পেজ"
+              aria-label="বিবাহ হোম পেজ"
             >
               <img
                 src="/assets/logo/biye-logo.svg"
-                alt="বিয়ে বাংলাদেশী ম্যাট্রিমনি"
+                alt="বিবাহ বাংলাদেশী ম্যাট্রিমনি"
                 width="220"
                 height="70"
                 className="h-auto w-36"

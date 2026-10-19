@@ -27,7 +27,7 @@ const FeaturedBioDataGrid = ({ data }) => {
       {data?.length > 0 ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {data.map((biodata) => (
-            <BioData key={biodata?._id || biodata?.user_id} biodata={biodata} />
+            <BioData key={biodata?._id || biodata?.user_id} biodata={biodata} featuredSlot />
           ))}
         </div>
       ) : (

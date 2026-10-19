@@ -9,7 +9,7 @@ const AboutUs = () => {
           <div className="md:order-2">
             <img
               src="https://www.dreamhost.com/blog/wp-content/uploads/2020/11/The-Perfect-About-Us-Page-Feature-730x486.jpg"
-              alt="বিয়ে ম্যাট্রিমনি সম্পর্কে"
+              alt="বিবাহ ম্যাট্রিমনি সম্পর্কে"
               width="730"
               height="486"
               loading="lazy"

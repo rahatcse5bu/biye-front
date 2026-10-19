@@ -207,7 +207,11 @@ const BioDatasGrid = ({ setSideBarDisplay }) => {
           ) : bios?.length ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
               {bios.map((biodata) => (
-                <BioData key={getBiodataKey(biodata)} biodata={biodata} />
+                <BioData
+                  key={getBiodataKey(biodata)}
+                  biodata={biodata}
+                  featuredSlot={Boolean(biodata?.isFeatured)}
+                />
               ))}
             </div>
           ) : (

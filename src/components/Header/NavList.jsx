@@ -8,7 +8,7 @@ const NavList = ({ navData, setOpenNav, user }) => (
       <Link to="/">
         <img
           src="/assets/icons/logo.png"
-          alt="বিয়ে ম্যাট্রিমনি"
+          alt="বিবাহ ম্যাট্রিমনি"
           width="177"
           height="55"
         />

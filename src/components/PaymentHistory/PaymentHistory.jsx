@@ -133,6 +133,8 @@ const PaymentHistory = () => {
               const preview = refundPreview(item);
               const canRequest =
                 !request && item.status === "Completed" && preview !== null && preview >= 1;
+              // TODO: the points bought must still be in the account to be held during review.
+              const lacksPoints = balance < (item.points || 0);
 
               return (
                 <tr key={item._id} className="border-b last:border-b-0">
@@ -154,13 +156,21 @@ const PaymentHistory = () => {
                         )}
                       </div>
                     ) : canRequest ? (
-                      <button
-                        type="button"
-                        onClick={() => handleRequestRefund(item)}
-                        className="whitespace-nowrap rounded bg-[#0D7377] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0D7377]/40"
-                      >
-                        রিফান্ড অনুরোধ
-                      </button>
+                      <div className="flex flex-col items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => handleRequestRefund(item)}
+                          disabled={lacksPoints}
+                          className="whitespace-nowrap rounded bg-[#0D7377] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#0F8287] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0D7377]/40 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+                        >
+                          রিফান্ড অনুরোধ
+                        </button>
+                        {lacksPoints && (
+                          <span className="max-w-[12rem] text-xs text-gray-500">
+                            কমপক্ষে {toBn(item.points)} পয়েন্ট প্রয়োজন
+                          </span>
+                        )}
+                      </div>
                     ) : (
                       <span className="text-xs text-gray-400">
                         {item.status === "Refunded" ? "রিফান্ড সম্পন্ন" : "প্রযোজ্য নয়"}

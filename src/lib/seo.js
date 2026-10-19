@@ -6,13 +6,13 @@ export const SITE_URL = (
 
 export const SITE_HOST = new URL(SITE_URL).host;
 
-export const SITE_NAME = 'বিয়ে';
+export const SITE_NAME = 'বিবাহ';
 
 export const DEFAULT_OG_IMAGE = {
   url: `${SITE_URL}/og-image.png`,
   width: 1200,
   height: 630,
-  alt: 'বিয়ে — বিশ্বস্ত বাংলাদেশি ম্যাট্রিমনি প্ল্যাটফর্ম',
+  alt: 'বিবাহ — বিশ্বস্ত বাংলাদেশি ম্যাট্রিমনি প্ল্যাটফর্ম',
 };
 
 export const SITE_KEYWORDS = [

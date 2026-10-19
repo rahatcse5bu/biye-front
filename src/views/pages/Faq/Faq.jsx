@@ -9,7 +9,7 @@ const Faq = () => {
         className="text-xl md:text-2xl lg:text-3xl font-semibold mb-2"
         style={{ color: Colors.titleText }}
       >
-        বিয়ে ম্যাট্রিমনি — সাধারণ জিজ্ঞাসা (FAQ)
+        বিবাহ ম্যাট্রিমনি — সাধারণ জিজ্ঞাসা (FAQ)
       </h1>
       <p className="mb-6 text-gray-600 leading-7">
         অ্যাকাউন্ট, বায়োডাটা জমা ও অনুমোদন, অনুরোধ পাঠানো, যোগাযোগ তথ্য,

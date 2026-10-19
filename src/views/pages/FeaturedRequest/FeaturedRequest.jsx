@@ -4,6 +4,7 @@ import { Link } from '@/lib/navigation';
 import {
   CheckBadgeIcon,
   ClockIcon,
+  CursorArrowRaysIcon,
   EyeIcon,
   HomeModernIcon,
   SparklesIcon,
@@ -25,7 +26,8 @@ const STATUS = {
 };
 
 const BENEFITS = [
-  { Icon: HomeModernIcon, text: 'হোমপেজের ফিচার্ড অংশে আপনার বায়োডাটা দেখানো হবে' },
+  { Icon: HomeModernIcon, text: 'হোমপেজের ফিচার্ড অংশে এবং মিলে যাওয়া সার্চ ফলাফলের শুরুতে আপনার বায়োডাটা দেখানো হবে' },
+  { Icon: CursorArrowRaysIcon, text: 'কতজন আপনার বায়োডাটা দেখেছেন ও ক্লিক করেছেন, তা এখানেই দেখতে পারবেন' },
   { Icon: EyeIcon, text: 'আরও বেশি সদস্যের চোখে পড়বে, ফলে প্রস্তাব পাওয়ার সম্ভাবনা বাড়বে' },
   { Icon: CheckBadgeIcon, text: 'অ্যাডমিন যাচাই করে অনুমোদন দেন; অনুমোদন না হলে টাকা ফেরত দেওয়া হয়' },
 ];
@@ -41,7 +43,7 @@ const StatusCard = ({ data }) => {
           <p className="font-semibold text-emerald-800">আপনার বায়োডাটা এখন ফিচার্ড</p>
           <p className="text-sm text-emerald-700">
             {data.featured_until
-              ? `${formatDate(data.featured_until)} পর্যন্ত হোমপেজে দেখানো হবে। চাইলে এখনই মেয়াদ বাড়াতে পারেন।`
+              ? `${formatDate(data.featured_until)} পর্যন্ত হোমপেজ ও সার্চ ফলাফলে দেখানো হবে। চাইলে এখনই মেয়াদ বাড়াতে পারেন।`
               : 'অ্যাডমিন আপনার বায়োডাটা ফিচার্ড করেছেন।'}
           </p>
         </div>
@@ -178,6 +180,18 @@ const FeaturedRequest = () => {
                     </p>
                     {item.status === 'approved' && item.featured_until && (
                       <p className="text-xs text-emerald-700">ফিচার্ড মেয়াদ: {formatDate(item.featured_until)} পর্যন্ত</p>
+                    )}
+                    {item.status === 'approved' && (
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        <span className="inline-flex items-center gap-1 rounded-lg bg-gray-50 px-2.5 py-1 text-xs text-gray-700">
+                          <EyeIcon className="h-4 w-4 text-[#0D7377]" aria-hidden="true" />
+                          ইমপ্রেশন: <span className="font-semibold">{bn(String(item.impressions || 0))}</span>
+                        </span>
+                        <span className="inline-flex items-center gap-1 rounded-lg bg-gray-50 px-2.5 py-1 text-xs text-gray-700">
+                          <CursorArrowRaysIcon className="h-4 w-4 text-[#0D7377]" aria-hidden="true" />
+                          ক্লিক: <span className="font-semibold">{bn(String(item.clicks || 0))}</span>
+                        </span>
+                      </div>
                     )}
                     {item.status === 'rejected' && (
                       <p className="text-xs text-rose-700">

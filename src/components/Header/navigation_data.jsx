@@ -20,7 +20,7 @@ export const navData = [
     path: '/refund-policy',
   },
   {
-    title: 'বিয়ে',
+    title: 'বিবাহ',
     subLinks: [
       { title: 'সচরাচর জিজ্ঞাসা', path: '/faq' },
       { title: 'আমাদের সম্পর্কে', path: '/about-us' },
