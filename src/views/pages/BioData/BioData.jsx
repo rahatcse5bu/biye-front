@@ -27,6 +27,7 @@ import UserContext from "../../../contexts/UserContext";
 import BioDetailsSkeleton from "../../../components/BioDetailsSkeleton/BioDetailsSkeleton";
 import { useNavigate } from "@/lib/navigation";
 import ScrollToTop from "../../../components/ScrollTop/ScrollTop";
+import { ArrowRightIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 
 import Contact from "../Contact/Contact";
 const BioData = ({ initialData = null }) => {
@@ -153,20 +154,42 @@ const BioData = ({ initialData = null }) => {
               ) : userInfo?.data?.user_id ? (
                 <Contact />
               ) : (
-                <div className="my-8 p-6 bg-gray-100 border border-gray-300 rounded-lg text-center">
-                  <h1 className="text-2xl font-bold text-gray-800 mb-4">
-                    এই বায়োডাটার যোগাযোগের তথ্য কিনতে লগইন করুন
-                  </h1>
-                  <p className="text-gray-600 text-lg mb-6">
-                    যোগাযোগের তথ্য দেখতে প্রথমে আপনার অ্যাকাউন্টে লগইন করুন।
-                  </p>
-                  <button
-                    onClick={() => navigate("/login")}
-                    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-                  >
-                    এখনই লগইন করুন
-                  </button>
-                </div>
+                <section
+                  aria-labelledby="contact-login-title"
+                  className="relative isolate my-6 overflow-hidden rounded-2xl border border-[#d9eae6] bg-gradient-to-br from-[#eef8f5] via-white to-[#f8fbfa] p-6 shadow-[0_4px_24px_rgba(13,115,119,0.04)] sm:p-8"
+                >
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -right-12 -top-12 -z-10 h-44 w-44 rounded-full border-[28px] border-[#0D7377]/[0.04]"
+                  />
+                  <div className="flex flex-col items-center gap-5 text-center sm:flex-row sm:items-start sm:gap-6 sm:text-left">
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-[#d4e9e3] bg-white text-[#0D7377] shadow-sm">
+                      <LockClosedIcon aria-hidden="true" className="h-7 w-7" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="mb-2 text-sm font-semibold text-[#0D7377]">
+                        যোগাযোগের তথ্য
+                      </p>
+                      <h2
+                        id="contact-login-title"
+                        className="text-xl font-bold leading-relaxed text-[#173f3b] sm:text-2xl"
+                      >
+                        যোগাযোগের তথ্য দেখতে লগইন করুন
+                      </h2>
+                      <p className="mt-2 text-base leading-7 text-[#637570]">
+                        এই বায়োডাটার যোগাযোগের তথ্য কিনতে আপনার অ্যাকাউন্টে প্রবেশ করুন।
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => navigate("/login")}
+                        className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-xl bg-[#0D7377] px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-[#095c60] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D7377] focus-visible:ring-offset-4 sm:w-auto"
+                      >
+                        এখনই লগইন করুন
+                        <ArrowRightIcon aria-hidden="true" className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                </section>
               )}
             </div>
           </div>
