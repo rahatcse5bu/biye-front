@@ -28,9 +28,11 @@ export async function generateMetadata({ params }) {
     return { title: 'লেখা পাওয়া যায়নি', robots: { index: false, follow: false } };
   }
 
+  // TODO: admin SEO fields win; title and excerpt are the fallback.
   const metadata = createPageMetadata({
-    title: post.title,
-    description: blogExcerpt(post),
+    title: post.seo_title || post.title,
+    description: post.seo_description || blogExcerpt(post),
+    keywords: post.tags,
     path: `/blog/${encodeURIComponent(post.slug)}`,
     ...(post.cover_image && { images: [{ url: post.cover_image, alt: post.title }] }),
   });
@@ -41,6 +43,7 @@ export async function generateMetadata({ params }) {
       type: 'article',
       publishedTime: post.published_at,
       modifiedTime: post.updatedAt,
+      ...(post.tags?.length && { tags: post.tags }),
     },
   };
 }
@@ -89,7 +92,8 @@ export default async function BlogPostPage({ params }) {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
-    description: blogExcerpt(post),
+    description: post.seo_description || blogExcerpt(post),
+    ...(post.tags?.length && { keywords: post.tags.join(', ') }),
     datePublished: post.published_at,
     dateModified: post.updatedAt,
     mainEntityOfPage: `${SITE_URL}${path}`,
@@ -116,6 +120,15 @@ export default async function BlogPostPage({ params }) {
           <p className="mt-3 text-sm text-gray-500">
             {[post.author, formatBlogDate(post.published_at)].filter(Boolean).join(' · ')}
           </p>
+          {post.tags?.length > 0 && (
+            <ul className="mt-4 flex flex-wrap gap-2" aria-label="ট্যাগ">
+              {post.tags.map((tag) => (
+                <li key={tag} className="rounded-full bg-brand-900/10 px-3 py-1 text-xs font-semibold text-brand-900">
+                  #{tag}
+                </li>
+              ))}
+            </ul>
+          )}
         </header>
 
         {post.cover_image && (
