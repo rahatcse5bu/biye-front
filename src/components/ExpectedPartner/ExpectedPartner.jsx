@@ -4,6 +4,10 @@ import { convertToBengaliDigits } from '../../utils/language';
 import { convertToFeetAndInches } from '../../utils/height';
 import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswerCard';
 
+// TODO: a range shows only when both ends exist; otherwise the card hides instead of printing "undefined"/"null".
+const formatRange = (min, max, format) =>
+  min != null && max != null ? `${format(min)} থেকে ${format(max)} পর্যন্ত` : null;
+
 const ExpectedPartner = () => {
   const { bio } = useContext(BioContext);
   const expectedLifePartner = bio?.expectedLifePartner || null;
@@ -19,7 +23,11 @@ const ExpectedPartner = () => {
       <div className="grid grid-cols-1 gap-0 my-3">
         <GridQuestionAnswerCard
           question="বয়স"
-          answer={`${convertToBengaliDigits(expectedLifePartner?.age?.min)} বছর থেকে ${convertToBengaliDigits(expectedLifePartner?.age?.max)} বছর পর্যন্ত`}
+          answer={formatRange(
+            expectedLifePartner?.age?.min,
+            expectedLifePartner?.age?.max,
+            (age) => `${convertToBengaliDigits(age)} বছর`,
+          )}
         />
         <GridQuestionAnswerCard
           question="গাত্রবর্ণ"
@@ -27,7 +35,11 @@ const ExpectedPartner = () => {
         />
         <GridQuestionAnswerCard
           question="উচ্চতা"
-          answer={`${convertToFeetAndInches(expectedLifePartner?.height?.min?.toFixed(2))} থেকে ${convertToFeetAndInches(expectedLifePartner?.height?.max?.toFixed(2))} পর্যন্ত`}
+          answer={formatRange(
+            expectedLifePartner?.height?.min,
+            expectedLifePartner?.height?.max,
+            (height) => convertToFeetAndInches(Number(height).toFixed(2)),
+          )}
         />
         <GridQuestionAnswerCard
           question="শিক্ষাগত যোগ্যতা"

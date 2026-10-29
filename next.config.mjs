@@ -73,6 +73,12 @@ const nextConfig = {
 
   async redirects() {
     return [
+      // TODO: robots.txt names sitemap-v2.xml; the old path forwards there so Google sees one sitemap.
+      {
+        source: "/sitemap.xml",
+        destination: "/sitemap-v2.xml",
+        permanent: true,
+      },
       {
         source: "/:path*",
         has: [{ type: "host", value: "bibaho.org" }],

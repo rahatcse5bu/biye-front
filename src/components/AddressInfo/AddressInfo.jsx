@@ -13,27 +13,39 @@ function AddressInfo() {
         <GridQuestionAnswerCard
           question="স্থায়ী ঠিকানা"
           answer={
-            <>
-              <span>{addressInfo?.permanent_address}</span>
-              <br />
-              <span>
-                <b>এলাকার নাম: &nbsp;</b>
-                {addressInfo?.permanent_area}
-              </span>
-            </>
+            (addressInfo?.permanent_address || addressInfo?.permanent_area) && (
+              <>
+                <span>{addressInfo?.permanent_address}</span>
+                {addressInfo?.permanent_area && (
+                  <>
+                    <br />
+                    <span>
+                      <b>এলাকার নাম: &nbsp;</b>
+                      {addressInfo.permanent_area}
+                    </span>
+                  </>
+                )}
+              </>
+            )
           }
         />
         <GridQuestionAnswerCard
           question="বর্তমান ঠিকানা"
           answer={
-            <>
-              <span>{addressInfo?.present_address}</span>
-              <br />
-              <span>
-                <b>এলাকার নাম: &nbsp;</b>
-                {addressInfo?.present_area}
-              </span>
-            </>
+            (addressInfo?.present_address || addressInfo?.present_area) && (
+              <>
+                <span>{addressInfo?.present_address}</span>
+                {addressInfo?.present_area && (
+                  <>
+                    <br />
+                    <span>
+                      <b>এলাকার নাম: &nbsp;</b>
+                      {addressInfo.present_area}
+                    </span>
+                  </>
+                )}
+              </>
+            )
           }
         />
         {/* Where Grew Up */}

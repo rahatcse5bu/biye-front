@@ -49,7 +49,7 @@ const trustFeatures = [
   },
 ];
 
-const Home = ({ initialReligion }) => {
+const Home = ({ initialReligion, initialFeatured = null, initialStats = null }) => {
   const { religion, ready } = useReligionPreference();
   const activeReligion = religion ?? initialReligion;
   const content = getContentForReligion(activeReligion);
@@ -81,6 +81,10 @@ const Home = ({ initialReligion }) => {
     queryKey: ['general-info', 'featured', activeReligion],
     queryFn: async () => GeneralInfoServices.getALLGeneralInfo(featuredQuery),
     enabled: ready,
+    // TODO: server data only seeds the religion it was fetched for; another choice fetches its own.
+    initialData:
+      activeReligion === initialReligion ? initialFeatured ?? undefined : undefined,
+    staleTime: 60_000,
     retry: false,
   });
 
@@ -203,7 +207,7 @@ const Home = ({ initialReligion }) => {
           <AboutFeature content={content.about} />
         </section>
 
-        <BioStats />
+        <BioStats initialData={initialStats} />
 
         <section
           className="py-12 sm:py-16"

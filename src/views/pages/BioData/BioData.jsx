@@ -21,7 +21,7 @@ import { ContactServices } from "../../../services/contact";
 import { UserInfoServices } from "../../../services/userInfo";
 import { getToken } from "../../../utils/cookies";
 import { trackEvent } from "../../../utils/analytics";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import BioContext from "../../../contexts/BioContext";
 import UserContext from "../../../contexts/UserContext";
 import BioDetailsSkeleton from "../../../components/BioDetailsSkeleton/BioDetailsSkeleton";
@@ -32,7 +32,8 @@ import { ArrowRightIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import Contact from "../Contact/Contact";
 const BioData = ({ initialData = null }) => {
   const { id } = useParams();
-  const { setBio } = useContext(BioContext);
+  const bioContext = useContext(BioContext);
+  const { setBio } = bioContext;
   const { userInfo } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -81,12 +82,19 @@ const BioData = ({ initialData = null }) => {
     };
   }, [data, setBio, id]);
 
+  // TODO: sections read bio from context; seeding it during render (not only in the effect) puts the profile in the server HTML.
+  const bioValue = useMemo(
+    () => ({ ...bioContext, bio: data?.data ?? bioContext.bio }),
+    [bioContext, data],
+  );
+
   const found = Boolean(data?.data);
   useEffect(() => {
     if (found) trackEvent("view_item", { content_ids: [String(id)], content_type: "product" });
   }, [found, id]);
 
   return (
+    <BioContext.Provider value={bioValue}>
     <div className="w-full py-2">
       <ScrollToTop />
       {isLoading ? (
@@ -196,6 +204,7 @@ const BioData = ({ initialData = null }) => {
         </>
       )}
     </div>
+    </BioContext.Provider>
   );
 };
 

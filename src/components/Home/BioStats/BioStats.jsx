@@ -8,13 +8,14 @@ import { BioDataServices } from '../../../services/bioData';
 import { useQuery } from '@tanstack/react-query';
 import LoadingCircle from '../../LoadingCircle/LoadingCircle';
 
-const useBioStats = () =>
+const useBioStats = (initialData) =>
   useQuery({
     queryKey: ['bio-all-stats'],
     queryFn: async () => {
       const response = await BioDataServices.getAllBioDataStats();
       return response.data;
     },
+    initialData: initialData ?? undefined,
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });
@@ -36,8 +37,8 @@ const StatCard = ({ value, label, icon: Icon }) => (
   </article>
 );
 
-const BioStats = () => {
-  const { data: biosStats, isLoading, error } = useBioStats();
+const BioStats = ({ initialData = null }) => {
+  const { data: biosStats, isLoading, error } = useBioStats(initialData);
   const totalBios = (biosStats?.পুরুষ || 0) + (biosStats?.মহিলা || 0);
 
   return (

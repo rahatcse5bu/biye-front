@@ -2,6 +2,9 @@ import { backendUrl } from '@/lib/backendUrl';
 import { SITE_URL } from '@/lib/seo';
 import { fetchBlogPosts } from '@/lib/blog';
 
+// TODO: lastmod for pages with no data source; bump when their content changes.
+const STATIC_PAGES_UPDATED = new Date('2026-10-19');
+
 const STATIC_ROUTES = [
   { path: '', changeFrequency: 'daily', priority: 1 },
   { path: '/biodatas', changeFrequency: 'daily', priority: 0.9 },
@@ -44,7 +47,7 @@ const fetchBiodataEntries = async () => {
       if (!/^\d+$/.test(String(row?.user_id ?? ''))) return;
       entries.push({
         url: `${SITE_URL}/biodata/${row.user_id}`,
-        lastModified: row.createdAt ? new Date(row.createdAt) : undefined,
+        lastModified: new Date(row.createdAt || STATIC_PAGES_UPDATED),
         changeFrequency: 'weekly',
         priority: 0.6,
       });
@@ -60,19 +63,19 @@ const fetchBlogEntries = async () => {
   const { posts } = await fetchBlogPosts(1, 50);
   return posts.map((post) => ({
     url: `${SITE_URL}/blog/${encodeURIComponent(post.slug)}`,
-    lastModified: post.published_at ? new Date(post.published_at) : undefined,
+    lastModified: new Date(post.updatedAt || post.published_at || STATIC_PAGES_UPDATED),
     changeFrequency: 'monthly',
     priority: 0.6,
   }));
 };
 
-export const getSitemapEntries = async () => {
-  const staticEntries = STATIC_ROUTES.map(({ path, changeFrequency, priority }) => ({
-    url: `${SITE_URL}${path}`,
-    changeFrequency,
-    priority,
-  }));
+const newest = (entries) =>
+  entries.reduce(
+    (latest, { lastModified }) => (lastModified > latest ? lastModified : latest),
+    STATIC_PAGES_UPDATED,
+  );
 
+export const getSitemapEntries = async () => {
   // TODO: a backend outage must not 500 the sitemap; fall back to static routes.
   const biodataEntries = await fetchBiodataEntries().catch((error) => {
     console.error('Sitemap biodata fetch failed', error);
@@ -83,6 +86,19 @@ export const getSitemapEntries = async () => {
     console.error('Sitemap blog fetch failed', error);
     return [];
   });
+
+  // TODO: the home page and listing change whenever a biodata does; the blog index when a post does.
+  const routeLastModified = {
+    '': newest(biodataEntries),
+    '/biodatas': newest(biodataEntries),
+    '/blog': newest(blogEntries),
+  };
+  const staticEntries = STATIC_ROUTES.map(({ path, changeFrequency, priority }) => ({
+    url: `${SITE_URL}${path}`,
+    lastModified: routeLastModified[path] ?? STATIC_PAGES_UPDATED,
+    changeFrequency,
+    priority,
+  }));
 
   return [...staticEntries, ...blogEntries, ...biodataEntries];
 };

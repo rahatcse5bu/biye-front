@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import './globals.css';
 import Providers from './providers';
 import {
@@ -134,7 +133,7 @@ export default function RootLayout({ children }) {
           }}
         />
         <Providers>
-          <Suspense fallback={null}>{children}</Suspense>
+          {children}
         </Providers>
       </body>
     </html>
