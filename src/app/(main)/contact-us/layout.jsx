@@ -3,7 +3,7 @@ import { createPageMetadata } from '@/lib/seo';
 export const metadata = createPageMetadata({
   title: 'বিবাহ ম্যাট্রিমনির সঙ্গে যোগাযোগ করুন',
   description:
-    'বিবাহ ম্যাট্রিমনি সম্পর্কে সহায়তা, প্রশ্ন বা মতামতের জন্য আমাদের সঙ্গে যোগাযোগ করুন।',
+    'বায়োডাটা, পয়েন্ট, পেমেন্ট বা রিফান্ড নিয়ে প্রশ্ন? ইমেইল bibahosupport@gmail.com বা ফোন +৮৮০১৭৯৩২৭৮৩৬০ — বিবাহ সাপোর্ট টিম দ্রুত সাহায্য করবে।',
   path: '/contact-us',
 });
 

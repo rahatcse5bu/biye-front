@@ -5,7 +5,6 @@ import { formatDate, formatDateAndCalculateAge, getDateMonthYear } from '../../u
 import { convertHeightToBengali } from '../../utils/height';
 import { FaEye, FaShieldAlt } from 'react-icons/fa';
 import { Button } from '@material-tailwind/react';
-import { ScrollToTop } from '../../constants/ScrolltoTop';
 
 const RELIGION_LABELS = {
   islam: { base: 'মুসলিম', color: 'bg-green-600' },
@@ -25,7 +24,6 @@ const UnverifiedBioData = ({ biodata }) => {
 
   return (
     <div className="my-5 min-w-[280px] relative hover:shadow-2xl transition-all duration-300 ease-in rounded-md border-2 border-dashed border-gray-300">
-      <ScrollToTop />
 
       {/* Unverified ribbon */}
       <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">

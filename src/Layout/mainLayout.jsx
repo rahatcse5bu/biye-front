@@ -2,6 +2,7 @@
 
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
+import { ScrollToTop } from '../constants/ScrolltoTop';
 
 const MainLayout = ({ children }) => {
   return (
@@ -9,6 +10,7 @@ const MainLayout = ({ children }) => {
       <Header />
       {children}
       <Footer />
+      <ScrollToTop />
     </div>
   );
 };

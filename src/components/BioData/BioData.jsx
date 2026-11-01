@@ -16,7 +16,6 @@ import {
   formatDateAndCalculateAge,
   getDateMonthYear,
 } from "../../utils/date";
-import { ScrollToTop } from "../../constants/ScrolltoTop";
 import { convertHeightToBengali } from "../../utils/height";
 import { GeneralInfoServices } from "../../services/generalInfo";
 import { FeaturedRequestServices } from "../../services/featuredRequest";
@@ -127,7 +126,6 @@ const BioData = ({ biodata, featuredSlot = false }) => {
       data-religion={theme.key}
       className={`group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-200 hover:shadow-lg motion-reduce:transition-none ${theme.cardHover}`}
     >
-      <ScrollToTop />
 
       <header
         className={`relative isolate overflow-hidden px-4 pb-5 pt-4 text-center text-white ${theme.header}`}

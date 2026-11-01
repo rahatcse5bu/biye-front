@@ -8,7 +8,7 @@ const OngikarNama = () => {
   const siteUrl = SITE_HOST;
   return (
     <div className="single-bio-ongikar-info rounded shadow">
-      <h5 className="card-title text-center text-2xl my-3">অঙ্গীকারনামা</h5>
+      <h2 className="card-title text-center text-2xl my-3">অঙ্গীকারনামা</h2>
 
       <div className="grid grid-cols-1 gap-0 my-3">
         <GridQuestionAnswerCard

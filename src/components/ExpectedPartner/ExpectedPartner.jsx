@@ -17,9 +17,9 @@ const ExpectedPartner = () => {
 
   return (
     <div className="w-auto border-t-2 rounded shadow single-bio-expected-lifepartner-info">
-      <h5 className="my-3 text-2xl text-center card-title">
+      <h2 className="my-3 text-2xl text-center card-title">
         প্রত্যাশিত জীবনসঙ্গী
-      </h5>
+      </h2>
       <div className="grid grid-cols-1 gap-0 my-3">
         <GridQuestionAnswerCard
           question="বয়স"

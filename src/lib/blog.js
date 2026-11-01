@@ -47,6 +47,18 @@ export const formatBlogDate = (value) =>
       })
     : '';
 
+const BRAND_PATTERN = /বিবাহ|bibaho/i;
+
+// TODO: admin titles often end in "| বিবাহ"; strip it so the layout template doesn't add a second one.
+export const blogTitle = (post) => {
+  const title = (post.seo_title || post.title).replace(/\s*[|।–—-]\s*(বিবাহ|bibaho)\s*$/i, '').trim();
+  return BRAND_PATTERN.test(title) ? { absolute: title } : title;
+};
+
+// TODO: editor autolinks "Bibaho.org" as http://, which costs a redirect hop; point it at the canonical host.
+export const canonicalizeLinks = (html = '') =>
+  html.replace(/href="https?:\/\/(?:www\.)?bibaho\.org/gi, 'href="https://www.bibaho.org');
+
 // TODO: rich-editor posts are HTML (sanitized by the backend); older posts are plain text.
 export const isHtmlContent = (content = '') => content.trim().startsWith('<');
 

@@ -10,8 +10,11 @@ import {
 } from '@/lib/seo';
 import {
   blogExcerpt,
+  blogTitle,
+  canonicalizeLinks,
   decodeSlug,
   fetchBlogPost,
+  fetchBlogPosts,
   formatBlogDate,
   isHtmlContent,
   parseBlogContent,
@@ -29,8 +32,9 @@ export async function generateMetadata({ params }) {
   }
 
   // TODO: admin SEO fields win; title and excerpt are the fallback.
+  const title = blogTitle(post);
   const metadata = createPageMetadata({
-    title: post.seo_title || post.title,
+    title: title.absolute ?? title,
     description: post.seo_description || blogExcerpt(post),
     keywords: post.tags,
     path: `/blog/${encodeURIComponent(post.slug)}`,
@@ -38,6 +42,7 @@ export async function generateMetadata({ params }) {
   });
   return {
     ...metadata,
+    title,
     openGraph: {
       ...metadata.openGraph,
       type: 'article',
@@ -81,6 +86,10 @@ export default async function BlogPostPage({ params }) {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();
+
+  // TODO: every post links to a few others so no post is reachable from the sitemap alone.
+  const { posts: latest } = await fetchBlogPosts(1, 4).catch(() => ({ posts: [] }));
+  const morePosts = latest.filter(({ slug: other }) => other !== post.slug).slice(0, 3);
 
   const path = `/blog/${encodeURIComponent(post.slug)}`;
   const breadcrumbSchema = createBreadcrumbSchema([
@@ -140,11 +149,31 @@ export default async function BlogPostPage({ params }) {
         )}
 
         {isHtmlContent(post.content) ? (
-          <div className="blog-content mt-6" dangerouslySetInnerHTML={{ __html: post.content }} />
+          <div className="blog-content mt-6" dangerouslySetInnerHTML={{ __html: canonicalizeLinks(post.content) }} />
         ) : (
           <div className="mt-6 text-lg leading-8 text-gray-700">
             {parseBlogContent(post.content).map(renderBlock)}
           </div>
+        )}
+
+        {morePosts.length > 0 && (
+          <nav className="mt-14 border-t border-gray-200 pt-8" aria-labelledby="more-posts-heading">
+            <h2 id="more-posts-heading" className="text-xl font-bold text-gray-900">
+              আরও পড়ুন
+            </h2>
+            <ul className="mt-4 space-y-3">
+              {morePosts.map((other) => (
+                <li key={other._id}>
+                  <Link
+                    to={`/blog/${encodeURIComponent(other.slug)}`}
+                    className="font-semibold text-brand-900 underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-900"
+                  >
+                    {other.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         )}
       </div>
     </article>

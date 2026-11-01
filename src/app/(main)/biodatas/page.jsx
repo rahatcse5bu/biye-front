@@ -1,6 +1,13 @@
 import { ServerSeededBioDatas } from "@/views/pages/BioDatas/BioDatas";
 import { convertToQuery, parseBiodataFilters } from "@/utils/query";
 import { backendUrl as baseUrl } from "@/lib/backendUrl";
+import { NO_INDEX_FOLLOW_METADATA } from "@/lib/seo";
+
+// TODO: filter combinations are endless near-duplicates; only the plain listing is indexed, the canonical stays /biodatas.
+export async function generateMetadata({ searchParams }) {
+  const params = await searchParams;
+  return Object.keys(params).length ? NO_INDEX_FOLLOW_METADATA : {};
+}
 
 export default async function BioDatasPage({ searchParams }) {
   const params = await searchParams;
@@ -16,7 +23,8 @@ export default async function BioDatasPage({ searchParams }) {
   };
   const queryString = convertToQuery(initialQuery);
   const response = await fetch(`${baseUrl}/general-info?${queryString}`, {
-    cache: "no-store",
+    // TODO: the listing is public, so one backend hit per query per minute is shared across visitors.
+    next: { revalidate: 60 },
     signal: AbortSignal.timeout(15000),
   });
 

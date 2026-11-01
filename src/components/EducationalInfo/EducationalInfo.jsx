@@ -35,7 +35,7 @@ function EducationInfo() {
 
   return (
     <div className="w-auto border-t-2 rounded shadow single-bio-educational-qualification">
-      <h5 className="my-3 text-2xl text-center card-title">শিক্ষাগত যোগ্যতা</h5>
+      <h2 className="my-3 text-2xl text-center card-title">শিক্ষাগত যোগ্যতা</h2>
 
       <div className="grid grid-cols-1 gap-0 my-3">
         <GridQuestionAnswerCard

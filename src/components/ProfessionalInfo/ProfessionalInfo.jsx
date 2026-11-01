@@ -41,7 +41,7 @@ const ProfessionalInfo = () => {
 
   return (
     <div className="single-bio-ocupational-info rounded shadow">
-      <h5 className="card-title text-center text-2xl my-3">পেশাগত তথ্য</h5>
+      <h2 className="card-title text-center text-2xl my-3">পেশাগত তথ্য</h2>
 
       <div className="grid grid-cols-1 gap-0 my-3">
         <GridQuestionAnswerCard

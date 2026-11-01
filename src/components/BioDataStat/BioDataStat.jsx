@@ -57,7 +57,7 @@ const BioDataStat = ({ id }) => {
         className="single-bio-left-sidebar-stats card-left px-2 mx-[2px] rounded-md text-white shadow-md"
         style={{ backgroundColor: Colors.pncPrimaryColor }}
       >
-        <h5 className="card-titlee text-lg text-center my-4 pt-5">পরিসংখ্যান</h5>
+        <h2 className="card-titlee text-lg text-center my-4 pt-5">পরিসংখ্যান</h2>
         <table className="w-full  mx-auto py-10">
           <thead>
             <tr className="border-b">
@@ -111,9 +111,9 @@ const BioDataStat = ({ id }) => {
       <div className="h-4"></div>
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100">
-          <h5 className="text-lg font-semibold text-gray-800 text-center">
+          <h2 className="text-lg font-semibold text-gray-800 text-center">
             এই বায়োডাটায় রিয়্যাক্ট করুন
-          </h5>
+          </h2>
         </div>
         <ReactionButton 
           bioUserId={generalInfo?.user}

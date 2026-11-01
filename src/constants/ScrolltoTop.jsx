@@ -21,7 +21,7 @@ export const ScrollToTop = () => {
   }
 
   useEffect(() => {
-    window.addEventListener('scroll', toggleVisibility)
+    window.addEventListener('scroll', toggleVisibility, { passive: true })
 
     return () => {
       window.removeEventListener('scroll', toggleVisibility)
@@ -29,12 +29,15 @@ export const ScrollToTop = () => {
   }, [])
 
   return (
-    <div className="fixed bottom-4 right-4  z-10 ">
+    <div className="fixed bottom-[calc(80px+env(safe-area-inset-bottom))] left-4 z-10 lg:bottom-6">
       <button
         type="button"
         onClick={scrollToTop}
+        aria-label="উপরে যান"
+        aria-hidden={!isVisible}
+        tabIndex={isVisible ? 0 : -1}
         className={classNames(
-          isVisible ? 'opacity-100' : 'opacity-0',
+          isVisible ? 'opacity-100' : 'pointer-events-none opacity-0',
           'bg-[#FF5E14] hover:bg-[#c54f19]  inline-flex items-center rounded-full p-3 text-white shadow-sm transition-opacity ',
         )}
       >

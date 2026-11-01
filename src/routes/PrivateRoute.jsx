@@ -18,7 +18,12 @@ const PrivateRoute = ({ children }) => {
   }, [pathname, router, user, userLoading]);
 
   if (userLoading || !user) {
-    return <LoadingCircle />;
+    return (
+      <>
+        <h1 className="sr-only">আমার অ্যাকাউন্ট</h1>
+        <LoadingCircle />
+      </>
+    );
   }
 
   return children;

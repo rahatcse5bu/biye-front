@@ -10,7 +10,6 @@ import {
   UsersIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { Navbar, Typography } from "@material-tailwind/react";
 import { navData } from "./navigation_data";
 import SubLinks from "./Sublinks.jsx";
 import UserContext from "../../contexts/UserContext";
@@ -167,12 +166,9 @@ export default function NavBar() {
               setOpenNav={setOpenNav}
             />
           ) : (
-            <Typography
+            <li
               key={_in}
-              as="li"
-              variant="small"
-              color="white"
-              className="block w-full list-none whitespace-nowrap text-base font-semibold lg:w-auto"
+              className="antialiased font-sans text-white block w-full list-none whitespace-nowrap text-base font-semibold lg:w-auto"
             >
               <Link
                 to={_navDataItem.path}
@@ -198,7 +194,7 @@ export default function NavBar() {
               >
                 {_navDataItem.title}
               </Link>
-            </Typography>
+            </li>
           ),
         )}
       </ul>
@@ -224,21 +220,16 @@ export default function NavBar() {
         </select>
         {isDesktop && <Notifications />}
         {!user ? (
-          <Typography
-            as="div"
-            variant="small"
-            color="white"
-            className="text-base font-semibold"
-          >
+          <div className="block antialiased font-sans text-white text-base font-semibold">
             <Link
               className="inline-flex min-h-10 items-center justify-center rounded-[10px] border border-transparent px-[7px] py-[9px] leading-none text-white/90 transition-colors duration-200 hover:border-white/10 hover:bg-white/[0.14] hover:text-white xl:px-[clamp(9px,1vw,14px)]"
               to="/login"
             >
               লগইন
             </Link>
-          </Typography>
+          </div>
         ) : (
-          <Typography as="div" variant="small" color="white">
+          <div className="block antialiased font-sans text-sm font-light leading-normal text-white">
             <Link
               to="/user/account/dashboard"
               className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-2 py-1.5 text-white transition-colors duration-200 hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
@@ -260,7 +251,7 @@ export default function NavBar() {
                 </span>
               )}
             </Link>
-          </Typography>
+          </div>
         )}
       </div>
     </div>
@@ -290,7 +281,8 @@ export default function NavBar() {
 
   return (
     <>
-      <Navbar className="sticky top-0 z-[1000] box-border !min-h-[60px] !w-full !min-w-full !overflow-visible !rounded-none !border-0 !border-b !border-white/10 !bg-brand-900 !p-0 text-white !shadow-[0_4px_16px_rgba(4,69,72,0.18)] lg:!min-h-[68px]">
+      {/* TODO: these were material-tailwind <Navbar>'s defaults; backdrop-blur also anchors the fixed mobile menu, so keep them. */}
+      <nav className="block w-full max-w-screen-2xl backdrop-saturate-200 backdrop-blur-2xl bg-opacity-80 sticky top-0 z-[1000] box-border !min-h-[60px] !w-full !min-w-full !overflow-visible !rounded-none !border-0 !border-b !border-white/10 !bg-brand-900 !p-0 text-white !shadow-[0_4px_16px_rgba(4,69,72,0.18)] lg:!min-h-[68px]">
         <div className="hidden lg:block">
           <NavList />
         </div>
@@ -392,7 +384,7 @@ export default function NavBar() {
             </div>
           </>
         )}
-      </Navbar>
+      </nav>
 
       <nav
         className="fixed inset-x-0 bottom-0 z-[1100] border-t border-gray-200 bg-white shadow-[0_-8px_24px_rgba(15,23,42,0.08)] lg:hidden"

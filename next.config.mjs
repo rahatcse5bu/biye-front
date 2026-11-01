@@ -55,9 +55,23 @@ const securityHeaders = [
     key: "Cross-Origin-Opener-Policy",
     value: "same-origin-allow-popups",
   },
+  {
+    key: "X-XSS-Protection",
+    value: "1; mode=block",
+  },
+];
+
+// TODO: public/ files have no content hash, so they get 30 days instead of immutable.
+const staticAssetHeaders = [
+  {
+    key: "Cache-Control",
+    value: "public, max-age=2592000, stale-while-revalidate=86400",
+  },
 ];
 
 const nextConfig = {
+  poweredByHeader: false,
+
   // TODO: production builds drop console.log/info/debug (they printed user and payment data); errors and warnings stay.
   compiler: {
     removeConsole: isDevelopment ? false : { exclude: ["error", "warn"] },
@@ -112,6 +126,14 @@ const nextConfig = {
       {
         source: "/:path*",
         headers: securityHeaders,
+      },
+      {
+        source: "/assets/:path*",
+        headers: staticAssetHeaders,
+      },
+      {
+        source: "/:file(logo\\.png|logo-192\\.png|logo-512\\.png|og-image\\.png|fav\\.svg|pnc-nikah\\.ico)",
+        headers: staticAssetHeaders,
       },
     ];
   },

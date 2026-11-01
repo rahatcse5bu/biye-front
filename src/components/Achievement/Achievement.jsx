@@ -11,7 +11,7 @@ const Achievement = () => {
 
   return (
     <div className="single-bio-achievement rounded shadow">
-      <h5 className="card-title text-center text-2xl my-3">অর্জন ও কৃতিত্ব</h5>
+      <h2 className="card-title text-center text-2xl my-3">অর্জন ও কৃতিত্ব</h2>
 
       <div
         className="px-4 py-3 text-center text-white font-semibold"

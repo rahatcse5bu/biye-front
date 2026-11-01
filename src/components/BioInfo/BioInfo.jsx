@@ -94,10 +94,10 @@ function BioInfo({ id }) {
       </div>
 
       <div className="text-center">
-        <h5 className="text-lg font-semibold my-2">
+        <h2 className="text-lg font-semibold my-2">
           Biodata No. {id}
           {/* {generalInfo?.gender === "মহিলা" ? "PNCF-" : "PNCM-"} */}
-        </h5>
+        </h2>
         <table className="table-auto w-full  mx-auto">
           <thead>
             <tr>

@@ -12,13 +12,35 @@ import { useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import UserContext from "../../contexts/UserContext";
 import { Toast } from "../../utils/toast";
-import { useLocation } from "@/lib/navigation";
+import { Link, useLocation } from "@/lib/navigation";
 import { pointsPackageService } from "../../services/pointsPackages";
 import { convertToBengaliDigits } from "../../utils/language";
 import CustomPointsCard from "./CustomPointsCard";
 import ButtonSpinner from "./ButtonSpinner";
 
 const toBn = (value) => convertToBengaliDigits(String(value));
+
+const steps = [
+  {
+    title: "পয়েন্ট কিনুন",
+    text: "নিচের যেকোনো প্যাকেজ বেছে নিয়ে বিকাশে পেমেন্ট করুন। পেমেন্ট সফল হলে পয়েন্ট আপনার অ্যাকাউন্টে যোগ হয়ে যাবে।",
+  },
+  {
+    title: `অনুরোধ পাঠান — ${toBn(30)} পয়েন্ট`,
+    text: "পছন্দের বায়োডাটায় নিজের বায়োডাটা পাঠান। বায়োডাটা-দাতা ও তার অভিভাবক আপনার তথ্য দেখে অ্যাপ্রুভ বা রিজেক্ট করবেন, ফলাফল ইমেইলে জানানো হবে।",
+  },
+  {
+    title: `যোগাযোগ তথ্য নিন — ${toBn(70)} পয়েন্ট`,
+    text: "অনুরোধ অ্যাপ্রুভ হলে তবেই বাকি পয়েন্ট খরচ করে অভিভাবকের নাম, মোবাইল নম্বর ও ইমেইল দেখতে পাবেন।",
+  },
+];
+
+const notes = [
+  `একটি বায়োডাটার যোগাযোগ তথ্য পেতে মোট ${toBn(100)} পয়েন্ট লাগে। অনুরোধ রিজেক্ট হলে পরের ${toBn(70)} পয়েন্ট খরচ হয় না।`,
+  `অ-যাচাইকৃত বায়োডাটার যোগাযোগ তথ্য একধাপে ${toBn(50)} পয়েন্টে পাওয়া যায়।`,
+  "এই মুহূর্তে শুধু বিকাশে পেমেন্ট নেওয়া হয়; নগদ, রকেট বা ব্যাংক পেমেন্ট গ্রহণ করা হয় না।",
+  `কেনা পয়েন্ট খরচ না করে থাকলে পেমেন্টের ${toBn(6)} ঘণ্টার মধ্যে পুরো টাকা, আর ${toBn(3)} দিনের মধ্যে ${toBn(1.5)} পয়েন্ট = ৳${toBn(1)} হারে রিফান্ড পাবেন।`,
+];
 
 function Payments() {
   const { user, userInfo } = useContext(UserContext);
@@ -208,6 +230,47 @@ function Payments() {
             পেমেন্টের ৩ দিনের মধ্যে রিফান্ড অনুরোধ করা যায়
           </li>
         </ul>
+
+        <section className="mt-14" aria-labelledby="points-how-heading">
+          <h2 id="points-how-heading" className="text-center text-2xl font-bold text-gray-900">
+            পয়েন্ট কীভাবে কাজ করে
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-center leading-7 text-gray-600">
+            বিবাহে বায়োডাটা দেখা ও খোঁজা বিনামূল্যে। শুধু পছন্দের পাত্র বা পাত্রীর অভিভাবকের সাথে যোগাযোগ করতে চাইলে পয়েন্ট লাগে, আর সেটাও দুই ধাপে — যাতে রাজি না হলে পুরো খরচ করতে না হয়।
+          </p>
+          <ol className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+            {steps.map((step, index) => (
+              <li key={step.title} className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-900 text-sm font-bold text-white">
+                  {toBn(index + 1)}
+                </span>
+                <h3 className="mt-3 font-bold text-gray-900">{step.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-gray-600">{step.text}</p>
+              </li>
+            ))}
+          </ol>
+
+          <h3 className="mt-10 text-lg font-bold text-gray-900">জেনে রাখুন</h3>
+          <ul className="mt-3 space-y-2.5 text-sm leading-6 text-gray-600">
+            {notes.map((note) => (
+              <li key={note} className="flex items-start gap-2.5">
+                <CheckCircleIcon className="mt-0.5 h-5 w-5 shrink-0 text-brand-900" aria-hidden="true" />
+                <span>{note}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 text-sm text-gray-600">
+            বিস্তারিত জানতে{" "}
+            <Link to="/refund-policy" className="font-bold text-brand-900 underline-offset-4 hover:underline">
+              রিফান্ড পলিসি
+            </Link>{" "}
+            ও{" "}
+            <Link to="/faq" className="font-bold text-brand-900 underline-offset-4 hover:underline">
+              সাধারণ জিজ্ঞাসা
+            </Link>{" "}
+            পড়ুন।
+          </p>
+        </section>
       </div>
     </main>
   );

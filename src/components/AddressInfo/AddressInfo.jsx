@@ -8,7 +8,7 @@ function AddressInfo() {
   // console.log('address~~~', addressInfo);
   return (
     <div className="single-bio-address rounded shadow">
-      <h5 className="card-title text-center text-2xl my-3">ঠিকানা</h5>
+      <h2 className="card-title text-center text-2xl my-3">ঠিকানা</h2>
       <div className="grid grid-cols-1 gap-0 my-3">
         <GridQuestionAnswerCard
           question="স্থায়ী ঠিকানা"

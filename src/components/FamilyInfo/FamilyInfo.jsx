@@ -10,7 +10,7 @@ const FamilyInfo = () => {
 
   return (
     <div className="w-auto border-t-2 rounded shadow single-bio-family-info">
-      <h5 className="my-3 text-2xl text-center card-title">পারিবারিক তথ্য</h5>
+      <h2 className="my-3 text-2xl text-center card-title">পারিবারিক তথ্য</h2>
       <div className="w-full">
         <div className="my-3 grid grid-cols-1 gap-0">
           <GridQuestionAnswerCard

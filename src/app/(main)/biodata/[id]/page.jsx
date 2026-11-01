@@ -136,7 +136,7 @@ export default async function BioDataPage({ params }) {
             </nav>
 
             <h1 className="mt-2 truncate text-2xl font-bold text-gray-900 sm:text-3xl">
-              {generalInfo.bio_type || "ম্যাট্রিমনি বায়োডাটা"}
+              {generalInfo.bio_type || "ম্যাট্রিমনি বায়োডাটা"} — BID-{id}
             </h1>
             {summary && (
               <p className="mt-1.5 text-sm text-gray-600">{summary}</p>

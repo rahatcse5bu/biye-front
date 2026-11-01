@@ -3,7 +3,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { BiSidebar } from 'react-icons/bi';
 
 import Form from '../../../components/Form/Form';
-import { ScrollToTop } from '../../../constants/ScrolltoTop';
 import Numbering from '../../../components/Numbering/Numbering';
 import { useContext } from 'react';
 import UserContext from '../../../contexts/UserContext';
@@ -45,7 +44,6 @@ const EditBiodata = () => {
         {userForm !== TOTAL_STEPS && <RevisionStatus />}
         <Form setUserForm={setUserForm} userForm={userForm} />
       </div>
-      <ScrollToTop />
     </div>
   );
 };

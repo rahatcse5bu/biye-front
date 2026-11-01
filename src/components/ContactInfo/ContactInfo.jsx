@@ -241,10 +241,10 @@ const ContactInfo = ({ status }) => {
       {/* For Unverified Biodatas - Single Step Purchase */}
       {bio?.is_unverified ? (
         <div className="ask-contact-info p-5">
-          <h4 className="my-4 text-center text-sm">
+          <p className="my-4 text-center text-sm">
             এটি একটি অ-যাচাইকৃত বায়োডাটা। যোগাযোগ তথ্য পেতে মাত্র ৫০ পয়েন্ট
             খরচ হবে।
-          </h4>
+          </p>
           <h2 className="my-5 text-2xl text-center">
             যোগাযোগ তথ্য পেতে আপনার {convertToBengaliNumerals('50')} টি পয়েন্ট
             হবে। আপনার একাউন্টে{' '}
@@ -269,7 +269,7 @@ const ContactInfo = ({ status }) => {
         </div>
       ) : contactInfo?.data ? (
         <>
-          <h5 className="my-3 text-2xl text-center card-title">যোগাযোগ</h5>
+          <h2 className="my-3 text-2xl text-center card-title">যোগাযোগ</h2>
           <div className="paid-contact-info">
             <div className="grid grid-cols-1 gap-0 my-3">
               <>
@@ -305,11 +305,11 @@ const ContactInfo = ({ status }) => {
         </>
       ) : status === 'inactive' ? (
         <div className="pnc-bio-hidden">
-          <h4 className="my-4 text-center">
+          <p className="my-4 text-center">
             এই বায়োডাটাটি হাইড অবস্থায় আছে। অর্থাৎ এই মুহুর্তে তিনি কোনো
             প্রস্তাব পেতে আগ্রহী নয়। তাই এখন এই বায়োডাটার যোগাযোগ তথ্য দেখা যাবে
             না।
-          </h4>
+          </p>
         </div>
       ) : (
         <RequestFlow

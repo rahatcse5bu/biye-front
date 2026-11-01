@@ -11,9 +11,9 @@ const MaritalInfo = () => {
 
   return (
     <div className="single-bio-marital-info border-t-2 w-auto rounded shadow">
-      <h5 className="card-title text-center text-2xl my-3">
+      <h2 className="card-title text-center text-2xl my-3">
         বিবাহ সম্পর্কিত তথ্য
-      </h5>
+      </h2>
 
       <div className="grid grid-cols-1 gap-0 my-3">
         <>

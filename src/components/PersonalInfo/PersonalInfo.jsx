@@ -222,7 +222,7 @@ const PersonalInfo = () => {
 
   return (
     <div className="w-auto border-t-2 rounded shadow single-bio-personal-info">
-      <h5 className="my-3 text-2xl text-center card-title">ব্যক্তিগত তথ্য</h5>
+      <h2 className="my-3 text-2xl text-center card-title">ব্যক্তিগত তথ্য</h2>
 
       <div className="grid grid-cols-1 gap-0 my-3">
         {/* Render religion-specific fields */}

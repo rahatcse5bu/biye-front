@@ -10,6 +10,7 @@ import {
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 import { Link } from '@/lib/navigation';
+import { stepTitles } from '@/components/Stepper/Stepper';
 
 const CREATE_PATH = '/user/account/edit-biodata';
 
@@ -34,6 +35,15 @@ const steps = [
     title: 'প্রস্তাব পাঠান ও পান',
     text: 'পছন্দের বায়োডাটায় প্রস্তাব পাঠান এবং আপনার কাছে আসা প্রস্তাবের উত্তর দিন।',
   },
+];
+
+const rules = [
+  'অভিভাবকের সম্মতি ছাড়া কোনো বায়োডাটা অনুমোদন করা হয় না। অভিভাবক নিজেও সন্তান বা নিকটাত্মীয়ের জন্য বায়োডাটা জমা দিতে পারেন।',
+  'আইনি কারণে ১৮ বছরের কম বয়সী মেয়ে এবং ২১ বছরের কম বয়সী ছেলের বায়োডাটা অনুমোদন করা হয় না।',
+  'জমা দেওয়ার ৩-৭ কার্যদিবসের মধ্যে যাচাই শেষ হয় এবং ফলাফল ইমেইলে জানানো হয়।',
+  'অভিভাবকের নাম ও নম্বর সবার জন্য খোলা থাকে না; আপনি যার প্রস্তাব অনুমোদন করবেন, শুধু তিনিই তা দেখতে পাবেন।',
+  'বিয়ের কথাবার্তা চললে বা বিয়ে হয়ে গেলে সেটিংস থেকে বায়োডাটা হাইড করুন, যাতে কেউ অকারণে পয়েন্ট খরচ না করেন।',
+  'ভুল বা প্রতারণামূলক তথ্য দিলে বায়োডাটাসহ অ্যাকাউন্ট বন্ধ করে দেওয়া হয়।',
 ];
 
 const videos = [
@@ -102,7 +112,39 @@ const Instructions = () => {
         </ol>
       </section>
 
-      <section className="border-t border-gray-200 bg-white" aria-labelledby="video-guides">
+      <section className="border-t border-gray-200 bg-white" aria-labelledby="biodata-contents">
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:py-16 lg:grid-cols-2">
+          <div>
+            <h2 id="biodata-contents" className="text-2xl font-bold text-gray-900 sm:text-3xl">
+              বায়োডাটায় কী কী তথ্য দিতে হবে
+            </h2>
+            <p className="mt-3 leading-7 text-gray-600">
+              পুরো বায়োডাটা {toBn(stepTitles.length)}টি ছোট ধাপে ভাগ করা। প্রতিটি ধাপ আলাদাভাবে সংরক্ষণ হয়, তাই একবারে সব পূরণ করতে হয় না। যত বিস্তারিত ও সঠিক তথ্য দেবেন, মিল খুঁজে পাওয়া তত সহজ হবে।
+            </p>
+            <ol className="mt-6 grid grid-cols-2 gap-2 text-sm sm:grid-cols-3">
+              {stepTitles.map((title, index) => (
+                <li key={title} className="flex items-center gap-2 rounded-xl border border-gray-200 px-3 py-2 text-gray-700">
+                  <span className="font-bold text-brand-900">{toBn(index + 1)}.</span>
+                  {title}
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">অনুমোদনের নিয়ম</h2>
+            <ul className="mt-6 space-y-3 text-sm leading-6 text-gray-600">
+              {rules.map((rule) => (
+                <li key={rule} className="flex items-start gap-2.5">
+                  <ShieldCheckIcon className="mt-0.5 h-5 w-5 shrink-0 text-brand-900" aria-hidden="true" />
+                  <span>{rule}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-gray-200 bg-[#F7F9F9]" aria-labelledby="video-guides">
         <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
           <div className="flex flex-col items-center text-center">
             <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-900/10 text-brand-900">
