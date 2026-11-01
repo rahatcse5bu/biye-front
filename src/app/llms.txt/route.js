@@ -26,7 +26,7 @@ export async function GET() {
     "",
     "> বিবাহ বাংলাদেশের একটি ম্যাট্রিমনি প্ল্যাটফর্ম। সব ধর্মের পাত্র-পাত্রী ও তাদের অভিভাবকেরা এখানে বিয়ের বায়োডাটা জমা দেন এবং পছন্দের বায়োডাটা খুঁজে অভিভাবকের সাথে যোগাযোগ করেন।",
     "",
-    "Bibaho is a Bangladeshi matrimony site for every religion. Biodatas are published only with a guardian's consent. Contact details are unlocked in two steps: a request (30 points) that the biodata owner approves, then the guardian's contact (70 points). Points are bought with bKash; 1 taka = 1.2 points.",
+    "Bibaho is a Bangladeshi matrimony site for every religion. Biodatas are published only with a guardian's consent. Contact details are unlocked in two steps: a request (30 points) that the biodata owner approves, then the guardian's contact (70 points). Points are bought with bKash.",
     "",
     "## প্রধান পাতা",
     "",

@@ -1,13 +1,8 @@
 'use client';
 
-import { Suspense } from 'react';
 import { Login } from '@/views/Login/Login';
 
 export default function LoginPage() {
-  // TODO: useSearchParams needs its own boundary on a prerendered page; the root layout no longer wraps every page.
-  return (
-    <Suspense fallback={null}>
-      <Login />
-    </Suspense>
-  );
+  // TODO: the layout renders per request, so useSearchParams needs no Suspense boundary and the form ships in the HTML.
+  return <Login />;
 }

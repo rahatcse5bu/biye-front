@@ -176,12 +176,12 @@ export function Signup() {
               <ShieldCheckIcon className="h-4 w-4" aria-hidden="true" />
               নতুন যাত্রার শুরু
             </p>
-            <h2
+            <p
               id="signup-benefits-heading"
               className="mt-5 text-3xl font-bold leading-[1.35]"
             >
               পছন্দের জীবনসঙ্গী খুঁজতে আজই যোগ দিন
-            </h2>
+            </p>
             <p className="mt-4 leading-8 text-white/75">
               একটি অ্যাকাউন্ট তৈরি করে নিজের বায়োডাটা প্রকাশ করুন এবং পছন্দ
               অনুযায়ী জীবনসঙ্গী খোঁজা শুরু করুন।

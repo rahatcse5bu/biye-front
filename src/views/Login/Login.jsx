@@ -137,12 +137,12 @@ export function Login() {
               <ShieldCheckIcon className="h-4 w-4" aria-hidden="true" />
               নিরাপদ অ্যাকাউন্ট প্রবেশ
             </p>
-            <h2
+            <p
               id="login-benefits-heading"
               className="mt-5 text-3xl font-bold leading-[1.35]"
             >
               আপনার জীবনসঙ্গী খোঁজার যাত্রায় আবার স্বাগতম
-            </h2>
+            </p>
             <p className="mt-4 leading-8 text-white/75">
               আপনার অ্যাকাউন্টে প্রবেশ করে বায়োডাটা, পছন্দের তালিকা ও যোগাযোগের
               অনুরোধ এক জায়গা থেকে পরিচালনা করুন।
