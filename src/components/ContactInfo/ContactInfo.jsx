@@ -22,7 +22,7 @@ import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswerCard';
 import CustomModal from '../CustomModal/CustomModal';
 import RequestFlow from './RequestFlow';
-import { GuideVideo } from './VideoGuide';
+import { GuideVideo } from '../VideoGuide/VideoGuide';
 import { getErrorMessage } from '../../utils/error';
 import { takaForPoints, useTopUpRate } from '../../utils/topUp';
 

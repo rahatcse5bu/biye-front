@@ -12,7 +12,7 @@ import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import ButtonSpinner from '../../views/Payments/ButtonSpinner';
 import { takaForPoints } from '../../utils/topUp';
 import ReminderEmail from './ReminderEmail';
-import VideoGuide from './VideoGuide';
+import VideoGuide from '../VideoGuide/VideoGuide';
 
 const PROPOSAL_COST = 30;
 const CONTACT_COST = 70;

@@ -7,6 +7,7 @@ import Numbering from '../../../components/Numbering/Numbering';
 import { useContext } from 'react';
 import UserContext from '../../../contexts/UserContext';
 import { StepperLine } from '../../../components/Stepper/Stepper';
+import VideoGuide from '../../../components/VideoGuide/VideoGuide';
 import RevisionStatus from '../../../components/RevisionStatus/RevisionStatus';
 
 const TOTAL_STEPS = 12; // 11 data-entry steps + review step
@@ -42,6 +43,10 @@ const EditBiodata = () => {
       </div>
       <div className="lg:w-[70%] w-full">
         {userForm !== TOTAL_STEPS && <RevisionStatus />}
+        <div className="mb-4">
+          {/* key resets the player when the step changes */}
+          <VideoGuide key={userForm} guide={`biodata-${userForm}`} heading="এই ধাপ কীভাবে পূরণ করবেন? ভিডিও দেখুন" />
+        </div>
         <Form setUserForm={setUserForm} userForm={userForm} />
       </div>
     </div>

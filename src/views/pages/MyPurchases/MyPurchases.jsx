@@ -31,7 +31,7 @@ import './MyPurchases.css';
 import { formatDateAndCalculateAge } from '../../../utils/date';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import CustomModal from '../../../components/CustomModal/CustomModal';
-import { GuideVideo } from '../../../components/ContactInfo/VideoGuide';
+import { GuideVideo } from '../../../components/VideoGuide/VideoGuide';
 import { HiOutlineLocationMarker, HiOutlinePhone, HiOutlineMail } from 'react-icons/hi';
 import { takaForPoints, useTopUpRate } from '../../../utils/topUp';
 

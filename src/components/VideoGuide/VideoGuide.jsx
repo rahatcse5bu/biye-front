@@ -1,8 +1,26 @@
 import { useState } from 'react';
 import { ChevronDownIcon, PlayCircleIcon } from '@heroicons/react/24/outline';
 import { trackEvent } from '@/utils/analytics';
+import { stepTitles } from '../Stepper/Stepper';
+import { convertToBengaliNumerals } from '../../utils/weight';
 
-// TODO: self-hosted tutorial videos for the two-step contact flow.
+const pad = (n) => String(n).padStart(2, '0');
+
+// TODO: one short clip per biodata form step, cut from the full "বায়োডাটা দেওয়ার নিয়ম" video.
+const BIODATA_GUIDES = Object.fromEntries(
+  stepTitles.map((title, i) => [
+    `biodata-${i + 1}`,
+    {
+      src: `/videos/biodata/step-${pad(i + 1)}.mp4`,
+      poster: `/videos/biodata/step-${pad(i + 1)}.jpg`,
+      subtitle: `ধাপ ${convertToBengaliNumerals(String(i + 1))}: ${title} — কীভাবে পূরণ করবেন`,
+      event: 'biodata_guide_play',
+      params: { step: i + 1 },
+    },
+  ])
+);
+
+// TODO: self-hosted tutorial videos.
 export const GUIDES = {
   proposal: {
     src: '/videos/proposal-guide.mp4',
@@ -16,11 +34,12 @@ export const GUIDES = {
     subtitle: 'অভিভাবকের যোগাযোগ তথ্য নেওয়ার নিয়ম — ৩টি সহজ ধাপে',
     event: 'contact_guide_play',
   },
+  ...BIODATA_GUIDES,
 };
 
 // TODO: nothing is downloaded until the video is played.
 export const GuideVideo = ({ guide, autoPlay = false }) => {
-  const { src, poster, event } = GUIDES[guide];
+  const { src, poster, event, params } = GUIDES[guide];
   return (
     <video
       className="aspect-video w-full rounded-xl bg-black"
@@ -30,14 +49,14 @@ export const GuideVideo = ({ guide, autoPlay = false }) => {
       playsInline
       preload="none"
       autoPlay={autoPlay}
-      onPlay={() => trackEvent(event)}
+      onPlay={() => trackEvent(event, params)}
     >
       আপনার ব্রাউজার ভিডিওটি চালাতে পারছে না।
     </video>
   );
 };
 
-// TODO: collapsible inline guide inside the contact section.
+// TODO: collapsible inline guide; `guide` is a key of GUIDES.
 export default function VideoGuide({ guide, heading = 'প্রথমবার? ভিডিও গাইড দেখে নিন' }) {
   const [open, setOpen] = useState(false);
 
