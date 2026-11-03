@@ -31,7 +31,7 @@ import './MyPurchases.css';
 import { formatDateAndCalculateAge } from '../../../utils/date';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import CustomModal from '../../../components/CustomModal/CustomModal';
-import YouTubeEmbed from '../../../components/YouTubeEmbed/YouTubeEmbed';
+import { GuideVideo } from '../../../components/ContactInfo/VideoGuide';
 import { HiOutlineLocationMarker, HiOutlinePhone, HiOutlineMail } from 'react-icons/hi';
 import { takaForPoints, useTopUpRate } from '../../../utils/topUp';
 
@@ -620,20 +620,14 @@ const MyPurchases = () => {
             isOpen={isFirstStepModalOpen}
             title="অনুরোধ পাঠানোর নিয়ম"
           >
-            <YouTubeEmbed
-              title="Send Request || অনুরোধ পাঠান || PNC NIkah"
-              videoId="X6sjWCZjiuQ"
-            />
+            <GuideVideo guide="proposal" autoPlay />
           </CustomModal>
           <CustomModal
             onClose={() => setIsSecondStepModalOpen(false)}
             isOpen={isSecondStepModalOpen}
             title="যোগাযোগ তথ্য অনুরোধের নিয়ম"
           >
-            <YouTubeEmbed
-              videoId="x0-RXTR0DfQ"
-              title="Contact Info Request || যোগাযোগ তথ্য অনুরোধ || PNC NIkah"
-            />
+            <GuideVideo guide="contact" autoPlay />
           </CustomModal>
           <div className="col right-sidebar-main overflow-hidden my-favs">
             <div className="w-auto overflow-hidden border-t-2 rounded shadow my-favs-info">

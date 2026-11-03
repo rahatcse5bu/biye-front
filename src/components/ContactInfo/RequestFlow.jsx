@@ -12,7 +12,7 @@ import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import ButtonSpinner from '../../views/Payments/ButtonSpinner';
 import { takaForPoints } from '../../utils/topUp';
 import ReminderEmail from './ReminderEmail';
-import ProposalVideoGuide from './ProposalVideoGuide';
+import VideoGuide from './VideoGuide';
 
 const PROPOSAL_COST = 30;
 const CONTACT_COST = 70;
@@ -162,7 +162,8 @@ export default function RequestFlow({
 
       {panel}
 
-      {!firstStatus && <ProposalVideoGuide />}
+      {!firstStatus && <VideoGuide guide="proposal" />}
+      {approved && <VideoGuide guide="contact" heading="যোগাযোগ তথ্য কীভাবে নেবেন? ভিডিও দেখুন" />}
 
       <p className="flex items-start gap-2 rounded-xl bg-amber-50/70 px-3 py-2.5 text-xs leading-5 text-amber-900">
         <ExclamationTriangleIcon className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />

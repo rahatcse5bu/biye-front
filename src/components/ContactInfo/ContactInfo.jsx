@@ -20,11 +20,9 @@ import { UnverifiedContactPurchaseService } from '../../services/unverifiedConta
 import { Colors } from '../../constants/colors';
 import LoadingCircle from '../LoadingCircle/LoadingCircle';
 import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswerCard';
-import LiteYouTubeEmbed from 'react-lite-youtube-embed';
-import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 import CustomModal from '../CustomModal/CustomModal';
 import RequestFlow from './RequestFlow';
-import { ProposalGuideVideo } from './ProposalVideoGuide';
+import { GuideVideo } from './VideoGuide';
 import { getErrorMessage } from '../../utils/error';
 import { takaForPoints, useTopUpRate } from '../../utils/topUp';
 
@@ -334,14 +332,14 @@ const ContactInfo = ({ status }) => {
         isOpen={isFirstStepModalOpen}
         title="অনুরোধ পাঠানোর নিয়ম"
       >
-        <ProposalGuideVideo autoPlay />
+        <GuideVideo guide="proposal" autoPlay />
       </CustomModal>
       <CustomModal
         onClose={() => setIsSecondStepModalOpen(false)}
         isOpen={isSecondStepModalOpen}
         title="যোগাযোগ তথ্য অনুরোধের নিয়ম"
       >
-        <LiteYouTubeEmbed noCookie id="x0-RXTR0DfQ" title="Contact Info Request || যোগাযোগ তথ্য অনুরোধ" />
+        <GuideVideo guide="contact" autoPlay />
       </CustomModal>
     </div>
   );
