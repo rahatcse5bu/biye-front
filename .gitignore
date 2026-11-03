@@ -13,12 +13,16 @@ dist
 dist-ssr
 *.local
 .env
+# stray copy of .env without the dot; may hold secrets
+/env
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
+# macOS metadata files created on non-Mac drives (exFAT/FAT/network shares)
+._*
 *.suo
 *.ntvs*
 *.njsproj
