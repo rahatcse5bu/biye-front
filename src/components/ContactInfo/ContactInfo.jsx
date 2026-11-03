@@ -24,6 +24,7 @@ import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 import CustomModal from '../CustomModal/CustomModal';
 import RequestFlow from './RequestFlow';
+import { ProposalGuideVideo } from './ProposalVideoGuide';
 import { getErrorMessage } from '../../utils/error';
 import { takaForPoints, useTopUpRate } from '../../utils/topUp';
 
@@ -333,7 +334,7 @@ const ContactInfo = ({ status }) => {
         isOpen={isFirstStepModalOpen}
         title="অনুরোধ পাঠানোর নিয়ম"
       >
-        <LiteYouTubeEmbed noCookie id="X6sjWCZjiuQ" title="Send Request || অনুরোধ পাঠান" />
+        <ProposalGuideVideo autoPlay />
       </CustomModal>
       <CustomModal
         onClose={() => setIsSecondStepModalOpen(false)}
