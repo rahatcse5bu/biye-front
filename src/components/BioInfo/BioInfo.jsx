@@ -7,6 +7,7 @@ import BioContext from "../../contexts/BioContext";
 import { getDateMonthYear } from "../../utils/date";
 import { convertHeightToBengali } from "../../utils/height";
 import PhotoViewer from "../PhotoViewer/PhotoViewer";
+import { isEmptyAnswer } from "../GridQuestionAnswerCard/GridQuestionAnswerCard";
 
 // TODO: Next.js image imports are objects ({ src, width, height }), not URL strings like in Vite.
 const female = femaleIcon?.src ?? femaleIcon;
@@ -41,6 +42,15 @@ const getReligionMeta = (religion) => {
   const key = religionToApiKey[religion] || religion || "islam";
   return RELIGION_META[key] || RELIGION_META.islam;
 };
+
+// TODO: a row with no value is left out instead of showing an empty cell.
+const InfoRow = ({ label, value }) =>
+  isEmptyAnswer(value) ? null : (
+    <tr>
+      <td className="px-4 text-left py-2">{label}</td>
+      <td className="px-4 text-left py-2">{value}</td>
+    </tr>
+  );
 
 function BioInfo({ id }) {
   const { bio } = useContext(BioContext);
@@ -99,56 +109,18 @@ function BioInfo({ id }) {
           {/* {generalInfo?.gender === "মহিলা" ? "PNCF-" : "PNCM-"} */}
         </h2>
         <table className="table-auto w-full  mx-auto">
-          <thead>
-            <tr>
-              <td className="px-4 text-left py-2">বায়োডাটার ধরন</td>
-              <td className="px-4 text-left py-2">{generalInfo?.bio_type}</td>
-            </tr>
-          </thead>
           <tbody>
-            <tr>
-              <td className="px-4 text-left py-2">বৈবাহিক অবস্থা:</td>
-              <td className="px-4 text-left py-2">
-                {generalInfo?.marital_status}
-              </td>
-            </tr>
-            <tr>
-              <td className="px-4 text-left py-2">জন্মসন</td>
-              <td className="px-4 text-left py-2">
-                {/* {formatDate(getDateMonthYear(generalInfo?.date_of_birth))} */}
-                {getDateMonthYear(generalInfo?.date_of_birth)}
-              </td>
-            </tr>
-            <tr>
-              <td className="px-4 text-left py-2">উচ্চতা</td>
-              <td className="px-4 text-left py-2">
-                {convertHeightToBengali(generalInfo?.height)}{" "}
-              </td>
-            </tr>
-            <tr>
-              <td className="px-4 text-left py-2">গাত্রবর্ণ</td>
-              <td className="px-4 text-left py-2">
-                {generalInfo?.screen_color}
-              </td>
-            </tr>
-            <tr>
-              <td className="px-4 text-left py-2">ওজন</td>
-              <td className="px-4 text-left py-2">
-                {generalInfo?.weight} কেজি
-              </td>
-            </tr>
-            <tr>
-              <td className="px-4 text-left py-2">রক্তের গ্রুপ</td>
-              <td className="px-4 text-left py-2">
-                {generalInfo?.blood_group}
-              </td>
-            </tr>
-            <tr>
-              <td className="px-4 text-left py-2">জাতীয়তা</td>
-              <td className="px-4 text-left py-2">
-                {generalInfo?.nationality}
-              </td>
-            </tr>
+            <InfoRow label="বায়োডাটার ধরন" value={generalInfo?.bio_type} />
+            <InfoRow label="বৈবাহিক অবস্থা:" value={generalInfo?.marital_status} />
+            <InfoRow label="জন্মসন" value={getDateMonthYear(generalInfo?.date_of_birth)} />
+            <InfoRow label="উচ্চতা" value={convertHeightToBengali(generalInfo?.height)} />
+            <InfoRow label="গাত্রবর্ণ" value={generalInfo?.screen_color} />
+            <InfoRow
+              label="ওজন"
+              value={!isEmptyAnswer(generalInfo?.weight) && `${generalInfo.weight} কেজি`}
+            />
+            <InfoRow label="রক্তের গ্রুপ" value={generalInfo?.blood_group} />
+            <InfoRow label="জাতীয়তা" value={generalInfo?.nationality} />
             {generalInfo?.religion && (
               <tr>
                 <td className="px-4 text-left py-2">ধর্ম</td>

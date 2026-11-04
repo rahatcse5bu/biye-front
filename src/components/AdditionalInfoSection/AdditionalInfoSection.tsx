@@ -1,10 +1,10 @@
 import React from "react";
-import ExtraFieldsDisplay from "../ExtraFieldsDisplay/ExtraFieldsDisplay";
+import ExtraFieldsDisplay, { hasValue } from "../ExtraFieldsDisplay/ExtraFieldsDisplay";
 
 interface ExtraField {
   label: string;
   value: string | number | boolean;
-  fieldType: "text" | "numeric" | "email" | "phone" | "select" | "boolean";
+  fieldType: "section" | "text" | "multi-line" | "numeric" | "email" | "phone" | "select" | "boolean";
   options?: string[];
 }
 
@@ -21,7 +21,7 @@ const AdditionalInfoSection: React.FC<AdditionalInfoSectionProps> = ({
   fields,
   isPurchased = true,
 }) => {
-  if (!fields || fields.length === 0) {
+  if (!fields?.some((field) => field.fieldType !== "section" && hasValue(field))) {
     return null;
   }
 

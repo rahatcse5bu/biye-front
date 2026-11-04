@@ -1,5 +1,5 @@
 import React from "react";
-import GridQuestionAnswerCard from "../GridQuestionAnswerCard/GridQuestionAnswerCard";
+import GridQuestionAnswerCard, { isEmptyAnswer } from "../GridQuestionAnswerCard/GridQuestionAnswerCard";
 
 interface ExtraField {
   label: string;
@@ -13,11 +13,22 @@ interface ExtraFieldsDisplayProps {
   isPurchased?: boolean;
 }
 
+// TODO: boolean false is a real answer ("না"), so only a missing value hides a boolean field.
+export const hasValue = (field: ExtraField) =>
+  field.fieldType === "boolean" && field.value === false ? true : !isEmptyAnswer(field.value);
+
 const ExtraFieldsDisplay: React.FC<ExtraFieldsDisplayProps> = ({
   fields,
   isPurchased = true,
 }) => {
   if (!fields || fields.length === 0) return null;
+
+  // TODO: a section header shows only when at least one field under it has a value.
+  const visibleFields = fields
+    .filter((field) => field.fieldType === "section" || hasValue(field))
+    .filter((field, index, list) => field.fieldType !== "section" || (list[index + 1] && list[index + 1].fieldType !== "section"));
+
+  if (visibleFields.length === 0) return null;
 
   const renderValue = (field: ExtraField) => {
     if (!isPurchased) {
@@ -60,7 +71,7 @@ const ExtraFieldsDisplay: React.FC<ExtraFieldsDisplayProps> = ({
 
   return (
     <>
-      {fields.map((field, index) => {
+      {visibleFields.map((field, index) => {
         if (field.fieldType === "section") {
           return (
             <div key={index} className="col-span-full px-4 pt-5 pb-2">

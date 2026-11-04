@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import BioContext from '../../contexts/BioContext';
-import GridQuestionAnswerCard from '../GridQuestionAnswerCard/GridQuestionAnswerCard';
+import GridQuestionAnswerCard, { isEmptyAnswer } from '../GridQuestionAnswerCard/GridQuestionAnswerCard';
 import { Colors } from '../../constants/colors';
 
 // Bengali month names
@@ -32,6 +32,13 @@ const formatDateBengali = (dateStr) => {
   const monthName = bengaliMonths[month] || month;
   const bengaliYear = toBengaliDigits(year);
   return `${monthName} ${bengaliYear}`;
+};
+
+// TODO: shows only the known end of the period; null when neither date is set.
+const formatPeriod = (history) => {
+  const start = formatDateBengali(history.start_date);
+  const end = history.is_current ? 'বর্তমান' : formatDateBengali(history.end_date);
+  return [start, end].filter(Boolean).join(' - ') || null;
 };
 
 const ProfessionalInfo = () => {
@@ -77,6 +84,7 @@ const ProfessionalInfo = () => {
               <GridQuestionAnswerCard
                 question="প্রতিষ্ঠান"
                 answer={
+                  !isEmptyAnswer(history.company_name) &&
                   <div className="flex items-center gap-2">
                     <span>{history.company_name}</span>
                     {history.is_current && (
@@ -96,14 +104,12 @@ const ProfessionalInfo = () => {
               />
               <GridQuestionAnswerCard
                 question="সময়কাল"
-                answer={`${formatDateBengali(history.start_date) || 'N/A'} - ${history.is_current ? 'বর্তমান' : (formatDateBengali(history.end_date) || 'N/A')}`}
+                answer={formatPeriod(history)}
               />
-              {history.job_description && (
-                <GridQuestionAnswerCard
-                  question="কাজের বিবরণ"
-                  answer={history.job_description}
-                />
-              )}
+              <GridQuestionAnswerCard
+                question="কাজের বিবরণ"
+                answer={history.job_description}
+              />
               {index < workingHistory.length - 1 && (
                 <div className="md:col-span-2 border-b-2 border-gray-300 my-1"></div>
               )}

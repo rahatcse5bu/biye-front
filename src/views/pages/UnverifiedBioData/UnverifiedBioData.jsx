@@ -15,7 +15,7 @@ import { Toast } from '../../../utils/toast';
 import LoadingCircle from '../../../components/LoadingCircle/LoadingCircle';
 import BioDetailsSkeleton from '../../../components/BioDetailsSkeleton/BioDetailsSkeleton';
 import ScrollToTop from '../../../components/ScrollTop/ScrollTop';
-import GridQuestionAnswerCard from '../../../components/GridQuestionAnswerCard/GridQuestionAnswerCard';
+import GridQuestionAnswerCard, { isEmptyAnswer } from '../../../components/GridQuestionAnswerCard/GridQuestionAnswerCard';
 import AdditionalInfoSection from '../../../components/AdditionalInfoSection/AdditionalInfoSection';
 import { ShortlistServices } from '../../../services/shortlist';
 import { Colors } from '../../../constants/colors';
@@ -222,17 +222,17 @@ const UnverifiedBioData = () => {
               <GridQuestionAnswerCard question="বায়োডাটার ধরন" answer={biodata.bio_type} />
               <GridQuestionAnswerCard
                 question="জন্মসন"
-                answer={`${formatDate(getDateMonthYear(biodata.date_of_birth))} [${formatDateAndCalculateAge(biodata.date_of_birth)?.age} বছর]`}
+                answer={biodata.date_of_birth && `${formatDate(getDateMonthYear(biodata.date_of_birth))} [${formatDateAndCalculateAge(biodata.date_of_birth)?.age} বছর]`}
               />
               <GridQuestionAnswerCard question="উচ্চতা" answer={convertHeightToBengali(biodata.height)} />
-              <GridQuestionAnswerCard question="ওজন" answer={`${biodata.weight} কেজি`} />
+              <GridQuestionAnswerCard question="ওজন" answer={!isEmptyAnswer(biodata.weight) && `${biodata.weight} কেজি`} />
               <GridQuestionAnswerCard question="গাত্রবর্ণ" answer={biodata.screen_color} />
               <GridQuestionAnswerCard question="রক্তের গ্রুপ" answer={biodata.blood_group} />
               <GridQuestionAnswerCard question="বৈবাহিক অবস্থা" answer={biodata.marital_status} />
               <GridQuestionAnswerCard question="জাতীয়তা" answer={biodata.nationality} />
-              <GridQuestionAnswerCard question="বিভাগ" answer={biodata.division || '—'} />
+              <GridQuestionAnswerCard question="বিভাগ" answer={biodata.division} />
               <GridQuestionAnswerCard question="জেলা" answer={biodata.zilla} />
-              <GridQuestionAnswerCard question="উপজেলা" answer={biodata.upzilla || '—'} />
+              <GridQuestionAnswerCard question="উপজেলা" answer={biodata.upzilla} />
             </div>
           </div>
 
